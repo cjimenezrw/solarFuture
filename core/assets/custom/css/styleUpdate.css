@@ -1,0 +1,111 @@
+.panel-line .panel-heading {
+    background: transparent;
+    border: none;
+    border-top: 3px solid transparent;
+}
+
+.panel-line.panel-default .panel-heading {
+    color: #e4eaec;
+    background: transparent;
+    border-top-color: #e4eaec;
+}
+
+.panel-line.panel-default .panel-title {
+    color: #e4eaec;
+}
+
+.panel-line.panel-default .panel-action {
+    color: #e4eaec;
+}
+
+.panel-line.panel-default .panel-title {
+    color: #37474f;
+}
+
+.panel-line.panel-default .panel-action {
+    color: #a3afb7;
+}
+
+.panel-line.panel-primary .panel-heading {
+    color: #3e8ef7;
+    background: transparent;
+    border-top-color: #3e8ef7;
+}
+
+.panel-line.panel-primary .panel-title {
+    color: #3e8ef7;
+}
+
+.panel-line.panel-primary .panel-action {
+    color: #3e8ef7;
+}
+
+.panel-line.panel-success .panel-heading {
+    color: #11c26d;
+    background: transparent;
+    border-top-color: #11c26d;
+}
+
+.panel-line.panel-success .panel-title {
+    color: #11c26d;
+}
+
+.panel-line.panel-success .panel-action {
+    color: #11c26d;
+}
+
+.panel-line.panel-info .panel-heading {
+    color: #0bb2d4;
+    background: transparent;
+    border-top-color: #0bb2d4;
+}
+
+.panel-line.panel-info .panel-title {
+    color: #0bb2d4;
+}
+
+.panel-line.panel-info .panel-action {
+    color: #0bb2d4;
+}
+
+.panel-line.panel-warning .panel-heading {
+    color: #eb6709;
+    background: transparent;
+    border-top-color: #eb6709;
+}
+
+.panel-line.panel-warning .panel-title {
+    color: #eb6709;
+}
+
+.panel-line.panel-warning .panel-action {
+    color: #eb6709;
+}
+
+.panel-line.panel-danger .panel-heading {
+    color: #ff4c52;
+    background: transparent;
+    border-top-color: #ff4c52;
+}
+
+.panel-line.panel-danger .panel-title {
+    color: #ff4c52;
+}
+
+.panel-line.panel-danger .panel-action {
+    color: #ff4c52;
+}
+
+.panel-line.panel-dark .panel-heading {
+    color: #526069;
+    background: transparent;
+    border-top-color: #526069;
+}
+
+.panel-line.panel-dark .panel-title {
+    color: #526069;
+}
+
+.panel-line.panel-dark .panel-action {
+    color: #526069;
+}

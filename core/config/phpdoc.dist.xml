@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<phpdoc>
+    
+    <title>DLOREAN</title>
+    
+    <parser>
+        <target>../../docs/cache</target>
+        <encoding>utf8</encoding>
+        <!-- 
+        <markers>
+            <item>TODO</item>
+            <item>FIXME</item>
+        </markers>
+        -->
+        <extensions>
+            <extension>php</extension>
+        </extensions>
+        <visibility></visibility>
+    </parser>
+    
+    <transformer>
+        <target>../../docs/</target>
+    </transformer>
+    
+    <transformations>
+        <template name="clean" />
+    </transformations>
+    
+    <files>
+        <directory>../../</directory>
+        <ignore>core/assets/*</ignore>
+    </files>
+    
+</phpdoc>
+
+<!--
+
+<?xml version="1.0" encoding="UTF-8" ?>
+<phpdoc>
+    <files>        
+        <ignore>../../core/assets/*</ignore>
+        <directory>../../</directory>
+    </files>
+    <parser>
+        <target>../../docs/cache</target>
+    </parser>
+    <transformer>
+        <target>../../docs/output</target>
+    </transformer>
+
+</phpdoc>
+
+
+-->

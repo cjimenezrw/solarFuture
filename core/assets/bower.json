@@ -1,0 +1,41 @@
+{
+  "name": "DLOREAN assets",
+  "homepage": "https://github.com/cjimenezrw/DLOREAN",
+  "authors": [
+    "Samuel Perez <sperezwoodward@gmail.com>"
+  ],
+  "description": "Dependencias frontend de DLOREAN",
+  "main": "",
+  "license": "MIT",
+  "directory" : "core/assets",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests",
+    "package.json",
+    "src"
+  ],
+   "dependencies": {
+    "jquery": "^3.1.1",
+    "bootstrap": "^3.3.7",
+    "animsition": "^4.0.2",
+    "jquery-asScrollable": "asscrollable#*",
+    "switchery": "^0.8.1",
+    "intro.js": "intro-js#^2.3.0",
+    "jquery-slidePanel": "slidepanel#*",
+    "flag-icon-css": "^2.5.0",
+    "web-icons": "*",
+    "brand-icons": "*",
+    "modernizr": "^3.3.1",
+    "breakpoints": "^2.0.0",
+    "screenfull": "^3.0.2",
+    "jquery-scrollTo": "asscroll#*",
+    "jquery-asHoverScroll": "ashoverscroll#*",
+    "jquery-placeholder": "^2.3.1",
+    "jquery-asPieProgress": "aspieprogress#^0.3.4",
+    "chartist": "^0.9.8",
+    "font-awesome": "font-awsome#^4.6.3"
+  }
+}

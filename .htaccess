@@ -1,0 +1,37 @@
+# DEFAULT TIME ZONE #
+#SetEnv TZ America/Mexico_City
+
+#php_value session.gc_maxlifetime 14400
+#php_value session.cookie_lifetime 14400
+
+# Charset #
+AddCharset utf-8 .txt .html .htm .php .js .json .css .wsdl .wsv
+
+
+
+Options -Indexes
+#Options -MultiViews
+Options +FollowSymLinks
+RewriteEngine on
+
+ErrorDocument 404 /core/src/views/error_404.php
+ErrorDocument 500 /core/src/views/error_500.php
+
+# DLOREAN LOGOUT #
+RewriteRule ^logout/$ core/src/views/logout.php [L,NC,QSA]
+
+# DLOREAN CORE JS #
+RewriteRule ^core/src/views/js/([a-zA-Z0-9-_.\s]+)/core.js$ core/src/views/js/core.js [L,NC,QSA]
+
+# DLOREAN ASSETS [JS CSS] #
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteRule ^core/assets/([a-zA-Z0-9-_.\s]+)/(.*)$ core/assets/$2 [L]
+
+# DLOREAN MODULE JS #
+RewriteRule ^([a-zA-Z0-9-_.\s]+)/([a-zA-Z0-9-_.\s]+)/view/js/([a-zA-Z0-9-_.\s]+)/([a-zA-Z0-9-_.\s]+)$ $1/$2/view/js/$4 [L,NC,QSA]
+
+# DLOREAN MODULES #
+RewriteRule ^([a-zA-Z0-9-_.\s]+)/(?:([a-zA-Z0-9-_.\s]+/)?)(?:([a-zA-Z0-9-_.\s]+/)?)(?:([a-zA-Z0-9-_.\s]+/)?)(?:([a-zA-Z0-9-_.\s]+/)?)(?:([a-zA-Z0-9-_.\s]+/)?)(?:([a-zA-Z0-9-_.\s]+/)?)(?:([a-zA-Z0-9-_.\s]+/)?)(?:([a-zA-Z0-9-_.\s]+/)?)$ core/src/index.php?sysProject=$1&sysModule=$2&sysController=$3&sysName=$4&p1=$5&p2=$6&p3=$7&p4=$8&p5=$9 [L,NC,QSA]
+
+# DLOREAN WEB SERVICES #
+RewriteRule ^(wsv|wsdl)/([a-zA-Z0-9-_.\s]+)/$ core/src/index.php?sysType=$1&sysModule=$2

@@ -1,0 +1,23 @@
+{
+    "target-dir":"/var/www/DLOREAN/core/assets",
+    "autoload": {
+        "psr-4": {
+            "DDSocket\\": "src"
+        }
+    },
+    "require": {
+        "mpdf/mpdf": "6.*",
+        "phpoffice/phpexcel": "1.8.*",
+        "swiftmailer/swiftmailer": "5.4.*",
+
+        "php": ">=5.3.3",
+        "ext-xml": "*",
+        "zendframework/zend-escaper": "2.4.*",
+        "zendframework/zend-stdlib": "2.4.*",
+        "zendframework/zend-validator": "2.4.*",
+        "phpoffice/common": "0.2.*",
+        "phpoffice/phpword": "v0.13.*",
+        "tecnickcom/tcpdf":"*",
+        "cboden/ratchet": "^0.4"
+    }
+}

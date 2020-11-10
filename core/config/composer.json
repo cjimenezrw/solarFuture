@@ -1,0 +1,6 @@
+{
+	"target-dir":"/var/www/DLOREAN/core/assets",
+    "require": {
+        "codeigniter/framework": "3.*"
+    }
+}

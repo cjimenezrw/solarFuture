@@ -1607,9 +1607,9 @@ trait DLOREAN_Functions {
         $len = strlen($loc);
 
         $fName = (!$loc) ? TMP_HARDPATH . $loc :
-                substr($loc, $len - 1, $len) === '/' ?
-                $loc . $datos['fileName'] :
-                $loc . '/' . $datos['fileName'];
+                (substr($loc, $len - 1, $len) === '/' ?
+                ($loc . $datos['fileName']) :
+                ($loc . '/' . $datos['fileName']));
 
         try {
             $file = fopen($fName, 'w');

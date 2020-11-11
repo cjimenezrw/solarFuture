@@ -54,7 +54,7 @@ Class Inic_Model Extends DLOREAN_Model {
 
         if ($result) {
             $row = Conn::fetch_assoc($result);
-            if (count($result) > 0) {
+            if (count($row) > 0) {
 
                 $hash = parent::desencriptar($pass, $row['salt']);
 
@@ -135,7 +135,7 @@ Class Inic_Model Extends DLOREAN_Model {
         $result = Conn::query($select);
         if ($result) {
             $row = Conn::fetch_assoc($result);
-            if (count($result) > 0) {
+            if (count($row) > 0) {
 
                 $hash = parent::desencriptar($data['password'], $row['salt']);
                 if ($row['hash1'] == $hash) {

@@ -635,7 +635,7 @@ Class DLOREAN_Model extends Conn {
         $publico = Conn::fetch_assoc($result);
 
         // VERIFICAMOS CON SESIÓN INICIADA EN EL SISTEMA SI EL MÓDULO EXISTE EN BASE DE DATOS //
-        if (count($publico) === 0 && isset($_SESSION['modulos']) && !isset($_SESSION['modulos'][$this->sysController])) {
+        if (is_array($publico) && count($publico) === 0 && isset($_SESSION['modulos']) && !isset($_SESSION['modulos'][$this->sysController])) {
             $this->showError('NO EXISTE EL MÓDULO (' . $this->sysController . ')', 500);
         }
 
@@ -979,7 +979,7 @@ Class DLOREAN_Model extends Conn {
             $query2->closeCursor();
 
 
-            $arrayModulos[$modulo]['botones'] = "";
+            $arrayModulos[$modulo]['botones'] = array();
             $amd_b = & $arrayModulos[$modulo]['botones'];
             $sqlBotones = "
                         SELECT cmb.skModulo, cmb.skModuloPadre, cmb.skEstatus, cmb.skBoton, IF(cmb.sNombre IS NULL, cb.sNombre, cmb.sNombre) AS sNombre, cmb.iPosicion, IF(cmb.sFuncion IS NULL, cb.sFuncion, cmb.sFuncion) AS sFuncion, cmb.skComportamiento, IF(cmb.sIcono IS NULL, cb.sIcono, cmb.sIcono) AS sIcono, cm.skModuloPrincipal, cm.sNombre AS nombreModulo,cmb.skComportamiento
@@ -1013,7 +1013,7 @@ Class DLOREAN_Model extends Conn {
             }
 
             $Botones->closeCursor();
-            $arrayModulos[$modulo]['caracteristicas'] = "";
+            $arrayModulos[$modulo]['caracteristicas'] = array();
 
             $amd_c = & $arrayModulos[$modulo]['caracteristicas'];
 
@@ -1025,7 +1025,7 @@ Class DLOREAN_Model extends Conn {
             $caracteristicas->closeCursor();
 
 
-            $arrayModulos[$modulo]['menuEmergente'] = "";
+            $arrayModulos[$modulo]['menuEmergente'] = array();
             $amd_me = & $arrayModulos[$modulo]['menuEmergente'];
             $sqlMenuEmergente = "SELECT cmme.*,cm.sNombre, cm.skModuloPrincipal
                        FROM core_modulos_menusEmergentes cmme

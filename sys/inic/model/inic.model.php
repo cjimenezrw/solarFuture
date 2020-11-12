@@ -718,23 +718,5 @@ SELECT count(*) FROM core_chats cc WHERE cc.skUsuarioEmisor = cu.skUsuario AND c
         return $cp;
     }
 
-    public function consultaVenta(){
-
-        $sql="SELECT SUM(oti.fTotal) AS totalDia
-            FROM ope_ticketsIngreso oti
-            WHERE CONVERT(oti.dFechaCreacion,DATE) = CONVERT(GETDATE(),DATE) ";
-            if (!empty($this->venta['skTipoCaja'])) {
-                $sql .= " AND oti.skCaja= " . escape($this->venta['skTipoCaja']);
-            }
-            $result = Conn::query($sql);
-            if ($result) {
-                return true;
-            } else {
-                return false;
-            }
-            $records = Conn::fetch_assoc($result);
-            utf8($records);
-            return $records;
-            return true;
-    }
+     
 }

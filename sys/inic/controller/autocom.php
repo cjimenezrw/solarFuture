@@ -10,25 +10,7 @@
 trait AutoCompleteTrait
 {
 
-    /**
-     * Retorna paises
-     *
-     * Esta funcion invoca la funcion getPaises del Conf_Model, el cual me retorna
-     * un json con los datos de los paises.
-     *
-     * @author Samuel Perez Saldivar <sperez@woodward.com.mx>
-     * @param string $param Parametro para la busqueda de datos
-     * @return string|false Retorna el json de datos o false en caso de error
-     */
-    public function getPaises($param)
-    {
-
-        parent::load_class('conf', 'model', 'conf');
-
-        $conf = new Conf_Model();
-
-        return $conf->getPaises($param);
-    }
+   
 
     /**
      * Autocomplete de perfiles

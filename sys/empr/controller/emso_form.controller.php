@@ -48,13 +48,9 @@ Class Emso_form_Controller Extends Empr_Model
     public function consultarSocioEmpresa(){
         $this->data['estatus'] = parent::consultar_core_estatus(['AC','IN'],true);
         $this->data['empresasTipos'] = parent::getEmpresasTipos();
-        $this->data['corresponsales'] = parent::getCorresponsales();
-        $this->data['promotores'] = parent::getPromotores();
-        $this->data['catPaises'] = parent::getPaises();
-        if (isset($_GET['p1'])) {
+         if (isset($_GET['p1'])) {
             $this->data['datos'] = parent::consultar_empresaSocio($_GET['p1']);
-            $this->data['datos2'] = parent::getEmpresasSociosDatos($_GET['p1']);
-            return $this->data;
+             return $this->data;
         }
         return $this->data;
         return TRUE;

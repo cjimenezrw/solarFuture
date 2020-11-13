@@ -1,23 +1,28 @@
 <?php
-
 /**
  * Clase de conexion
  *
  * @author Samuel Perez Saldivar <sperez@woodward.com.mx>
  */
 class Conn {
-
+     
+    /**
+     *
+     * @var array Array asociativo de resultado de conexion a otras bases de datos
+     */
+    public static $connect_result = array();
+    
     /**
      *
      * @var int Cantidad actual de reconexiones realizadas
      */
     public static $reconects = 0;
-
-    /**
+    
+    /** 
      *
-     * @var int Maximo numero de reintentos para conectar.
+     * @var int Maximo numero de reintentos para conectar.  
      */
-    public static $maxReconTy = 4;
+    public static $maxReconTy = 5;
 
     /**
      *
@@ -78,7 +83,7 @@ class Conn {
         global $db_connections;
         if (!Conn::connect($db_connections[DEFAULT_CONNECTION][ENVIRONMENT])) {
             return false;
-        }
+        }       
         Conn::testing();
     }
 
@@ -141,41 +146,86 @@ class Conn {
         }
         $dsn = trim($d['TYPE']);
         $hostStr = "";
-
+        
         if(strpos($d['HOST_DB'], '\\') !== false){
             $hostStr .= $d['HOST_DB'];
         }else{
-            $hostStr .= "$d[HOST_DB]";
-        }
-
-        try {
-
-            if ($relatedName) {
-                Conn::$others[$relatedName] = new PDO("$dsn:host=$hostStr;dbname=$d[DATABASE_DB];charset=UTF-8;timeout=0;connect timeout=0", "$d[USER_DB]", "$d[PASSWORD_DB]");
-                Conn::$others[$relatedName]->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-                //PDO::SQLSRV_ATTR_ENCODING, PDO::SQLSRV_ENCODING_UTF8
-            } else {
-		//exit("$dsn:host=$hostStr;dbname=$d[DATABASE_DB];charset=UTF-8;timeout=0;connect timeout=0");
-        //Conn::$base = new PDO("$dsn:host=$hostStr;dbname=$d[DATABASE_DB];charset=UTF-8;timeout=0;connect timeout=0", "$d[USER_DB]", "$d[PASSWORD_DB]");
-                Conn::$base = new PDO("mysql:host=$hostStr;dbname=$d[DATABASE_DB]", $d["USER_DB"], $d["PASSWORD_DB"]);
-                Conn::$base->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-                //Conn::$base->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+            switch ($dsn) {
+                case 'mysql':
+                    $hostStr .= "$d[HOST_DB]";
+                    break;
+                case 'mssql':
+                    $hostStr .= "$d[HOST_DB]:$d[PORT_DB]";
+                    break;
+                case 'posgress':
+                    $hostStr .= "$d[HOST_DB]:$d[PORT_DB]";
+                    break;
+                default:
+                    $hostStr .= "$d[HOST_DB]:$d[PORT_DB]";
+                    break;
             }
+        }
+        
+        try {
+            
+            if ($relatedName) {
+                
+                // BASE DE DATOS EXTERNA
+                    Conn::$others[$relatedName] = new PDO("$dsn:host=$hostStr;dbname=$d[DATABASE_DB];charset=UTF-8;timeout=0;connect timeout=0", "$d[USER_DB]", "$d[PASSWORD_DB]");
+                    Conn::$others[$relatedName]->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+                    
+            } else {
+                
+                // BASE DE DATOS DLOREAN
+                    switch ($dsn) {
+                        case 'mysql':
+                            Conn::$base = new PDO("mysql:host=$hostStr;dbname=$d[DATABASE_DB]", $d["USER_DB"], $d["PASSWORD_DB"]);
+                            break;
+                        case 'mssql':
+                            Conn::$base = new PDO("$dsn:host=$hostStr;dbname=$d[DATABASE_DB];charset=UTF-8;timeout=0;connect timeout=0", "$d[USER_DB]", "$d[PASSWORD_DB]");
+                            break;
+                        case 'posgress':
+                            Conn::$base = new PDO("$dsn:host=$hostStr;dbname=$d[DATABASE_DB];charset=UTF-8;timeout=0;connect timeout=0", "$d[USER_DB]", "$d[PASSWORD_DB]");
+                            break;
+                        default:
+                            Conn::$base = new PDO("$dsn:host=$hostStr;dbname=$d[DATABASE_DB];charset=UTF-8;timeout=0;connect timeout=0", "$d[USER_DB]", "$d[PASSWORD_DB]");
+                            break;
+                    }
+                    Conn::$base->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+            }
+            
             return true;
-
+            
         } catch (PDOException $e) {
-
+            
             if(Conn::$reconects < Conn::$maxReconTy){
                 Conn::$reconects ++;
                 error_log(date('Y-m-d h:i:s'). " - Reintentando conexion   $d[HOST_DB] > $d[DATABASE_DB]  Intento numero: " . Conn::$reconects . "\n", 3, ERROR_LOGFILE);
                 usleep(300000);
-                Conn::connect($d,$relatedName);
+                Conn::connect($d,$relatedName);                
             }else{
                 error_log(date('Y-m-d h:i:s'). " - Conexion fallida a  $d[HOST_DB] > $d[DATABASE_DB] :" . $e->getMessage() . "\n", 3, ERROR_LOGFILE);
-                DLOREAN_Model::showError('Error al conectar con la base de datos, por favor intente nuevamente onconnect.',9);
-                return false;
-            }
-
+                
+                if(isset(Conn::$others[$relatedName])){
+                    
+                    // BASE DE DATOS EXTERNA
+                    
+                        Conn::$connect_result = [
+                            'success' => FALSE,
+                            'message' => 'ERROR AL CONECTAR CON LA BASE DE DATOS',
+                            'messageSQL' => $e->getMessage(),
+                            'datos' => NULL
+                        ];
+                        return Conn::$connect_result;
+                        
+                }else{
+                    
+                    // BASE DE DATOS DLOREAN
+                        DLOREAN_Model::showError('Error al conectar con la base de datos, por favor intente nuevamente onconnect.',9);
+                        return FALSE;
+                }
+            }   
+            
         }
     }
 
@@ -222,8 +272,13 @@ class Conn {
      */
     public static function query($sql, $db = false) {
         $r = false;
-
+        
+        Conn::$connect_result = [];
         Conn::checkOnlineStatus($db);
+        if(is_array(Conn::$connect_result) && isset(Conn::$connect_result['success']) && Conn::$connect_result['success'] == false){
+            return Conn::$connect_result;
+        }
+        
         if (is_string($db)) {
             if (!array_key_exists($db, Conn::$others)) {
                 error_log(date('Y-m-d h:i:s'). " - La base de datos $db no existe.",3, ERROR_LOGFILE);
@@ -234,12 +289,30 @@ class Conn {
 
                 $r = Conn::$others[$db]->query($sql);
             } catch (PDOException $e) {
+                
+                Conn::$connect_result = [
+                    'success' => FALSE,
+                    'message' => 'ERROR AL CONSULTAR CON LA BASE DE DATOS',
+                    'messageSQL' => $e->getMessage(),
+                    'datos' => NULL
+                ];
+                return Conn::$connect_result;
+                
                 error_log(date('Y-m-d h:i:s'). " - La consulta ha fallado: \n $sql \n<br>   ERROR: " . $e->getMessage() . "\n",3, ERROR_LOGFILE);
             }
         } else {
             try {
                 $r = Conn::$base->query($sql);
             } catch (PDOException $e) {
+                
+                Conn::$connect_result = [
+                    'success' => FALSE,
+                    'message' => 'ERROR AL CONSULTAR CON LA BASE DE DATOS',
+                    'messageSQL' => $e->getMessage(),
+                    'datos' => NULL
+                ];
+                return Conn::$connect_result;
+                
                 error_log(date('Y-m-d h:i:s'). " - La consulta ha fallado: \n $sql \n<br>   ERROR: " . $e->getMessage() . "\n",3, ERROR_LOGFILE);
                 //echo "La consulta ha fallado: \n $sql \n<br>   ERROR: " . $e->getMessage() . "\n";
             }
@@ -261,9 +334,12 @@ class Conn {
      */
     public static function checkOnlineStatus($dbn = false) {
         if (!$dbn) {
+            // BASE DE DATOS DLOREAN
             try {
+                
                 Conn::$base->query('SELECT 1');
                 return true;
+                
             } catch (PDOException $e) {
 
                 error_log(date('Y-m-d h:i:s'). " - La conexion base no esta disponible reconectando..." . $e->getMessage() . "\n",3, ERROR_LOGFILE);
@@ -272,22 +348,43 @@ class Conn {
                 return false;
             }
         } else {
-
-            if (!Conn::$others[$dbn]) {
-                Conn::connect(Conn::$credentials[$dbn], $dbn);
-                return true;
-            }
-
-            if (Conn::$others[$dbn]->query('SELECT 1')) {
-                return true;
-            }
+            
+            // BASE DE DATOS EXTERNA
+            
             try {
+                
+                if (!Conn::$others[$dbn]) {
+                    Conn::connect(Conn::$credentials[$dbn], $dbn);
+                    return true;
+                }
+
+                if (Conn::$others[$dbn]->query('SELECT 1')) {
+                    return true;
+                }
+            
                 Conn::connect(Conn::$credentials[$dbn]);
                 return true;
+                
             } catch (PDOException $e) {
+                
                 error_log(date('Y-m-d h:i:s'). " - La conexion $dbn no esta disponible..." . $e->getMessage(). "\n",3, ERROR_LOGFILE);
-                DLOREAN_Model::showError('Error al conectar con base de datos externa.',10);
-                return false;
+                
+                if(isset(Conn::$others[$relatedName])){
+                    
+                    // BASE DE DATOS EXTERNA
+                        /*Conn::$connect_result = [
+                            'success' => FALSE,
+                            'message' => 'ERROR AL CONECTAR CON LA BASE DE DATOS',
+                            'messageSQL' => $e->getMessage(),
+                            'datos' => NULL
+                        ];
+                        return Conn::$connect_result;*/
+                }else{
+                    
+                    // BASE DE DATOS DLOREAN
+                        DLOREAN_Model::showError('Error al conectar con base de datos externa.',10);
+                        return FALSE;
+                }
             }
         }
     }
@@ -314,7 +411,12 @@ class Conn {
             $mcc = $db_connections[DEFAULT_CONNECTION][ENVIRONMENT];
             $mcc['TYPE'] = Conn::getDSN($mcc['TYPE']);
             Conn::$trsLoc[$tid]['dsn'] = $mcc['TYPE'];
+            
             Conn::checkOnlineStatus();
+            if(is_array(Conn::$connect_result) && isset(Conn::$connect_result['success']) && Conn::$connect_result['success'] == false){
+                return Conn::$connect_result;
+            }
+            
             Conn::begingTransAs($tid);
         } else {
 
@@ -324,7 +426,12 @@ class Conn {
                 return false;
             }
             Conn::$trsLoc[$tid]['dsn'] = Conn::$credentials[$cnname]['TYPE'];
+            
             Conn::checkOnlineStatus($cnname);
+            if(is_array(Conn::$connect_result) && isset(Conn::$connect_result['success']) && Conn::$connect_result['success'] == false){
+                return Conn::$connect_result;
+            }
+            
             Conn::begingTransAs($tid);
         }
     }
@@ -429,9 +536,11 @@ class Conn {
      * @return type
      */
     public static function fetch_assoc(&$data) {
-
-        return $data->fetch(PDO::FETCH_ASSOC);
-        //return $data->fetch(PDO::FETCH_ASSOC);
+        if(is_object($data)){
+            return $data->fetch(PDO::FETCH_ASSOC);
+        }else{
+            return [];
+        }
     }
 
     /**
@@ -441,7 +550,11 @@ class Conn {
      * @return type
      */
     public static function fetch_assoc_all(&$data) {
-        return $data->fetchall(PDO::FETCH_ASSOC);
+        if(is_object($data)){
+            return $data->fetchall(PDO::FETCH_ASSOC);
+        }else{
+            return [];
+        }
     }
 
     /**

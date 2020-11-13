@@ -82,7 +82,7 @@ function randomPrint(){
     <div class="page-content">
         <div class="page-brand-info">
             <div class="brand">
-                <!--<img class="brand-img" src="<?php echo ASSETS_PATH . 'tpl/'; ?>images/LogoMedicLab.svg" alt="..." style="max-width: 450px;">-->
+                <img class="brand-img" src="<?php echo ASSETS_PATH . 'tpl/'; ?>images/logoHeader.png" alt="..." style="max-width: 450px;">
                 <!--<h2 class="brand-text font-size-40"><?php /*echo COMPANY */?></h2>-->
             </div>
             <!--<p class="font-size-20">Normalmente, lo que nos da m&aacute;s miedo hacer es lo que m&aacute;s necesitamos

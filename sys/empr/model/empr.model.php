@@ -259,34 +259,7 @@ Class Empr_Model Extends DLOREAN_Model {
         }
         return Conn::fetch_assoc($result);
     }
-
-    /**
-     * stpCUD_empresasSociosDatos
-     *
-     * Crea o Edita los datos de una empresa socio en base de datos.
-     *
-     * @author Jonathan Topete Figueroa <jtopete@woodward.com.mx>
-     * @return boolean Retorna un objeto de resultado mssql en caso de éxito ó false en caso de error.
-     */
-    public function stpCUD_empresasSociosDatos() {
-        $sql = "CALL stpCUD_empresasSociosDatos (
-            /*@skDatosEmpreasSocios       = */" . escape($this->empresaSocio['skDatosEmpreasSocios']) . ",
-            /*@skEmpresaSocio             = */" . escape($this->empresaSocio['skEmpresaSocio']) . ",
-            /*@skEmpresaSocioCorresponsal             = */" . escape($this->empresaSocio['skEmpresaSocioCorresponsal']) . ",
-            /*@skEmpresaSocioPromotor1             = */" . escape($this->empresaSocio['skEmpresaSocioPromotor1']) . ",
-            /*@skEmpresaSocioPromotor2             = */" . escape($this->empresaSocio['skEmpresaSocioPromotor2']) . ",
-            /*@sObservaciones             = */" . escape($this->empresaSocio['sObservaciones']) . ",
-            /*@skUsuarioCreacion          = */" . escape($_SESSION['usuario']['skUsuario']) . ",
-            /*@skModulo                   = */" . escape($this->sysController) . " )";
-
-
-        $result = Conn::query($sql);
-        if (!$result) {
-            return FALSE;
-        }
-        return Conn::fetch_assoc($result);
-    }
-
+ 
     /**
      * stpCD_caracteristica_empesaSocio
      *

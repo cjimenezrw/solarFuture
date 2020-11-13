@@ -122,86 +122,8 @@ if (isset($data['datos'])) {
                                 <hr>
                             </div>
                         </div>
-                        <div class="col-md-12 hidden">
-                            <label class="col-md-2 control-label"><b>Area</b> </label>
-                            <div class="form-group col-md-3">
-                                <select name="skArea" class="form-control" onchange="conf.usua_form.change_skDepartamento(this);">
-                                    <option value="">Seleccionar</option>
-                                    <?php
-                                    if ($data['Area']) {
-                                        foreach ($data['Area'] as $row ) {
-                                            ?>
-                                            <option <?php echo(isset($result['skArea']) && $result['skArea'] == $row['skArea'] ? 'selected="selected"' : '') ?>
-                                                value="<?php echo $row['skArea']; ?>"> <?php echo $row['sNombre']; ?> </option>
-                                            <?php
-                                        }
-                                    }//ENDWHILE
-                                    ?>
-                                </select>
-                            </div>
-                            <label class="col-md-2 control-label"><b>Departamento</b> </label>
-                            <div class="form-group col-md-3">
-                                <div id="departamento">
-                                <?php if (isset($result['skArea']) && $result['skArea']) { ?>
-                                <select name="skDepartamento" class="form-control" >
-                                    <option value="">Seleccionar</option>
-                                    <?php
-                                    if ($data['Departamento']) {
-                                        foreach ($data['Departamento'] as $row) {
-                                            ?>
-                                            <option <?php echo(isset($result['skDepartamento']) && $result['skDepartamento'] == $row['skDepartamento'] ? 'selected="selected"' : '') ?>
-                                                value="<?php echo $row['skDepartamento']; ?>"> <?php echo $row['sNombre']; ?> </option>
-                                            <?php
-                                        }
-                                    }//ENDWHILE
-                                    ?>
-
-                                </select>
-                                <?php }else{ ?>
-                                    <select name="skDepartamento" class="form-control" disabled="disabled">
-                                        <option value="">Seleccionar</option>
-                                    </select>
-                            <?php    } ?>
-                                </div>
-                            </div>
-
-
-                        </div>
-                        <div class="col-md-12 hidden">
-                            <label class="col-md-2 control-label"><b>Grupo</b> </label>
-                            <div class="form-group col-md-3">
-                                <select name="skGrupo" class="form-control">
-                                    <option value="">Seleccionar</option>
-                                    <?php
-                                    if ($data['Grupo']) {
-                                        foreach ( $data['Grupo'] as $row) {
-                                            ?>
-                                            <option <?php echo(isset($result['skGrupo']) && $result['skGrupo'] == $row['skGrupo'] ? 'selected="selected"' : '') ?>
-                                                value="<?php echo $row['skGrupo']; ?>"> <?php echo $row['sNombre']; ?> </option>
-                                            <?php
-                                        }
-                                    }//ENDWHILE
-                                    ?>
-                                </select>
-                            </div>
-
-                            <label class="col-md-2 control-label"><b>Rol digitalizacion</b> </label>
-                            <div class="form-group col-md-3">
-                                <select name="skRolDigitalizacion" class="form-control" >
-                                    <option value="">Seleccionar</option>
-                                    <?php
-                                    if ($data['rolesDigitalizacion']) {
-                                        array_walk($data['rolesDigitalizacion'], function(&$v,&$k) use(&$result) {
-                                            $s = ($result['skRolDigitalizacion'] === $v['skRolDigitalizacion'])? 'selected':'';
-                                            echo "<option $s value = \"$v[skRolDigitalizacion]\" >$v[sNombre]</option>";
-                                        });
-                                    }//ENDWHILE
-                                    ?>
-                                </select>
-                            </div>
-
-
-                        </div>
+                        
+                         
                         <div class="form-group col-md-12">
                             <div class="col-md-2">
                             </div>

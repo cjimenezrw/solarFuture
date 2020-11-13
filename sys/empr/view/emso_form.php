@@ -1,9 +1,7 @@
 <?php
 if (isset($data['datos'])) {
     $result = $data['datos'];
-    $result2 = $data['datos2'];
-    utf8($result);
-    utf8($result2);
+    utf8($result); 
 
 }
 ?>
@@ -86,77 +84,11 @@ if (isset($data['datos'])) {
                             <input class="form-control" id="sNombreCorto" name="sNombreCorto" value="<?php echo (isset($result['sNombreCorto'])) ? ($result['sNombreCorto']) : ''; ?>"  placeholder="Nombre Corto" autocomplete="off" type="text">
                         </div>
                     </div>
-                    <div class="col-md-12">
-                        <label class="col-sm-2 control-label"><b>Corresponsalia:</b> </label>
-                        <div class="form-group col-sm-3">
-                            <select id="skEmpresaSocioCorresponsal" name="skEmpresaSocioCorresponsal" class="form-control">
-                                <option value="">Seleccionar</option>
-                                <?php
-                                if ($data['corresponsales']) {
-                                    foreach (  $data['corresponsales'] as $row) {
-                                        utf8($row);
-                                        ?>
-                                        <option <?php echo(isset($result2['skEmpresaSocioCorresponsal']) && $result2['skEmpresaSocioCorresponsal'] == $row['skEmpresaSocio'] ? 'selected="selected"' : '') ?>
-                                            value="<?php echo $row['skEmpresaSocio']; ?>"> <?php echo $row['sNombre']; ?> </option>
-                                        <?php
-                                        }//ENDWHILE
-                                    }//ENDIF
-                                    ?>
-                            </select>
-
-                        </div>
-
-                    </div>
-                    <div class="col-md-12">
-                        <label class="col-sm-2 control-label"><b>Promotor 1:</b> </label>
-                        <div class="form-group col-sm-3">
-                            <select id="skEmpresaSocioPromotor1" name="skEmpresaSocioPromotor1" class="form-control">
-                                <option value="">Seleccionar</option>
-                                <?php
-                                if ($data['promotores']) {
-                                    foreach (  $data['promotores'] as $row) {
-                                        utf8($row);
-                                        ?>
-                                        <option <?php echo(isset($result2['skEmpresaSocioPromotor1']) && $result2['skEmpresaSocioPromotor1'] == $row['skEmpresaSocio'] ? 'selected="selected"' : '') ?>
-                                            value="<?php echo $row['skEmpresaSocio']; ?>"> <?php echo $row['sNombre']; ?> </option>
-                                        <?php
-                                        }//ENDWHILE
-                                    }//ENDIF
-                                    ?>
-                            </select>
-
-                        </div>
-                        <label class="col-sm-2 control-label"><b>Promotor 2:</b> </label>
-                        <div class="form-group col-sm-3">
-                            <select id="skEmpresaSocioPromotor2" name="skEmpresaSocioPromotor2" class="form-control"  >
-                                <option value="">Seleccionar</option>
-                                <?php
-                                if ($data['promotores']) {
-                                    foreach (  $data['promotores'] as $row) {
-                                        utf8($row);
-                                        ?>
-                                        <option <?php echo(isset($result2['skEmpresaSocioPromotor2']) && $result2['skEmpresaSocioPromotor2'] == $row['skEmpresaSocio'] ? 'selected="selected"' : '') ?>
-                                            value="<?php echo $row['skEmpresaSocio']; ?>"> <?php echo $row['sNombre']; ?> </option>
-                                    <?php
-                                    }//ENDWHILE
-                                }//ENDIF
-                                ?>
-                            </select>
-
-                        </div>
-                    </div>
+                  
 
 
 
 
-
-
-                    <div class="col-md-12">
-                        <label class="col-md-2 control-label"><b>Observaciones: </b> </label>
-                        <div class="form-group col-md-8">
-                            <textarea class="form-control input-sm max-width-100" name="sObservaciones" rows="4" cols="50" placeholder="Añada sus observaciones"><?php echo (isset($result2['sObservaciones'])) ? ($result2['sObservaciones']) : ''; ?></textarea>
-                        </div>
-                    </div>
 
                 </div>
             </div>

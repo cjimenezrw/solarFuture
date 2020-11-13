@@ -78,12 +78,7 @@ Class Emso_form_Controller Extends Empr_Model
         $this->empresaSocio['skEmpresaTipo'] = isset($_POST['skEmpresaTipo']) ? $_POST['skEmpresaTipo'] : NULL;
         $skCaracteristicaEmpresaSocio = isset($_POST['skCaracteristicaEmpresaSocio']) ? $_POST['skCaracteristicaEmpresaSocio'] : NULL;
 
-        $this->empresaSocio['skDatosEmpreasSocios'] = isset($_POST['skDatosEmpreasSocios']) ? $_POST['skDatosEmpreasSocios'] : NULL;
-        $this->empresaSocio['skEmpresaSocioCorresponsal'] = isset($_POST['skEmpresaSocioCorresponsal']) ? $_POST['skEmpresaSocioCorresponsal'] : NULL;
-        $this->empresaSocio['skEmpresaSocioPromotor1'] = isset($_POST['skEmpresaSocioPromotor1']) ? $_POST['skEmpresaSocioPromotor1'] : NULL;
-        $this->empresaSocio['skEmpresaSocioPromotor2'] = isset($_POST['skEmpresaSocioPromotor2']) ? $_POST['skEmpresaSocioPromotor2'] : NULL;
-        $this->empresaSocio['sObservaciones'] = isset($_POST['sObservaciones']) ? $_POST['sObservaciones'] : NULL;
-
+ 
         $skEmpresaSocio = parent::stpCUD_empresaSocio();
         if(!$skEmpresaSocio){
             $this->data['success'] = FALSE;
@@ -91,13 +86,7 @@ Class Emso_form_Controller Extends Empr_Model
         }
 
         $this->empresaSocio['skEmpresaSocio'] = isset($skEmpresaSocio["skEmpresaSocio"]) ? $skEmpresaSocio["skEmpresaSocio"] : NULL;
-        $skEmpresaSocioDatos = parent::stpCUD_empresasSociosDatos();
-        if(!$skEmpresaSocioDatos){
-            $this->data['success'] = FALSE;
-            $this->data['message'] = 'Hubo un error al guardar el registro, intenta de nuevo.';
-        }
-
-
+      
         if($skCaracteristicaEmpresaSocio){
             $this->empresaSocio['skEmpresaSocio'] = $skEmpresaSocio['skEmpresaSocio'];
             // Eliminamos las características ANTERIORES //

@@ -55,12 +55,7 @@ Class Inic_Controller Extends Inic_Model {
         }
 
         switch ($axn) {
-
-            case 'getPaises':
-                $arr = $this->getPaises((isset($_GET['val'])) ? $_GET['val'] : $_POST['val']);
-                header('Content-Type: application/json');
-                echo json_encode($arr, 512);
-                break;
+ 
             case 'obtenerPerfiles':
                 $arr = $this->obtenerPerfiles($_GET['perfilesLike']);
                 header('Content-Type: application/json');

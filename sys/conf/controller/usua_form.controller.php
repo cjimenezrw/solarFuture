@@ -49,9 +49,9 @@ Class Usua_form_Controller Extends Conf_Model {
             $this->usuario['sUsuario'] = (isset($_POST['sUsuario']) ?  $_POST['sUsuario'] : NULL);
             $this->usuario['skEstatus'] = ($_POST['skEstatus'] ? $_POST['skEstatus']  : NULL);
 
-            $this->usuario['skArea'] = ($_POST['skArea'] ?  $_POST['skArea'] : NULL);
-            $this->usuario['skDepartamento'] = (isset($_POST['skDepartamento']) ?  $_POST['skDepartamento']  : NULL);
-            $this->usuario['skGrupo'] = ($_POST['skGrupo'] ?  $_POST['skGrupo']  : NULL);
+            $this->usuario['skArea'] = NULL;
+            $this->usuario['skDepartamento'] = NULL;
+            $this->usuario['skGrupo'] = NULL;
 
             $this->usuario['sNombre'] = ($_POST['sNombre'] ? $_POST['sNombre'] : NULL);
             $this->usuario['sApellidoPaterno'] = ($_POST['sApellidoPaterno'] ? $_POST['sApellidoPaterno'] : NULL);
@@ -146,14 +146,11 @@ Class Usua_form_Controller Extends Conf_Model {
     }
 
     public function consultarUsuario() {
-        $this->data['Area'] = parent::consultar_area();
-        $this->data['Grupo'] = parent::consultar_grupos();
-        $this->data['Estatus'] = parent::consultar_core_estatus(['AC','IN'], true);
+         $this->data['Estatus'] = parent::consultar_core_estatus(['AC','IN'], true);
         if (isset($_GET['p1'])) {
             $this->usuario['skUsuario'] = $_GET['p1'];
             $this->data['datos'] = parent::consulta_usuario();
-            $this->data['Departamento'] = parent::getArea_Departamento($this->data['datos']['skArea']);
-            $this->data['usuario_perfiles'] = $this->consultarUsuarioPerfiles();
+             $this->data['usuario_perfiles'] = $this->consultarUsuarioPerfiles();
             return $this->data;
         }
         return $this->data;

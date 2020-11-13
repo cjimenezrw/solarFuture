@@ -82,17 +82,10 @@ Class Inic_dash_Controller Extends Inic_Model {
 
     }
     public function datosInicial(){
-        $this->data['ventaGeneral'] = parent::consultaVenta();
-        $this->venta['skTipoCaja'] = '95E4D624-DAF5-45A8-9F88-AA7D990B9809';
-        $this->data['caja1'] = parent::consultaVenta();
-        $this->venta['skTipoCaja'] = '57CADC4F-DD40-4023-81AE-5C8D9C117769';
-        $this->data['caja2'] = parent::consultaVenta();
-        $this->venta['skTipoCaja'] = '88894A41-FFEA-4507-8AD6-95CA8FB61E4A';
-        $this->data['caja3'] = parent::consultaVenta();
+        $this->data['ventaGeneral'] = [];
+        
 
-
-        return $this->data;
-        return true;
+        return $this->data; 
     }
 
 }

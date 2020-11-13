@@ -12,7 +12,6 @@
         <div class="navbar-brand navbar-brand-center site-gridmenu-toggle" data-toggle="gridmenu">
             <img class="navbar-brand-logo img-rounded" src="<?php echo ASSETS_PATH ?>tpl/images/logoHeader.png"
                  title="<?php echo COMPANY;?>">
-            <span class="navbar-brand-text hidden-xs"> <?php echo COMPANY; ?></span>
         </div>
         <button type="button" class="navbar-toggle collapsed" data-target="#site-navbar-search"
                 data-toggle="collapse">

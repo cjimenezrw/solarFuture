@@ -11,8 +11,7 @@ $load = new AssetLoader();
     <meta name="description" content="softlab.">
     <meta name="theme-color" content="#064480">
     <meta name="author" content="Softlab">
-    <meta name="keywords" content="
-logistica internacional, agencia logistica, holding, importación, exportación, agencia aduanal, fletes, almacenaje, maniobras, consolidación, desconsolidacion, de, carga, servicios, integrales, comercio, exterior, manzanillo" />
+    <meta name="keywords" content="solar,paneles"/>
     <title><?php echo WEBTITLE; ?></title>
     <link rel="apple-touch-icon" href="<?php echo ASSETS_PATH . 'tpl/'; ?>images/favicon.ico">
     <link rel="shortcut icon" href="<?php echo ASSETS_PATH . 'tpl/'; ?>images/favicon.ico">

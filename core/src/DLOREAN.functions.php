@@ -10,6 +10,7 @@
  */
 trait DLOREAN_Functions {
 
+    public $pusherInstance = false;
 
     /**
      * pdf
@@ -22,22 +23,22 @@ trait DLOREAN_Functions {
      * </pre>
      *
      * <p><i>header</i> y <i>footer</i> se comportan distinto dependiendo de su valor:
-        <ul>
-            <li>text/html       => Se establece html provisto por usuario. </li>
-            <li>FALSE		=> Se establece contenido vacio.</li>
-            <li>NO DEFINIR     => Se establece un contenido por defecto</li>
-        </ul>
+      <ul>
+      <li>text/html       => Se establece html provisto por usuario. </li>
+      <li>FALSE   => Se establece contenido vacio.</li>
+      <li>NO DEFINIR     => Se establece un contenido por defecto</li>
+      </ul>
      * </p>
      *
      * <pre>
-        &nbsp;&nbsp;&nbsp;&nbsp;[<b><i>content</i></b>]   => text/html
-        &nbsp;&nbsp;&nbsp;&nbsp;[<b><i>css</i></b>]       => text/css|RUTA ABSOLUTA DE ARCHIVO
-        &nbsp;&nbsp;&nbsp;&nbsp;[<b><i>waterMark</i></b>] => Array(
-        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[<i>imgsrc</i>]  => RUTA ABSOLUTA A IMAGEN
-        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[<i>opacity</i>] => Float de 0.0 a 1.0
-        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[<i>size</i>]    => D|P|F|INT|[ancho,alto]
-        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[<i>place</i>]   => P|F|[int X,int Y]
-        &nbsp;&nbsp;&nbsp;&nbsp)
+      &nbsp;&nbsp;&nbsp;&nbsp;[<b><i>content</i></b>]   => text/html
+      &nbsp;&nbsp;&nbsp;&nbsp;[<b><i>css</i></b>]       => text/css|RUTA ABSOLUTA DE ARCHIVO
+      &nbsp;&nbsp;&nbsp;&nbsp;[<b><i>waterMark</i></b>] => Array(
+      &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[<i>imgsrc</i>]  => RUTA ABSOLUTA A IMAGEN
+      &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[<i>opacity</i>] => Float de 0.0 a 1.0
+      &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[<i>size</i>]    => D|P|F|INT|[ancho,alto]
+      &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[<i>place</i>]   => P|F|[int X,int Y]
+      &nbsp;&nbsp;&nbsp;&nbsp)
      * </pre>
      *
      * <p><b><i>waterMark</i></b><br> Puedes no declarar esta propiedad para omitirla<br>
@@ -59,9 +60,9 @@ trait DLOREAN_Functions {
      *
      * <pre>
      * &nbsp;&nbsp;&nbsp;&nbsp;[<b><i>protection</i></b>] => Array(
-        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[<i>permissions</i>] => ['Accion permitida ' ....]
-        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[<i>userPass</i>]    => Clave de usuario, puede estar en blanco.
-        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[<i>ownerPass</i>]   => Clave de propietario, puede estar en blanco.
+      &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[<i>permissions</i>] => ['Accion permitida ' ....]
+      &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[<i>userPass</i>]    => Clave de usuario, puede estar en blanco.
+      &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[<i>ownerPass</i>]   => Clave de propietario, puede estar en blanco.
      * &nbsp;&nbsp;&nbsp;&nbsp)
      * </pre>
      *
@@ -78,19 +79,19 @@ trait DLOREAN_Functions {
      * </ul>
      * </p>
      *
-<pre>
-    &nbsp;&nbsp;&nbsp;&nbsp;[<b><i>pdf</i></b>] => Array(
-    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[<i>contentMargins</i>] => [int izquierda, int ferecha, int arriba, int abajo]
-    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[<i>format</i>] => LETTER
-    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[<i>vertical</i>] => TRUE | FALSE
-    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[<i>footerMargin</i>] => 5
-    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[<i>headerMargin</i>] => 5
-    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[<i>font-size</i>] => 12
-    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[<i>font</i>] => Times
-    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[<i>directDownloadFile</i>] => TRUE | FALSE
-    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[<i>fileName</i>] => Nombre.pdf
-    &nbsp;&nbsp;&nbsp;&nbsp;)
-</pre>
+      <pre>
+      &nbsp;&nbsp;&nbsp;&nbsp;[<b><i>pdf</i></b>] => Array(
+      &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[<i>contentMargins</i>] => [int izquierda, int ferecha, int arriba, int abajo]
+      &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[<i>format</i>] => LETTER
+      &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[<i>vertical</i>] => TRUE | FALSE
+      &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[<i>footerMargin</i>] => 5
+      &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[<i>headerMargin</i>] => 5
+      &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[<i>font-size</i>] => 12
+      &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[<i>font</i>] => Times
+      &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[<i>directDownloadFile</i>] => TRUE | FALSE
+      &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[<i>fileName</i>] => Nombre.pdf
+      &nbsp;&nbsp;&nbsp;&nbsp;)
+      </pre>
      *
      * <p> Esta funcion tambien acepta un array de arreglos de configuracion, lo que creara
      * un solo archivo, se tomará el primer arreglo como la configuracion por defecto de todo
@@ -118,62 +119,60 @@ trait DLOREAN_Functions {
         $mainPDF = array_shift($arg);
         $mainPDF['forceInstanceReturn'] = true;
 
-        $mainPDF['header'] = ($mainPDF['header'] === false  ) ?  '
+        $mainPDF['header'] = ($mainPDF['header'] === false ) ? '
                     <div class="pdf_cabecera">
                         <div class="pdf_left"><img style=""  src="' . CORE_PATH . 'assets/tpl/images/logoPDF.png" width="50" height="50"></div>
                         <div class="pdf_centro">
                           <h3>Documento</h3>
                         </div>
                         <div class="leFlotar"></div>
-                      </div>' :  $mainPDF['header'];
+                      </div>' : $mainPDF['header'];
 
-        $mainPDF['footer'] = ($mainPDF['footer'] === false  ) ?  '<div class="pdf_cabecera" style="color:gray">
+        $mainPDF['footer'] = ($mainPDF['footer'] === false ) ? '<div class="pdf_cabecera" style="color:gray">
                         <div class="pdf_left">
                             <div class="pdf_fontStyle">' . COMPANY . '</div>
                             <div class="pdf_fontStyle">' . date_format(new DateTime(), 'd/m/Y H:i:s') . '</div>
                         </div>
                         <div class="pdf_centro pdf_fontStyle">' . SYS_URL . '</div>
                         <div class="pdf_left fpag pdf_fontStyle">Página {PAGENO} de {nb} </div>
-                    </div>':  $mainPDF['footer'];
+                    </div>' : $mainPDF['footer'];
 
         $mainInstance = $this->_pdf($mainPDF);
-        $mainInstance->SetImportUse();
+        //$mainInstance->SetImportUse();
 
         foreach ($arg as $otherPDF) {
 
-            if(empty($otherPDF)){
+            if (empty($otherPDF)) {
                 continue;
             }
 
             $leNameTMP = sha1($mainPDF['pdf']['fileName'] . (string) microtime(true) . rand(0, 2024)) . '.pdf';
             $otherPDF['tempForce'] = $leNameTMP;
             $this->_pdf($otherPDF);
-            $pagecount = $mainInstance->SetSourceFile(TMP_HARDPATH.$leNameTMP);
+            $pagecount = $mainInstance->SetSourceFile(TMP_HARDPATH . $leNameTMP);
 
             for ($i = 1; $i <= $pagecount; $i++) {
-                $l = (!$otherPDF['pdf']['vertical']) ?'L':'P';
+                $l = (!$otherPDF['pdf']['vertical']) ? 'L' : 'P';
                 $mainInstance->AddPage($l);
-                $mainInstance->showWatermarkImage = (isset($otherPDF['defaultWatermark']))? $otherPDF['defaultWatermark'] : true;
+                $mainInstance->showWatermarkImage = (isset($otherPDF['defaultWatermark'])) ? $otherPDF['defaultWatermark'] : true;
 
-                if(isset($otherPDF['defaultHeader']) && !$otherPDF['defaultHeader'] ){
-                    $mainInstance->SetHTMLHeader('<div></div>','',true);
-                }else{
-                    $mainInstance->SetHTMLHeader($mainPDF['header'],'',true);
+                if (isset($otherPDF['defaultHeader']) && !$otherPDF['defaultHeader']) {
+                    $mainInstance->SetHTMLHeader('<div></div>', '', true);
+                } else {
+                    $mainInstance->SetHTMLHeader((!empty($otherPDF['header']) ? $otherPDF['header'] : $mainPDF['header']), '', true);
                 }
 
-                if(isset($otherPDF['defaultFooter']) && !$otherPDF['defaultFooter'] ){
-                    $mainInstance->SetHTMLFooter('<div></div>','',true);
-                }else{
-                    $mainInstance->SetHTMLFooter($mainPDF['footer'],'',true);
+                if (isset($otherPDF['defaultFooter']) && !$otherPDF['defaultFooter']) {
+                    $mainInstance->SetHTMLFooter('<div></div>', '', true);
+                } else {
+                    $mainInstance->SetHTMLFooter((!empty($otherPDF['footer']) ? $otherPDF['footer'] : $mainPDF['footer']), '', true);
                 }
 
                 $import_page = $mainInstance->ImportPage($i);
                 $mainInstance->UseTemplate($import_page);
-
             }
 
             unlink(TMP_HARDPATH . $leNameTMP);
-
         }
 
 
@@ -187,7 +186,6 @@ trait DLOREAN_Functions {
         }
 
         $mainInstance->Output($mainPDF['pdf']['fileName'], 'I');
-
     }
 
     protected function _pdf(array $arg) {
@@ -206,15 +204,19 @@ trait DLOREAN_Functions {
                         height: 52px;
                         width: 100%;
                         margin: 0px 0px 0px 0px;
-                        padding: 0px 0px 0px 0px ;
+                        padding: 0px 0px 0px 0px;
                         float:left;
                     }
                     .pdf_centro{
                         text-align:center;
-                        width:75%;
+                        width:69%;
                         float:left;
                     }
                     .pdf_left{
+                        width:15%;
+                        float: left;
+                    }
+                    .pdf_right{
                         width:15%;
                         float: left;
                     }
@@ -339,54 +341,6 @@ trait DLOREAN_Functions {
                         width: 99.999999996%;
                         float: left;
                     }
-                    /*.col-md-1{
-                        width:  4%;
-                        float: left;
-                    }
-                    .col-md-2{
-                        width:  12%;
-                        float: left;
-                    }
-                    .col-md-3{
-                        width:  20%;
-                        float: left;
-                    }
-                    .col-md-4{
-                        width:  29%;
-                        float: left;
-                    }
-                    .col-md-5{
-                        width:  37%;
-                        float: left;
-                    }
-                    .col-md-6{
-                        width:  45%;
-                        float: left;
-                    }
-                    .col-md-7{
-                        width:  54%;
-                        float: left;
-                    }
-                    .col-md-8{
-                        width:  62%;
-                        float: left;
-                    }
-                    .col-md-9{
-                        width:  70%;
-                        float: left;
-                    }
-                    .col-md-10{
-                        width:  79%;
-                        float: left;
-                    }
-                    .col-md-11{
-                        width:  87%;
-                        float: left;
-                    }
-                    .col-md-12{
-                        width:  95%;
-                        float: left;
-                    }*/
                     .col-md-offset-1{
                         margin-left:  4%;
                     }
@@ -445,39 +399,52 @@ trait DLOREAN_Functions {
         );
 
         $a = $arg["pdf"];
-        $leLandskapetl = (isset($a['vertical']) && !$a['vertical']) ? '-L' : '' ;
+        $leLandskapetl = (isset($a['vertical']) && !$a['vertical']) ? '-L' : '';
 
         if (!$a) {
             return false;
         }
 
-        $mpdf = new mPDF(
-                '', // Modo de creacion Ni puta idea de que hace
-                $a['format'] . $leLandskapetl , //Formato y orientacion
-                ($a['font-size']) ? $a['font-size'] : 12, //Tamaño default
-                ($a['font']) ? $a['font'] : 'Times', //Fuente default
-                $a['contentMargins'][0], //Margen izq
-                $a['contentMargins'][1], //Margen der
-                $a['contentMargins'][2], //Margen arriba
-                $a['contentMargins'][3], //Margen abajo
-                $a['footerMargin'], //Margen header
-                $a['headerMargin']//,          //Margen footer
-        );
+        $mpdf = new Mpdf\Mpdf([
+            'mode' => 'utf-8',
+            'format' => (isset($a['format']) && is_array($a['format']) ? $a['format'] : $a['format'].$leLandskapetl), //Formato y orientacion
+            'orientation' => 'P', //Formato y orientacion
+            'default_font_size' => (isset($a['font-size'])) ? $a['font-size'] : 12, //Tamaño default
+            'default_font' => (isset($a['font'])) ? $a['font'] : 'Times', //Fuente default
+            'margin_left' => $a['contentMargins'][0], //Margen izq
+            'margin_right' => $a['contentMargins'][1], //Margen der
+            'margin_top' => $a['contentMargins'][2], //Margen arriba
+            'margin_bottom' => $a['contentMargins'][3], //Margen abajo
+            'margin_header' => $a['headerMargin'], //Margen header
+            'margin_footer' => $a['footerMargin'] //Margen footer
+        ]);
 
         if (isset($arg['protection']) && is_array($arg['protection'])) {
             $prot = &$arg['protection'];
             $mpdf->SetProtection($prot['permissions'], $prot['userPass'], $prot['ownerPass'], 128);
         }
 
+        if (isset($arg['existingFile']) && !empty($arg['existingFile']) && file_exists($arg['existingFile'])) {
+            //$mpdf->SetImportUse();
+            $pagecount = $mpdf->SetSourceFile($arg['existingFile']);
+            for ($i = 1; $i <= $pagecount; $i++) {
+                $import_page = $mpdf->ImportPage($i);
+                $mpdf->UseTemplate($import_page);
+                if ($i < $pagecount) {
+                    $mpdf->AddPage();
+                }
+            }
+        }
+
         /* $mpdf->WriteHTML(
           file_get_contents(CORE_PATH . 'assets/tpl/global/css/bootstrap.min.css'), 1); */
 
-        if (is_array($arg["waterMark"])) {
+        if (isset($arg["waterMark"]) && is_array($arg["waterMark"])) {
 
             $w = $arg["waterMark"];
 
             $mpdf->SetWatermarkImage(
-                    $w['imgsrc'], $w['opacity'], $w['size'], $w['place']
+                    $w['imgsrc'], $w['opacity'], $w['size'], (isset($w['place']) ? $w['place'] : 'P')
             );
 
             $mpdf->showWatermarkImage = true;
@@ -487,7 +454,7 @@ trait DLOREAN_Functions {
 
             $css = file_get_contents($arg['css']);
             $mpdf->WriteHTML($css, 1);
-        } elseif (strlen($arg['css']) > 0) {
+        } elseif(isset($arg['css']) && strlen($arg['css']) > 0) {
             $mpdf->WriteHTML($arg['css'], 1);
         }
 
@@ -497,58 +464,31 @@ trait DLOREAN_Functions {
             $defaultCss = true;
         }
 
-        /*
-         *
-        if ($arg['header'] != strip_tags($arg['header'])) {
-            $mpdf->SetHTMLHeader($arg['header']);
-        } elseif (file_exists($arg['header'])) {
-            //Insertar html as new
-            ob_start();
-            require_once($arg['header']);
-            $content = ob_get_clean();
-            $mpdf->SetHTMLHeader($content);
-        } else {
-            $mpdf->SetHTMLHeader($defaultContent['header_HTML']);
-        }*/
-
         if (isset($arg['header'])) {
-            if($arg['header'] != strip_tags($arg['header'])){
+            if ($arg['header'] != strip_tags($arg['header'])) {
                 $mpdf->SetHTMLHeader($arg['header']);
-            }else{
-                if($arg['header']){
+            } else {
+                if ($arg['header']) {
                     $mpdf->SetHTMLHeader($defaultContent['header_HTML']);
-                }else{
+                } else {
                     $mpdf->SetHTMLHeader('<div></div>');
                 }
             }
-        }else{
+        } else {
             $mpdf->SetHTMLHeader($defaultContent['header_HTML']);
         }
 
-
-/*
-        if ($arg['footer'] != strip_tags($arg['footer'])) {
-            $mpdf->SetHTMLFooter($arg['footer']);
-        } elseif (file_exists($arg['footer'])) {
-            ob_start();
-            require_once($arg['footer']);
-            $content = ob_get_clean();
-            $mpdf->SetHTMLFooter($content);
-        } else {
-            $mpdf->SetHTMLFooter($defaultContent['footer_HTML']);
-        }
-*/
         if (isset($arg['footer'])) {
-            if($arg['footer'] != strip_tags($arg['footer'])){
+            if ($arg['footer'] != strip_tags($arg['footer'])) {
                 $mpdf->SetHTMLFooter($arg['footer']);
-            }else{
-                if($arg['footer']){
+            } else {
+                if ($arg['footer']) {
                     $mpdf->SetHTMLFooter($defaultContent['footer_HTML']);
-                }else{
+                } else {
                     $mpdf->SetHTMLFooter('<div></div>');
                 }
             }
-        }else{
+        } else {
             $mpdf->SetHTMLFooter($defaultContent['footer_HTML']);
         }
 
@@ -583,6 +523,84 @@ trait DLOREAN_Functions {
         }
 
         $mpdf->Output($a['fileName'], 'I');
+    }
+
+    public function pdfAddText($conf = FALSE) {
+
+      require_once CORE_PATH . 'assets/vendor/autoload.php';
+
+
+      $mpdf = new Mpdf\Mpdf();
+      //$mpdf->SetImportUse();
+      $mpdf->SetSourceFile($conf['rutaFinal']);
+      $template = $mpdf->ImportPage(1);
+      $mpdf->UseTemplate($template);
+      if(!empty($conf['WriteText'])){
+        $mpdf->SetFont((!empty($conf['family']) ? $conf['family'] : 'Arial'),(!empty($conf['style']) ? $conf['style'] : '') ,(!empty($conf['size']) ? $conf['size'] :12) );
+
+        $mpdf->WriteText((!empty($conf['w']) ? $conf['w'] : 124) ,(!empty($conf['h']) ? $conf['h'] : 6), $conf['texto']);
+      }
+      if(!empty($conf['WriteCell'])){
+        $mpdf->SetXY((!empty($conf['w']) ? $conf['w'] : 124),(!empty($conf['h']) ? $conf['h'] : 6)); 
+        $mpdf->SetFont((!empty($conf['family']) ? $conf['family'] : 'Arial'),(!empty($conf['style']) ? $conf['style'] : '') ,(!empty($conf['size']) ? $conf['size'] :12) );
+
+        $mpdf->WriteCell(40,20, $conf['texto'],0,0,'L',true);
+          }
+
+      $mpdf->Output($conf['location'] . $conf['fileName'], 'F');
+
+    }
+    public function pdfCombineFiles($conf = FALSE) {
+
+      require_once CORE_PATH . 'assets/vendor/autoload.php';
+
+
+      $mpdf = new Mpdf\Mpdf();
+     
+      if (!empty($conf['filesNames'])) {
+
+           $filesTotal = sizeof($conf['filesNames']);
+           $fileNumber = 1;
+        $fileNameDescarga = "comprobantes.pdf";
+        if(!empty($conf['outFile'])){
+            $fileNameDescarga = $conf['outFile'];
+        }
+           //$mpdf->SetImportUse();
+
+           /*if (!file_exists($conf['outFile'])) {
+               $handle = fopen($conf['outFile'], 'w');
+               fclose($handle);
+           }*/
+
+		
+           foreach ($conf['filesNames'] as $fileName) {
+               if (file_exists($fileName)) {
+
+                   $pagesInFile = $mpdf->SetSourceFile($fileName);
+                   for ($i = 1; $i <= $pagesInFile; $i++) {
+                       $tplId = $mpdf->ImportPage($i);
+                       $mpdf->UseTemplate($tplId);
+                       if (($fileNumber < $filesTotal) || ($i != $pagesInFile)) {
+                           $mpdf->WriteHTML('<pagebreak />');
+                       }
+                   }
+               }
+               $fileNumber++;
+           }
+            $mpdf->Output($fileNameDescarga, 'D');
+
+       }
+    }
+
+    public function pdfToText($conf = FALSE) {
+
+      require_once CORE_PATH . 'src/DLOREAN.pdf2text.php';
+
+      $a = new PDF2Text();
+      $a->setFilename($conf['rutaArchivo']);
+      $a->decodePDF();
+      return $a->output();
+
     }
 
     /**
@@ -714,10 +732,16 @@ trait DLOREAN_Functions {
      * @link https://goo.gl/e6n5Mc Ejemplo para xlsx
      *
      * @param array $data Array con datos y configuracion de nuevo archivo excel
-     *
      * @return file|false|true Retorna el archivo o true en caso de exito.
      */
     public function excel($data) {
+
+        /*
+         * **************************
+         *  PhpOffice\PhpSpreadsheet
+         * **************************
+         */
+
 
         require_once CORE_PATH . 'assets/vendor/autoload.php';
         error_reporting(E_ALL);
@@ -728,28 +752,27 @@ trait DLOREAN_Functions {
             exit("Formato no valido " . $data['format']);
         }
 
+
         // Crear objeto
         if (isset($data['template']) && !empty($data['template'])) {
-            $objReader = PHPExcel_IOFactory::createReader('Excel2007');
+            $objReader = PhpOffice\PhpSpreadsheet\IOFactory::createReader('Xlsx');
             $objPHPExcel = $objReader->load($data['template']);
         } else {
-            $objPHPExcel = new PHPExcel();
+            $objPHPExcel = new PhpOffice\PhpSpreadsheet\Spreadsheet();
         }
 
         // Establecer propiedades de documentos
         $objPHPExcel->getProperties()
                 ->setCreator("Portal Woodward - " . $_SESSION['usuario']['sNombreUsuario'] . ' ' . $_SESSION['usuario']['sPaterno'] . ' ' . $_SESSION['usuario']['sMaterno'])
                 ->setLastModifiedBy($_SESSION['usuario']['sNombreUsuario'] . ' ' . $_SESSION['usuario']['sPaterno'] . ' ' . $_SESSION['usuario']['sMaterno'])
-                ->setTitle("Office 2007 XLSX Test Document")
-                ->setSubject("Office 2007 XLSX Test Document")
-                ->setDescription("Documento de excel generado desde la plataforma Portal Woodward.")
-                ->setKeywords("office 2007 openxml php")
-                ->setCategory("Archivo de excel");
+                ->setTitle("Excel Portal")
+                ->setSubject("Excel Portal")
+                ->setDescription("Excel Portal")
+                ->setKeywords("office PhpSpreadsheet php")
+                ->setCategory("Excel Portal");
 
         $n1 = true;
         $i = 0;
-
-
         foreach ($data['pages'] as $key => $v) {
 
             // Obtenemos pagina actualmente activa
@@ -886,69 +909,53 @@ trait DLOREAN_Functions {
      */
     public function excel_save($data, $objPHPExcel) {
 
+        /*
+        * **************************
+        *  PhpOffice\PhpSpreadsheet
+        * **************************
+        */
+
         $floc = (isset($data['fileLocation'])) ? $data['fileLocation'] : FALSE;
 
 
         if (isset($floc) && $floc !== '' && is_string($floc)) {
 
-            $objWriter = PHPExcel_IOFactory::createWriter(
-                            $objPHPExcel, ($data['format'] === 'xlsx') ? 'Excel2007' : 'Excel5'
-            );
-            $f = $floc .
-                    $data['fileName'] . '.' .
-                    $data['format'];
+            $objWriter = PhpOffice\PhpSpreadsheet\IOFactory::createWriter($objPHPExcel, 'Xlsx');
+            $f = $floc.$data['fileName'].'.'.$data['format'];
+            $objWriter->save($f);
+            if(!@chmod($f, 0777)){
+                return false;
+            }
 
-            $objWriter->save(
-                    $f
-            );
-            chmod($f, 0777);
         } else {
-            if ($data['format'] === 'xls') {
 
-                // Redirecciona la salida como archivo enviado por navegador (Excel5)
+            if(!in_array($data['format'], ['xls','xlsx'])){
+                return false;
+            }
+
+            if($data['format'] === 'xls'){
                 header('Content-Type: application/vnd.ms-excel');
-                header('Content-Disposition: attachment;filename="' . $data['fileName'] . '.' . $data['format'] . '"');
-                header('Cache-Control: max-age=0');
-
-                // Si estas atentiendo un IE9, entonces estas lineas deberian argegarse
-                header('Cache-Control: max-age=1');
-
-                // Si estas atendiendo un IE sobre SSL, esto puede ser requerido
-                header('Expires: Mon, 26 Jul 1997 05:00:00 GMT'); // Fecha pasada
-                header('Last-Modified: ' . gmdate('D, d M Y H:i:s') . ' GMT'); // Siempre modificada
-                header('Cache-Control: cache, must-revalidate'); // HTTP/1.1
-                header('Pragma: public'); // HTTP/1.0
-
-                header('Set-Cookie: fileDownload=true; path=/');
-
-                $objWriter = PHPExcel_IOFactory::createWriter($objPHPExcel, 'Excel5');
-                //$objWriter->save('php://output');
-                $this->SaveViaTempFile($objWriter);
-            } elseif ($data['format'] === 'xlsx') {
-
-                // Redirecciona la salida como archivo enviado por navegador  (Excel2007)
+            }elseif($data['format'] === 'xlsx'){
                 header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
-                header('Content-Disposition: attachment;filename="' . $data['fileName'] . '.' . $data['format'] . '"');
-                header('Cache-Control: max-age=0');
+            }
 
+            // Redirect output to a client’s web browser (Xlsx)
+                header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
+                header('Content-Disposition: attachment;filename="'.$data['fileName'].'.'.$data['format'].'"');
                 header('Set-Cookie: fileDownload=true; path=/');
-
-                // Si estas atentiendo un IE9, entonces estas lineas deberian argegarse
+                header('Cache-Control: max-age=0');
+            // If you're serving to IE 9, then the following may be needed
                 header('Cache-Control: max-age=1');
 
-                // Si estas atendiendo un IE sobre SSL, esto puede ser requerido
+            // If you're serving to IE over SSL, then the following may be needed
                 header('Expires: Mon, 26 Jul 1997 05:00:00 GMT'); // Date in the past
                 header('Last-Modified: ' . gmdate('D, d M Y H:i:s') . ' GMT'); // always modified
                 header('Cache-Control: cache, must-revalidate'); // HTTP/1.1
                 header('Pragma: public'); // HTTP/1.0
 
-                $objWriter = PHPExcel_IOFactory::createWriter($objPHPExcel, 'Excel2007');
-                //$objWriter->save('php://output');
-                $this->SaveViaTempFile($objWriter);
-            } else {
-                return false;
-            }
-            return false;
+            $objWriter = PhpOffice\PhpSpreadsheet\IOFactory::createWriter($objPHPExcel, 'Xlsx');
+            //$objWriter->save('php://output');
+            $this->SaveViaTempFile($objWriter);
         }
 
 
@@ -970,18 +977,18 @@ trait DLOREAN_Functions {
         switch ($rule) {
             case '=':
                 if ($type != 'date' && $type != 'dateTime') {
-                    $filtro = " " . $colum . " " . $rule . " '" . $value . "' ";
+                    $filtro = " " . $colum . " " . $rule . " '" . trim($value) . "' ";
                 } else {
-                    $filtro = " datediff(day, " . $colum . ", '" . $value . "') = 0 ";
+                    $filtro = " datediff(day, " . $colum . ", '" . trim($value) . "') = 0 ";
                 }
                 return $filtro;
                 break;
             case '>':
-                $filtro = " " . $colum . " " . $rule . " '" . $value . "' ";
+                $filtro = " " . $colum . " " . $rule . " '" . trim($value) . "' ";
                 return $filtro;
                 break;
             case '<':
-                $filtro = " " . $colum . " " . $rule . " '" . $value . "' ";
+                $filtro = " " . $colum . " " . $rule . " '" . trim($value) . "' ";
                 return $filtro;
                 break;
             case 'null':
@@ -993,19 +1000,19 @@ trait DLOREAN_Functions {
                 return $filtro;
                 break;
             case '%LIKE%':
-                $filtro = " " . $colum . " LIKE '%" . $value . "%' ";
+                $filtro = " " . $colum . " LIKE '%" . trim($value) . "%' ";
                 return $filtro;
                 break;
             case 'NOT LIKE':
-                $filtro = " " . $colum . " NOT LIKE '%" . $value . "%' ";
+                $filtro = " " . $colum . " NOT LIKE '%" . trim($value) . "%' ";
                 return $filtro;
                 break;
             case 'LIKE%':
-                $filtro = " " . $colum . " LIKE '" . $value . "%' ";
+                $filtro = " " . $colum . " LIKE '" . trim($value) . "%' ";
                 return $filtro;
                 break;
             case '%LIKE':
-                $filtro = " " . $colum . " LIKE '%" . $value . "' ";
+                $filtro = " " . $colum . " LIKE '%" . trim($value) . "' ";
                 return $filtro;
                 break;
             case 'BETWEEN':
@@ -1125,20 +1132,24 @@ trait DLOREAN_Functions {
             if (!isset($_POST['generarExcel']) && !isset($_POST['envioAutomatico'])) {
                 $length = (isset($_POST['length']) ? $_POST['length'] : '');
                 $start = (isset($_POST['start']) ? $_POST['start'] : '');
-                //$sql .= " OFFSET " . $start . " ROWS FETCH NEXT " . $length . "  ROWS ONLY";
                 $sql .= " LIMIT " . $start . " ," . $length . "  ";
             }
+            //exit($sql);
             if (!$conexion) {
                 $result = Conn::query($sql);
             } else {
                 $result = Conn::query($sql, $conexion);
             }
-            //$result = Conn::query($sql,$this->db[$conexion]);
 
-            if (!$result) {
-                return FALSE;
+            if(is_array($result) && isset($result['success']) && $result['success'] == false){
+                $result['draw'] = isset($_POST['draw']) ? $_POST['draw'] : 0;
+                $result['recordsTotal'] = 0;
+                $result['recordsFiltered'] = 0;
+                $result['data'] = [];
+                $result['filters'] = false;
+                return $result;
             }
-            //$this->connect();
+            
             $data = array(
                 'draw' => isset($_POST['draw']) ? $_POST['draw'] : 0,
                 'recordsTotal' => $total,
@@ -1151,16 +1162,17 @@ trait DLOREAN_Functions {
             $sql = "SELECT " . ($distinto ? $distinto : '*') . " FROM ( " . $consulta['query'] . " ) Q1 WHERE 1 = 1 ";
             $sql .= ($filtro ? " AND ( " . $filtro . " ) " : "");
             $sql .= " ORDER BY Q1." . $_POST['column'];
-            //$resultTotal = Conn::query($sql);
+            
             if (!$conexion) {
                 $result = Conn::query($sql);
             } else {
                 $result = Conn::query($sql, $conexion);
             }
-            if (!$result) {
-                return FALSE;
+            
+            if(is_array($result) && isset($result['success']) && $result['success'] == false){
+                return $result;
             }
-            //$this->connect();
+            
             $data = array('data' => array(array(), array()), 'filters' => true);
             while ($row = Conn::fetch_assoc($result)) {
                 utf8($row, FALSE);
@@ -1188,55 +1200,133 @@ trait DLOREAN_Functions {
      * @author Luis Alberto Valdez Alvarez <lvaldez@woodward.com.mx>
      */
     public function menuEmergente($Regla, $codigo = '') {
-        //print_r($Regla);
+
         if (!empty($_SESSION['modulos'][$this->sysController]['menuEmergente'])) {
             $stringMenu = "";
             foreach ($_SESSION['modulos'][$this->sysController]['menuEmergente'] as $key => $value) {
                 if ($value['sTitulo'] != '-') {
-                    if (isset($Regla["menuEmergente" . $value['iPosicion']]) && $Regla["menuEmergente" . $value['iPosicion']] != 0) {
-                        if ($Regla["menuEmergente" . $value['iPosicion']] == 1) {
-                            $stringMenu .= '<li class="disabled"><a><i class="' . $value['sIcono'] . '" aria-hidden="true"></i> ' . $value['sTitulo'] . '</a></li>';
-                        }
-                        if ($Regla["menuEmergente" . $value['iPosicion']] == 2) {
-                            //$stringMenu.= '<li class="disabled"><a>' . $value['sTitulo'] . '</a></li>';
-                        }
-                    } else {
-                        $slash = '/';
-                        if (is_array($codigo)) {
+                    if (isset($Regla["menuEmergente" . $value['iPosicion']]) && is_array($Regla["menuEmergente" . $value['iPosicion']])) {
 
-                            if (isset($codigo["menuEmergente" . $value['iPosicion']])) {
-                                $id = $codigo["menuEmergente" . $value['iPosicion']];
-                                $slash = '';
-                            } else {
-                                $id = $codigo["default"];
+                        if (isset($Regla["menuEmergente" . $value['iPosicion']]['estatus']) && $Regla["menuEmergente" . $value['iPosicion']]['estatus'] != 0) {
+                            if ($Regla["menuEmergente" . $value['iPosicion']]['estatus'] == 1) {
+                                $stringMenu .= '<li class="disabled"><a><i class="' . $value['sIcono'] . '" aria-hidden="true"></i> ' . (isset($Regla["menuEmergente" . $value['iPosicion']]['estatus']) ? $Regla["menuEmergente" . $value['iPosicion']]['titulo'] : $value['sTitulo']) . '</a></li>';
+                            }
+                            if ($Regla["menuEmergente" . $value['iPosicion']]['estatus'] == 2) {
+                                //$stringMenu.= '<li class="disabled"><a>' . $value['sTitulo'] . '</a></li>';
                             }
                         } else {
-                            $id = $codigo;
+                            $slash = '/';
+                            /* if (is_array($codigo)) {
+
+                              if (isset($codigo["menuEmergente" . $value['iPosicion']])) {
+                              $id = $codigo["menuEmergente" . $value['iPosicion']];
+                              $slash = '';
+                              } else {
+                              $id = $codigo["default"];
+                              }
+                              } else {
+                              $id = $codigo;
+                              } */
+                            $slash = '/';
+                            if (isset($Regla["menuEmergente" . $value['iPosicion']]['id'])) {
+                                $id = "";
+                                if (is_array($Regla["menuEmergente" . $value['iPosicion']]['id'])) {
+                                    $i = 0;
+                                    foreach ($Regla["menuEmergente" . $value['iPosicion']]['id'] as $value1) {
+                                        if ($i > 0) {
+                                            $id .= "/";
+                                        }
+                                        $id .= $value1;
+                                        $i++;
+                                    }
+                                } else {
+                                    $id = $Regla["menuEmergente" . $value['iPosicion']]['id'];
+                                }
+                            } else {
+                                if (is_array($codigo)) {
+                                    if (isset($codigo["menuEmergente" . $value['iPosicion']])) {
+                                        $id = $codigo["menuEmergente" . $value['iPosicion']];
+                                        $slash = '';
+                                    } else {
+                                        $id = $codigo["default"];
+                                    }
+                                } else {
+                                    $id = $codigo;
+                                }
+                            }
+
+
+                            switch ($value['skComportamiento']) {
+                                case 'VEMO':
+                                    $function = "core.menuLoadModule({skModulo: '" . $value['skModuloPadre'] . "', url: '/" . DIR_PATH . SYS_PROJECT . '/' . $value['skModuloPrincipal'] . '/' . $value['skModuloPadre'] . '/' . $value['sNombreModulo'] . '/' . $id . $slash . "', skComportamiento: '" . $value['skComportamiento'] . "', id: '" . $id . "' });";
+                                    $stringMenu .= '<li id="opc' . $value['iPosicion'] . '"><a tabindex="-1" role="button" onclick="' . $function . '" id="opc' . $value['iPosicion'] . '"><i class="' . $value['sIcono'] . '" aria-hidden="true"></i> ' . (isset($Regla["menuEmergente" . $value['iPosicion']]['titulo']) ? $Regla["menuEmergente" . $value['iPosicion']]['titulo'] : $value['sTitulo']) . '</a></li>';
+                                    break;
+                                case 'PANE':
+                                    $function = "core.menuLoadModule({skModulo: '" . $value['skModuloPadre'] . "', url: '/" . DIR_PATH . SYS_PROJECT . '/' . $value['skModuloPrincipal'] . '/' . $value['skModuloPadre'] . '/' . $value['sNombreModulo'] . '/' . $id . $slash . "', skComportamiento: '" . $value['skComportamiento'] . "', id: '" . $id . "' });";
+                                    $stringMenu .= '<li id="opc' . $value['iPosicion'] . '"><a tabindex="-1" role="button" onclick="' . $function . '" id="opc' . $value['iPosicion'] . '"><i class="' . $value['sIcono'] . '" aria-hidden="true"></i> ' . (isset($Regla["menuEmergente" . $value['iPosicion']]['titulo']) ? $Regla["menuEmergente" . $value['iPosicion']]['titulo'] : $value['sTitulo']) . '</a></li>';
+                                    break;
+                                case 'MOWI':
+                                    $function = "core.menuLoadModule({skModulo: '" . $value['skModuloPadre'] . "', url: '/" . DIR_PATH . SYS_PROJECT . '/' . $value['skModuloPrincipal'] . '/' . $value['skModuloPadre'] . '/' . $value['sNombreModulo'] . '/' . $id . $slash . "', skComportamiento: '" . $value['skComportamiento'] . "', id: '" . $id . "' });";
+                                    $stringMenu .= '<li id="opc' . $value['iPosicion'] . '"><a tabindex="-1" role="button" onclick="' . $function . '" id="opc' . $value['iPosicion'] . '"><i class="' . $value['sIcono'] . '" aria-hidden="true"></i> ' . (isset($Regla["menuEmergente" . $value['iPosicion']]['titulo']) ? $Regla["menuEmergente" . $value['iPosicion']]['titulo'] : $value['sTitulo']) . '</a></li>';
+                                    break;
+                                case 'RELO':
+                                    $function = "core.menuLoadModule({skModulo: '" . $value['skModuloPadre'] . "', url: '/" . DIR_PATH . SYS_PROJECT . '/' . $value['skModuloPrincipal'] . '/' . $value['skModuloPadre'] . '/' . $value['sNombreModulo'] . '/' . $id . $slash . "', skComportamiento: '" . $value['skComportamiento'] . "', id: '" . $id . "' });";
+                                    $stringMenu .= '<li id="opc' . $value['iPosicion'] . '"><a tabindex="-1" role="button" onclick="' . $function . '" id="opc' . $value['iPosicion'] . '"><i class="' . $value['sIcono'] . '" aria-hidden="true"></i> ' . (isset($Regla["menuEmergente" . $value['iPosicion']]['titulo']) ? $Regla["menuEmergente" . $value['iPosicion']]['titulo'] : $value['sTitulo']) . '</a></li>';
+                                    break;
+                                case 'FUNC':
+                                    $function = $value['sFuncion'] . "({skModulo: '" . $value['skModuloPadre'] . "', url: '/" . DIR_PATH . SYS_PROJECT . '/' . $value['skModuloPrincipal'] . '/' . $value['skModuloPadre'] . '/' . $value['sNombreModulo'] . '/' . $id . $slash . "', skComportamiento: '" . $value['skComportamiento'] . "', id: '" . $id . "' });";
+                                    $stringMenu .= '<li id="opc' . $value['iPosicion'] . '"><a tabindex="-1" role="button" onclick="' . $function . '" id="opc' . $value['iPosicion'] . '"><i class="' . $value['sIcono'] . '" aria-hidden="true"></i> ' . (isset($Regla["menuEmergente" . $value['iPosicion']]['titulo']) ? $Regla["menuEmergente" . $value['iPosicion']]['titulo'] : $value['sTitulo']) . '</a></li>';
+                                    break;
+                                default:
+                            }
                         }
+                        /* Agregar Funcionar de Abajo pero con Array en posiciones, Titulo y Estatus. */
+                    } else {
+                        if (isset($Regla["menuEmergente" . $value['iPosicion']]) && $Regla["menuEmergente" . $value['iPosicion']] != 0) {
+                            if ($Regla["menuEmergente" . $value['iPosicion']] == 1) {
+                                $stringMenu .= '<li class="disabled"><a><i class="' . $value['sIcono'] . '" aria-hidden="true"></i> ' . $value['sTitulo'] . '</a></li>';
+                            }
+                            if ($Regla["menuEmergente" . $value['iPosicion']] == 2) {
+                                //$stringMenu.= '<li class="disabled"><a>' . $value['sTitulo'] . '</a></li>';
+                            }
+                        } else {
+                            $slash = '/';
+                            if (is_array($codigo)) {
+
+                                if (isset($codigo["menuEmergente" . $value['iPosicion']])) {
+                                    $id = $codigo["menuEmergente" . $value['iPosicion']];
+                                    $slash = '';
+                                } else {
+                                    $id = $codigo["default"];
+                                }
+                            } else {
+                                $id = $codigo;
+                            }
 
 
-                        switch ($value['skComportamiento']) {
-                            case 'VEMO':
-                                $function = "core.menuLoadModule({skModulo: '" . $value['skModuloPadre'] . "', url: '/" . DIR_PATH . SYS_PROJECT . '/' . $value['skModuloPrincipal'] . '/' . $value['skModuloPadre'] . '/' . $value['sNombreModulo'] . '/' . $id . $slash . "', skComportamiento: '" . $value['skComportamiento'] . "', id: '" . $id . "' });";
-                                $stringMenu .= '<li id="opc' . $value['iPosicion'] . '"><a tabindex="-1" role="button" onclick="' . $function . '" id="opc' . $value['iPosicion'] . '"><i class="' . $value['sIcono'] . '" aria-hidden="true"></i> ' . $value['sTitulo'] . '</a></li>';
-                                break;
-                            case 'PANE':
-                                $function = "core.menuLoadModule({skModulo: '" . $value['skModuloPadre'] . "', url: '/" . DIR_PATH . SYS_PROJECT . '/' . $value['skModuloPrincipal'] . '/' . $value['skModuloPadre'] . '/' . $value['sNombreModulo'] . '/' . $id . $slash . "', skComportamiento: '" . $value['skComportamiento'] . "', id: '" . $id . "' });";
-                                $stringMenu .= '<li id="opc' . $value['iPosicion'] . '"><a tabindex="-1" role="button" onclick="' . $function . '" id="opc' . $value['iPosicion'] . '"><i class="' . $value['sIcono'] . '" aria-hidden="true"></i> ' . $value['sTitulo'] . '</a></li>';
-                                break;
-                            case 'MOWI':
+                            switch ($value['skComportamiento']) {
+                                case 'VEMO':
                                     $function = "core.menuLoadModule({skModulo: '" . $value['skModuloPadre'] . "', url: '/" . DIR_PATH . SYS_PROJECT . '/' . $value['skModuloPrincipal'] . '/' . $value['skModuloPadre'] . '/' . $value['sNombreModulo'] . '/' . $id . $slash . "', skComportamiento: '" . $value['skComportamiento'] . "', id: '" . $id . "' });";
                                     $stringMenu .= '<li id="opc' . $value['iPosicion'] . '"><a tabindex="-1" role="button" onclick="' . $function . '" id="opc' . $value['iPosicion'] . '"><i class="' . $value['sIcono'] . '" aria-hidden="true"></i> ' . $value['sTitulo'] . '</a></li>';
-                                break;
-                            case 'RELO':
-                                $function = "core.menuLoadModule({skModulo: '" . $value['skModuloPadre'] . "', url: '/" . DIR_PATH . SYS_PROJECT . '/' . $value['skModuloPrincipal'] . '/' . $value['skModuloPadre'] . '/' . $value['sNombreModulo'] . '/' . $id . $slash . "', skComportamiento: '" . $value['skComportamiento'] . "', id: '" . $id . "' });";
-                                $stringMenu .= '<li id="opc' . $value['iPosicion'] . '"><a tabindex="-1" role="button" onclick="' . $function . '" id="opc' . $value['iPosicion'] . '"><i class="' . $value['sIcono'] . '" aria-hidden="true"></i> ' . $value['sTitulo'] . '</a></li>';
-                                break;
-                            case 'FUNC':
-                                $function = $value['sFuncion'] . "({skModulo: '" . $value['skModuloPadre'] . "', url: '/" . DIR_PATH . SYS_PROJECT . '/' . $value['skModuloPrincipal'] . '/' . $value['skModuloPadre'] . '/' . $value['sNombreModulo'] . '/' . $id . $slash . "', skComportamiento: '" . $value['skComportamiento'] . "', id: '" . $id . "' });";
-                                $stringMenu .= '<li id="opc' . $value['iPosicion'] . '"><a tabindex="-1" role="button" onclick="' . $function . '" id="opc' . $value['iPosicion'] . '"><i class="' . $value['sIcono'] . '" aria-hidden="true"></i> ' . $value['sTitulo'] . '</a></li>';
-                                break;
-                            default:
+                                    break;
+                                case 'PANE':
+                                    $function = "core.menuLoadModule({skModulo: '" . $value['skModuloPadre'] . "', url: '/" . DIR_PATH . SYS_PROJECT . '/' . $value['skModuloPrincipal'] . '/' . $value['skModuloPadre'] . '/' . $value['sNombreModulo'] . '/' . $id . $slash . "', skComportamiento: '" . $value['skComportamiento'] . "', id: '" . $id . "' });";
+                                    $stringMenu .= '<li id="opc' . $value['iPosicion'] . '"><a tabindex="-1" role="button" onclick="' . $function . '" id="opc' . $value['iPosicion'] . '"><i class="' . $value['sIcono'] . '" aria-hidden="true"></i> ' . $value['sTitulo'] . '</a></li>';
+                                    break;
+                                case 'MOWI':
+                                    $function = "core.menuLoadModule({skModulo: '" . $value['skModuloPadre'] . "', url: '/" . DIR_PATH . SYS_PROJECT . '/' . $value['skModuloPrincipal'] . '/' . $value['skModuloPadre'] . '/' . $value['sNombreModulo'] . '/' . $id . $slash . "', skComportamiento: '" . $value['skComportamiento'] . "', id: '" . $id . "' });";
+                                    $stringMenu .= '<li id="opc' . $value['iPosicion'] . '"><a tabindex="-1" role="button" onclick="' . $function . '" id="opc' . $value['iPosicion'] . '"><i class="' . $value['sIcono'] . '" aria-hidden="true"></i> ' . $value['sTitulo'] . '</a></li>';
+                                    break;
+                                case 'RELO':
+                                    $function = "core.menuLoadModule({skModulo: '" . $value['skModuloPadre'] . "', url: '/" . DIR_PATH . SYS_PROJECT . '/' . $value['skModuloPrincipal'] . '/' . $value['skModuloPadre'] . '/' . $value['sNombreModulo'] . '/' . $id . $slash . "', skComportamiento: '" . $value['skComportamiento'] . "', id: '" . $id . "' });";
+                                    $stringMenu .= '<li id="opc' . $value['iPosicion'] . '"><a tabindex="-1" role="button" onclick="' . $function . '" id="opc' . $value['iPosicion'] . '"><i class="' . $value['sIcono'] . '" aria-hidden="true"></i> ' . $value['sTitulo'] . '</a></li>';
+                                    break;
+                                case 'FUNC':
+                                    $function = $value['sFuncion'] . "({skModulo: '" . $value['skModuloPadre'] . "', url: '/" . DIR_PATH . SYS_PROJECT . '/' . $value['skModuloPrincipal'] . '/' . $value['skModuloPadre'] . '/' . $value['sNombreModulo'] . '/' . $id . $slash . "', skComportamiento: '" . $value['skComportamiento'] . "', id: '" . $id . "' });";
+                                    $stringMenu .= '<li id="opc' . $value['iPosicion'] . '"><a tabindex="-1" role="button" onclick="' . $function . '" id="opc' . $value['iPosicion'] . '"><i class="' . $value['sIcono'] . '" aria-hidden="true"></i> ' . $value['sTitulo'] . '</a></li>';
+                                    break;
+                                default:
+                            }
                         }
                     }
                 } else {
@@ -1301,6 +1391,8 @@ trait DLOREAN_Functions {
      *
      */
     public function sendMail($mConf) {
+        $uid = true;
+
         require_once CORE_PATH . 'assets/vendor/autoload.php';
 
         $cf = [];
@@ -1316,20 +1408,21 @@ trait DLOREAN_Functions {
             $dFechaProgramacion = 'NULL';
         }
 
-        $createLog = ( isset($mConf['NoLog']) ?  false :  @!$mConf['NoLog']);
+        $createLog = ( isset($mConf['NoLog']) ? false : @!$mConf['NoLog']);
 
         if ($createLog) {
             $query = Conn::query("EXEC sp_emailLog
-            @skMensaje	= NULL,
-            @sEmisor	= '" . $cf['user'] . "',
-            @sAsunto	= " . escape($mConf['subject']) . ",
-            @sCopia		= '" . json_encode($mConf['cc']) . "',
-            @sCopiaOculta	= '" . json_encode($mConf['bcc']) . "',
-            @sDestinatario	= '" . json_encode($mConf['to']) . "',
-            @dFechaProgramacion	= $dFechaProgramacion,
-            @sContenido	= " . escape($mConf['msg']) . ",
-            @sFiles = '".json_encode($mConf['files'])."',
-            @iPrioridad	= " . escape($mConf['msgPriority']));
+            @skMensaje  = NULL,
+            @sEmisor  = '" . $cf['user'] . "',
+            @sAsunto  = " . escape($mConf['subject']) . ",
+            @sCopia   = '" . json_encode($mConf['cc']) . "',
+            @sCopiaOculta = '" . json_encode($mConf['bcc']) . "',
+            @sDestinatario  = '" . json_encode($mConf['to']) . "',
+            @dFechaProgramacion = $dFechaProgramacion,
+            @sContenido = " . escape($mConf['msg']) . ",
+            @sFiles = '" . json_encode($mConf['files']) . "',
+            @iPrioridad = " . escape($mConf['msgPriority']) . ",
+            @send1by1 = " . escape(($mConf['send1by1']) ? 1 : 0));
             $uid = ($query) ? Conn::fetch_array($query)[0] : false;
         }
 
@@ -1351,7 +1444,7 @@ trait DLOREAN_Functions {
                 ->setBcc($mConf['bcc']);
 
         //Agregamos todos los archivos
-        if (isset($mConf['files'])) {
+        if (isset($mConf['files']) && !empty($mConf['files']) && is_array($mConf['files'])) {
             array_walk($mConf['files'], function (&$val, &$key) use (&$message) {
 
                 $file = Swift_Attachment::fromPath($val[0]);
@@ -1368,7 +1461,6 @@ trait DLOREAN_Functions {
 
         try {
             if ($mConf['send1by1']) {
-
                 foreach ($mConf['to'] as $address => $name) {
                     if (is_int($address)) {
                         $message->setTo($name);
@@ -1379,9 +1471,9 @@ trait DLOREAN_Functions {
                     $sended += $mailer->send($message, $failedRecipients);
                 }
             } else {
+
                 $message->setTo($mConf['to']);
                 $sended = $mailer->send($message);
-                return $sended;
             }
             if ($createLog) {
                 if ($uid) {
@@ -1396,15 +1488,15 @@ trait DLOREAN_Functions {
                     $upd = $record[0];
                 }
             }
-            if(isset($mConf['files']) && !empty($mConf['files']) && is_array($mConf['files'])){
-                foreach($mConf['files'] AS $k=>$v){
+            if (isset($mConf['files']) && !empty($mConf['files']) && is_array($mConf['files'])) {
+                foreach ($mConf['files'] AS $k => $v) {
                     unlink($v[0]);
                 }
             }
         } catch (Swift_TransportException $e) {
             error_log(date('Y-m-d h:i:s') . " - Error al enviar correo electronico :" . $e->getMessage() . "\n", 3, ERROR_LOGFILE);
         }
-        return $sended;
+        return $uid;
     }
 
     /**
@@ -1418,7 +1510,8 @@ trait DLOREAN_Functions {
      * @param string $headers Cabeceras en formato json
      * @param object $data Objeto stdobject de resultados mssql
      */
-    protected function generar_excel($title, $headers, $data,$save = FALSE) {
+    protected function generar_excel($title, $headers, $data, $save = FALSE) {
+
         $conf = array(
             'fileName' => $title,
             'format' => 'xlsx',
@@ -1431,21 +1524,23 @@ trait DLOREAN_Functions {
                 )
             )
         );
-        if($save){
+
+        if ($save) {
             $conf['fileLocation'] = TMP_HARDPATH;
         }
+
         $headers = json_decode($headers, true);
+
         foreach ($headers AS $k => &$v) {
             array_push($conf['pages']['Hoja 1']['headers'], $v['title']);
         }
-        //while ($row = Conn::fetch_assoc($data)) {
 
         $records_data = $data;
-        if(isset($data->queryString)){
+        if (isset($data->queryString)) {
             $records_data = Conn::fetch_assoc_all($data);
         }
 
-        foreach($records_data AS $row) {
+        foreach ($records_data AS $row) {
             $records = array();
             foreach ($headers AS $k => &$v) {
                 if ($v['dataType'] === 'date') {
@@ -1461,27 +1556,23 @@ trait DLOREAN_Functions {
             array_push($conf['pages']['Hoja 1']['data'], $records);
         }
 
-        //Conn::free_result($data);
-        if($save){
+        if ($save) {
             return $this->excel($conf);
         }
 
         $this->excel($conf);
-
-
     }
 
     /**
      * Generar pdf
      *
      * Genera un array de configuracion para ejecutar la funcion pdf apartir de
-     * los datos de una tabla de algun modulo xxxx-inde.
+     * los datos de una tabla de algún módulo
      *
      * @author Samuel Perez <sperez@woodward.com.mx>
      * @param string $title Titulo del documento
      * @param string $headers Cabeceras en formato json
      * @param object $data Objeto stdobject de resultados mssql
-     * @return boolean
      */
     protected function generar_pdf($title, $headers, $data, $save = false) {
 
@@ -1495,18 +1586,18 @@ trait DLOREAN_Functions {
         });
 
         $records_data = $data;
-        if(isset($data->queryString)){
+        if (isset($data->queryString)) {
             $records_data = Conn::fetch_assoc_all($data);
         }
-        foreach($records_data AS $d) {
-        //while ($d = Conn::fetch_assoc($data)) {
+        foreach ($records_data AS $d) {
+            //while ($d = Conn::fetch_assoc($data)) {
             utf8($d);
             $ACHETEEMEELE .= "<tr style=\"margin:10px; padding-bottom:15px;\" >";
             array_walk($JIDERS, function (&$v) use (&$ACHETEEMEELE, &$d) {
-                if($v['dataType'] === 'date'){
+                if ($v['dataType'] === 'date' && !empty($d[$v['column']])) {
                     $txt = date('d/m/Y', strtotime($d[$v['column']]));
                     $ACHETEEMEELE .= "<td style=\"border-bottom: .5px solid #afafaf;padding-right:15px;\">$txt</td>";
-                }elseif ($v['dataType'] === 'dateTime' ) {
+                } elseif ($v['dataType'] === 'dateTime' && !empty($d[$v['column']])) {
                     $txt = date('d/m/Y H:i:s', strtotime($d[$v['column']]));
                     $ACHETEEMEELE .= "<td style=\"border-bottom: .5px solid #afafaf;padding-right:15px;\">$txt</td>";
                 } else {
@@ -1528,9 +1619,9 @@ trait DLOREAN_Functions {
             </table>";
 
         $fileName = $title;
-        if($save){
-            $fileName = rand(1,100).time();
-        }else{
+        if ($save) {
+            $fileName = rand(1, 100) . time();
+        } else {
             header('Set-Cookie: fileDownload=true; path=/');
         }
 
@@ -1549,11 +1640,11 @@ trait DLOREAN_Functions {
                     </div>
                     <div class="leFlotar"></div>
                 </div>',
-            'footer' => false,
+            'footer' => 'false',
             'pdf' => array(
                 'contentMargins' => [10, 10, 25, 25],
-                'format' => 'Letter-L',
-                'vertical' => true,
+                'format' => 'Letter',
+                'vertical' => false,
                 'footerMargin' => 5,
                 'headerMargin' => 5,
                 'location' => ($save) ? TMP_HARDPATH : false,
@@ -1562,8 +1653,8 @@ trait DLOREAN_Functions {
             )
         ));
 
-        if($save){
-            return TMP_HARDPATH.$fileName.'.pdf';
+        if ($save) {
+            return TMP_HARDPATH . $fileName . '.pdf';
         }
 
         return true;
@@ -1598,7 +1689,7 @@ trait DLOREAN_Functions {
      * @return boolean|file Returna archivo o True en caso de exito y false en caso de error
      */
     public function toTextFile($datos = null) {
-        exit($datos['fileLocation']);
+
         if (strlen($datos['separator']) < 1 || !isset($datos['separator']) || strlen($datos['fileName']) < 1 || !isset($datos['fileName']) || $datos == null) {
             return false;
         }
@@ -1689,10 +1780,10 @@ trait DLOREAN_Functions {
      * @param mixed $excluirUsuarios Usuarios a excluir que NO recibirán el mensaje.
      * @return boolena  retorna true en caso de éxito, false en caso de haber algún error.
      */
-    public function notify($sClaveNotificacion, $conf = array(), $usuarios = array(), $gruposPublicaciones = array(), $excluirUsuarios = array()) {
+    public function notify($sClaveNotificacion, $conf = [], $usuarios = [], $gruposPublicaciones = [], $excluirUsuarios = [], $correosAdicionales = []) {
 
         // Prioridad de Notificación
-            $prioridad = 'AL';
+        $prioridad = 'AL';
 
         $sql = "SELECT * FROM cat_notificacionesMensajes WHERE skEstatus = 'AC' AND sClaveNotificacion = '" . $sClaveNotificacion . "'";
         $result = Conn::query($sql);
@@ -1709,26 +1800,25 @@ trait DLOREAN_Functions {
 
         utf8($notificacion, FALSE);
 
-        $sql = "SELECT * FROM rel_notificacionesMensajes_variables WHERE skNotificacionMensaje = '" . $notificacion['skNotificacionMensaje'] . "'";
-
+        /*$sql = "SELECT * FROM rel_notificacionesMensajes_variables WHERE skNotificacionMensaje = '" . $notificacion['skNotificacionMensaje'] . "'";
         $result = Conn::query($sql);
-
         if (!$result) {
             return FALSE;
-        }
+        }*/
 
         utf8($conf, FALSE);
 
         $sValores = array();
-        foreach (Conn::fetch_assoc_all($result) as $row) {
-
-            utf8($row, FALSE);
+        //foreach (Conn::fetch_assoc_all($result) as $row) {
+            //utf8($row, FALSE);
 
             foreach ($conf AS $k => $v) {
 
                 $sValores[$k] = $v;
 
                 if (!is_array($v)) {
+                    $notificacion['sNombre'] = str_replace('[' . $k . ']', $v, $notificacion['sNombre']);
+                    $notificacion['sAsunto'] = str_replace('[' . $k . ']', $v, $notificacion['sAsunto']);
                     $notificacion['sMensaje'] = str_replace('[' . $k . ']', $v, $notificacion['sMensaje']);
                     $notificacion['sMensajeCorreo'] = str_replace('[' . $k . ']', $v, $notificacion['sMensajeCorreo']);
                     $notificacion['sUrl'] = str_replace('[' . $k . ']', $v, $notificacion['sUrl']);
@@ -1737,7 +1827,7 @@ trait DLOREAN_Functions {
                     $notificacion['sImagen'] = str_replace('[' . $k . ']', $v, $notificacion['sImagen']);
                 }
             }
-        }
+        //}
 
         $sValores['sNombre'] = $notificacion['sNombre'];
         $sValores['sMensaje'] = $notificacion['sMensaje'];
@@ -1745,17 +1835,16 @@ trait DLOREAN_Functions {
         $notificacion['sValores'] = json_encode($sValores);
 
         // @skEstatus = '".($notificacion['iEnviarInstantaneo'] ? 'EN' : 'NU')."',
-
         // excluirUsuarios
-            array_push($excluirUsuarios, $_SESSION['usuario']['skUsuario']);
-            $excluirUsuarios = array_unique($excluirUsuarios);
-            foreach($excluirUsuarios AS $k=>$v){
-                $array_excluirUsuarios[$v] = $v;
-            }
-            $notificacion['excluirUsuarios'] = $array_excluirUsuarios;
+        array_push($excluirUsuarios, $_SESSION['usuario']['skUsuario']);
+        $excluirUsuarios = array_unique($excluirUsuarios);
+        foreach ($excluirUsuarios AS $k => $v) {
+            $array_excluirUsuarios[$v] = $v;
+        }
+        $notificacion['excluirUsuarios'] = $array_excluirUsuarios;
 
 
-        $sql = "stpCU_notificacion
+        $sql = "EXECUTE stpCU_notificacion
         @skNotificacionMensaje = " . escape($notificacion['skNotificacionMensaje']) . ",
         @skEmpresaSocioPropietario = " . escape($_SESSION['usuario']['skEmpresaSocioPropietario']) . ",
         @skComportamientoModulo = " . escape($notificacion['skComportamientoModulo']) . ",
@@ -1771,9 +1860,10 @@ trait DLOREAN_Functions {
         @sIcono = " . escape($notificacion['sIcono']) . ",
         @sColor = " . escape($notificacion['sColor']) . ",
         @sImagen = " . escape($notificacion['sImagen']) . ",
+        @sAsunto = " . escape($notificacion['sAsunto']) . ",
         @sValores = " . escape($notificacion['sValores']) . ",
         @skUsuarioCreacion = " . escape($_SESSION['usuario']['skUsuario']) . ",
-        @sExcluirUsuarios = ".escape(mssql_where_in($excluirUsuarios,FALSE));
+        @sExcluirUsuarios = " . escape(mssql_where_in($excluirUsuarios, FALSE));
 
         $result = Conn::query($sql);
 
@@ -1792,11 +1882,15 @@ trait DLOREAN_Functions {
         if ($usuarios) {
             foreach ($usuarios AS $k => $v) {
 
-                $sql = "stpC_notificaciones_usuarios
+                if(in_array($v, $excluirUsuarios)){
+                    continue;
+                }
+
+                $sql = "EXECUTE stpC_notificaciones_usuarios
                 @skNotificacion = " . escape($skNotificacion['skNotificacion']) . ",
-                @skUsuario = " . escape($v). ",
+                @skUsuario = " . escape($v) . ",
                 @skGrupoPublicacion = NULL,
-                @sExcluirUsuarios = ".escape(mssql_where_in($excluirUsuarios,FALSE));
+                @sExcluirUsuarios = " . escape(mssql_where_in($excluirUsuarios, FALSE));
 
                 $result = Conn::query($sql);
 
@@ -1806,14 +1900,6 @@ trait DLOREAN_Functions {
             }
         }
 
-        // ENVIAR LA NOTIFICAION POR SERVICIO CRON JOB GOOGLE //
-        /* if ($notificacion['iEnviarInstantaneo'] == 0) {
-          if ($notificacion['iEnviarCorreo'] == 1) {
-          $this->notifyMail($skNotificacion, $notificacion);
-          }
-          return TRUE;
-          } */
-
         $sql = "SELECT DISTINCT N1.channel FROM (
             SELECT
             cn.skNotificacion, gnm.skGrupoNotificacion AS channel, cn.dFechaCreacion, u.skUsuario
@@ -1822,15 +1908,15 @@ trait DLOREAN_Functions {
             INNER JOIN rel_gruposNotificaciones_mensajes gnm ON gnm.skNotificacionMensaje = cn.skNotificacionMensaje
             INNER JOIN rel_gruposNotificaciones_usuarios gnu ON gnu.skGrupoNotificacion = gnm.skGrupoNotificacion
             INNER JOIN cat_gruposNotificaciones g ON g.skGrupoNotificacion = gnm.skGrupoNotificacion AND g.skEmpresaSocioPropietario = " . escape($_SESSION['usuario']['skEmpresaSocioPropietario']) . "
-            INNER JOIN cat_usuarios u ON u.skUsuario = gnu.skUsuario
-            WHERE nm.iNotificacionGeneral = 1 AND cn.skNotificacion = '" . $skNotificacion['skNotificacion'] . "'
+            INNER JOIN cat_usuarios u ON u.skUsuario = gnu.skUsuario AND u.skEstatus = 'AC'
+            WHERE cn.skNotificacion = '" . $skNotificacion['skNotificacion'] . "'
             UNION
             SELECT
             cn.skNotificacion, u.skUsuario AS channel, cn.dFechaCreacion, u.skUsuario
             FROM core_notificaciones cn
             INNER JOIN cat_notificacionesMensajes nm ON nm.skNotificacionMensaje = cn.skNotificacionMensaje
             INNER JOIN rel_notificaciones_usuarios nu ON nu.skNotificacion = cn.skNotificacion
-            INNER JOIN cat_usuarios u ON u.skUsuario = nu.skUsuario
+            INNER JOIN cat_usuarios u ON u.skUsuario = nu.skUsuario AND u.skEstatus = 'AC'
             LEFT JOIN rel_notificacionesMensajes_usuariosAjustes ua ON ua.skUsuario = u.skUsuario AND ua.skTipoNotificacion = nm.skTipoNotificacion
             WHERE cn.skNotificacion = '" . $skNotificacion['skNotificacion'] . "' AND ua.skUsuario IS NULL AND nu.skUsuario NOT IN (
                 SELECT gnu.skUsuario
@@ -1839,8 +1925,8 @@ trait DLOREAN_Functions {
                 INNER JOIN rel_gruposNotificaciones_mensajes gnm ON gnm.skNotificacionMensaje = cn.skNotificacionMensaje
                 INNER JOIN rel_gruposNotificaciones_usuarios gnu ON gnu.skGrupoNotificacion = gnm.skGrupoNotificacion
                 INNER JOIN cat_gruposNotificaciones g ON g.skGrupoNotificacion = gnm.skGrupoNotificacion AND g.skEmpresaSocioPropietario = " . escape($_SESSION['usuario']['skEmpresaSocioPropietario']) . "
-                INNER JOIN cat_usuarios u ON u.skUsuario = gnu.skUsuario
-                WHERE nm.iNotificacionGeneral = 1 AND cn.skNotificacion = '" . $skNotificacion['skNotificacion'] . "'
+                INNER JOIN cat_usuarios u ON u.skUsuario = gnu.skUsuario AND u.skEstatus = 'AC'
+                WHERE cn.skNotificacion = '" . $skNotificacion['skNotificacion'] . "'
             )
             ) AS N1
         WHERE N1.skNotificacion = '" . $skNotificacion['skNotificacion'] . "'";
@@ -1854,13 +1940,13 @@ trait DLOREAN_Functions {
         $channels = Conn::fetch_assoc_all($result);
 
         // Grupos de Publicaciones //
-        if(is_array($gruposPublicaciones) && count($gruposPublicaciones) > 0){
-            foreach($gruposPublicaciones AS $k => $v) {
+        if (is_array($gruposPublicaciones) && count($gruposPublicaciones) > 0) {
+            foreach ($gruposPublicaciones AS $k => $v) {
                 $sql = "stpC_notificaciones_usuarios
                 @skNotificacion = " . escape($skNotificacion['skNotificacion']) . ",
                 @skUsuario = NULL,
-                @skGrupoPublicacion = " . escape($v). ",
-                @sExcluirUsuarios = ".escape(mssql_where_in($excluirUsuarios,FALSE));
+                @skGrupoPublicacion = " . escape($v) . ",
+                @sExcluirUsuarios = " . escape(mssql_where_in($excluirUsuarios, FALSE));
 
                 $result = Conn::query($sql);
 
@@ -1869,23 +1955,9 @@ trait DLOREAN_Functions {
                 }
 
                 // Agregamos el canal del Grupo de Publicaciones
-                    array_push($channels, array('channel'=>$v));
+                array_push($channels, array('channel' => $v));
             }
         }
-
-        require_once(CORE_PATH . 'src/notifications/pusher/Pusher.php');
-
-        $options = array(
-            'encrypted' => true
-        );
-
-        // https://pusher.com/docs/server_api_guide
-        $pusher = new Pusher(
-                PUSHER_KEY, // APP_KEY
-                PUSHER_SECRET, // APP_SECRET
-                PUSHER_APP_ID, // APP_ID
-                $options // OPTIONS
-        );
 
         $arrayUsuario = array();
         foreach ($channels as $row) {
@@ -1908,58 +1980,58 @@ trait DLOREAN_Functions {
             utf8($row, FALSE);
             $notificacion['dFechaCreacion'] = date('d/m/Y H:i:s');
 
-            // https://pusher.com/docs/server_api_guide
-            $pusher_response = $pusher->trigger($row['channel'], 'notify', $notificacion);
+            $wmsg_response = $this->d_notify($notificacion,$row['channel'],'notify');
 
-            if ($pusher_response == true) {
+            if ($wmsg_response == true) {
 
                 // SE CAMBIA EL ESTATUS COMO NOTIFICACIÓN ENVIADA PARA UN USUARIO (INDIVIDUAL) //
-                    $sql = "UPDATE rel_notificaciones_usuarios SET skEstatus = 'EN' WHERE skNotificacion = " . escape($notificacion['skNotificacion']) . " AND skUsuario = " . escape($row['channel']);
-                    $result = Conn::query($sql);
-                    if (!$result) {
-                        $this->data['success'] = FALSE;
-                        $this->data['message'] = 'Hubo un error actualizar el estatus de la notificación web del usuario a enviada';
-                    }
+                $sql = "UPDATE rel_notificaciones_usuarios SET skEstatus = 'EN' WHERE skNotificacion = " . escape($notificacion['skNotificacion']) . " AND skUsuario = " . escape($row['channel']);
+                $result = Conn::query($sql);
+                if (!$result) {
+                    $this->data['success'] = FALSE;
+                    $this->data['message'] = 'Hubo un error actualizar el estatus de la notificación web del usuario a enviada';
+                }
 
                 // SE CAMBIA EL ESTATUS COMO NOTIFICACIÓN ENVIADA PARA LOS USUARIOS DE UN GRUPO (SISTEMA) //
-                    $sql = "UPDATE rel_notificaciones_usuarios SET skEstatus = 'EN' WHERE skNotificacion = " . escape($notificacion['skNotificacion']) . " AND skUsuario IN
+                $sql = "UPDATE rel_notificaciones_usuarios SET skEstatus = 'EN' WHERE skNotificacion = " . escape($notificacion['skNotificacion']) . " AND skUsuario IN
                     (SELECT skUsuario FROM rel_gruposNotificaciones_usuarios WHERE skGrupoNotificacion = " . escape($row['channel']) . ")";
-                    $result = Conn::query($sql);
-                    if (!$result) {
-                        $this->data['success'] = FALSE;
-                        $this->data['message'] = 'Hubo un error actualizar el estatus de la notificación web del usuario a enviada';
-                    }
+                $result = Conn::query($sql);
+                if (!$result) {
+                    $this->data['success'] = FALSE;
+                    $this->data['message'] = 'Hubo un error actualizar el estatus de la notificación web del usuario a enviada';
+                }
 
                 // SE CAMBIA EL ESTATUS COMO NOTIFICACIÓN ENVIADA PARA LOS USUARIOS DE UN GRUPO DE PUBLICACIONES (PUBLICACIONES) //
-                    $sql = "UPDATE rel_notificaciones_usuarios SET skEstatus = 'EN' WHERE skNotificacion = " . escape($notificacion['skNotificacion']) . " AND skUsuario IN
+                $sql = "UPDATE rel_notificaciones_usuarios SET skEstatus = 'EN' WHERE skNotificacion = " . escape($notificacion['skNotificacion']) . " AND skUsuario IN
                     (SELECT skUsuario FROM rel_publicaciones_grupos_usuarios WHERE skGrupoPublicacion = " . escape($row['channel']) . ")";
-                    $result = Conn::query($sql);
-                    if (!$result) {
-                        $this->data['success'] = FALSE;
-                        $this->data['message'] = 'Hubo un error actualizar el estatus de la notificación web del usuario a enviada';
-                    }
+                $result = Conn::query($sql);
+                if (!$result) {
+                    $this->data['success'] = FALSE;
+                    $this->data['message'] = 'Hubo un error actualizar el estatus de la notificación web del usuario a enviada';
+                }
+
             }
         }
 
         // Ponemos en estatus de enviada a la notificación de los usuarios que no quieren ser molestados con notificaciones
-            $sql = "UPDATE rel_notificaciones_usuarios SET skEstatus = 'EN' WHERE skUsuario IN (
+        $sql = "UPDATE rel_notificaciones_usuarios SET skEstatus = 'EN' WHERE skUsuario IN (
 		SELECT ua.skUsuario
                 FROM core_notificaciones cn
                 INNER JOIN cat_notificacionesMensajes nm ON nm.skNotificacionMensaje = cn.skNotificacionMensaje
                 INNER JOIN rel_notificaciones_usuarios nu ON nu.skNotificacion = cn.skNotificacion
                 INNER JOIN rel_notificacionesMensajes_usuariosAjustes ua ON ua.skUsuario = nu.skUsuario AND ua.skTipoNotificacion = nm.skTipoNotificacion
-                WHERE cn.skNotificacion = ".escape($notificacion['skNotificacion']).") AND skNotificacion = ".escape($notificacion['skNotificacion']);
-            $result = Conn::query($sql);
-            if (!$result) {
-                $this->data['success'] = FALSE;
-                $this->data['message'] = 'Hubo un error actualizar el estatus de la notificación web del usuario a enviada';
-            }
+                WHERE cn.skNotificacion = " . escape($notificacion['skNotificacion']) . ") AND skNotificacion = " . escape($notificacion['skNotificacion']);
+        $result = Conn::query($sql);
+        if (!$result) {
+            $this->data['success'] = FALSE;
+            $this->data['message'] = 'Hubo un error actualizar el estatus de la notificación web del usuario a enviada';
+        }
 
         // Enviamos la notificación al celular
         $this->sendPushMessage($notificacion, $arrayUsuario);
 
         if ($notificacion['iEnviarCorreo'] == 1) {
-            $this->notifyMail($skNotificacion, $notificacion);
+            $this->notifyMail($skNotificacion, $notificacion, $correosAdicionales);
         }
         return TRUE;
     }
@@ -2036,9 +2108,10 @@ trait DLOREAN_Functions {
      * @author          Christian Josué Jiménez Sánchez <cjimenez@woodward.com.mx>
      * @param string $skNotificacion ID de la notificación.
      * @param mixed $notificacion Configuración de la notificación.
+     * @param mixed $correosAdicionales Correos adicionales que recibirán el mensaje.
      * @return boolena  retorna true en caso de éxito, false en caso de haber algún error.
      */
-    protected function notifyMail($skNotificacion, $notificacion) {
+    protected function notifyMail($skNotificacion, $notificacion, $correosAdicionales) {
 
         $sql = "SELECT DISTINCT N1.* FROM (
             SELECT
@@ -2049,7 +2122,7 @@ trait DLOREAN_Functions {
             INNER JOIN rel_gruposNotificaciones_usuarios gnu ON gnu.skGrupoNotificacion = gnm.skGrupoNotificacion
             INNER JOIN cat_gruposNotificaciones g ON g.skGrupoNotificacion = gnm.skGrupoNotificacion AND g.skEmpresaSocioPropietario = " . escape($_SESSION['usuario']['skEmpresaSocioPropietario']) . "
             INNER JOIN cat_usuarios u ON u.skUsuario = gnu.skUsuario
-            WHERE nm.iNotificacionGeneral = 1 AND cn.skNotificacion = '" . $skNotificacion['skNotificacion'] . "'
+            WHERE cn.skNotificacion = '" . $skNotificacion['skNotificacion'] . "'
             UNION
             SELECT
             cn.skNotificacion, u.skUsuario, CONCAT(u.sNombre,' ',u.sApellidoPaterno,' ',u.sApellidoMaterno) AS nombreCompleto, u.sNombre, u.sApellidoPaterno, u.sApellidoMaterno, u.sCorreo
@@ -2064,7 +2137,7 @@ trait DLOREAN_Functions {
                 INNER JOIN rel_gruposNotificaciones_usuarios gnu ON gnu.skGrupoNotificacion = gnm.skGrupoNotificacion
                 INNER JOIN cat_gruposNotificaciones g ON g.skGrupoNotificacion = gnm.skGrupoNotificacion AND g.skEmpresaSocioPropietario = " . escape($_SESSION['usuario']['skEmpresaSocioPropietario']) . "
                 INNER JOIN cat_usuarios u ON u.skUsuario = gnu.skUsuario
-                WHERE nm.iNotificacionGeneral = 1 AND cn.skNotificacion = '" . $skNotificacion['skNotificacion'] . "'
+                WHERE cn.skNotificacion = '" . $skNotificacion['skNotificacion'] . "'
             )
             ) AS N1
         WHERE N1.skNotificacion = '" . $skNotificacion['skNotificacion'] . "'";
@@ -2077,33 +2150,41 @@ trait DLOREAN_Functions {
 
         $usuarios = Conn::fetch_assoc_all($result);
 
-        if (count($usuarios) == 0) {
-            return FALSE;
-        }
-
         $list = array();
-        foreach ($usuarios as $row) {
-            if (!empty($row['sCorreo'])) {
-                array_push($list, $row['sCorreo']);
+        if (count($usuarios) > 0) {
+            foreach ($usuarios as $row) {
+                if (!empty(trim($row['sCorreo']))) {
+                    $list[trim($row['sCorreo'])] = $row['sCorreo'];
+                    //array_push($list, $row['sCorreo']);
+                }
             }
         }
 
+        // Correos Adicionales
+        if ($correosAdicionales) {
+            foreach ($correosAdicionales AS $k => $v) {
+                if (!empty(trim($v))) {
+                    $list[trim($v)] = $v;
+                }
+            }
+        }
+
+        if (count($list) == 0) {
+            return TRUE;
+        }
+
         $this->sendMail(array(
-            'subject' => $notificacion['sNombre'],
-            'to' => $list,
-            'msg' => (empty($notificacion['sMensajeCorreo']) ? $notificacion['sMensaje'] : $notificacion['sMensajeCorreo']),
-            'cc' => array(),
-            'bcc' => array(),
+            'subject' => (!empty($notificacion['sAsunto']) ? $notificacion['sAsunto'] : $notificacion['sNombre']),
+            'to' => array_keys($list),
+            'msg' => (!empty($notificacion['sMensajeCorreo']) ? $notificacion['sMensajeCorreo'] : $notificacion['sMensaje']),
+            'cc' => [],
+            'bcc' => [],
             'msgPriority' => 1,
-            'send1by1' => true,
-            'files' => array(),
+            'send1by1' => ($notificacion['iNotificacionGeneral']) ? FALSE : TRUE,
+            'files' => [],
             'envioInstantaneo' => $notificacion['iEnviarInstantaneo'],
-            'senderConf' => array()
+            'senderConf' => []
         ));
-    }
-
-    public static function createWord($data) {
-
     }
 
     /**
@@ -2171,6 +2252,43 @@ trait DLOREAN_Functions {
     }
 
     /**
+     * getCaracteristica
+     *
+     * Obtiene el valor de una caracteristica
+     *
+     * @author Christian Josue Jiménez Sánchez <cjimenez@woodward.com.mx>
+     * @param type $skCaracteristica Identificador de la característica
+     * @param type $tipoCaracteristica Identificador del tipo de característica empresas / usuarios / servicios
+     * @param type $codigo Identificador de la Empresa / Usuario / skServicio
+     * @return string Retorna el valor de la variable
+     */
+    public function getCaracteristica($skCaracteristica, $tipoCaracteristica, $codigo) {
+        switch ($tipoCaracteristica) {
+            case 'empresas':
+                $sql = "SELECT sValor FROM rel_caracteristica_empresaSocio WHERE skCaracteristicaEmpresaSocio = " . escape($skCaracteristica) . " AND skEmpresaSocio = " . escape($codigo);
+                break;
+            case 'usuarios':
+                $sql = "SELECT sValor FROM rel_caracteristicasUsuarios_usuarios WHERE skCaracteristicaUsuario = " . escape($skCaracteristica) . " AND skUsuario = " . escape($codigo);
+                break;
+            case 'servicios':
+                $sql = "SELECT sValor FROM rel_servicios_caracteristicas WHERE skServicioCaracteristica = " . escape($skCaracteristica) . " AND skServicio = " . escape($codigo);
+                break;
+            default:
+                break;
+        }
+
+        $result = Conn::query($sql);
+        if (!$result) {
+            return FALSE;
+        }
+        $record = Conn::fetch_assoc($result);
+        if(!isset($record['sValor'])){
+            return FALSE;
+        }
+        return $record['sValor'];
+    }
+
+    /**
      * getServidorVinculado
      *
      * Obtiene los datos de un servidor vinculado
@@ -2180,7 +2298,7 @@ trait DLOREAN_Functions {
      * @return mixed Array | False
      */
     public function getServidorVinculado($skServidorVinculado) {
-        $select = "SELECT * FROM cat_servidoresVinculados WHERE skServidorVinculado = '" . $skServidorVinculado . "'";
+        $select = "SELECT * FROM cat_servidoresVinculados WHERE skServidorVinculado = " . escape($skServidorVinculado);
         $result = Conn::query($select);
         if (!$result) {
             return FALSE;
@@ -2266,8 +2384,7 @@ trait DLOREAN_Functions {
 
         require_once CORE_PATH . 'assets/vendor/autoload.php';
 
-
-        $objReader = PHPExcel_IOFactory::createReaderForFile($filename);
+        $objReader = PhpOffice\PhpSpreadsheet\IOFactory::createReaderForFile($filename);
         $objReader->setReadDataOnly(true);
         $reader = $objReader->load($filename);
 
@@ -2286,12 +2403,13 @@ trait DLOREAN_Functions {
      * @return array
      */
     private function phpCharSeparated2Array($filename, $args) {
+
         require_once CORE_PATH . 'assets/vendor/autoload.php';
 
-        $objReader = new PHPExcel_Reader_CSV();
+        $objReader = new PhpOffice\PhpSpreadsheet\Reader\Csv();
+        $objReader->setInputEncoding('CP1252');
         $objReader->setDelimiter($args[0]);
         $objReader->setEnclosure($args[1]);
-
         $reader = $objReader->load($filename);
 
         return $this->importDataEngine($reader);
@@ -2383,6 +2501,59 @@ trait DLOREAN_Functions {
         require_once CORE_PATH . 'assets/vendor/autoload.php';
 
         $tcpdf = new TCPDF2DBarcode($args['data'], $args['format']);
+
+        switch ($args['output']) {
+            case 'html':
+                return $tcpdf->getBarcodeHTML($args['w'], $args['h'], $args['colorhtml']);
+            default :
+                return 'data:image/png;base64,' . base64_encode(
+                                $tcpdf->getBarcodePngData($args['w'], $args['h'], $args['color'])
+                );
+        }
+    }
+
+    /**
+     * Codigos de barras
+     *
+     * Retorna codigos de barras 2D en diversos formatos soportados por la libreria
+     * tcpdf en formato HTML y base64.
+     *
+     * Argumentos pasados mediente array con la siguiente estructura
+     *
+     * [
+     *  'data' => "Informacion a codificar en forma de cadena",
+     *  'format' => 'FORMATO' Vease 'PDF417' 'QRCODE,[L,M,Q,H]', 'DATAMATRIX', leer documentacion oficial para mas formatos.
+     *  'w' => int Ancho,
+     *  'h' => int Alto,
+     *  'color' => [R,G,B] Array de color RGB, Default [0,0,0],
+     *  'colorhtml' => 'black' Nombre de color para salida como HTML, default 'black',
+     *  'output' => 'base64'  | 'html' Default 'base64'     *
+     * ]
+     *
+     *
+     * @link https://tcpdf.org Documentacion oficial de TCPDF
+     * @author Samuel Perez Saldivar <sperez@woodward.com.mx>
+     * @param array $args
+     * @return string Representacion de codigo de barras.
+     */
+    public static function barcode1D($args) {
+
+        if (!isset($args['data'], $args['format'], $args['w'], $args['h'])) {
+            return false;
+        }
+        if (!isset($args['color'])) {
+            $args['color'] = [0, 0, 0];
+        }
+        if (!isset($args['colorhtml'])) {
+            $args['colorhtml'] = 'black';
+        }
+        if (!isset($args['output'])) {
+            $args['output'] = '';
+        }
+
+        require_once CORE_PATH . 'assets/vendor/autoload.php';
+
+        $tcpdf = new TCPDFBarcode($args['data'], $args['format']);
 
         switch ($args['output']) {
             case 'html':

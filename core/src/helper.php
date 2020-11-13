@@ -52,116 +52,7 @@ function utf8(&$value , $htmlentities = TRUE){
         return mb_convert_encoding(trim($value),'UTF-8');
     }
 }
-/*function utf8(&$value , $htmlentities = TRUE){
-    if(is_null($value) || $value === FALSE){
-        return $value;
-    }
-    if(is_array($value)){
-        foreach($value AS $k=>&$v){
-            if(is_array($v)){
-                foreach($v AS $a=>&$b){
-                    if(is_numeric($b)){
-                        continue;
-                    }
-                    if($htmlentities){
-                        $b = htmlentities(utf8_encode(trim($b)));
-                    }else{
-                        $b = utf8_encode(trim($b));
-                    }
-                }
-            }else{
-                if(is_numeric($v)){
-                    continue;
-                }
-                if($htmlentities){
-                    $v = htmlentities(mb_convert_encoding(trim($v),'UTF-8'));
-                }else{
-                    $v = utf8_encode(trim($v));
-                }
-            }
-        }
-        return true;
-    }
-    if(is_numeric($value)){
-        return $value;
-    }
-    if($htmlentities){
-        return htmlentities(utf8_encode(trim($value)));
-    }else{
-        return utf8_encode(trim($value));
-    }
-}*/
-/*
-function utf8B(&$value , $htmlentities = TRUE){
-    if(is_null($value) || $value === FALSE){
-        return $value;
-    }
-    if(is_array($value)){
-        foreach($value AS $k=>&$v){
-            if(is_array($v)){
-                foreach($v AS $a=>&$b){
-                    if(is_numeric($b)){
-                        continue;
-                    }
-                    if($htmlentities){
-                        if(ENVIRONMENT != 'PRODUCTION'){
-                            $b = htmlentities(mb_convert_encoding(trim($b),'UTF-8'));
-                            //$b = htmlentities(utf8_encode(trim($b)));
-                        }else{
-                            $b = htmlentities(utf8_decode(utf8_encode(trim($b))));
-                        }
-                    }else{
-                        if(ENVIRONMENT != 'PRODUCTION'){
-                            //$b = mb_convert_encoding(trim($b),'UTF-8');
-                            $b = utf8_encode(trim($b));
-                        }else{
-                            $b = utf8_decode(utf8_encode(trim($b)));
-                        }
-                    }
-                }
-            }else{
-                if(is_numeric($v)){
-                    continue;
-                }
-                if($htmlentities){
-                    if(ENVIRONMENT != 'PRODUCTION'){
-                        $v = htmlentities(mb_convert_encoding(trim($v),'UTF-8'));
-                        //$v = htmlentities(utf8_encode(trim($v)));
-                    }else{
-                        $v = htmlentities(utf8_decode(utf8_encode(trim($v))));
-                    }
-                }else{
-                    if(ENVIRONMENT != 'PRODUCTION'){
-                        $v = mb_convert_encoding(trim($v),'UTF-8');
-                        //$v = utf8_encode(trim($v));
-                    }else{
-                        $v = utf8_decode(utf8_encode(trim($v)));
-                    }
-                }
-            }
-        }
-        return true;
-    }
-    if(is_numeric($value)){
-        return $value;
-    }
-    if($htmlentities){
-        if(ENVIRONMENT != 'PRODUCTION'){
-            //return htmlentities(mb_convert_encoding(trim($value),'UTF-8'));
-            return htmlentities(utf8_encode(trim($value)));
-        }else{
-            return htmlentities(utf8_decode(utf8_encode(trim($value))));
-        }
-    }else{
-        if(ENVIRONMENT != 'PRODUCTION'){
-            //return mb_convert_encoding(trim($value),'UTF-8');
-            return utf8_encode(trim($value));
-        }else{
-            return utf8_decode(utf8_encode(trim($value)));
-        }
-    }
-}
-*/
+
 /**
  * escape
  *
@@ -174,6 +65,9 @@ function utf8B(&$value , $htmlentities = TRUE){
  * @return string | integer     Retorna string | integer
  */
 function escape($value, $quotes = true){
+    if(is_array($value)){
+        return $value;
+    }
     if(is_numeric($value)){
         if($quotes){
             return "'".$value."'";
@@ -250,50 +144,37 @@ function errorHandler($errno, $errstr, $errfile, $errline){
     }
 
     $error_log = function($data){
-        if(!file_exists(CORE_PATH.'logs/error')){
-            $log = fopen(CORE_PATH.'logs/error', 'w');
-            fclose($log);
-            chmod(CORE_PATH.'logs/error' , 0777);
+        if(!file_exists(ERROR_LOGFILE)){
+            $file = fopen(ERROR_LOGFILE, 'w');
+            fclose($file);
+            chmod(ERROR_LOGFILE , 0777);
         }
-        @file_put_contents(CORE_PATH.'logs/error', print_r($data,true)."\n" , FILE_APPEND | LOCK_EX);
+        @file_put_contents(ERROR_LOGFILE, print_r($data,true)."\n" , FILE_APPEND | LOCK_EX);
     };
-
-    $data = "";
-
-    switch ($errno) {
-        case E_USER_ERROR:
-            $data.= date('Y-m-d h:i:s')." PHP " . PHP_VERSION . " (" . PHP_OS . ")\n";
-            $data.= "My ERROR [$errno] $errstr\n";
-            $data.= "Fatal error on line $errline in file $errfile";
-            $data.= "Aborting...";
-            $error_log($data);
-            break;
-
-        case E_USER_WARNING:
-            $data.= date('Y-m-d h:i:s')." PHP " . PHP_VERSION . " (" . PHP_OS . ")\n";
-            $data.= "My WARNING [$errno] $errstr";
-            $data.= "Error on line $errline in file $errfile\n";
-            $error_log($data);
-            break;
-
-        case E_USER_NOTICE:
-            $data.= date('Y-m-d h:i:s')." PHP " . PHP_VERSION . " (" . PHP_OS . ")\n";
-            $data.= "My NOTICE [$errno] $errstr";
-            $data.= "Error on line $errline in file $errfile\n";
-            $error_log($data);
-            break;
-
-        default:
-            $data.= date('Y-m-d h:i:s')." PHP " . PHP_VERSION . " (" . PHP_OS . ")\n";
-            $data.= "Unknown error type: [$errno] $errstr\n";
-            $data.= "Error on line $errline in file $errfile\n";
-            $error_log($data);
-            break;
-    }
-
-    /* Don't execute PHP internal error handler */
+    
+    $errorType = [
+        1  => 'E_ERROR',
+        2  => 'E_WARNING',
+        4  => 'E_PARSE',
+        8  => 'E_NOTICE',
+        16 => 'E_CORE_ERROR',
+        32 => 'E_CORE_WARNING',
+        64 => 'E_COMPILE_ERROR',
+        128 => 'E_COMPILE_WARNING',
+        256 => 'E_USER_ERROR',
+        512 => 'E_USER_WARNING',
+        1024 => 'E_USER_NOTICE',
+        2048 => 'E_STRICT',
+        4096 => 'E_RECOVERABLE_ERROR',
+        8192 => 'E_DEPRECATED',
+        16384 => 'E_USER_DEPRECATED',
+    ];
+    
+    $data  = date('Y-m-d h:i:s')." [PHP " . PHP_VERSION . "] (" . PHP_OS . ")\n";
+    $data .= "Error on line ($errline) in file $errfile\n";
+    $data .= "Error Type ($errno) $errorType[$errno] => $errstr\n";
+    $error_log($data);
     return TRUE;
-
 }
 
 /**
@@ -558,31 +439,7 @@ function getChronArray(){
     return $r;
 }
 
-function slugify($text){
-    // replace non letter or digits by -
-    $text = preg_replace('~[^\pL\d]+~u', '-', $text);
 
-    // transliterate
-    $text = iconv('utf-8', 'us-ascii//TRANSLIT', $text);
-
-    // remove unwanted characters
-    $text = preg_replace('~[^-\w]+~', '', $text);
-
-    // trim
-    $text = trim($text, '-');
-
-    // remove duplicate -
-    $text = preg_replace('~-+~', '-', $text);
-
-    // lowercase
-    $text = strtolower($text);
-
-    if (empty($text)) {
-        return 'n-a';
-    }
-
-    return $text;
-}
 
 
 

@@ -31,14 +31,14 @@ Class Conc_form_Controller Extends Conc_Model {
         // Obtener datos de entrada de información
             $getInputData = $this->getInputData();
             if(!$getInputData['success']){
-                Conn::rollback($this->idTran);
+                //Conn::rollback($this->idTran);
                 return $this->data;
             }
 
             // Validamos los datos de entrada
             $validar_datos_entrada = $this->validar_datos_entrada();
             if(!$validar_datos_entrada['success']){
-                Conn::rollback($this->idTran);
+                //Conn::rollback($this->idTran);
                 return $this->data;
             }
 
@@ -48,6 +48,7 @@ Class Conc_form_Controller Extends Conc_Model {
 
             $this->conc['skConcepto'] = (isset($_GET['p1']) ? $_GET['p1'] : NULL);
 
+            
             // Guardar Concepto
             $guardar_comprobante = $this->guardar_concepto();
             if(!$guardar_comprobante['success']){
@@ -56,11 +57,11 @@ Class Conc_form_Controller Extends Conc_Model {
             }
 
             // Guardar impuestos Concepto
-            /*$guardar_conceptos = $this->guardar_concepto_impuestos();
+            $guardar_conceptos = $this->guardar_concepto_impuestos();
             if(!$guardar_conceptos['success']){
-                Conn::rollback($this->idTran);
+               // Conn::rollback($this->idTran);
                 return $this->data;
-            }*/
+            }
           
 
         //Conn::commit($this->idTran);
@@ -109,19 +110,25 @@ Class Conc_form_Controller Extends Conc_Model {
         public function guardar_concepto_impuestos(){
             $this->data['success'] = TRUE;
             $this->conc['axn'] = 'guardar_concepto_impuestos';
-            
-            foreach ($this->conc['Conceptos'] as $row) {
-                //verificamos si ya existe el producto en el catalogo, si no existe se inserta.
-                $this->conc['skImpuesto']= (!empty($row['skImpuesto']) ? $row['skImpuesto'] : NULL);
-               
-                $stpCUD_conceptos = parent::stpCUD_conceptos();
-
-                if(!$stpCUD_conceptos || isset($stpCUD_conceptos['success']) && $stpCUD_conceptos['success'] != 1){
-                    $this->data['success'] = FALSE;
-                    $this->data['message'] = 'HUBO UN ERROR AL GUARDAR LOS IMPUESTOS DEL CONCEPTO';
-                    return $this->data;
+          
+            $delete="DELETE FROM rel_conceptos_impuestos WHERE skConcepto = '". $this->conc['skConcepto'] ."'";
+            $result = Conn::query($delete);
+            if(!empty($this->conc['skImpuesto'])){
+                foreach ($this->conc['skImpuesto'] as $k => $v) {
+                    //verificamos si ya existe el producto en el catalogo, si no existe se inserta.
+                    $this->conc['skImpuestoConcepto']= (!empty($v) ? $v : NULL);
+                   
+                    $stpCUD_conceptos = parent::stpCUD_conceptos();
+    
+                    if(!$stpCUD_conceptos || isset($stpCUD_conceptos['success']) && $stpCUD_conceptos['success'] != 1){
+                        $this->data['success'] = FALSE;
+                        $this->data['message'] = 'HUBO UN ERROR AL GUARDAR LOS IMPUESTOS DEL CONCEPTO';
+                        return $this->data;
+                    }
                 }
+
             }
+            
             $this->data['success'] = TRUE;
             $this->data['message'] = 'IMPUESTOS GUARDADOS CON EXITO';
             return $this->data;
@@ -142,7 +149,7 @@ Class Conc_form_Controller Extends Conc_Model {
 
           $validations = [
               'sCodigo'=>['message'=>'CODIGO'],
-              'sCodigo'=>['message'=>'CODIGO']
+              'sNombre'=>['message'=>'NOMBRE']
           ];
 
           foreach($validations AS $k=>$v){

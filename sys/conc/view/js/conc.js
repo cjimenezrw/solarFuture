@@ -19,8 +19,8 @@ conc.conc_inde.dataTableConf = {
     'columns': [
         {'title': 'E', 'data': 'estatus', 'dataType': 'string', 'tooltip': 'Estatus', 'filterT': 'Estatus'},
         {'title': 'CODIGO', 'data': 'sCodigo', 'dataType': 'string','tooltip': 'CODIGO'},
-        {'title': 'Usuario Creacion', 'data': 'usuarioCreacion', 'dataType': 'string'},
         {'title': 'Nombre', 'data': 'sNombre', 'dataType': 'string'},
+        {'title': 'Usuario Creacion', 'data': 'usuarioCreacion', 'dataType': 'string'},
         {'title': 'F. Creacion', 'data': 'dFechaCreacion', 'dataType': 'date'},
         {'title': 'Proveedor', 'data': 'proveedor', 'dataType': 'string'},
     ],

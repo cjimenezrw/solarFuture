@@ -33,10 +33,11 @@ Class Conc_Model Extends DLOREAN_Model {
             " .escape(isset($this->conc['sDescripcion']) ? $this->conc['sDescripcion'] : NULL) . ",
             " .escape(isset($this->conc['fPrecioCompra']) ? $this->conc['fPrecioCompra'] : NULL) . ",
             " .escape(isset($this->conc['fPrecioVenta']) ? $this->conc['fPrecioVenta'] : NULL) . ",
+            " .escape(isset($this->conc['skImpuestoConcepto']) ? $this->conc['skImpuestoConcepto'] : NULL) . ",
             " .escape(isset($this->conc['axn']) ? $this->conc['axn'] : NULL) . ",
             '" . $_SESSION['usuario']['skUsuario'] . "',
             '" . $this->sysController . "' )";
-         
+      
         //$this->log($sql, true);
         $result = Conn::query($sql);
         //$codigo = Conn::fetch_assoc($result);
@@ -65,19 +66,24 @@ Class Conc_Model Extends DLOREAN_Model {
                 cc.dFechaCreacion,
                 cc.sNombre,
                 cc.fPrecioCompra,
+                cc.sDescripcion,
                 cc.fPrecioVenta,
                 cc.skUnidadMedida,
                 cc.iClaveProductoServicio,
+                cc.skEmpresaSocioProveedor,
                 ce.sNombre AS estatus,
                 ce.sIcono AS estatusIcono,
                 ce.sColor AS estatusColor,
+                cum.sNombre AS unidadMedida,
                 cep.sNombre AS proveedor,
+                cep.sRFC AS proveedorRFC,
                 cu.sNombre AS usuarioCreacion       
                 FROM cat_conceptos cc
                 INNER JOIN core_estatus ce ON ce.skEstatus = cc.skEstatus
                 INNER JOIN cat_usuarios cu ON cu.skUsuario = cc.skUsuarioCreacion
                 LEFT JOIN rel_empresasSocios resp ON resp.skEmpresaSocio = cc.skEmpresaSocioProveedor
                 LEFT JOIN cat_empresas cep ON cep.skEmpresa = resp.skEmpresa
+                LEFT JOIN cat_unidadesMedidaSAT cum ON cum.skUnidadMedida = cc.skUnidadMedida
             
                 WHERE  cc.skConcepto =  " . escape($this->conc['skConcepto']);
 
@@ -135,7 +141,8 @@ Class Conc_Model Extends DLOREAN_Model {
         $select = "SELECT cim.skImpuesto,CONCAT( cim.skTipoImpuesto,'-',cim.sNombre,'(', cim.svalor,'%)')  AS nombre 
                     FROM rel_conceptos_impuestos  rci
                     INNER JOIN cat_impuestos cim ON cim.skImpuesto = rci.skImpuesto
-                    where rci.ckConcepto = '".$this->conc['skConcepto']."' ";
+                    where rci.skConcepto = '".$this->conc['skConcepto']."' ";
+       
         $result = Conn::query($select);
         if (!$result) {
             return FALSE;

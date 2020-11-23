@@ -77,7 +77,7 @@ Class Conc_Controller Extends Conc_Model {
                 $conc_deta->crearPDF();
                 break;
             default:
-                $this->data['datos'] = $conc_deta->consultar();
+                $this->data = $conc_deta->consultar();
                 $this->load_view('conc_deta', $this->data);
                 break;
         }

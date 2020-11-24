@@ -27,7 +27,8 @@ Class Emso_form_Controller Extends Empr_Model
     * @return object | false Retorna el objeto de resultados de la consulta o false si algo falla
     */
     public function validarEmpresaSocio(){
-        $sRFC = isset($_POST['sRFC']) ?  ( ($_POST['sRFC'] === 'XAXX010101000') ?  NULL : $_POST['sRFC'] )    : NULL;
+        //$sRFC = isset($_POST['sRFC']) ?  ( ($_POST['sRFC'] === 'XAXX010101000') ?  NULL : $_POST['sRFC'] )    : NULL;
+        $sRFC = isset($_POST['sRFC']) ?  ( ($_POST['sRFC'] === 'XAXX010101000') ?  NULL : ( ($_POST['sRFC'] === 'XEXX010101000') ?  NULL : $_POST['sRFC'] )   )    : NULL;
         $skEmpresaTipo = isset($_POST['skEmpresaTipo']) ? $_POST['skEmpresaTipo'] : NULL;
         $data = parent::validar_empresaSocio($sRFC,$skEmpresaTipo);
         $data['valid'] = TRUE;

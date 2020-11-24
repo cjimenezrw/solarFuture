@@ -206,8 +206,54 @@ Class Empr_Controller Extends Empr_Model {
         return true;
     }
 
-     
+    /**
+     * Consulta de Prospectos (pros-inde)
+     *
+     * @author Christian Josué Jiménez Sánchez <christianjimenezcjs@gmail.com>
+     * @return html Retorna la vista del módulo
+     */
+    public function pros_inde() {
+        $this->load_class("pros_inde", "controller");
+        $pros_inde = new Pros_inde_Controller();
+        $axn = (isset($_POST['axn']) ? $_POST['axn'] : (isset($_GET['axn']) ? $_GET['axn'] : NULL));
+        switch ($axn) {
+            case 'consultar':
+                header('Content-Type: application/json');
+                echo json_encode($pros_inde->consultar());
+                return TRUE;
+                break;
+            case 'generarExcel':
+                $pros_inde->generarExcel();
+                break;
+            case 'pdf':
+                $pros_inde->generarPDF();
+                break;
+            default:
+                $this->load_view('pros_inde', $this->data);
+                break;
+        }
+        return true;
+    }
 
- 
-
+    /**
+     * Formulario de Prospectos (pros-form)
+     *
+     * @author Christian Josué Jiménez Sánchez <christianjimenezcjs@gmail.com>
+     * @return html Retorna la vista del módulo
+     */
+    public function pros_form() {
+        $this->load_class("pros_form", "controller");
+        $pros_form = new Pros_form_Controller();
+        $axn = (isset($_POST['axn']) ? $_POST['axn'] : (isset($_GET['axn']) ? $_GET['axn'] : NULL));
+        switch ($axn) {
+            case 'guardar':
+                header('Content-Type: application/json');
+                echo json_encode($pros_form->guardar());
+                break;
+            default:
+                $this->load_view('pros_form', $pros_form->consultar());
+                break;
+        }
+        return TRUE;
+    }
 }

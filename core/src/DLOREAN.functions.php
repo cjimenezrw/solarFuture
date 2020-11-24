@@ -1120,12 +1120,26 @@ trait DLOREAN_Functions {
 
 
             }
-//exit($sql);
+
+            if (isset($consulta['log']) && $consulta['log'] == true) {
+                $this->log($sql, TRUE);
+            }
+
             if (!$conexion) {
                 $resultTotal = Conn::query($sql);
             } else {
                 $resultTotal = Conn::query($sql, $conexion);
             }
+
+            if(is_array($resultTotal) && isset($resultTotal['success']) && $resultTotal['success'] == false){
+                $resultTotal['draw'] = isset($_POST['draw']) ? $_POST['draw'] : 0;
+                $resultTotal['recordsTotal'] = 0;
+                $resultTotal['recordsFiltered'] = 0;
+                $resultTotal['data'] = [];
+                $resultTotal['filters'] = false;
+                return $resultTotal;
+            }
+
             $total = count($resultTotal->fetchall());
             $resultTotal->closeCursor();
 

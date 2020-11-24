@@ -418,3 +418,44 @@ empr.tipo_form.validaciones = {
         }
     }
 };
+
+empr.pros_inde = [];
+empr.pros_inde.dataTableConf = {
+    'serverSide': true,
+    'ajax': {
+        'url': window.location.href,
+        'type': 'POST',
+        'data': function (data) {
+            data.axn = 'consultar';
+            data.filters = core.dataFilterSend;
+            data.generarExcel = core.generarExcel;
+        }
+    },
+    'axn': 'consultar',
+    'order': [[4, "desc"]],
+    'columns': [
+        {'title': 'E', 'data': 'estatus', 'dataType': 'string', 'tooltip': 'Estatus', 'filterT': 'Estatus'},
+        {'title': 'Folio', 'data': 'iFolioProspecto', 'dataType': 'string'},
+        {'title': 'Nombre', 'data': 'sNombreContacto', 'dataType': 'string'},
+        {'title': 'U.Creación', 'data': 'usuarioCreacion', 'dataType': 'string', 'tooltip': 'Usuario Creación'},
+        {'title': 'F.Creación', 'data': 'dFechaCreacion', 'tooltip': 'Fecha Creación', 'dataType': 'date'}
+    ],
+
+    "drawCallback": function () {
+        core.dataTable.contextMenuCore(true);
+        core.dataTable.changeColumnColor(1, 'success');
+        core.dataTable.fastFilters(1, [], true);
+        $('[data-toggle="tooltip"]').tooltip();
+    },
+    "columnDefs": [
+        {
+            "targets": [0],
+            "width": '20px',
+            "createdCell": function (td, cellData, rowData, row, col) {
+                ((rowData.estatusIcono) ? $(td).html('<i class="' + rowData.estatusIcono + '"></i>') : $(td).html(cellData));
+                $(td).addClass('text-center ' + ((rowData.estatusColor) ? rowData.estatusColor : 'text-primary'));
+                ((rowData.estatusIcono) ? $(td).find('i').attr({"title": cellData, "data-toggle": "tooltip", "data-placement": "rigth"}) : '');
+            }
+        }
+    ]
+};

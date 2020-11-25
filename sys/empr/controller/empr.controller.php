@@ -220,7 +220,10 @@ Class Empr_Controller Extends Empr_Model {
             case 'consultar':
                 header('Content-Type: application/json');
                 echo json_encode($pros_inde->consultar());
-                return TRUE;
+                break;
+            case 'eliminar':
+                header('Content-Type: application/json');
+                echo json_encode($pros_inde->eliminar());
                 break;
             case 'generarExcel':
                 $pros_inde->generarExcel();
@@ -252,6 +255,24 @@ Class Empr_Controller Extends Empr_Model {
                 break;
             default:
                 $this->load_view('pros_form', $pros_form->consultar());
+                break;
+        }
+        return TRUE;
+    }
+
+    /**
+     * Detalles de Prospectos (pros-deta)
+     *
+     * @author Christian Josué Jiménez Sánchez <christianjimenezcjs@gmail.com>
+     * @return html Retorna la vista del módulo
+     */
+    public function pros_deta() {
+        $this->load_class("pros_deta", "controller");
+        $pros_deta = new Pros_deta_Controller();
+        $axn = (isset($_POST['axn']) ? $_POST['axn'] : (isset($_GET['axn']) ? $_GET['axn'] : NULL));
+        switch ($axn) {
+            default:
+                $this->load_view('pros_deta', $pros_deta->consultar());
                 break;
         }
         return TRUE;

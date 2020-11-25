@@ -356,6 +356,62 @@ Class Empr_Model Extends DLOREAN_Model {
         return Conn::fetch_assoc_all($result);
     }
  
-  
+    public function stp_prospectos(){
+        $sql = "CALL stp_prospectos (
+            ".escape(isset($this->prospectos['skProspecto']) ? $this->prospectos['skProspecto'] : NULL).",
+            ".escape(isset($this->prospectos['sNombreContacto']) ? $this->prospectos['sNombreContacto'] : NULL).",
+            ".escape(isset($this->prospectos['sEmpresa']) ? $this->prospectos['sEmpresa'] : NULL).",
+            ".escape(isset($this->prospectos['sCorreo']) ? $this->prospectos['sCorreo'] : NULL).",
+            ".escape(isset($this->prospectos['sTelefono']) ? $this->prospectos['sTelefono'] : NULL).",
+            ".escape(isset($this->prospectos['sComentarios']) ? $this->prospectos['sComentarios'] : NULL).",
+            ".escape($_SESSION['usuario']['skEmpresaSocioPropietario']).",
+
+            ".escape(isset($this->prospectos['axn']) ? $this->prospectos['axn'] : NULL).",
+            ".escape($_SESSION['usuario']['skUsuario']).",
+            ".escape($this->sysController)."
+        )";
+
+        $result = Conn::query($sql);
+        if(is_array($result) && isset($result['success']) && $result['success'] == false){
+            return $result;
+        }
+        $record = Conn::fetch_assoc($result);
+        utf8($record);
+        return $record;
+    }
+
+    public function _get_prospecto($params){
+        $sql = "SELECT      
+             pros.skProspecto
+            ,pros.skEmpresaSocioPropietario
+            ,pros.skEstatus
+            ,pros.iFolioProspecto
+            ,pros.sNombreContacto
+            ,pros.sEmpresa
+            ,pros.sCorreo
+            ,pros.sTelefono
+            ,pros.sComentarios
+            ,pros.skUsuarioCreacion
+            ,pros.dFechaCreacion
+            ,pros.skUsuarioModificacion
+            ,pros.dFechaModificacion
+            ,CONCAT(ucre.sNombre,' ',ucre.sApellidoPaterno) AS usuarioCreacion
+            ,est.sNombre AS estatus
+            ,est.sIcono AS estatusIcono
+            ,est.sColor AS estatusColor
+            FROM cat_prospectos pros
+            INNER JOIN core_estatus est ON est.skEstatus = pros.skEstatus
+            INNER JOIN cat_usuarios ucre ON ucre.skUsuario = pros.skUsuarioCreacion
+            WHERE pros.skEmpresaSocioPropietario = ".escape($_SESSION['usuario']['skEmpresaSocioPropietario'])."
+            AND pros.skProspecto = ".escape($params['skProspecto']);
+
+        $result = Conn::query($sql);
+        if(is_array($result) && isset($result['success']) && $result['success'] == false){
+            return $result;
+        }
+        $record = Conn::fetch_assoc($result);
+        utf8($record);
+        return $record;
+    }
 
 }

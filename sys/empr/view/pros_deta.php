@@ -18,43 +18,34 @@
 
                 <div class="col-md-6 col-lg-6">
                     <div class="form-group margin-bottom-60">
-                        <h4 class="example-title"><b><span style="color:red;">* </span>NOMBRE CONTACTO:</b></h4>
-                        <input class="form-control" autocomplete="off" id="sNombreContacto" name="sNombreContacto" type="text" placeholder="NOMBRE CONTACTO" 
-                        value = "<?php echo isset($result['sNombreContacto']) ? $result['sNombreContacto'] : ''; ?>">
+                        <h4 class="example-title"><b>NOMBRE CONTACTO:</b></h4>
+                        <label><?php echo isset($result['sNombreContacto']) ? $result['sNombreContacto'] : ''; ?></label>
                     </div>
                 </div>
                 <div class="col-md-6 col-lg-6">
                     <div class="form-group margin-bottom-60">
                         <h4 class="example-title"><b>EMPRESA:</b></h4>
-                        <input class="form-control" autocomplete="off" id="sEmpresa" name="sEmpresa" type="text" placeholder="EMPRESA" 
-                        value = "<?php echo isset($result['sEmpresa']) ? $result['sEmpresa'] : ''; ?>">
+                        <label><?php echo isset($result['sEmpresa']) ? $result['sEmpresa'] : ''; ?></label>
                     </div>
                 </div>
                 
-                <div class="col-md-12 col-lg-12 clearfix"></div>
-
                 <div class="col-md-6 col-lg-6">
                     <div class="form-group margin-bottom-60">
-                        <h4 class="example-title"><b><span style="color:red;">* </span>CORREO:</b></h4>
-                        <input class="form-control" autocomplete="off" id="sCorreo" name="sCorreo" type="text" placeholder="CORREO" 
-                        value = "<?php echo isset($result['sCorreo']) ? $result['sCorreo'] : ''; ?>">
+                        <h4 class="example-title"><b>CORREO:</b></h4>
+                        <label><?php echo isset($result['sCorreo']) ? $result['sCorreo'] : ''; ?></label>
                     </div>
                 </div>
                 <div class="col-md-6 col-lg-6">
                     <div class="form-group margin-bottom-60">
-                        <h4 class="example-title"><b><span style="color:red;">* </span>TELÉFONO:</b></h4>
-                        <input class="form-control" autocomplete="off" id="sTelefono" name="sTelefono" type="text" placeholder="TELÉFONO" 
-                        value = "<?php echo isset($result['sTelefono']) ? $result['sTelefono'] : ''; ?>">
+                        <h4 class="example-title"><b>TELÉFONO:</b></h4>
+                        <label><?php echo isset($result['sTelefono']) ? $result['sTelefono'] : ''; ?></label>
                     </div>
                 </div>
-
-                <div class="col-md-12 col-lg-12 clearfix"></div>
 
                 <div class="col-md-12 col-lg-12">
                     <div class="form-group margin-bottom-60">
                         <h4 class="example-title"><b>COMENTARIOS:</b></h4>
-                        <textarea rows="5" class="form-control" id="sComentarios" name="sComentarios" autocomplete="off"
-                        placeholder="COMENTARIOS"><?php echo isset($result['sComentarios']) ? html_entity_decode($result['sComentarios']) : ''; ?></textarea>
+                        <label><?php echo isset($result['sComentarios']) ? nl2br($result['sComentarios']) : ''; ?></label>
                     </div>
                 </div>
                 
@@ -67,9 +58,8 @@
 
 <script src="<?php echo SYS_URL; ?><?php echo $this->sysProject; ?>/<?php echo $this->sysModule; ?>/view/js/<?php echo VERSION; ?>/<?php echo $this->sysModule; ?>.js"></script>
 <script type="text/javascript">
-    core.formValidaciones.fields = <?php echo $this->sysModule; ?>.<?php echo $this->sysFunction; ?>.validaciones;
     $(document).ready(function () {
-        $('#core-guardar').formValidation(core.formValidaciones);
+        $('#mowi').iziModal('setBackground', '#f1f4f5');
     });
 </script>
 

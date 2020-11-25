@@ -432,11 +432,14 @@ empr.pros_inde.dataTableConf = {
         }
     },
     'axn': 'consultar',
-    'order': [[4, "desc"]],
+    'order': [[7, "desc"]],
     'columns': [
         {'title': 'E', 'data': 'estatus', 'dataType': 'string', 'tooltip': 'Estatus', 'filterT': 'Estatus'},
         {'title': 'Folio', 'data': 'iFolioProspecto', 'dataType': 'string'},
         {'title': 'Nombre', 'data': 'sNombreContacto', 'dataType': 'string'},
+        {'title': 'Empresa', 'data': 'sEmpresa', 'dataType': 'string'},
+        {'title': 'Correo', 'data': 'sCorreo', 'dataType': 'string'},
+        {'title': 'Teléfono', 'data': 'sTelefono', 'dataType': 'string'},
         {'title': 'U.Creación', 'data': 'usuarioCreacion', 'dataType': 'string', 'tooltip': 'Usuario Creación'},
         {'title': 'F.Creación', 'data': 'dFechaCreacion', 'tooltip': 'Fecha Creación', 'dataType': 'date'}
     ],
@@ -458,4 +461,29 @@ empr.pros_inde.dataTableConf = {
             }
         }
     ]
+};
+
+empr.pros_form = [];
+empr.pros_form.validaciones = {
+    sNombreContacto: {
+        validators: {
+            notEmpty: {
+                message: 'Este dato el requerido'
+            }
+        }
+    },
+    sCorreo: {
+        validators: {
+            notEmpty: {
+                message: 'Este dato el requerido'
+            }
+        }
+    },
+    sTelefono: {
+        validators: {
+            notEmpty: {
+                message: 'Este dato el requerido'
+            }
+        }
+    }
 };

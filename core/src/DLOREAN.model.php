@@ -462,8 +462,9 @@ Class DLOREAN_Model extends Conn {
      * de que la ejecución sea por ajax, retorna un string de datos.
      *
      * @author Christian Josue Jimenez Sanchez <cjimenez@woodward.com.mx>
-     * @param object $message Objeto opcional de conexion a base de datos
-     * @param object $errorCode Objeto opcional de conexion a base de datos
+     * @param String $message Mensaje
+     * @param String $errorCode Código del Error
+     * @return array | view Retorna un json o la vista con el mensaje de error
      */
     public static function showError($message = 'ERROR', $errorCode = 404) {
         $skDispositivoToken = (isset($_POST['skDispositivoToken']) ? $_POST['skDispositivoToken'] : (isset($_GET['skDispositivoToken']) ? $_GET['skDispositivoToken'] : NULL));
@@ -485,42 +486,85 @@ Class DLOREAN_Model extends Conn {
     }
 
     /**
-     * Log
+     * showMessage
      *
-     * Crea un archivo de log dentro de core/logs/
+     * Manda a llamar la pantalla de mensaje cuando es invocada esta función, en caso
+     * de que la ejecución sea por ajax, retorna un string de datos.
      *
      * @author Christian Josue Jimenez Sanchez <cjimenez@woodward.com.mx>
-     * @param string $data Contenido para el log
+     * @param String $message Mensaje
+     * @param String $messageCode Código del Mensaje
+     * @return array | view Retorna un json o la vista con el mensaje de error
      */
-    public static function log($data, $force = FALSE) {
-        if (ENVIRONMENT === 'DEVELOPMENT' || $force === TRUE) {
-            if (!file_exists(CORE_PATH . 'logs/log')) {
-                $log = fopen(CORE_PATH . 'logs/log', 'w');
-                fclose($log);
-                chmod(CORE_PATH . 'logs/log', 0777);
-            }
-            $debug_backtrace = debug_backtrace();
-            @file_put_contents(CORE_PATH . 'logs/log', date('Y-m-d h:i:s') .' Log on line '.$debug_backtrace[0]['line'].' in file '.$debug_backtrace[0]['file']."\n" . print_r($data, true) . "\n\n", FILE_APPEND | LOCK_EX);
+    public static function showMessage($message = 'Mensaje de Portal Woodward', $messageCode = 200) {
+        $skDispositivoToken = (isset($_POST['skDispositivoToken']) ? $_POST['skDispositivoToken'] : (isset($_GET['skDispositivoToken']) ? $_GET['skDispositivoToken'] : NULL));
+        if (DLOREAN_Model::is_ajax() || $skDispositivoToken) {
+            $data = array(
+                'ok'=>1,
+                'success'=>TRUE,
+                'data'=>$messageCode,
+                'response'=>TRUE,
+                'message'=>$message,
+                'datos'=>$messageCode
+            );
+            header('Content-Type: application/json');
+            echo json_encode($data);
+            exit;
         }
+        require_once(CORE_PATH . 'src' . DIRECTORY_SEPARATOR . 'views' . DIRECTORY_SEPARATOR . 'message.php');
+        exit;
     }
 
     /**
      * Log
      *
-     * Crea un archivo de log de errores dentro de core/logs/
+     * Crea un archivo de log dentro de core/logs/log
+     *
+     * @author Christian Josue Jimenez Sanchez <cjimenez@woodward.com.mx>
+     * @param string $data Contenido para el log
+     * @return void NO retorna nada
+     */
+    public static function log($data, $force = FALSE, $clean = FALSE) {
+        if(in_array(ENVIRONMENT, ['DEVELOPMENT','TEST']) || $force === TRUE){
+            if($clean === TRUE && file_exists(LOG_LOGFILE)){
+                unlink(LOG_LOGFILE);
+            }
+            if (!file_exists(LOG_LOGFILE)) {
+                $file = fopen(LOG_LOGFILE, 'w');
+                fclose($file);
+                chmod(LOG_LOGFILE, 0777);
+            }
+            $debug_backtrace = debug_backtrace();
+            $log_message  = date('Y-m-d h:i:s')." [PHP " . PHP_VERSION . "] (" . PHP_OS . ")\n";
+            $log_message .= "Log Message on line (".$debug_backtrace[0]['line'].") in file ".$debug_backtrace[0]['file']."\n";
+            $log_message .= print_r($data, true)."\n\n";
+            @file_put_contents(LOG_LOGFILE, $log_message, FILE_APPEND | LOCK_EX);
+        }
+    }
+
+    /**
+     * Error Log
+     *
+     * Crea un archivo de log de errores dentro de core/logs/error
      *
      * @author Christian Josue Jimenez Sanchez <cjimenez@woodward.com.mx>
      * @param string $data Contenido para el log de error
      */
-    public static function error($data, $force = FALSE) {
-        if (ENVIRONMENT === 'DEVELOPMENT' || $force === TRUE) {
-            if (!file_exists(CORE_PATH . 'logs/error')) {
-                $log = fopen(CORE_PATH . 'logs/error', 'w');
-                fclose($log);
-                chmod(CORE_PATH . 'logs/error', 0777);
+    public static function error($data, $force = FALSE, $clean = FALSE) {
+        if(in_array(ENVIRONMENT, ['DEVELOPMENT','TEST']) || $force === TRUE){
+            if($clean === TRUE && file_exists(ERROR_LOGFILE)){
+                unlink(ERROR_LOGFILE);
+            }
+            if (!file_exists(ERROR_LOGFILE)) {
+                $file = fopen(ERROR_LOGFILE, 'w');
+                fclose($file);
+                chmod(ERROR_LOGFILE, 0777);
             }
             $debug_backtrace = debug_backtrace();
-            @file_put_contents(CORE_PATH . 'logs/error', date('Y-m-d h:i:s') .' Error on line '.$debug_backtrace[0]['line'].' in file '.$debug_backtrace[0]['file']."\n" . print_r($data, true) . "\n\n", FILE_APPEND | LOCK_EX);
+            $error_message  = date('Y-m-d h:i:s')." [PHP " . PHP_VERSION . "] (" . PHP_OS . ")\n";
+            $error_message .= "Error Message on line (".$debug_backtrace[0]['line'].") in file ".$debug_backtrace[0]['file']."\n";
+            $error_message .= "Error Type (24) DLOREAN_ERROR => ".print_r($data, true)."\n\n";
+            @file_put_contents(ERROR_LOGFILE, $error_message, FILE_APPEND | LOCK_EX);
         }
     }
 

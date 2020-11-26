@@ -11,6 +11,7 @@ Class Pros_inde_Controller Extends Empr_Model{
 
     // PRIVATE VARIABLES //
         private $data = [];
+        private $idTran = 'stp_prospectos';
 
     public function __construct(){
         parent::init();
@@ -103,8 +104,19 @@ Class Pros_inde_Controller Extends Empr_Model{
             }
         }else{
             $this->data = ['success'=>TRUE,'message'=>NULL,'datos'=>NULL];
+            $this->prospectos['skProspecto'] = !empty($_POST['id']) ? $_POST['id'] : NULL;
+            Conn::begin($this->idTran);
 
-            $params = [];
+            $this->prospectos['axn'] = 'eliminar';
+            $stp_prospectos = parent::stp_prospectos();
+            if(is_array($stp_prospectos) && isset($stp_prospectos['success']) && $stp_prospectos['success'] == false){
+                Conn::rollback($this->idTran);
+                return $stp_prospectos;
+            }
+            
+            Conn::commit($this->idTran);
+            $this->data['datos'] = $stp_prospectos;
+            $this->data['message'] = 'GUARDADO CON ÉXITO';
             return $this->data;
         }
     }

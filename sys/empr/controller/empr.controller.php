@@ -223,7 +223,7 @@ Class Empr_Controller Extends Empr_Model {
                 break;
             case 'eliminar':
                 header('Content-Type: application/json');
-                echo json_encode($pros_inde->eliminar());
+                echo json_encode($pros_inde->ME_Eliminar($_POST,TRUE));
                 break;
             case 'generarExcel':
                 $pros_inde->generarExcel();

@@ -609,17 +609,20 @@ Class DLOREAN_Model extends Conn {
      */
      public static function is_ajax() {
          if(function_exists('getallheaders')){
- 			$headers = apache_request_headers();
- 			//print_r($headers);
+            $headers = apache_request_headers();
+             
+            if(isset($_SERVER['HTTP_SEC_FETCH_MODE']) && $_SERVER['HTTP_SEC_FETCH_MODE'] !== 'navigate'){
+                return TRUE;
+            }
 
+            if (!isset($headers['X-Requested-With'])) {
+                return FALSE;
+            }
 
-         if (!isset($headers['X-Requested-With'])) {
-             return FALSE;
-         }
-
-         if (!strtolower($_SERVER['HTTP_X_REQUESTED_WITH']) == 'xmlhttprequest') {
-             return FALSE;
-         }
+            if (!strtolower($_SERVER['HTTP_X_REQUESTED_WITH']) == 'xmlhttprequest') {
+                return FALSE;
+            }
+            
  		}else{
  			$si =  function () {
  				  $arh = array();

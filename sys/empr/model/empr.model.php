@@ -370,7 +370,7 @@ Class Empr_Model Extends DLOREAN_Model {
             ".escape($_SESSION['usuario']['skUsuario']).",
             ".escape($this->sysController)."
         )";
-
+        
         $result = Conn::query($sql);
         if(is_array($result) && isset($result['success']) && $result['success'] == false){
             return $result;

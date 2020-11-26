@@ -1,0 +1,99 @@
+<?php
+
+Class Vent_Controller Extends Vent_Model {
+
+    
+    // PUBLIC VARIABLES //
+    // PROTECTED VARIABLES //
+    // PRIVATE VARIABLES //
+    private $data = array();
+
+    public function __construct() {
+        parent::init();
+    }
+
+    public function __destruct() {
+
+    }
+ 
+
+ 
+
+
+    public function coti_inde() {
+        $this->load_class("coti_inde", "controller");
+        $coti_inde = new Coti_inde_Controller();
+        $axn = (isset($_POST['axn']) ? $_POST['axn'] : (isset($_GET['axn']) ? $_GET['axn'] : NULL));
+        switch ($axn) {
+            case 'consulta':
+                $data = $coti_inde->consulta();
+                header('Content-Type: application/json');
+                echo json_encode($data);
+                return TRUE;
+                break;
+            case 'generarExcel':
+                $coti_inde->generarExcel();
+                break;
+            case 'pdf':
+                $coti_inde->generarPDF();
+                break;
+            default:
+                $this->load_view('coti_inde');
+                break;
+        }
+        return TRUE;
+    }
+
+     
+ 
+    public function coti_form() {
+        $this->load_class("coti_form", "controller");
+        $coti_form = new Coti_form_Controller();
+
+        $axn = (isset($_POST['axn']) ? $_POST['axn'] : (isset($_GET['axn']) ? $_GET['axn'] : NULL));
+
+        switch ($axn) {
+            case 'get_empresas':
+                header('Content-Type: application/json');
+                echo json_encode($coti_form->get_empresas());
+            break;
+            case 'get_conceptos':
+                header('Content-Type: application/json');
+                echo json_encode($coti_form->get_conceptos());
+            break;
+            case 'get_medidas':
+                header('Content-Type: application/json');
+                echo json_encode($coti_form->get_medidas());
+            break;
+                
+            
+            case 'guardar':
+                header('Content-Type: application/json');
+                echo json_encode($coti_form->guardar());
+                break;
+            default:
+                $this->data = $coti_form->getDatos();
+                $this->load_view('coti_form', $this->data);
+                break;
+        }
+        return true;
+    }
+    public function coti_deta() {
+        $this->load_class("coti_deta", "controller");
+        $coti_deta = new Coti_deta_Controller();
+        $axn = (isset($_POST['axn']) ? $_POST['axn'] : (isset($_GET['axn']) ? $_GET['axn'] : NULL));
+        switch ($axn) {
+            case 'pdf':
+                $coti_deta->crearPDF();
+                break;
+            default:
+                $this->data = $coti_deta->consultar();
+                $this->load_view('coti_deta', $this->data);
+                break;
+        }
+        return true;
+    }
+
+
+
+}

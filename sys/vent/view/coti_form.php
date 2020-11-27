@@ -295,7 +295,7 @@ function addCommas(amount) {
 
                             $.post(window.location.href,
                                 {
-                                    axn: 'get_servicio_impuestos',
+                                    axn: 'get_conceptos_impuestos',
                                     skConcepto: skConcepto
                                 },
                                 function (data) {
@@ -305,12 +305,17 @@ function addCommas(amount) {
 
                                     //console.log(data);
                                     if(data){
+                                        var fPrecioVenta = 0;
                                         $.each(data, function (k, v) {
+                                            $(obj).closest('tr').find('td').eq(5).find('input').removeAttr("disabled");
+                                            $(tr).attr(v.skImpuesto, v.sValor);
                                                 $(tr).attr(v.skImpuesto, v.sValor);
                                             });
                                     }
                             });
                         }
+                    $(obj).closest('tr').find('td').eq(4).find('input').removeAttr("disabled");
+
                     actualizarImporte(obj);
                     $(obj).closest('tr').find('td').eq(4).find('input').removeAttr("disabled");
                     $(obj).closest('tr').find('td').eq(5).find('input').removeAttr("disabled");

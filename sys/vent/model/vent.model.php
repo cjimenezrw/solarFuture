@@ -185,6 +185,57 @@ Class Vent_Model Extends DLOREAN_Model {
         return $records;
     }
 
+     /**
+     * consultar_conceptos
+     *
+     * Obtiene los Conceptos disponibles
+     *
+     * @author Luis Alberto Valdez Alvarez <lvaldez@woodward.com.mx>
+     * @return object | false Retorna el objeto de resultados de la consulta o false si algo falla.
+     */
+    public function consultar_conceptos() {
+        $sql = "SELECT skConcepto AS id,sNombre AS nombre  FROM cat_conceptos
+				WHERE skEstatus = 'NU' ";
+        if (!empty(trim($_POST['val']))) {
+            $sql .= " AND sNombre   LIKE '%" . escape($_POST['val'], false) . "%' ";
+        }
+
+        $result = Conn::query($sql);
+        if (!$result) {
+            return FALSE;
+        }
+        $records = Conn::fetch_assoc_all($result);
+        utf8($records);
+        return $records;
+    }
+
+    /**
+     * consultar_conceptos_impuestos
+     *
+     *
+     * @author Luis Alberto Valdez Alvarez <lvaldez@woodward.com.mx>
+     * @return array | false Retorna array de datos o false en caso de error
+     */
+    public function consultar_conceptos_impuestos() {
+
+        $sql = "SELECT DISTINCT
+		                cse.skConcepto,
+                        resi.skImpuesto,
+                        resi.skTipoImpuesto,
+                        resi.sValor,
+                        cse.fPrecioVenta
+		                FROM cat_conceptos cse
+		                INNER JOIN rel_conceptos_impuestos resi ON resi.skConcepto = cse.skConcepto
+
+		                WHERE cse.skConcepto = " . escape($this->vent['skConcepto']);
+
+        $result = Conn::query($sql);
+        if (!$result) {
+            return FALSE;
+        }
+        return Conn::fetch_assoc_all($result);
+    }
+
       
 
    

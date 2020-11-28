@@ -23,11 +23,30 @@ Class Vent_Model Extends DLOREAN_Model {
 
         $sql = "CALL stpCUD_cotizaciones (
             " .escape(isset($this->vent['skCotizacion']) ? $this->vent['skCotizacion'] : NULL) . ",
+            " .escape(isset($this->vent['skCotizacionConcepto']) ? $this->vent['skCotizacionConcepto'] : NULL) . ",
+            " .escape(isset($this->vent['skEstatus']) ? $this->vent['skEstatus'] : NULL) . ",
+            " .escape(isset($this->vent['skDivisa']) ? $this->vent['skDivisa'] : NULL) . ",
+            " .escape(isset($this->vent['dFechaVigencia']) ? $this->vent['dFechaVigencia'] : NULL) . ",
+            " .escape(isset($this->vent['skEmpresaSocioCliente']) ? $this->vent['skEmpresaSocioCliente'] : NULL) . ",
+            " .escape(isset($this->vent['skProspecto']) ? $this->vent['skProspecto'] : NULL) . ",
+            " .escape(isset($this->vent['sObservaciones']) ? $this->vent['sObservaciones'] : NULL) . ",
+            " .escape(isset($this->vent['fImporteSubtotal']) ? $this->vent['fImporteSubtotal'] : NULL) . ",
+            " .escape(isset($this->vent['fDescuento']) ? $this->vent['fDescuento'] : NULL) . ",
+            " .escape(isset($this->vent['fImpuestosTrasladados']) ? $this->vent['fImpuestosTrasladados'] : NULL) . ",
+            " .escape(isset($this->vent['fImpuestosRetenidos']) ? $this->vent['fImpuestosRetenidos'] : NULL) . ",
+            " .escape(isset($this->vent['fImporteTotal']) ? $this->vent['fImporteTotal'] : NULL) . ",
+            " .escape(isset($this->vent['fTipoCambio']) ? $this->vent['fTipoCambio'] : NULL) . ",
+            " .escape(isset($this->vent['skConcepto']) ? $this->vent['skConcepto'] : NULL) . ",
+            " .escape(isset($this->vent['skTipoMedida']) ? $this->vent['skTipoMedida'] : NULL) . ",
+            " .escape(isset($this->vent['fCantidad']) ? $this->vent['fCantidad'] : NULL) . ",
+            " .escape(isset($this->vent['fPrecioUnitario']) ? $this->vent['fPrecioUnitario'] : NULL) . ",
+            " .escape(isset($this->vent['fImporte']) ? $this->vent['fImporte'] : NULL) . ",
+            " .escape(isset($this->vent['sCorreo']) ? $this->vent['sCorreo'] : NULL) . ",
            
             " .escape(isset($this->vent['axn']) ? $this->vent['axn'] : NULL) . ",
             '" . $_SESSION['usuario']['skUsuario'] . "',
             '" . $this->sysController . "' )";
-      
+         
         //$this->log($sql, true);
         $result = Conn::query($sql);
         //$codigo = Conn::fetch_assoc($result);
@@ -50,7 +69,8 @@ Class Vent_Model Extends DLOREAN_Model {
      */
     public function _getCotizacion() {
 
-        $sql = "SELECT * FROM ope_cotizaciones oc WHERE  oc.skCotizacion =  " . escape($this->vent['skCotizacion']);
+        $sql = "SELECT * FROM ope_cotizaciones oc 
+        WHERE  oc.skCotizacion =  " . escape($this->vent['skCotizacion']);
 
 
         $result = Conn::query($sql);
@@ -58,6 +78,38 @@ Class Vent_Model Extends DLOREAN_Model {
             return FALSE;
         }
         return Conn::fetch_assoc($result);
+    }
+
+     /**
+     * _getCotizacionConceptos
+     *
+     *
+     * @author Luis Alberto Valdez Alvarez <lvaldez@woodward.com.mx>
+     * @return array | false Retorna array de datos o false en caso de error
+     */
+    public function _getCotizacionConceptos() {
+
+        $sql = "SELECT DISTINCT
+		                cse.skCotizacionConcepto,
+		                cse.skCotizacion,
+		                cse.skConcepto,
+                        cse.skTipoMedida,
+                        cse.fCantidad,
+                        cse.fPrecioUnitario,
+                        cse.fDescuento,
+                        cse.fImporte,
+                        cc.sNombre AS concepto,
+                        cum.sNombre as tipoMedida
+		                FROM rel_cotizaciones_conceptos cse 
+                        INNER JOIN cat_conceptos cc ON cc.skConcepto = cse.skConcepto
+                        LEFT JOIN cat_unidadesMedidaSAT cum ON cum.skUnidadMedida = cse.skTipoMedida
+		                WHERE cse.skCotizacion = " . escape($this->vent['skCotizacion']);
+
+        $result = Conn::query($sql);
+        if (!$result) {
+            return FALSE;
+        }
+        return Conn::fetch_assoc_all($result);
     }
 
 
@@ -208,7 +260,23 @@ Class Vent_Model Extends DLOREAN_Model {
         utf8($records);
         return $records;
     }
+    /**
+     * consultar_conceptos_datos
+     *
+     *
+     * @author Luis Alberto Valdez Alvarez <lvaldez@woodward.com.mx>
+     * @return array | false Retorna array de datos o false en caso de error
+     */
+    public function consultar_conceptos_datos() {
 
+        $sql = "SELECT cse.fPrecioVenta FROM cat_conceptos cse WHERE cse.skConcepto = " . escape($this->vent['skConcepto']);
+
+        $result = Conn::query($sql);
+        if (!$result) {
+            return FALSE;
+        }
+        return Conn::fetch_assoc($result);
+    }
     /**
      * consultar_conceptos_impuestos
      *
@@ -228,6 +296,27 @@ Class Vent_Model Extends DLOREAN_Model {
 		                INNER JOIN rel_conceptos_impuestos resi ON resi.skConcepto = cse.skConcepto
 
 		                WHERE cse.skConcepto = " . escape($this->vent['skConcepto']);
+
+        $result = Conn::query($sql);
+        if (!$result) {
+            return FALSE;
+        }
+        return Conn::fetch_assoc_all($result);
+    }
+
+    /**
+     * _getDivisas
+     *
+     *
+     * @author Luis Alberto Valdez Alvarez <lvaldez@woodward.com.mx>
+     * @return array | false Retorna array de datos o false en caso de error
+     */
+    public function _getDivisas() {
+
+        $sql = "SELECT DISTINCT
+		                cd.skDivisa,
+                        cd.sNombre 
+		                FROM cat_divisas cd WHERE skEstatus='AC'";
 
         $result = Conn::query($sql);
         if (!$result) {

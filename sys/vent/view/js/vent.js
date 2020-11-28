@@ -15,16 +15,16 @@ vent.coti_inde.dataTableConf = {
         }
     },
     'axn': 'consulta',
-    'order': [[3, "desc"]],
+    'order': [[2, "desc"]],
     'columns': [
         {'title': 'E', 'data': 'estatus', 'dataType': 'string', 'tooltip': 'Estatus', 'filterT': 'Estatus'},
         {'title': 'Folio', 'data': 'iFolio', 'dataType': 'string','tooltip': 'Folio'},
         {'title': 'F. Creacion', 'data': 'dFechaCreacion', 'dataType': 'date'},
          {'title': 'Usuario Creacion', 'data': 'usuarioCreacion', 'dataType': 'string'},
-         {'title': 'Total', 'data': 'fTotal', 'dataType': 'string'},
-         {'title': 'Moneda', 'data': 'skMoneda', 'dataType': 'string'},
+         {'title': 'Total', 'data': 'fImporteTotal', 'dataType': 'string'},
+         {'title': 'Moneda', 'data': 'skDivisa', 'dataType': 'string'},
         {'title': 'F. Vigencia', 'data': 'dFechaVigencia', 'dataType': 'date'},
-        {'title': 'Proveedor', 'data': 'cliente', 'dataType': 'string'},
+        {'title': 'Cliente', 'data': 'cliente', 'dataType': 'string'},
     ],
 
     "drawCallback": function () {

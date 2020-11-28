@@ -18,7 +18,7 @@ Class Coti_deta_Controller Extends Vent_Model {
 
     public function consultar(){
 
-        $this->conc['skcotizacion'] = $_GET['p1'];
+        $this->vent['skCotizacion'] = $_GET['p1'];
         $this->data['datos'] =  parent::_getCotizacion();
         $this->data['conceptosCotizacion']  = parent::_getCotizacionConceptos();
 

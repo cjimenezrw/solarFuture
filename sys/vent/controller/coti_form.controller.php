@@ -84,6 +84,9 @@ Class Coti_form_Controller Extends Vent_Model {
           $this->data['success'] = TRUE;
           $this->vent['axn'] = 'guardar_cotizacion';
           $this->vent['skEstatus'] = 'NU';
+            /*echo "<PRE>";
+            print_r($this->vent);
+            die();*/
 
           $stpCUD_cotizaciones = parent::stpCUD_cotizaciones();
            
@@ -111,13 +114,19 @@ Class Coti_form_Controller Extends Vent_Model {
             $this->data['success'] = TRUE;
             $this->vent['axn'] = 'guardar_cotizacion_conceptos';
           
-            $delete="DELETE FROM rel_cotizaciones_conceptos WHERE skCotizacion = '". $this->coti['skCotizacion'] ."'";
+            $delete="DELETE FROM rel_cotizaciones_conceptos WHERE skCotizacion = '". $this->vent['skCotizacion'] ."'";
             $result = Conn::query($delete);
-            if(!empty($this->vent['skConcepto'])){
-                foreach ($this->vent['skConcepto'] as $k => $v) {
-                    //verificamos si ya existe el producto en el catalogo, si no existe se inserta.
-                    $this->vent['skCotizacionConcepto']= (!empty($v) ? $v : NULL);
-                   
+            if(!empty($this->vent['conceptos'])){
+                foreach ($this->vent['conceptos'] AS $con){
+                    //$this->vent['skCotizacionConcepto']           = (isset($con['skCotizacionConcepto']) ? $con['skCotizacionConcepto'] : NULL);
+                    $this->vent['skConcepto']         = (isset($con['skConcepto']) ? $con['skConcepto'] : NULL);
+                    $this->vent['skTipoMedida']       = (isset($con['skTipoMedida']) ? $con['skTipoMedida'] : NULL);
+                    $this->vent['fCantidad']          = (isset($con['fCantidad']) ? str_replace(',','',$con['fCantidad']) : NULL);
+                    $this->vent['fPrecioUnitario']    = (isset($con['fPrecioUnitario']) ? str_replace(',','',$con['fPrecioUnitario']) : NULL);
+                    $this->vent['fImpuestosTrasladados']    = (isset($con['fImpuestosTrasladados']) ? str_replace(',','',$con['fImpuestosTrasladados']) : NULL);
+                    $this->vent['fImpuestosRetenidos']    = (isset($con['fImpuestosRetenidos']) ? str_replace(',','',$con['fImpuestosRetenidos']) : NULL);
+                    $this->vent['fImporte']    = (isset($con['fImporte']) ? str_replace(',','',$con['fImporte']) : NULL);
+                    $this->vent['fDescuento']    = (isset($con['fDescuento']) ? str_replace(',','',$con['fDescuento']) : NULL);
                     $stpCUD_cotizaciones = parent::stpCUD_cotizaciones();
     
                     if(!$stpCUD_cotizaciones || isset($stpCUD_cotizaciones['success']) && $stpCUD_cotizaciones['success'] != 1){
@@ -125,7 +134,34 @@ Class Coti_form_Controller Extends Vent_Model {
                         $this->data['message'] = 'HUBO UN ERROR AL GUARDAR LOS CONCEPTOS DE LA COTIZACION';
                         return $this->data;
                     }
+
+                    //$this->vent['skServicioPago'] = $stpCUD_ordenPago['skServicioPago'];
+
+                    /*if(!empty($this->vent['fImpuestosTrasladados'])){
+                            $this->vent['axn'] = "pagos_servicios_impuestos";
+                            $this->vent['fImporte']        = (isset($this->vent['fImpuestosTrasladados']) ? str_replace(',','',$this->admi['fImpuestosTrasladados']) : NULL);
+                            $this->vent['skImpuesto'] = "TRAIVA";
+                            $stpCUD_ordenPago = parent::stpCUD_ordenPago();
+                            if(!$stpCUD_ordenPago || isset($stpCUD_ordenPago['success']) && $stpCUD_ordenPago['success'] != 1){
+                                $this->data['success'] = FALSE;
+                                $this->data['message'] = 'HUBO UN ERROR AL GUARDAR EL IMPUESTO DEL CONCEPTO.';
+                                return $this->data;
+                            }
+                    }
+                    if(!empty($this->vent['fImpuestosRetenidos'])){
+                            $this->vent['axn'] = "pagos_servicios_impuestos";
+                            $this->vent['fImporte']        = (isset($this->admi['fImpuestosRetenidos']) ? str_replace(',','',$this->admi['fImpuestosRetenidos']) : NULL);
+                            $this->vent['skImpuesto'] = "RETIVA";
+                            $stpCUD_ordenPago = parent::stpCUD_ordenPago();
+                            if(!$stpCUD_ordenPago || isset($stpCUD_ordenPago['success']) && $stpCUD_ordenPago['success'] != 1){
+                                $this->data['success'] = FALSE;
+                                $this->data['message'] = 'HUBO UN ERROR AL GUARDAR EL IMPUESTO DEL CONCEPTO.';
+                                return $this->data;
+                            }
+                    }*/
+
                 }
+                 
 
             }
             
@@ -149,7 +185,8 @@ Class Coti_form_Controller Extends Vent_Model {
 
           $validations = [
               'skDivisa'=>['message'=>'DIVISA'],
-              'skEmpresaSocioCliente'=>['message'=>'CLIENTE']
+              'skEmpresaSocioCliente'=>['message'=>'CLIENTE'],
+              'dFechaVigencia'=>['message'=>'VIGENCIA','validations'=>['date']]
           ];
 
           foreach($validations AS $k=>$v){
@@ -244,12 +281,13 @@ Class Coti_form_Controller Extends Vent_Model {
         $this->data = ['success' => TRUE, 'message' => NULL, 'datos' => NULL];
         $this->vent['skCotizacion'] = (isset($_GET['p1']) && !empty($_GET['p1'])) ? $_GET['p1'] : NULL;
          
-         
+        $this->data['divisas'] = parent::_getDivisas();
 
         if (!empty($this->vent['skCotizacion'])) {
             $this->data['datos'] = parent::_getCotizacion();
             $cotizacionConceptos = parent::_getCotizacionConceptos();
             $this->data['cotizacionesConceptos'] = $cotizacionConceptos;
+            
         }
  
         return $this->data;
@@ -287,6 +325,12 @@ Class Coti_form_Controller Extends Vent_Model {
         return parent::consultar_conceptos_impuestos();
   
     }
+    public function get_conceptos_datos(){
+        $this->vent['skConcepto'] = (isset($_POST['skConcepto']) ? $_POST['skConcepto'] : NULL);
+        return parent::consultar_conceptos_datos();
+  
+    }
+    
 
 
      

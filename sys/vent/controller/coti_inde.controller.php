@@ -27,10 +27,10 @@ Class Coti_inde_Controller Extends Vent_Model {
         $configuraciones['query'] = "SELECT oc.skCotizacion,
         oc.iFolio, 
         oc.dFechaCreacion, 
-        oc.fTotal,
+        oc.fImporteTotal,
         oc.skDivisa,
         oc.dFechaVigencia,
-        oc.sComentarios,
+        oc.sObservaciones,
         ce.sNombre AS estatus,
         ce.sIcono AS estatusIcono,
         ce.sColor AS estatusColor,
@@ -63,6 +63,7 @@ Class Coti_inde_Controller Extends Vent_Model {
                 $regla = [];
 
                 $row['dFechaCreacion'] = ($row['dFechaCreacion']) ? date('d/m/Y  H:i:s', strtotime($row['dFechaCreacion'])) : '';
+                $row['dFechaVigencia'] = ($row['dFechaVigencia']) ? date('d/m/Y', strtotime($row['dFechaVigencia'])) : '';
                  
                $row['menuEmergente'] = parent::menuEmergente($regla, $row['skCotizacion']);
                 array_push($data['data'],$row);

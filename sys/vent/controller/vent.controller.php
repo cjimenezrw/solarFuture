@@ -94,7 +94,11 @@ Class Vent_Controller Extends Vent_Model {
         switch ($axn) {
             case 'pdf':
                 $coti_deta->crearPDF();
-                break;
+            break;
+            case 'formatoPDF':
+                header('Content-Type: application/json');
+                echo json_encode($coti_deta->formatoPDF());
+            break;
             default:
                 $this->data = $coti_deta->consultar();
                 $this->load_view('coti_deta', $this->data);

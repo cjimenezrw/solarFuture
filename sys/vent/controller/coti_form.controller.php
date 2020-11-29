@@ -118,6 +118,7 @@ Class Coti_form_Controller Extends Vent_Model {
             $result = Conn::query($delete);
             if(!empty($this->vent['conceptos'])){
                 foreach ($this->vent['conceptos'] AS $con){
+                    $this->vent['axn'] = 'guardar_cotizacion_conceptos';
                     //$this->vent['skCotizacionConcepto']           = (isset($con['skCotizacionConcepto']) ? $con['skCotizacionConcepto'] : NULL);
                     $this->vent['skConcepto']         = (isset($con['skConcepto']) ? $con['skConcepto'] : NULL);
                     $this->vent['skTipoMedida']       = (isset($con['skTipoMedida']) ? $con['skTipoMedida'] : NULL);
@@ -135,30 +136,31 @@ Class Coti_form_Controller Extends Vent_Model {
                         return $this->data;
                     }
 
-                    //$this->vent['skServicioPago'] = $stpCUD_ordenPago['skServicioPago'];
+                    $this->vent['skCotizacionConcepto'] = $stpCUD_cotizaciones['skCotizacionConcepto'];
 
-                    /*if(!empty($this->vent['fImpuestosTrasladados'])){
-                            $this->vent['axn'] = "pagos_servicios_impuestos";
-                            $this->vent['fImporte']        = (isset($this->vent['fImpuestosTrasladados']) ? str_replace(',','',$this->admi['fImpuestosTrasladados']) : NULL);
+                    if(!empty($this->vent['fImpuestosTrasladados'])){
+                            $this->vent['axn'] = "guardar_cotizacion_conceptosImpuestos";
+                            $this->vent['fImporte']        = (isset($this->vent['fImpuestosTrasladados']) ? str_replace(',','',$this->vent['fImpuestosTrasladados']) : NULL);
                             $this->vent['skImpuesto'] = "TRAIVA";
-                            $stpCUD_ordenPago = parent::stpCUD_ordenPago();
-                            if(!$stpCUD_ordenPago || isset($stpCUD_ordenPago['success']) && $stpCUD_ordenPago['success'] != 1){
+                           
+                            $stpCUD_cotizaciones = parent::stpCUD_cotizaciones();
+                            if(!$stpCUD_cotizaciones || isset($stpCUD_cotizaciones['success']) && $stpCUD_cotizaciones['success'] != 1){
                                 $this->data['success'] = FALSE;
                                 $this->data['message'] = 'HUBO UN ERROR AL GUARDAR EL IMPUESTO DEL CONCEPTO.';
                                 return $this->data;
                             }
                     }
                     if(!empty($this->vent['fImpuestosRetenidos'])){
-                            $this->vent['axn'] = "pagos_servicios_impuestos";
-                            $this->vent['fImporte']        = (isset($this->admi['fImpuestosRetenidos']) ? str_replace(',','',$this->admi['fImpuestosRetenidos']) : NULL);
+                            $this->vent['axn'] = "guardar_cotizacion_conceptosImpuestos";
+                            $this->vent['fImporte']        = (isset($this->vent['fImpuestosRetenidos']) ? str_replace(',','',$this->vent['fImpuestosRetenidos']) : NULL);
                             $this->vent['skImpuesto'] = "RETIVA";
-                            $stpCUD_ordenPago = parent::stpCUD_ordenPago();
-                            if(!$stpCUD_ordenPago || isset($stpCUD_ordenPago['success']) && $stpCUD_ordenPago['success'] != 1){
+                            $stpCUD_cotizaciones = parent::stpCUD_cotizaciones();
+                            if(!$stpCUD_cotizaciones || isset($stpCUD_cotizaciones['success']) && $stpCUD_cotizaciones['success'] != 1){
                                 $this->data['success'] = FALSE;
                                 $this->data['message'] = 'HUBO UN ERROR AL GUARDAR EL IMPUESTO DEL CONCEPTO.';
                                 return $this->data;
                             }
-                    }*/
+                    }
 
                 }
                  

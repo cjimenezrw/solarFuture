@@ -424,6 +424,97 @@ Class Conf_Controller Extends Conf_Model {
         return $record;
     }
 
+    /**
+     * Consulta de Variables de Sistema (vasi-deta)
+     *
+     * @author Christian Josué Jiménez Sánchez <christianjimenezcjs@gmail.com>
+     * @return html Retorna la vista del módulo
+     */
+    public function vasi_inde(){
+        $this->load_class("vasi_inde", "controller");
+        $vasi_inde = new Vasi_inde_Controller();
+        $axn = (isset($_POST['axn']) ? $_POST['axn'] : (isset($_GET['axn']) ? $_GET['axn'] : null));
+        switch ($axn) {
+            case 'getVariablesSistema':
+                $data = $vasi_inde->getVariablesSistema();
+                header('Content-Type: application/json');
+                echo json_encode($data);
+                return true;
+                break;
+            case 'eliminar':
+                header('Content-Type: application/json');
+                echo json_encode($vasi_inde->ME_Eliminar($_POST, TRUE));
+                break;
+            case 'inactivar':
+                header('Content-Type: application/json');
+                echo json_encode($vasi_inde->ME_Inactivar_Activar($_POST, TRUE));
+                break;
+            case 'generarExcel':
+                $vasi_inde->generarExcelVariablesSistema();
+                break;
+            default:
+                $this->load_view('vasi_inde', $this->data);
+                break;
+        }
+        return true;
+    }
 
+    /**
+     * Formulario de Variables de Sistema (vasi-deta)
+     *
+     * @author Christian Josué Jiménez Sánchez <christianjimenezcjs@gmail.com>
+     * @return html Retorna la vista del módulo
+     */
+    public function vasi_form(){
+        $this->load_class("vasi_form", "controller");
+        $vasi_form = new Vasi_form_Controller();
+        $axn = (isset($_POST['axn']) ? $_POST['axn'] : (isset($_GET['axn']) ? $_GET['axn'] : null));
+        switch ($axn) {
+            case 'guardar':
+                header('Content-Type: application/json');
+                echo json_encode($vasi_form->accionesVariables());
+                break;
+            case 'validarCodigo':
+                $respuesta = $vasi_form->validarCodigo();
+                if ($respuesta) {
+                    $isAvailable = true;
+                } else {
+                    $isAvailable = false;
+                }
+                $data = array('valid' => $isAvailable);
+                header('Content-Type: application/json');
+                echo json_encode($data);
+                return true;
+                break;
+            case 'getModulos':
+                header('Content-Type: application/json');
+                echo json_encode($vasi_form->getModulos(), 512);
+                break;
+            default:
+                $this->data = $vasi_form->consultarVariable();
+                $this->load_view('vasi_form', $this->data);
+                break;
+        }
+        return true;
+    }
+
+    /**
+     * Detalles de Variables de Sistema (vasi-deta)
+     *
+     * @author Christian Josué Jiménez Sánchez <christianjimenezcjs@gmail.com>
+     * @return html Retorna la vista del módulo
+     */
+    public function vasi_deta(){
+        $this->load_class("vasi_deta", "controller");
+        $vasi_deta = new Vasi_deta_Controller();
+        $axn = (isset($_POST['axn']) ? $_POST['axn'] : (isset($_GET['axn']) ? $_GET['axn'] : NULL));
+        switch ($axn) {
+            default:
+                $this->data = $vasi_deta->getDatos();
+                $this->load_view('vasi_deta', $this->data);
+                break;
+        }
+        return true;
+    }
 
 }

@@ -1,6 +1,171 @@
 var conf = {};
  
+conf.vasi_inde = {};
+conf.vasi_inde.dataTableConf = {
 
+    'serverSide': true,
+    'ajax': {
+        'url': window.location.href,
+        'type': 'POST',
+        'data': function (data) {
+            data.axn = 'getVariablesSistema';
+            data.filters = core.dataFilterSend;
+            data.generarExcel = core.generarExcel;
+        }
+    },
+    'axn': 'getVariablesSistema',
+    'order': [[7, "desc"]],
+    'columns': [
+        {'title': 'E', 'data': 'estatus', 'dataType': 'string', 'tooltip': 'Estatus', 'filterT': 'Estatus'},
+        {'title': 'Código', 'data': 'skVariable', 'dataType': 'string'},
+        {'title': 'Tipo Variable', 'data': 'skVariableTipo', 'dataType': 'string'},
+        {'title': 'Nombre', 'data': 'sNombre', 'dataType': 'string'},
+        {'title': 'Valor', 'data': 'sValor', 'dataType': 'string'},
+        {'title': 'Descripción', 'data': 'sDescripcion', 'dataType': 'string'},
+        {'title': 'U. Creación', 'data': 'usuarioCreacion', 'dataType': 'string', 'tooltip': 'Usuario Creación'},
+        {'title': 'F. Creación', 'data': 'dFechaCreacion', 'dataType': 'date', 'tooltip': 'Fecha creación'}
+
+    ],
+
+    "drawCallback": function () {
+        core.dataTable.contextMenuCore(true);
+        core.dataTable.changeColumnColor(1, 'success');
+        core.dataTable.fastFilters(3, [], true);
+        $('[data-toggle="tooltip"]').tooltip();
+    },
+    "columnDefs": [
+        {
+            "targets": [0],
+            "width": '20px',
+            "createdCell": function (td, cellData, rowData, row, col) {
+                ((rowData.estatusIcono) ? $(td).html('<i class="' + rowData.estatusIcono + '"></i>') : $(td).html(cellData));
+                $(td).addClass('text-center ' + ((rowData.estatusColor) ? rowData.estatusColor : 'text-primary'));
+                ((rowData.estatusIcono) ? $(td).find('i').attr({
+                    "title": cellData,
+                    "data-toggle": "tooltip",
+                    "data-placement": "rigth"
+                }) : '');
+            }
+        }
+    ]
+};
+conf.vasi_inde.ME_Inactivar_Activar = function ME_Inactivar_Activar(obj) {
+    if (core.rowDataTable.skEstatus == 'IN') {
+        msg = "¿Está seguro de Activar esta Variable?";
+        comfirmBtnTxt = "Si, Activar";
+    } else {
+        msg = "¿Está seguro de Inactivar esta Variable?";
+        comfirmBtnTxt = "Si, Inactivar"
+    }
+
+    swal({
+            title: '¡Advertencia!',
+            text: msg,
+            type: "warning",
+            showCancelButton: true,
+            confirmButtonColor: "#DD6B55",
+            confirmButtonText: comfirmBtnTxt,
+            cancelButtonText: "NO",
+            closeOnConfirm: true
+        },
+        function () {
+            $.ajax({
+                url: window.location.href,
+                type: 'POST',
+                data: {
+                    axn: 'inactivar',
+                    id: obj.id,
+                    skEstatus: core.rowDataTable.skEstatus
+                },
+                async: false,
+                cache: false,
+                processData: true,
+                success: function (data) {
+
+                    //console.log(data);
+
+                    if (data.success == true) {
+                        core.dataTable.sendFilters(true);
+                    } else {
+                        toastr.error(data.message, 'Notificación');
+                    }
+                }
+            });
+        });
+};
+
+conf.vasi_form = {};
+conf.vasi_form.validations = {
+    skVariable: {
+        threshold: 6,
+        validators: {
+            notEmpty: {
+                message: 'Campo Requerido'
+            },
+            remote: {
+                url: window.location.href,
+                data: {
+                    axn: 'validarCodigo'
+                },
+                message: 'El codigo ya existe',
+                type: 'POST'
+            },
+            stringCase: {
+                message: 'Solo letras mayusculas',
+                'case': 'upper'
+            }
+        }
+    },
+    skEstatus: {
+        validators: {
+            notEmpty: {
+                message: 'Campo Requerido'
+            }
+        }
+    },
+    skVariableTipo: {
+        validators: {
+            notEmpty: {
+                message: 'Campo Requerido'
+            }
+        }
+    },
+    sNombre: {
+        validators: {
+            notEmpty: {
+                message: 'Campo Requerido'
+            }
+        }
+    },
+    sDescripcion: {
+        validators: {
+            notEmpty: {
+                message: 'Campo Requerido'
+            }
+        }
+    },
+    sValor: {
+        validators: {
+            notEmpty: {
+                message: 'Campo Requerido'
+            }
+        }
+    },
+    "sProyecto[]":{
+    validators: {
+            notEmpty: {
+                message: 'Campo Requerido'
+            }
+        }
+    },
+    "skModulo[]":{
+    validators: {
+            notEmpty: {
+                message: 'Campo Requerido'
+            }
+        }
+    }
+};
 
 /*
  * Módulo usua-inde (consulta-usuarios)

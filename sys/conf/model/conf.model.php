@@ -570,7 +570,165 @@ Class Conf_Model Extends DLOREAN_Model {
     }
       
 
-   
+    /**
+     * stpCUD_variablesSistema
+     *
+     * @author Christian Josué Jiménez Sánchez <christianjimenezcjs@gmail.com>
+     * @return Bool TRUE | FALSE
+     */
+    public function stpCUD_variablesSistema(){
+        $sql = "CALL stpCUD_variablesSistema (
+               /*@skVariableVieja          =*/ ".escape(isset($this->conf['skVariableVieja']) ? $this->conf['skVariableVieja'] : NULL).",
+               /*@skVariable               =*/ ".escape(isset($this->conf['skVariable']) ? $this->conf['skVariable'] : NULL).",
+               /*@skVariableTipo           =*/ ".escape(isset($this->conf['skVariableTipo']) ? $this->conf['skVariableTipo'] : NULL).",
+               /*@skEstatus                =*/ ".escape(isset($this->conf['skEstatus']) ? $this->conf['skEstatus'] : NULL).",
+               /*@sNombre                  =*/ ".escape(isset($this->conf['sNombre']) ? $this->conf['sNombre'] : NULL).",
+               /*@sDescripcion             =*/ ".escape(isset($this->conf['sDescripcion']) ? $this->conf['sDescripcion'] : NULL).",
+               /*@sValor                   =*/ ".escape(isset($this->conf['sValor']) ? $this->conf['sValor'] : NULL).",
+               /*@sProyecto                =*/ ".escape(isset($this->conf['sProyecto']) ? $this->conf['sProyecto'] : NULL).",
+               /*@skModuloVariable         =*/ ".escape(isset($this->conf['skModulo']) ? $this->conf['skModulo'] : NULL).",
+
+               /*@axn                      =*/ ".escape(isset($this->conf['axn']) ? $this->conf['axn'] : NULL).",
+               /*@skUsuario                =*/ ".escape($_SESSION['usuario']['skUsuario']).",
+               /*@skModulo                 =*/ ".escape($this->sysController).")";
+
+       $result = Conn::query($sql);
+       if(is_array($result) && isset($result['success']) && $result['success'] == false){
+           return $result;
+       }
+       $record = Conn::fetch_assoc($result);
+       utf8($record);
+       return $record;
+    }
+
+    public function consultar_variableTipo(){
+        $sql = "SELECT * FROM core_variablesTipos";
+
+        $result = Conn::query($sql);
+        if(is_array($result) && isset($result['success']) && $result['success'] == false){
+            return $result;
+        }
+        $record = Conn::fetch_assoc_all($result);
+        utf8($record,true);
+        return $record;
+    }
+
+    public function consulta_variable(){
+        $sql = "SELECT 
+             cv.*
+            ,CONCAT(uc.sNombre,' ',uc.sApellidoPaterno) AS usuarioCreacion
+            ,CONCAT(um.sNombre,' ',um.sApellidoPaterno) AS usuarioModificacion
+            ,ce.sNombre AS estatus
+            ,ce.sIcono AS estatusicono
+            ,cvt.sNombre AS tipovariable
+            FROM core_variables  cv
+            LEFT JOIN core_estatus ce on ce.skEstatus =  cv.skEstatus
+            LEFT JOIN cat_usuarios uc ON uc.skUsuario =  cv.skUsuarioCreacion
+            LEFT JOIN cat_usuarios um ON um.skUsuario =  cv.skUsuarioModificacion
+            LEFT JOIN core_variablesTipos cvt ON cvt.skVariableTipo = cv.skVariableTipo
+            WHERE cv.skVariable = ".escape($this->conf['skVariable']);
+
+        $result = Conn::query($sql);
+        if(is_array($result) && isset($result['success']) && $result['success'] == false){
+            return $result;
+        }
+        $record = Conn::fetch_assoc($result);
+        utf8($record);
+        return $record;
+    }
+
+    public function _variablesSistema_consultar_modulos(){
+        $sql = "SELECT 
+             cm.*
+            ,CONCAT(uc.sNombre,' ',uc.sApellidoPaterno) AS usuarioCreacion
+            ,CONCAT(um.sNombre,' ',um.sApellidoPaterno) AS usuarioModificacion
+            ,CONCAT(cm.sTitulo,' (',cm.skModulo,')') AS modulo
+            ,ce.sNombre AS estatus
+            ,ce.sIcono AS estatusicono
+            ,cmi.sIcono
+            ,cmi.sColor
+            FROM core_modulos cm
+            LEFT JOIN core_estatus ce on ce.skEstatus = cm.skEstatus
+            LEFT JOIN cat_usuarios uc ON uc.skUsuario =  cm.skUsuarioCreacion
+            LEFT JOIN cat_usuarios um ON um.skUsuario =  cm.skUsuarioCreacion
+            LEFT JOIN core_modulos_iconos cmi ON cmi.skModulo = cm.skModulo
+            LEFT JOIN rel_core_variables_modulos cvm ON cvm.skModulo = cm.skModulo 
+            WHERE cm.skEstatus = 'AC'";
+
+        $result = Conn::query($sql);
+        if(is_array($result) && isset($result['success']) && $result['success'] == false){
+            return $result;
+        }
+        $record = Conn::fetch_assoc_all($result);
+        utf8($record);
+        return $record;
+    }
+
+    public function consulta_variable_proyecto(){
+        $sql = "SELECT sProyecto
+            FROM rel_core_variables_proyectos
+            WHERE skVariable = " . escape(isset($this->conf['skVariable']) ? $this->conf['skVariable'] : NULL);
+       
+       $result = Conn::query($sql);
+       if(is_array($result) && isset($result['success']) && $result['success'] == false){
+           return $result;
+       }
+       $record = Conn::fetch_assoc_all($result);
+       utf8($record);
+       return $record;
+    }
+
+    public function consulta_variable_modulos(){
+        $sql = "SELECT 
+            cvm.skModulo,
+            CONCAT(cm.sTitulo,' (',cvm.skModulo,')') AS modulo
+            FROM rel_core_variables_modulos cvm
+            LEFT JOIN core_modulos cm ON cm.skModulo = cvm.skModulo
+            WHERE skVariable =  ". escape(isset($this->conf['skVariable']) ? $this->conf['skVariable'] : NULL);
+
+        $result = Conn::query($sql);
+        if(is_array($result) && isset($result['success']) && $result['success'] == false){
+            return $result;
+        }
+        $record = Conn::fetch_assoc_all($result);
+        utf8($record);
+        return $record;
+    }
+
+    public function validar_codigo_variable($skVariable){
+        $sql = "SELECT skVariable FROM core_variables WHERE skVariable = '" . $skVariable . "'";
+        $result = Conn::query($sql);
+        if(is_array($result) && isset($result['success']) && $result['success'] == false){
+            return $result;
+        }
+        $records = Conn::fetch_assoc_all($result);
+        if (count($records) > 0) {
+            return false;
+        }
+        return true;
+    }
+    
+    public function _getModulosVariables() {
+        $sql = "SELECT N1.* FROM (
+            SELECT cm.skmodulo AS id
+            ,CONCAT(cm.sTitulo,' (',cm.skModulo,')') AS nombre
+            FROM core_modulos cm 
+        ) AS N1 WHERE 1 = 1 ";
+
+        if (isset($this->rehu['val']) && !empty($this->rehu['val']) && trim($this->rehu['val']) != '') {
+            $sql .= " AND N1.nombre COLLATE Latin1_General_CI_AI LIKE '%" . escape($this->rehu['val'], FALSE) . "%' ";
+        }
+        
+        $sql .= " ORDER BY N1.nombre ASC";
+
+        $result = Conn::query($sql);
+        if(is_array($result) && isset($result['success']) && $result['success'] == false){
+            return $result;
+        }
+        $record = Conn::fetch_assoc_all($result);
+        utf8($record);
+        return $record;
+    }
 
 
 }

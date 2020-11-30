@@ -26,7 +26,68 @@ Class Conf_Controller Extends Conf_Model {
         echo('<pre>' . print_r($_GET, 1) . '</pre><hr>');
     }
 
+    public function modu_inde(){
+        $this->load_class("modu_inde", "controller");
+        $modu_inde = new Modu_inde_Controller();
+        $axn = (isset($_POST['axn']) ? $_POST['axn'] : (isset($_GET['axn']) ? $_GET['axn'] : NULL));
+        switch ($axn) {
+            case 'obtenerDatos':
+                header('Content-Type: application/json');
+                echo json_encode($modu_inde->getModulos());
+                return TRUE;
+                break;
+            case 'generarExcel':
+                $modu_inde->generarExcel();
+                break;
+            case 'pdf':
+                $modu_inde->generarPDF();
+                break;
+            case 'eliminar':
+                header('Content-Type: application/json');
+                echo json_encode($modu_inde->ME_Eliminar($_POST, TRUE));
+                break;
+            default:
+                $this->load_view('modu_inde');
+                break;
+        }
+        return TRUE;
+    }
+    
+    public function modu_form(){
+        $this->load_class("modu_form", "controller");
+        $modu_form = new Modu_form_Controller();
+        $axn = (isset($_POST['axn']) ? $_POST['axn'] : (isset($_GET['axn']) ? $_GET['axn'] : NULL));
+        switch ($axn) {
+            case 'guardar':
+                header('Content-Type: application/json');
+                echo json_encode($modu_form->guardar());
+                break;
+            case 'getCaracteristicasModulo':
+                header('Content-Type: application/json');
+                echo json_encode($modu_form->getCaracteristicasModulo());
+                break;
+            case 'validarModulo':
+                header('Content-Type: application/json');
+                echo json_encode($modu_form->validarModulo());
+                break;
+            default:
+                $this->load_view('modu_form', $modu_form->getDatos());
+                break;
+        }
+        return TRUE;
+    }
 
+    public function modu_deta(){
+        $this->load_class("modu_deta", "controller");
+        $modu_deta = new Modu_deta_Controller();
+        $axn = (isset($_POST['axn']) ? $_POST['axn'] : (isset($_GET['axn']) ? $_GET['axn'] : NULL));
+        switch ($axn) {
+            default:
+                $this->load_view('modu_deta', $modu_deta->getDatos());
+                break;
+        }
+        return true;
+    }
 
     public function usua_inde() {
         $this->load_class("usua_inde", "controller");

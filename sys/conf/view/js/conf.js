@@ -1,5 +1,209 @@
 var conf = {};
  
+conf.modu_inde = {};
+conf.modu_inde.dataTableConf = {
+    'serverSide': true,
+    'ajax': {
+        'url': window.location.href,
+        'type': 'POST',
+        'data': function (data) {
+            data.axn = 'obtenerDatos';
+            data.filters = core.dataFilterSend;
+            data.generarExcel = core.generarExcel;
+        }
+    },
+    'axn': 'obtenerDatos',
+    'order': [[8, "desc"]],
+    'columns': [
+        {'title': 'E', 'data': 'estatus', 'dataType': 'string', 'tooltip': 'Estatus', 'filterT': 'Estatus'},
+        {'title': 'skMódulo', 'data': 'skModulo', 'dataType': 'string'},
+        {
+            'title': 'M. Principal',
+            'data': 'skModuloPrincipal',
+            'dataType': 'string',
+            'tooltip': 'Módulo Principal',
+            'filterT': 'Módulo Principal'
+        },
+        {
+            'title': 'M. Padre',
+            'data': 'skModuloPadre',
+            'dataType': 'string',
+            'tooltip': 'Módulo Principal',
+            'filterT': 'Módulo Padre'
+        },
+        {'title': 'Título Módulo', 'data': 'sTitulo', 'dataType': 'string'},
+        {'title': 'Título Módulo Padre', 'data': 'moduloPadre', 'dataType': 'string'},
+        {'title': 'Posición', 'data': 'iPosicion', 'dataType': 'int'},
+        {
+            'title': 'U. Creación',
+            'data': 'usuarioCreacion',
+            'tooltip': 'Usuario Creación',
+            'dataType': 'string',
+            'filterT': 'Usuario Creación'
+        },
+        {'title': 'F. Creación', 'data': 'dFechaCreacion', 'tooltip': 'Fecha Creación', 'dataType': 'date'},
+
+    ],
+
+    "drawCallback": function () {
+        core.dataTable.contextMenuCore(true);
+        core.dataTable.changeColumnColor(1, 'success');
+        core.dataTable.fastFilters(1, [], true);
+        $('[data-toggle="tooltip"]').tooltip();
+    },
+    "columnDefs": [
+        {
+            "targets": [0],
+            "width": '20px',
+            "createdCell": function (td, cellData, rowData, row, col) {
+                /*
+                 ((rowData.estatusIcono) ? $(td).html('<i class="'+rowData.estatusIcono+'"></i>') : $(td).html(cellData));
+                 $(td).addClass('text-center '+((rowData.estatusColor) ? rowData.estatusColor : 'text-primary'));
+                 ((rowData.estatusIcono) ? $(td).find('i').attr({"title": cellData,"data-toggle": "tooltip","data-placement": "rigth"}) : '');*/
+
+                switch (cellData) {
+                    case "Activo":
+                        $(td).html('<i class="fa fa-check"></i>');
+                        $(td).addClass('text-success text-center');
+                        $(td).find('i').attr({
+                            "title": cellData,
+                            "data-toggle": "tooltip",
+                            "data-placement": "rigth"
+                        });
+                        break;
+                    case "Eliminado":
+                        $(td).html('<i class="fa fa-times"></i>');
+                        $(td).addClass('text-danger text-center');
+                        $(td).find('i').attr({
+                            "title": cellData,
+                            "data-toggle": "tooltip",
+                            "data-placement": "rigth"
+                        });
+                        break;
+                    case "Inactivo":
+                        $(td).html('<i class="fa fa-ban"></i>');
+                        $(td).addClass('text-warning text-center');
+                        $(td).find('i').attr({
+                            "title": cellData,
+                            "data-toggle": "tooltip",
+                            "data-placement": "rigth"
+                        });
+                        break;
+                    default:
+                }
+            }
+        }
+    ]
+};
+conf.modu_form = {};
+conf.modu_form.validations = {
+    skModuloAlta: {
+        validators: {
+            notEmpty: {
+                message: 'ESTE CAMPO ES REQUERIDO.'
+            },
+            remote: {
+                url: window.location.href,
+                data: {
+                    axn: 'validarModulo'
+                },
+                message: 'EL MÓDULO YA EXISTE.',
+                type: 'POST'
+            },
+            callback: {
+                message: 'MÓDULO NO VALIDO',
+                callback: function (input) {
+                    var RegExp_modulo = /^([0-9a-z]{4}-[0-9a-z]{4})?$/g;
+                    if (!RegExp_modulo.exec(input)) {
+                        toastr.warning('EL MÓDULO NO ES VALÍDO.', 'NOTIFICACIÓN');
+                        return false;
+                    }
+                    return true;
+                }
+            },
+            stringCase: {
+                upper: {},
+                message: 'ESTE CAMPO NO ACEPTA LETRAS MAYUSCULAS'
+            }
+        },
+    },
+    skModuloPrincipal: {
+        validators: {
+            notEmpty: {
+                message: 'ESTE CAMPO ES REQUERIDO.'
+            },
+            stringCase: {
+                upper: {},
+                message: 'ESTE CAMPO NO ACEPTA LETRAS MAYUSCULAS'
+            }
+        }
+    },
+    skModuloPadre: {
+        validators: {
+            notEmpty: {
+                message: 'ESTE CAMPO ES REQUERIDO.'
+            },
+            callback: {
+                message: 'MÓDULO NO VALIDO',
+                callback: function (input) {
+                    var RegExp_modulo = /^([0-9a-z]{4}-[0-9a-z]{4})?$/g;
+                    if (!RegExp_modulo.exec(input)) {
+                        toastr.warning('EL MÓDULO NO ES VALÍDO.', 'NOTIFICACIÓN');
+                        return false;
+                    }
+                    return true;
+                }
+            },
+            stringCase: {
+                upper: {},
+                message: 'ESTE CAMPO NO ACEPTA LETRAS MAYUSCULAS'
+            }
+        }
+    },
+    sNombre: {
+        validators: {
+            notEmpty: {
+                message: 'ESTE CAMPO ES REQUERIDO.'
+            },
+            callback: {
+                message: 'CAMPO NO VALIDO',
+                callback: function (input) {
+                    var RegExp_modulo = /^([0-9a-z-]{1,200})?$/g;
+                    if (!RegExp_modulo.exec(input)) {
+                        toastr.warning('ESTE CAMPO SOLO ACEPTA LETRAS MINUSCULAS Y EL GUION', 'NOTIFICACIÓN');
+                        return false;
+                    }
+                    return true;
+                }
+            },
+        }
+    },
+    sTitulo: {
+        validators: {
+            notEmpty: {
+                message: 'ESTE CAMPO ES REQUERIDO.'
+            }
+        }
+    },
+    iPosicion: {
+        validators: {
+            notEmpty: {
+                message: 'ESTE CAMPO ES REQUERIDO.'
+            },
+            numeric: {
+                message: 'ESTE CAMPO SOLO ACEPTA NÚMEROS'
+            }
+        }
+    },
+    skModuloEditar: {
+        validators: {
+            notEmpty: {
+                message: 'ESTE CAMPO ES REQUERIDO.'
+            },
+        }
+    }
+};
+
 conf.vasi_inde = {};
 conf.vasi_inde.dataTableConf = {
 

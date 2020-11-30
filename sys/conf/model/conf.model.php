@@ -730,5 +730,233 @@ Class Conf_Model Extends DLOREAN_Model {
         return $record;
     }
 
+    public function _consulta_botones(){
+        $sql = "SELECT * from core_botones";
+
+
+        $result = Conn::query($sql);
+        if(is_array($result) && isset($result['success']) && $result['success'] == false){
+            return $result;
+        }
+        $record = Conn::fetch_assoc_all($result);
+        utf8($record);
+        return $record;
+    }
+
+    public function _getCaracteristicasModulo(){
+        $sql = "SELECT
+            sNombre,
+            skCaracteristicaModulo,
+            skCaracteristicaModulo AS id,
+            CONCAT(sNombre,' (',skCaracteristicaModulo,')') AS nombre
+            FROM core_caracteristicasModulos";
+
+        $result = Conn::query($sql);
+        if(is_array($result) && isset($result['success']) && $result['success'] == false){
+            return $result;
+        }
+
+        $records = Conn::fetch_assoc_all($result);
+        utf8($records);
+        return $records;
+    }
+
+    public function _consultar_modulos_caracteristicas(){
+        $sql = "SELECT cmc.*,
+            ccm.sNombre AS caracteristica,
+            ccm.skCaracteristicaModulo AS id,
+            CONCAT(ccm.sNombre,' (',ccm.skCaracteristicaModulo,')') AS nombre
+            FROM core_modulos_caracteristicas cmc
+            LEFT JOIN core_caracteristicasModulos ccm ON ccm.skCaracteristicaModulo = cmc.skCaracteristicaModulo
+            WHERE cmc.skModulo = " . escape(isset($this->conf['skModulo']) ? $this->conf['skModulo'] : NULL);
+
+
+        $result = Conn::query($sql);
+        if(is_array($result) && isset($result['success']) && $result['success'] == false){
+            return $result;
+        }
+        $record = Conn::fetch_assoc_all($result);
+        utf8($record);
+        return $record;
+    }
+
+    public function _consultar_comportamientos(){
+        $sql = "SELECT
+            CONCAT(sNombre,' (',skComportamientoModulo,')') AS comportamiento,
+            skComportamientoModulo AS id
+            FROM core_comportamientos_modulos";
+
+
+        $result = Conn::query($sql);
+        if(is_array($result) && isset($result['success']) && $result['success'] == false){
+            return $result;
+        }
+        $record = Conn::fetch_assoc_all($result);
+        utf8($record);
+        return $record;
+    }
+
+    public function _validar_modulo(){
+        $sql = "SELECT cm.*
+            FROM  core_modulos cm
+            WHERE cm.skModulo = " . escape(isset($this->conf['skModulo']) ? $this->conf['skModulo'] : NULL);
+
+        if (isset($_GET['p1']) && !empty(trim($_GET['p1']))) {
+            $sql .= " AND cm.skModulo != " . escape($_GET['p1']);
+        }
+
+        $result = Conn::query($sql);
+        if(is_array($result) && isset($result['success']) && $result['success'] == false){
+            return $result;
+        }
+
+        return (count($result->fetchall()) > 0) ? false : true;
+    }
+
+    public function stpCUD_coreModulos(){
+        $sql = "CALL stpCUD_coreModulos (
+             /*@skModuloAlta          =*/ ".escape(isset($this->conf['skModulo']) ? $this->conf['skModulo'] : NULL).",
+             /*@skModuloPrincipal     =*/ ".escape(isset($this->conf['skModuloPrincipal']) ? $this->conf['skModuloPrincipal'] : NULL).",
+             /*@skModuloPadre         =*/ ".escape(isset($this->conf['skModuloPadre']) ? $this->conf['skModuloPadre'] : NULL).",
+             /*@sNombre               =*/ ".escape(isset($this->conf['sNombre']) ? $this->conf['sNombre'] : NULL).",
+             /*@sTitulo               =*/ ".escape(isset($this->conf['sTitulo']) ? $this->conf['sTitulo'] : NULL).",
+             /*@iPosicion             =*/ ".escape(isset($this->conf['iPosicion']) ? $this->conf['iPosicion'] : NULL).",
+             /*@sDescripcion          =*/ ".escape(isset($this->conf['sDescripcion']) ? $this->conf['sDescripcion'] : NULL).",
+             /*@skPermiso             =*/ ".escape(isset($this->conf['skPermiso']) ? $this->conf['skPermiso'] : NULL).",
+             /*@sColor                =*/ ".escape(isset($this->conf['sColor']) ? $this->conf['sColor'] : NULL).",
+             /*@skMenu                =*/ ".escape(isset($this->conf['skMenu']) ? $this->conf['skMenu'] : NULL).",
+
+             /*@skBoton               =*/ ".escape(isset($this->conf['skBoton']) ? $this->conf['skBoton'] : NULL).",
+             /*@sFuncion              =*/ ".escape(isset($this->conf['sFuncion']) ? $this->conf['sFuncion'] : NULL).",
+             /*@sIcono                =*/ ".escape(isset($this->conf['sIcono']) ? $this->conf['sIcono'] : NULL) . ",
+             /*@skComportamiento      =*/ ".escape(isset($this->conf['skComportamiento']) ? $this->conf['skComportamiento'] : NULL).",
+
+             /*@skCaracteristicaModulo      =*/ " . escape(isset($this->conf['skCaracteristicaModulo']) ? $this->conf['skCaracteristicaModulo'] : NULL).",
+
+
+             /*@axn                   =*/ " . escape(isset($this->conf['axn']) ? $this->conf['axn'] : NULL).",
+             /*@skUsuario             =*/ " . escape($_SESSION['usuario']['skUsuario']).",
+             /*@skModulo              =*/ " . escape($this->sysController).")";
+
+        $result = Conn::query($sql);
+        if(is_array($result) && isset($result['success']) && $result['success'] == false){
+            return $result;
+        }
+
+        $record = Conn::fetch_assoc($result);
+        utf8($record);
+        return $record;
+    }
+
+    public function _consultar_modulo_permisos(){
+        $sql = "SELECT cmp.*,
+            per.sNombre AS permiso
+            FROM core_modulos_permisos cmp
+            LEFT JOIN core_permisos per ON per.skPermiso = cmp.skPermiso
+            WHERE cmp.skModulo = " . escape(isset($this->conf['skModulo']) ? $this->conf['skModulo'] : NULL);
+
+        $result = Conn::query($sql);
+        if(is_array($result) && isset($result['success']) && $result['success'] == false){
+            return $result;
+        }
+        $record = Conn::fetch_assoc_all($result);
+        utf8($record);
+        return $record;
+    }
+
+    public function _consultar_modulosMenu(){
+        $sql = "SELECT DISTINCT
+            skMenu AS id
+            FROM core_modulos_menus
+            WHERE skModulo = " . escape(isset($this->conf['skModulo']) ? $this->conf['skModulo'] : NULL);;
+
+        $result = Conn::query($sql);
+        if(is_array($result) && isset($result['success']) && $result['success'] == false){
+            return $result;
+        }
+        $record = Conn::fetch_assoc_all($result);
+        utf8($record);
+        return $record;
+    }
+
+    public function _consultar_modulos(){
+        $sql = "SELECT cm.*
+            ,CONCAT(uc.sNombre,' ',uc.sApellidoPaterno) AS usuarioCreacion
+            ,CONCAT(um.sNombre,' ',um.sApellidoPaterno) AS usuarioModificacion
+            ,ce.sNombre AS estatus
+            ,ce.sIcono AS estatusicono
+            ,cmi.sIcono
+            ,cmi.sColor
+            FROM core_modulos cm
+            LEFT JOIN core_estatus ce on ce.skEstatus = cm.skEstatus
+            LEFT JOIN cat_usuarios uc ON uc.skUsuario =  cm.skUsuarioCreacion
+            LEFT JOIN cat_usuarios um ON um.skUsuario =  cm.skUsuarioCreacion
+            LEFT JOIN core_modulos_iconos cmi ON cmi.skModulo = cm.skModulo
+            WHERE cm.skModulo = " . escape(isset($this->conf['skModulo']) ? $this->conf['skModulo'] : NULL);
+
+        $result = Conn::query($sql);
+        if(is_array($result) && isset($result['success']) && $result['success'] == false){
+            return $result;
+        }
+        $record = Conn::fetch_assoc($result);
+        utf8($record);
+        return $record;
+    }
+
+    public function _consultar_modulos_botones(){
+        $sql = "SELECT cmb.*,
+            cb.sNombre AS boton
+            FROM core_modulos_botones  cmb
+            LEFT JOIN core_botones cb ON  cb.skBoton = cmb.skBoton
+            WHERE cmb.skModulo = " . escape(isset($this->conf['skModulo']) ? $this->conf['skModulo'] : NULL);
+
+        $result = Conn::query($sql);
+        if(is_array($result) && isset($result['success']) && $result['success'] == false){
+            return $result;
+        }
+        $record = Conn::fetch_assoc_all($result);
+        utf8($record);
+        return $record;
+    }
+
+    public function _consultar_modulos_menuEmergentes(){
+        $sql = "SELECT *
+            FROM core_modulos_menusEmergentes
+            WHERE skModulo = " . escape(isset($this->conf['skModulo']) ? $this->conf['skModulo'] : NULL);
+
+        $result = Conn::query($sql);
+        if(is_array($result) && isset($result['success']) && $result['success'] == false){
+            return $result;
+        }
+        $record = Conn::fetch_assoc_all($result);
+        utf8($record);
+        return $record;
+    }
+
+    public function _consultar_modulos_perfiles(){
+        $sql = "SELECT cmpp.*,
+                cper.sNombre AS nombrePerfil,
+                cper.dFechaCreacion,
+                cper.sDescripcionPerfil AS descripcionPerfil,
+                cper.skEstatus AS estatusPerfil,
+                per.skPermiso AS permiso,
+                per.sNombre AS nombrePermiso,
+                ce.sNombre AS estatusPerfil,
+                ce.sIcono AS estatusicono,
+                ce.sNombre AS estatus
+                FROM core_modulos_permisos_perfiles cmpp
+                LEFT JOIN core_perfiles cper ON cper.skPerfil = cmpp.skPerfil
+                LEFT JOIN core_permisos per ON per.skPermiso = cmpp.skPermiso
+                LEFT JOIN core_estatus ce on ce.skEstatus = per.skEstatus
+                WHERE cmpp.skModulo = " . escape(isset($this->conf['skModulo']) ? $this->conf['skModulo'] : NULL);
+
+        $result = Conn::query($sql);
+        if(is_array($result) && isset($result['success']) && $result['success'] == false){
+            return $result;
+        }
+        $record = Conn::fetch_assoc_all($result);
+        utf8($record);
+        return $record;
+    }
 
 }

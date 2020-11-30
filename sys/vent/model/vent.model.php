@@ -38,6 +38,7 @@ Class Vent_Model Extends DLOREAN_Model {
             " .escape(isset($this->vent['fTipoCambio']) ? $this->vent['fTipoCambio'] : NULL) . ",
             " .escape(isset($this->vent['skConcepto']) ? $this->vent['skConcepto'] : NULL) . ",
             " .escape(isset($this->vent['skTipoMedida']) ? $this->vent['skTipoMedida'] : NULL) . ",
+            " .escape(isset($this->vent['skImpuesto']) ? $this->vent['skImpuesto'] : NULL) . ",
             " .escape(isset($this->vent['fCantidad']) ? $this->vent['fCantidad'] : NULL) . ",
             " .escape(isset($this->vent['fPrecioUnitario']) ? $this->vent['fPrecioUnitario'] : NULL) . ",
             " .escape(isset($this->vent['fImporte']) ? $this->vent['fImporte'] : NULL) . ",
@@ -69,7 +70,27 @@ Class Vent_Model Extends DLOREAN_Model {
      */
     public function _getCotizacion() {
 
-        $sql = "SELECT * FROM ope_cotizaciones oc 
+        $sql = "SELECT 
+        oc.skCotizacion,
+        oc.dFechaVigencia,
+        oc.skDivisa,
+        oc.skEmpresaSocioCliente,
+        oc.skProspecto,
+        oc.sObservaciones,
+        oc.fImporteSubtotal,
+        oc.fDescuento,
+        oc.fImpuestosTrasladados,
+        oc.fImpuestosRetenidos,
+        oc.fImporteTotal,
+        oc.fTipoCambio,
+        cec.sNombre AS cliente,
+        cec.sRFC AS clienteRFC,
+        cu.sNombre AS usuarioCreacion
+        FROM ope_cotizaciones oc 
+        LEFT JOIN rel_empresasSocios resc ON resc.skEmpresaSocio = oc.skEmpresaSocioCliente
+        LEFT JOIN cat_empresas cec ON cec.skEmpresa = resc.skEmpresa
+        LEFT JOIN cat_usuarios cu ON cu.skUsuario = oc.skUsuarioCreacion
+ 
         WHERE  oc.skCotizacion =  " . escape($this->vent['skCotizacion']);
 
 
@@ -99,7 +120,10 @@ Class Vent_Model Extends DLOREAN_Model {
                         cse.fDescuento,
                         cse.fImporte,
                         cc.sNombre AS concepto,
-                        cum.sNombre as tipoMedida
+                        cum.sNombre as tipoMedida,
+                        (SELECT fImporte FROM rel_cotizaciones_conceptosImpuestos rps where rps.skCotizacion = cse.skCotizacion AND rps.skConcepto = cse.skConcepto AND rps.skImpuesto = 'RETIVA' AND rps.skCotizacionConcepto = cse.skCotizacionConcepto )AS fImpuestosRetenidos,
+                        (SELECT fImporte FROM rel_cotizaciones_conceptosImpuestos rps where rps.skCotizacion = cse.skCotizacion AND rps.skConcepto = cse.skConcepto AND rps.skImpuesto = 'TRAIVA' AND rps.skCotizacionConcepto = cse.skCotizacionConcepto )AS fImpuestosTrasladados
+								
 		                FROM rel_cotizaciones_conceptos cse 
                         INNER JOIN cat_conceptos cc ON cc.skConcepto = cse.skConcepto
                         LEFT JOIN cat_unidadesMedidaSAT cum ON cum.skUnidadMedida = cse.skTipoMedida
@@ -109,7 +133,43 @@ Class Vent_Model Extends DLOREAN_Model {
         if (!$result) {
             return FALSE;
         }
-        return Conn::fetch_assoc_all($result);
+        $records = Conn::fetch_assoc_all($result);
+        $i = 0;
+        foreach ($records as $value) {
+
+            $this->vent['skCotizacionConcepto'] = $value['skCotizacionConcepto'];
+
+            $this->vent['skConcepto'] = $value['skConcepto'];
+            $records[$i]['impuestos'] = $this->_getCotizacionConceptos_impuestos();
+            $i++;
+        }
+        return $records;
+    }
+     /**
+     * _getCotizacionConceptos_impuestos
+     *
+     * Función Para obtener los datos de los almacenes
+     *
+     *
+     * @author Luis Alberto Valdez Alvarez <lvaldez@woodward.com.mx>
+     * @return array | false Retorna array de datos o false en caso de error
+     */
+    public function _getCotizacionConceptos_impuestos() {
+
+        $sql = "SELECT
+							 ras.*,
+							 ras.skTipoImpuesto  AS tipoImpuesto,
+							 ci.sNombre AS impuesto
+							 FROM rel_cotizaciones_conceptosImpuestos ras
+							 INNER JOIN cat_impuestos ci ON ci.skImpuesto = ras.skImpuesto
+							 WHERE ras.skCotizacion = " . escape($this->vent['skCotizacion']) . " AND ras.skCotizacionConcepto = " . escape($this->vent['skCotizacionConcepto']) . "  AND ras.skConcepto= " . escape($this->vent['skConcepto']);
+   
+        $result = Conn::query($sql);
+        if (!$result) {
+            return FALSE;
+        }
+        $records = Conn::fetch_assoc_all($result);
+        return $records;
     }
 
 

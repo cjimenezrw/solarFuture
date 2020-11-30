@@ -71,6 +71,26 @@ if (isset($data['datos'])) {
                          </div>
                      </div>
                  </div>
+                 <div class="row row-lg col-lg-12">
+                     <div class="col-md-8 col-lg-8">
+                         <div class="form-group">
+                             <h4 class="example-title"> Correos</h4>
+                             <select name="sCorreos[]" id="sCorreos" class="form-control select2"  autocomplete="off" multiple="multiple" data-plugin="select2">
+                        <?php
+                            if (isset($data['cotizacionesCorreos'])){
+                                foreach ($data['cotizacionesCorreos'] as $row){
+                                ?>
+
+                                <option  value="<?php echo $row['sCorreo']; ?>"><?php echo $row['sCorreo']; ?></option>
+
+                                <?php
+                            }//ENDFOREACH
+                            }//ENDIF
+                            ?>
+                        </select>                         </div>
+                     </div>
+                 </div>
+                 
                 </div>
             </div>
      
@@ -338,6 +358,11 @@ function addCommas(amount) {
  
     var tr_concepto = '';
     $(document).ready(function () {
+        $('#sCorreos').tagsinput({
+					    trimValue: true,
+					    freeInput: true,
+					    tagClass: 'label label-danger'
+					});
 
         $(".input-datepicker").datepicker({
                 format: "dd/mm/yyyy"

@@ -37,6 +37,28 @@ if (isset($data['datos'])) {
                             </div>
                         </div>
                 </div>
+				<div class="col-md-12 same-heigth">
+					<div class="col-md-12">
+					<div class="form-group">
+						<h4 class="example-title">EMAILS:</h4>
+						<?php
+						$sCorreo = "";
+						if (isset($data['cotizacionCorreos'])) {
+						 
+							foreach ($data['cotizacionCorreos'] AS $correos) {
+								if(empty($sCorreo)){
+									$sCorreo .= $correos['sCorreo'];
+								}else{
+									$sCorreo .= ",".$correos['sCorreo'];
+								}
+							
+								}
+							}
+							?>
+						<p><?php echo (isset($sCorreo) && !empty($sCorreo)) ? $sCorreo : 'N/D' ?></p>
+					</div>
+					</div>
+				</div>
                 <div class="col-md-12 clearfix"><hr></div>
                 <div class="col-md-12 same-heigth">
                   <div class="col-md-12 col-lg-8">

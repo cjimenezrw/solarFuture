@@ -171,6 +171,26 @@ Class Vent_Model Extends DLOREAN_Model {
         $records = Conn::fetch_assoc_all($result);
         return $records;
     }
+     /**
+     * _getCotizacionCorreos
+     *
+     * Función Para obtener los correos de las cotizaciones
+     *
+     *
+     * @author Luis Alberto Valdez Alvarez <lvaldez@woodward.com.mx>
+     * @return array | false Retorna array de datos o false en caso de error
+     */
+    public function _getCotizacionCorreos() {
+
+        $sql = "SELECT rcc.sCorreo FROM rel_cotizaciones_correos rcc WHERE  rcc.skCotizacion= " . escape($this->vent['skCotizacion']);
+   
+        $result = Conn::query($sql);
+        if (!$result) {
+            return FALSE;
+        }
+        $records = Conn::fetch_assoc_all($result);
+        return $records;
+    }
 
 
     /**

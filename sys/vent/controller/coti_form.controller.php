@@ -26,7 +26,7 @@ Class Coti_form_Controller Extends Vent_Model {
         //exit(print_r($_POST));
 
         $this->data = ['success' => TRUE, 'message' => NULL, 'datos' => NULL];
-        //Conn::begin($this->idTran);
+        Conn::begin($this->idTran);
 
         // Obtener datos de entrada de información
             $getInputData = $this->getInputData();
@@ -38,34 +38,34 @@ Class Coti_form_Controller Extends Vent_Model {
             // Validamos los datos de entrada
             $validar_datos_entrada = $this->validar_datos_entrada();
             if(!$validar_datos_entrada['success']){
-                //Conn::rollback($this->idTran);
+                Conn::rollback($this->idTran);
+                return $this->data;
+            }
+            $this->vent['skCotizacion'] = (isset($_GET['p1']) ? $_GET['p1'] : NULL);  
+            // Guardar cotizacion
+            $guardar_cotizacion = $this->guardar_cotizacion();
+            if(!$guardar_cotizacion['success']){
+                Conn::rollback($this->idTran);
                 return $this->data;
             }
 
-            
-
-
-
-            $this->vent['skCotizacion'] = (isset($_GET['p1']) ? $_GET['p1'] : NULL);
-
-            
-            // Guardar Concepto
-            $guardar_cotizacion = $this->guardar_cotizacion();
-            if(!$guardar_cotizacion['success']){
-                //Conn::rollback($this->idTran);
+            // Guardar correos
+            $guardar_cotizacion_correos = $this->guardar_cotizacion_correos();
+            if(!$guardar_cotizacion_correos['success']){
+               Conn::rollback($this->idTran);
                 return $this->data;
             }
 
             // Guardar impuestos Concepto
             $guardar_cotizacion_conceptos = $this->guardar_cotizacion_conceptos();
             if(!$guardar_cotizacion_conceptos['success']){
-               // Conn::rollback($this->idTran);
+               Conn::rollback($this->idTran);
                 return $this->data;
             }
           
 
         //Conn::commit($this->idTran);
-        //Conn::commit($this->idTran);
+        Conn::commit($this->idTran);
         $this->data['datos'] = $this->vent;
         $this->data['success'] = TRUE;
         $this->data['message'] = 'Registro guardado con éxito.';
@@ -103,6 +103,38 @@ Class Coti_form_Controller Extends Vent_Model {
           return $this->data;
       }
       /**
+         * guardar_cotizacion_correos
+         *
+         * Guardar correos
+         *
+         * @author Luis Alberto Valdez Alvarez <lvaldez@woodward.com.mx>
+         * @return Array ['success'=>NULL,'message'=>NULL,'datos'=>NULL]
+         */
+        public function guardar_cotizacion_correos(){
+            $this->data['success'] = TRUE;
+            $this->vent['axn'] = 'guardar_cotizacion_correo';
+          
+            $delete="DELETE FROM rel_cotizaciones_correos WHERE skCotizacion = '". $this->vent['skCotizacion'] ."'";
+            $result = Conn::query($delete);
+           
+            if(!empty($this->vent['sCorreos'])){
+                foreach ($this->vent['sCorreos'] AS $correo){
+                    $this->vent['axn'] = 'guardar_cotizacion_correo';
+                    $this->vent['sCorreo']         = (!empty($correo) ? $correo : NULL);         
+                     $stpCUD_cotizaciones = parent::stpCUD_cotizaciones();
+                    if(!$stpCUD_cotizaciones || isset($stpCUD_cotizaciones['success']) && $stpCUD_cotizaciones['success'] != 1){
+                        $this->data['success'] = FALSE;
+                        $this->data['message'] = 'HUBO UN ERROR AL GUARDAR LOS CORREOS DE LA COTIZACION';
+                        return $this->data;
+                    }
+                }
+            }
+            
+            $this->data['success'] = TRUE;
+            $this->data['message'] = 'CORREO GUARDADOS CON EXITO';
+            return $this->data;
+        }
+      /**
          * guardar_cotizacion_conceptos
          *
          * Guardar Archivos
@@ -115,6 +147,8 @@ Class Coti_form_Controller Extends Vent_Model {
             $this->vent['axn'] = 'guardar_cotizacion_conceptos';
           
             $delete="DELETE FROM rel_cotizaciones_conceptos WHERE skCotizacion = '". $this->vent['skCotizacion'] ."'";
+            $result = Conn::query($delete);
+            $delete="DELETE FROM rel_cotizaciones_conceptosImpuestos WHERE skCotizacion = '". $this->vent['skCotizacion'] ."'";
             $result = Conn::query($delete);
             if(!empty($this->vent['conceptos'])){
                 foreach ($this->vent['conceptos'] AS $con){
@@ -289,6 +323,9 @@ Class Coti_form_Controller Extends Vent_Model {
             $this->data['datos'] = parent::_getCotizacion();
             $cotizacionConceptos = parent::_getCotizacionConceptos();
             $this->data['cotizacionesConceptos'] = $cotizacionConceptos;
+            $cotizacionCorreos= parent::_getCotizacionCorreos();
+            $this->data['cotizacionesCorreos'] = $cotizacionCorreos;
+
             
         }
  

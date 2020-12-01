@@ -80,7 +80,7 @@ if (isset($data['datos'])) {
 			    <h3 class="panel-title">CONCEPTOS</h3>
                 <ul class="panel-actions panel-actions-keep">
                     <li>
-                        <a href="javascript:void(0);" class="btn btn-squared btn-outline btn-primary btn-sm" onclick="verFormato();"> Formato Cotizacion</a>
+                        <a href="javascript:void(0);" class="btn btn-squared btn-outline btn-primary btn-sm" onclick="formatoPDF();"> Formato Cotizacion</a>
                     </li>
                 </ul>
 
@@ -166,9 +166,10 @@ if (isset($data['datos'])) {
 <script src="<?php echo SYS_URL; ?><?php echo $this->sysProject; ?>/<?php echo $this->sysModule; ?>/view/js/<?php echo VERSION; ?>/<?php echo $this->sysModule; ?>.js"></script>
 
 <script type="text/javascript">
-    function verFormato() {
-				    var skCotizacion = '<?php echo $_GET['skCotizacion'] ?>';
-				    var url = core.SYS_URL + 'sys/vent/coti-deta/detalle-cotizacion/?axn=formatoPDF&skCotizacion=' + skCotizacion;
+
+    function formatoPDF(){
+				    var skCotizacion = '<?php echo $_GET['p1']; ?>';
+				    var url = core.SYS_URL + 'sys/vent/coti-deta/detalle-cotizacion/'+skCotizacion+'/?axn=formatoPDF';
 				    $.magnificPopup.open({
 					items: {
 					    src: url

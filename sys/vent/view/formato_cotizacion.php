@@ -2,23 +2,10 @@
 if (isset($data)) {
     $datos = $data['datos'];
     $result = $data['datos'];
-    //exit(print_r($result['view']));
     //utf8($result);
 }
 
-/* $conteiners = $result['contenedores'];
-  if (!empty($conteiners)) {
-  $prefix = $conList = '';
-  foreach ($conteiners as $cons) {
-  $conList .= $prefix . '' . $cons['sContenedor'] . '';
-  $prefix = ', ';
-  }
-  } */
 
-//exit(print_r($conteiners));
-//$total = $result['total'];
-//print_r($result['general']);
-//exit();
 ?>
 <style>
 

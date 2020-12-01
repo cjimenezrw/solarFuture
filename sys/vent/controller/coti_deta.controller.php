@@ -1,4 +1,4 @@
-  <?php
+<?php
 
 Class Coti_deta_Controller Extends Vent_Model {
     // PUBLIC VARIABLES //
@@ -28,17 +28,10 @@ Class Coti_deta_Controller Extends Vent_Model {
         return $this->data;
     }
 
-    public function formato_ordenServicios() {
+    public function formatoPDF() {
         //$data = [];
         $this->data = $this->consultar();
-        $this->data['footer'] = '<div class="pdf_cabecera" style="color:gray">
-                            <div class="pdf_left">
-                                <div class="pdf_fontStyle">' . COMPANY . '</div>
-                                <div class="pdf_fontStyle">' . date_format(new DateTime(), 'd/m/Y H:i:s') . '</div>
-                            </div>
-                            <div class="pdf_centro pdf_fontStyle">' . SYS_URL . '</div>
-                            <div class="pdf_left fpag pdf_fontStyle">' . $_SESSION['usuario']['sNombreUsuario'] . ' ' . $_SESSION['usuario']['sPaterno'] . ' ' . $_SESSION['usuario']['sPaterno'] . '</div>
-                        </div>';
+        
         
         ob_start();
         $this->load_view('formato_cotizacion', $this->data, NULL, FALSE);

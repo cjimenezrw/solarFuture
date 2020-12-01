@@ -102,7 +102,7 @@ Class Vent_Controller Extends Vent_Model {
             default:
                 $this->data = $coti_deta->consultar();
                 $this->load_view('coti_deta', $this->data);
-                break;
+            break;
         }
         return true;
     }

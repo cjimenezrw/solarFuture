@@ -1,5 +1,127 @@
 var conf = {};
- 
+
+conf.cage_inde = {};
+conf.cage_inde.dataTableConf = {
+    'serverSide': true,
+    'ajax': {
+        'url': window.location.href,
+        'type': 'POST',
+        'data': function (data) {
+            data.axn = 'getCatalogosGenerales';
+            data.filters = core.dataFilterSend;
+            data.generarExcel = core.generarExcel;
+        }
+    },
+    'order': [[5, "desc"]],
+    'columns': [
+        {'title': 'E', 'data': 'estatus', 'dataType': 'string', 'tooltip': 'Estatus', 'filterT': 'Estatus'},
+        {'title': 'Datos', 'data': 'n', 'dataType': 'string'},
+        {'title': 'Código', 'data': 'skCatalogoSistema', 'dataType': 'string'},
+        {'title': 'Nombre', 'data': 'sNombre', 'dataType': 'string'},
+        {'title': 'Usuario Creación', 'data': 'usuarioCreacion', 'dataType': 'string'},
+        {'title': 'Fecha Creación', 'data': 'dFechaCreacion', 'dataType': 'date'}
+    ],
+    'axn': 'getCatalogosGenerales',
+    "drawCallback": function () {
+        core.dataTable.contextMenuCore(true);
+        core.dataTable.changeColumnColor(2, 'success');
+        core.dataTable.fastFilters(3, [], true);
+        $('[data-toggle="tooltip"]').tooltip();
+
+    },
+    "columnDefs": [
+        {
+
+            "targets": [0],
+            "width": '20px',
+            "createdCell": function (td, cellData, rowData, row, col) {
+                /*((rowData.estatusIcono) ? $(td).html('<i class="'+rowData.estatusIcono+'"></i>') : $(td).html(cellData));
+                $(td).addClass('text-center '+((rowData.estatusColor) ? rowData.estatusColor : 'text-primary'));
+                ((rowData.estatusIcono) ? $(td).find('i').attr({"title": cellData,"data-toggle": "tooltip","data-placement": "rigth"}) : '');*/
+                switch (cellData) {
+                    case "Activo":
+                        $(td).html('<i class="fa fa-check"></i>');
+                        $(td).addClass('text-success text-center');
+                        $(td).find('i').attr({
+                            "title": cellData,
+                            "data-toggle": "tooltip",
+                            "data-placement": "rigth"
+                        });
+                        break;
+                    case "Eliminado":
+                        $(td).html('<i class="fa fa-times"></i>');
+                        $(td).addClass('text-danger text-center');
+                        $(td).find('i').attr({
+                            "title": cellData,
+                            "data-toggle": "tooltip",
+                            "data-placement": "rigth"
+                        });
+                        break;
+                    case "Inactivo":
+                        $(td).html('<i class="fa fa-ban"></i>');
+                        $(td).addClass('text-warning text-center');
+                        $(td).find('i').attr({
+                            "title": cellData,
+                            "data-toggle": "tooltip",
+                            "data-placement": "rigth"
+                        });
+                        break;
+                    default:
+                }
+            }
+        },
+        {"targets": [1], "width": '10px',}
+    ]
+};
+
+conf.cage_form = {};
+conf.cage_form.validations = {
+    sNombre: {
+        validators: {
+            notEmpty: {
+                message: 'El nombre es requerido'
+            }
+        }
+    },
+    skCatalogoSistema: {
+        threshold: 1,
+        validators: {
+            notEmpty: {
+                message: 'El código es requerido'
+            },
+            remote: {
+                url: window.location.href,
+                data: {
+                    axn: 'validarCodigo'
+                },
+                message: 'El código ya existe',
+                type: 'POST'
+            },
+            stringCase: {
+                message: 'Solo letras mayusculas',
+                'case': 'upper'
+            },
+            stringLength: {
+                max: 3,
+                message: 'Son mínimo 6 Caracteres'
+            }
+        }
+    },
+        skClave: {
+        threshold: 1,
+        validators: {
+            stringCase: {
+                message: 'Solo letras mayusculas',
+                'case': 'upper'
+            },
+            stringLength: {
+                max: 3,
+                message: 'Son mínimo 6 Caracteres'
+            }
+        }
+    }
+};
+
 conf.modu_inde = {};
 conf.modu_inde.dataTableConf = {
     'serverSide': true,

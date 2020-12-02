@@ -13,8 +13,8 @@ $load = new AssetLoader();
     <meta name="author" content="Softlab">
     <meta name="keywords" content="solar,paneles"/>
     <title><?php echo WEBTITLE; ?></title>
-    <link rel="apple-touch-icon" href="<?php echo ASSETS_PATH . 'tpl/'; ?>images/favicon.ico">
-    <link rel="shortcut icon" href="<?php echo ASSETS_PATH . 'tpl/'; ?>images/favicon.ico">
+    <link rel="apple-touch-icon" href="<?php echo ASSETS_PATH . 'tpl/'; ?>images/favicon.png">
+    <link rel="shortcut icon" href="<?php echo ASSETS_PATH . 'tpl/'; ?>images/favicon.png">
 
 
     <!-- Stylesheets -->

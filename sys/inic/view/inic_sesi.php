@@ -13,15 +13,13 @@ $load = new AssetLoader();
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=0, minimal-ui">
-    <meta name="description" content="Somos un Grupo Logístico de Clase Mundial que no tiene límites ni fronteras
-el primer Holding de empresas en integrar la Logistica Global de manera sólida.">
+    <meta name="description" content="Solar Future">
     <meta name="theme-color" content="#064480">
-    <meta name="author" content="Woodward Group">
-    <meta name="keywords" content="
-logistica internacional, agencia logistica, holding, importación, exportación, agencia aduanal, fletes, almacenaje, maniobras, consolidación, desconsolidacion, de, carga, servicios, integrales, comercio, exterior, manzanillo" />
+    <meta name="author" content="Solar Future">
+    <meta name="keywords" content="Solar Future" />
     <title><?php echo COMPANY; ?></title>
-    <link rel="apple-touch-icon" href="<?php echo ASSETS_PATH . 'tpl/'; ?>images/apple-touch-icon.png">
-    <link rel="shortcut icon" href="<?php echo ASSETS_PATH . 'tpl/'; ?>images/favicon.ico">
+    <link rel="apple-touch-icon" href="<?php echo ASSETS_PATH . 'tpl/'; ?>images/favicon.png">
+    <link rel="shortcut icon" href="<?php echo ASSETS_PATH . 'tpl/'; ?>images/favicon.png">
     <!-- Stylesheets -->
     <?php echo $load->getCSS("login"); ?>
     <link rel="stylesheet" href="<?php echo ASSETS_PATH . 'tpl/'; ?>examples/css/pages/login-v2.css">

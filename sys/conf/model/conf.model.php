@@ -524,39 +524,6 @@ Class Conf_Model Extends DLOREAN_Model {
              return $record['skCatalogoSistema'];
      }
 
-     /**
-      * stpC_catalogoSistemaOpciones
-      *
-      * Guarda o actuzaliza los valores del punto de Catalogos de Sistemas
-      *
-      * @author Luis Alberto Valdez Alvarez <lvaldez@woodward.com.mx>
-      * @return bool Retorna TRUE en caso de exito ó FALSE si algo falla.a
-      */
-     public function stpC_catalogoSistemaOpciones() {
-         $sql = "CALL stpC_catalogoSistemaOpciones (
-         /*@skCatalogoSistemaOpciones     = */" . escape($this->cage['skCatalogoSistemaOpciones']) . ",
-         /*@skCatalogoSistema             = */".escape($this->cage['skCatalogoSistema']).",
-         /*@skEstatus                     = */'AC',
-         /*@sNombre                       = */" . escape($this->cage['sNombreOpcion']) . ",
-         /*@sClave                        = */" . escape($this->cage['sClave']) . ",
-         /*@skUsuario                     = */'" . $_SESSION['usuario']['skUsuario'] . "',
-         /*@skModulo                      = */'" . $this->sysController . "' )";
-
-         $result = Conn::query($sql);
-         if (!$result) {
-             return FALSE;
-         }
-         return TRUE;
-     }
-     
-     /**
-     * stpC_catalogoSistemaOpciones
-     *
-     * Guarda o actuzaliza los valores del punto de Catalogos de Sistemas
-     *
-     * @author Luis Alberto Valdez Alvarez <lvaldez@woodward.com.mx>
-     * @return bool Retorna TRUE en caso de exito ó FALSE si algo falla.a
-     */
     public function deleteCatalogoSitemaValores() {
         if(!mssql_where_in($this->cage['skCatalogoSistemaOpciones'])){
             return true;
@@ -955,6 +922,147 @@ Class Conf_Model Extends DLOREAN_Model {
             return $result;
         }
         $record = Conn::fetch_assoc_all($result);
+        utf8($record);
+        return $record;
+    }
+
+    public function cage_query($code, $dataRet = false){
+        $slq = "SELECT * FROM cat_catalogosSistemas WHERE skCatalogoSistema = $code";
+        $result = Conn::query($slq);
+        if (!$result) {
+            return false;
+        }
+
+        if ($dataRet) {
+            return Conn::fetch_assoc($result);
+        }
+
+        return (count($result->fetchall()) > 0) ? false : true;
+    }
+
+    public function consultar_opcionesCatalogo(){
+        $sql = "SELECT rcso.*,
+            CONCAT(u.sNombre,' ',u.sApellidoPaterno) AS usuarioCreacion,
+            CONCAT(u2.sNombre,' ',u2.sApellidoPaterno) AS usuarioModificacion,
+            ce.sNombre as estatus
+            FROM cat_catalogosSistemas ccs
+            LEFT JOIN rel_catalogosSistemasOpciones rcso ON rcso.skCatalogoSistema = ccs.skCatalogoSistema
+            LEFT JOIN cat_usuarios u ON u.skUsuario =  rcso.skUsuarioCreacion
+            LEFT JOIN cat_usuarios u2 ON u2.skUsuario =  rcso.skUsuarioModificacion
+            LEFT JOIN core_estatus ce ON ce.skEstatus = rcso.skEstatus
+            WHERE  rcso.skEstatus = 'AC' AND ccs.skCatalogoSistema = " . escape(isset($this->conf['skCatalogoSistema']) ? $this->conf['skCatalogoSistema'] : NULL);
+
+        $result = Conn::query($sql);
+        if(is_array($result) && isset($result['success']) && $result['success'] == false){
+            return $result;
+        }
+        $record = Conn::fetch_assoc_all($result);
+        utf8($record);
+        return $record;
+    }
+
+    public function consultar_opcionesCatalogos($tablaMultiple = FALSE){
+        $sql = "SELECT tpv.* FROM rel_catalogosSistemasOpciones tpv
+        WHERE tpv.skEstatus = 'AC' AND tpv.skCatalogoSistema = " . escape(isset($this->conf['skCatalogoSistema']) ? $this->conf['skCatalogoSistema'] : NULL);
+
+        $result = Conn::query($sql);
+        if(is_array($result) && isset($result['success']) && $result['success'] == false){
+            return $result;
+        }
+
+        $data = array();
+        while ($row = Conn::fetch_assoc($result)) {
+            utf8($row);
+
+            $input = '';
+            if ($tablaMultiple) {
+                $input .= '<input data-name="' . $row['skCatalogoSistemaOpciones'] . '" type="text" name="skCatalogoSistemaOpciones[]" value="' . $row['skCatalogoSistemaOpciones'] . '"  hidden/>';
+                $input .= '<input data-name="' . $row['sNombre'] . '" type="text" name="sNombreOpcion[]" value="' . $row['sNombre'] . '" hidden />';
+                $input .= '<input data-name="' . $row['skClave'] . '" type="text" name="skClave[]" value="' . $row['skClave'] . '" maxlength="6" hidden />';
+            }
+            array_push($data, array(
+                "id" => $row['skCatalogoSistemaOpciones'],
+                "skCatalogoSistemaOpciones" => $row['skCatalogoSistemaOpciones'],
+                "sNombreOpcion" => $row['sNombre'] . $input,
+                "skClave" => $row['skClave']
+            ));
+        }
+        return $data;
+    }
+
+    public function stpCU_catalogosSistemas(){
+        $sql = "CALL stpCU_catalogosSistemas (
+            /*@skCatalogoSistema     =*/ ".escape(isset($this->conf['skCatalogoSistema']) ? $this->conf['skCatalogoSistema'] : NULL).",
+            /*@skEstatus             =*/ ".escape(isset($this->conf['skEstatus']) ? $this->conf['skEstatus'] : NULL).",
+            /*@sNombre               =*/ ".escape(isset($this->conf['sNombre']) ? $this->conf['sNombre'] : NULL).",
+            /*@axn                   =*/ ".escape(isset($this->conf['axn']) ? $this->conf['axn'] : NULL).",
+            /*@skUsuario             =*/ ".escape($_SESSION['usuario']['skUsuario']).",
+            /*@skModulo              =*/ ".escape($this->sysController).")";
+
+        $result = Conn::query($sql);
+        if(is_array($result) && isset($result['success']) && $result['success'] == false){
+            return $result;
+        }
+        $record = Conn::fetch_assoc($result);
+        return $record;
+    }
+
+    public function stpC_catalogoSistemaOpciones(){
+        $sql = "CALL stpC_catalogoSistemaOpciones (
+            /*@skCatalogoSistemaOpciones     =*/ ".escape(isset($this->conf['skCatalogoSistemaOpciones']) ? $this->conf['skCatalogoSistemaOpciones'] : NULL).",
+            /*@skCatalogoSistema             =*/ ".escape(isset($this->conf['skCatalogoSistema']) ? $this->conf['skCatalogoSistema'] : NULL).",
+            /*@skEstatus                     =*/ ".escape(isset($this->conf['skEstatus']) ? $this->conf['skEstatus'] : NULL).",
+            /*@sNombre                       =*/ ".escape(isset($this->conf['sNombreOpcion']) ? $this->conf['sNombreOpcion'] : NULL).",
+            /*@skClave                       =*/ ".escape(isset($this->conf['skClave']) ? $this->conf['skClave'] : NULL).",
+            /*@axn                           =*/ ".escape(isset($this->conf['axn']) ? $this->conf['axn'] : NULL).",
+            /*@skUsuario                     =*/ ".escape($_SESSION['usuario']['skUsuario']).",
+            /*@skModulo                      =*/ ".escape($this->sysController).")";
+
+      
+        $result = Conn::query($sql);
+        if(is_array($result) && isset($result['success']) && $result['success'] == false){
+            return $result;
+        }
+        $record = Conn::fetch_assoc($result);
+        Conn::free_result($result);
+        return $record;
+    }
+
+    public function delete_catalogosOpciones(){
+        $sql = "UPDATE rel_catalogosSistemasOpciones SET
+            skEstatus = 'EL',
+            skUsuarioModificacion = ".escape($_SESSION['usuario']['skUsuario']).",
+            dFechaModificacion = NOW()
+            WHERE skEstatus != 'EL' AND skCatalogoSistema = ".escape($this->conf['skCatalogoSistema']);
+
+        $mssql_where_in = mssql_where_in($this->conf['skCatalogosSistemas_array']);
+        if (!empty($mssql_where_in)) {
+            $sql .= " AND skCatalogoSistemaOpciones NOT IN (" . $mssql_where_in . ")";
+        }
+
+        $result = Conn::query($sql);
+        if(is_array($result) && isset($result['success']) && $result['success'] == false){
+            return $result;
+        }
+        return TRUE;
+    }
+
+    public function consultar_catalogosSistemas(){
+        $sql = "SELECT ccs.*,
+            CONCAT(u.sNombre,' ',u.sApellidoPaterno) AS usuarioCreacion,
+            CONCAT(u2.sNombre,' ',u2.sApellidoPaterno) AS usuarioModificacion,
+            ce.sNombre as estatus
+            FROM cat_catalogosSistemas ccs
+            INNER JOIN cat_usuarios u ON u.skUsuario =  ccs.skUsuarioCreacion
+            LEFT JOIN cat_usuarios u2 ON u2.skUsuario =  ccs.skUsuarioModificacion
+            LEFT JOIN core_estatus ce ON ce.skEstatus = ccs.skEstatus
+            WHERE ccs.skCatalogoSistema = " . escape(isset($this->conf['skCatalogoSistema']) ? $this->conf['skCatalogoSistema'] : NULL);
+        
+        $result = Conn::query($sql);
+        if(is_array($result) && isset($result['success']) && $result['success'] == false){
+            return $result;
+        }
+        $record = Conn::fetch_assoc($result);
         utf8($record);
         return $record;
     }

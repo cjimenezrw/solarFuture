@@ -18,12 +18,71 @@ Class Conf_Controller Extends Conf_Model {
     public function __destruct() {
 
     }
- 
-
-
+    
     public function conf_inde() {
         echo '<hr>MODULO CARGADO: conf_inde';
         echo('<pre>' . print_r($_GET, 1) . '</pre><hr>');
+    }
+
+    public function cage_inde(){
+        $this->load_class("cage_inde", "controller");
+        $cage_inde = new Cage_inde_Controller();
+        $axn = (isset($_POST['axn']) ? $_POST['axn'] : (isset($_GET['axn']) ? $_GET['axn'] : NULL));
+        switch ($axn) {
+            case 'getCatalogosGenerales':
+                $data = $cage_inde->getCatalogosGenerales();
+                header('Content-Type: application/json');
+                echo json_encode($data);
+                return TRUE;
+                break;
+            case 'generarExcel':
+                $cage_inde->generarExcel();
+                break;
+            case 'pdf':
+                $cage_inde->generarPDF();
+                break;
+            case 'eliminar':
+                header('Content-Type: application/json');
+                echo json_encode($cage_inde->ME_Eliminar($_POST, TRUE));
+                break;
+            default:
+                $this->load_view('cage_inde');
+                break;
+        }
+        return TRUE;
+    }
+
+    public function cage_form(){
+        $this->load_class("cage_form", "controller");
+        $cage_form = new Cage_form_Controller();
+        $axn = (isset($_POST['axn']) ? $_POST['axn'] : (isset($_GET['axn']) ? $_GET['axn'] : NULL));
+        switch ($axn) {
+            case 'guardar':
+                header('Content-Type: application/json');
+                echo json_encode($cage_form->guardar());
+                break;
+            case 'validarCodigo':
+                header('Content-Type: application/json');
+                echo json_encode(array('valid' => $cage_form->validarCodigo()));
+                break;
+            default:
+                $this->load_view('cage_form', $cage_form->consultar_cage());
+                break;
+        }
+        return true;
+    }
+
+    public function cage_deta(){
+        $this->load_class("cage_deta", "controller");
+        $cage_deta = new Cage_deta_Controller();
+        $axn = (isset($_POST['axn']) ? $_POST['axn'] : (isset($_GET['axn']) ? $_GET['axn'] : NULL));
+        switch ($axn) {
+            default:
+                $this->data = $cage_deta->getDatos();
+                $this->load_view('cage_deta', $this->data);
+                break;
+        }
+        return true;
     }
 
     public function modu_inde(){

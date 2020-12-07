@@ -38,7 +38,13 @@ if (isset($data['datos'])) {
                         </div>
                 </div>
 				<div class="col-md-12 same-heigth">
-					<div class="col-md-12">
+				<div class="col-md-4 col-lg-4">
+                            <div class="form-group">
+                                <h4 class="example-title">PROSPECTO:</h4>
+                                <p><?php echo (!empty($result['prospecto'])) ? $result['prospecto'] : '';?> </p>
+                            </div>
+                        </div>
+					<div class="col-md-8">
 					<div class="form-group">
 						<h4 class="example-title">EMAILS:</h4>
 						<?php

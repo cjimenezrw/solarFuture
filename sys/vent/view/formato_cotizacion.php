@@ -125,28 +125,33 @@ if (isset($data)) {
 
 <br>
 <div class="col-md-12 " style="margin-bottom: 10px;">
-    <div class="col-md-4 pull-left"><img style="margin-left:80px;" src="<?php echo IMAGE_LOGO_PDF; ?>" width="150px"></div>
+    <div class="col-md-4 pull-left"><img style="margin-left:40px;" src="<?php echo IMAGE_LOGO_PDF; ?>" width="180px"></div>
 
-    <div class="col-md-2"><p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</p></div>
-
-    <div class="col-md-6" style="text-align: center; margin-left: -70px;">
+ 
+    <div class="col-md-8" style="text-align: right; margin-left: 70px;">
         <div class="" style=" color:black;">
-            <span class="bold" style="font-size: 12px;text-transform: uppercase;"><?php echo $_SESSION['usuario']['sEmpresa'] ?></span><br>
-            <span class="bold" style="font-size: 12px;">COTIZACION</span><br>
+            <span class="bold" style="font-size: 10px;text-transform: uppercase;">Solar Future Manzanillo S.A.S.</span><br>
+            <span class="bold" style="font-size: 10px;">RFC: SFM1905213C3</span><br>
+            <span  style="font-size: 10px;">AV. ELIAS ZAMORA VERDUZCO  #3220 "A"</span><br>
+            <span  style="font-size: 10px;">COLONIA BARRIO NUEVO, MANZANILLO, COL.</span><br>
+            <span style="font-size: 10px;">TEL (314) 1378133 CEL. 314 129 1339</span><br>
         </div>
     </div>
 </div>
 <br>
+<div class="col-md-6">
+    <div  style="font-size:13px;" class="pull-left col-md-4"><b>CLIENTE:</b></div>
+    <div  style="font-size:13px;" class="pull-left col-md-8"><span style="color:#000000;"><?php echo (isset($datos['cliente'])) ? ($datos['cliente']) : 'N/D'; ?></span></div>
+    <br>
+</div>
 <div class="col-md-12" style="font-size:13px;">
     <div class="pull-left col-md-2"><b>FOLIO:</b> <span style="color:#000000;"></span></div>
     <div class="pull-left col-md-3"> <span style="color:#000000;"><?php echo (isset($datos['iFolio'])) ? ($datos['iFolio']) : 'N/D'; ?></span></div>
     
-    <div class="col-md-offset-1 col-md-6 pull-right text-right"><small>FECHA SERVICIO:</small> <small style="text-transform: uppercase;"><?php echo (isset($datos['dFechaCreacion']) && !empty($datos['dFechaCreacion'])) ? $this->obtenerFechaEnLetra($datos['dFechaCreacion']) : 'N/D'; ?></small></div>
-</div>
+ </div>
 
 <div class="col-md-12" style="font-size:13px;">
-    <div class="pull-left col-md-2"><b>VIGENCIA:</b> <span style="color:#000000;"></span></div>
-    <div class="col-md-offset-1 col-md-6 pull-right text-right"><small>FECHA SERVICIO:</small> <small style="text-transform: uppercase;"><?php echo (isset($datos['dFechaVigencia']) && !empty($datos['dFechaVigencia'])) ? $this->obtenerFechaEnLetra($datos['dFechaVigencia']) : 'N/D'; ?></small></div>
+    <div class="col-md-offset-1 col-md-6 pull-right text-right"><small>FECHA VIGENCIA:</small> <small style="text-transform: uppercase;"><?php echo (isset($datos['dFechaVigencia']) && !empty($datos['dFechaVigencia'])) ? $this->obtenerFechaEnLetra($datos['dFechaVigencia']) : 'N/D'; ?></small></div>
     
 </div>
 
@@ -154,11 +159,7 @@ if (isset($data)) {
 
 <div><br></div>
 
-<div class="col-md-6">
-    <div  style="font-size:13px;" class="pull-left col-md-12"><b>CLIENTE:</b></div>
-    <div  style="font-size:13px;" class="pull-left col-md-12"><span style="color:#000000;"><?php echo (isset($datos['cliente'])) ? ($datos['cliente']) : 'N/D'; ?></span></div>
-    <br>
-</div>
+
 
 
 
@@ -170,8 +171,7 @@ if (isset($data)) {
 	<thead>
 	    <tr>
 		<th class="text-center">#</th>
-		<th class="text-center" >Unidad de Medida</th>
-		<th class="text-center" >Servicio</th>
+ 		<th class="text-center" >Servicio</th>
 		<th class="text-center">Cantidad</th>
 		<th class="text-center">P. Unit</th>
 		<th class="text-center">Importe </th>
@@ -182,13 +182,12 @@ if (isset($data)) {
 	<tbody>
 	    <?php
 	    $i = 1;
-	    if (isset($data['cotizacionConceptos'])) {
-		foreach ($data['cotizacionConceptos'] AS $conceptos) {
+	    if (isset($data['conceptosCotizacion'])) {
+		foreach ($data['conceptosCotizacion'] AS $conceptos) {
 		    ?>
 		    <tr>
 			<td style="text-align:center; font-size: 8px; text-transform: uppercase;" ><?php echo $i; ?></td>
-			<td style="text-align:left; font-size: 8px; text-transform: uppercase;" ><?php echo $conceptos['tipoMedida']; ?></td>
-			<td style="text-align:left; font-size: 8px; text-transform: uppercase;" ><?php echo $conceptos['concepto']; ?></td>
+ 			<td style="text-align:left; font-size: 8px; text-transform: uppercase;" ><?php echo $conceptos['concepto']; ?></td>
 			<td style="text-align:right; font-size: 8px; text-transform: uppercase;" ><?php echo number_format($conceptos['fCantidad'], 2); ?></td>
 			<td style="text-align:right; font-size: 8px; text-transform: uppercase;" ><?php echo "$" . number_format($conceptos['fPrecioUnitario'], 2); ?></td>
 			<td style="text-align:right; font-size: 8px; text-transform: uppercase;" ><?php echo "$" . number_format($conceptos['fImporte'], 2); ?></td>
@@ -212,8 +211,7 @@ if (isset($data)) {
 	    ?>
 	    <tr>
 		<td style="text-align:right; font-size: 8px; text-transform: uppercase;" ></td>
-		<td style="text-align:right; font-size: 8px; text-transform: uppercase;" ></td>
-		<td style="text-align:right; font-size: 8px; text-transform: uppercase;" ></td>
+ 		<td style="text-align:right; font-size: 8px; text-transform: uppercase;" ></td>
 		<td style="text-align:right; font-size: 8px; text-transform: uppercase;" ></td>
 		<td style="text-align:right; font-size: 8px; text-transform: uppercase;" ></td>
 		<td style="text-align:right; font-size: 8px; text-transform: uppercase;" ></td>
@@ -222,8 +220,7 @@ if (isset($data)) {
 	    </tr>
 	    <tr>
 		<td style="text-align:right; font-size: 8px; text-transform: uppercase;" ></td>
-		<td style="text-align:right; font-size: 8px; text-transform: uppercase;" ></td>
-		<td style="text-align:right; font-size: 8px; text-transform: uppercase;" ></td>
+ 		<td style="text-align:right; font-size: 8px; text-transform: uppercase;" ></td>
 		<td style="text-align:right; font-size: 8px; text-transform: uppercase;" ></td>
 		<td style="text-align:right; font-size: 8px; text-transform: uppercase;" ></td>
 		<td style="text-align:right; font-size: 8px; text-transform: uppercase;" ></td>
@@ -232,8 +229,7 @@ if (isset($data)) {
 	    </tr>
 	    <tr>
 		<td style="text-align:right; font-size: 8px; text-transform: uppercase;" ></td>
-		<td style="text-align:right; font-size: 8px; text-transform: uppercase;" ></td>
-		<td style="text-align:right; font-size: 8px; text-transform: uppercase;" ></td>
+ 		<td style="text-align:right; font-size: 8px; text-transform: uppercase;" ></td>
 		<td style="text-align:right; font-size: 8px; text-transform: uppercase;" ></td>
 		<td style="text-align:right; font-size: 8px; text-transform: uppercase;" ></td>
 		<td style="text-align:right; font-size: 8px; text-transform: uppercase;" ></td>
@@ -242,8 +238,7 @@ if (isset($data)) {
 	    </tr>
 	    <tr>
 		<td style="text-align:right; font-size: 8px; text-transform: uppercase;" ></td>
-		<td style="text-align:right; font-size: 8px; text-transform: uppercase;" ></td>
-		<td style="text-align:right; font-size: 8px; text-transform: uppercase;" ></td>
+ 		<td style="text-align:right; font-size: 8px; text-transform: uppercase;" ></td>
 		<td style="text-align:right; font-size: 8px; text-transform: uppercase;" ></td>
 		<td style="text-align:right; font-size: 8px; text-transform: uppercase;" ></td>
 		<td style="text-align:right; font-size: 8px; text-transform: uppercase;" ></td>
@@ -252,8 +247,7 @@ if (isset($data)) {
 	    </tr>
 	    <tr>
 		<td style="text-align:right; font-size: 8px; text-transform: uppercase;" ></td>
-		<td style="text-align:right; font-size: 8px; text-transform: uppercase;" ></td>
-		<td style="text-align:right; font-size: 8px; text-transform: uppercase;" ></td>
+ 		<td style="text-align:right; font-size: 8px; text-transform: uppercase;" ></td>
 		<td style="text-align:right; font-size: 8px; text-transform: uppercase;" ></td>
 		<td style="text-align:right; font-size: 8px; text-transform: uppercase;" ></td>
 		<td style="text-align:right; font-size: 8px; text-transform: uppercase;" ></td>
@@ -264,8 +258,14 @@ if (isset($data)) {
 	</tbody>
     </table>
 </div>
+<div class="col-md-12" >
+    <div class="condiciones" style="font-size: 10px;">
+        <span>PRECIOS YA INCLUYEN IVA(16%). SE REQUIERE EL 70% DE LA COTIZACION. PRECIOS EN MONEDA NACIONAL (MXN)</span><br>
+        
+    </div>
 
-<div class="col-md-12" style="display: none;">
+</div>
+<div class="col-md-12" >
     <p><b>Condiciones</b></p>
     <div class="condiciones" style="font-size: 12px;">
         <span>1.- CONDICION 1</span><br>
@@ -282,20 +282,5 @@ if (isset($data)) {
 </div>
 <br>
 
-<div class="col-md-12" style="text-align: center;">
-    <div class="col-md-4" style="text-align: center">
-	<p style='font-size: 10px'><b>CLIENTE</b></p><br>
-        <label><b>_________________________</b></label><br>
-        <p style='font-size: 8px'>FIRMA Y NOMBRE <br> SELLO</p><br>
-    </div>
-    <div class="col-md-4" style="text-align: center">&nbsp;
-    </div>
-    <div class="col-md-4" style="text-align: center">
-	<p style='font-size: 10px'><b>MIP TERMINAL</b></p><br>
-        <label><b>_________________________</b></label><br>
-        <p style='font-size: 8px'><b><?php echo $data['datos']['nombreCreacion']; ?></b></p>
-	<p style='font-size: 8px'>FIRMA Y NOMBRE <br> SELLO</p><br>
-    </div>
-    <br><br>
-</div>
+
 

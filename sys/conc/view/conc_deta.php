@@ -49,13 +49,13 @@ if (isset($data['datos'])) {
                     <div class="col-md-4 col-lg-4">
                       <div class="form-group">
                           <h4 class="example-title">PRECIO DE COMPRA</h4>
-                          <p><?php echo (!empty($result['fPrecioCompra'])) ? $result['fPrecioCompra'] : 'N/D'; ?> </p>
+                          <p><?php echo (!empty($result['fPrecioCompra'])) ? number_format($result['fPrecioCompra'],2) : 'N/D'; ?> </p>
                       </div>
                     </div>
                     <div class="col-md-4 col-lg-4">
                       <div class="form-group">
                           <h4 class="example-title">PRECIO DE VENTA</h4>
-                          <p><?php echo (!empty($result['fPrecioVenta'])) ? $result['fPrecioVenta'] : 'N/D'; ?> </p>
+                          <p><?php echo (!empty($result['fPrecioVenta'])) ? number_format($result['fPrecioVenta'],2) : 'N/D'; ?> </p>
                       </div>
                     </div>
                 </div>
@@ -63,7 +63,12 @@ if (isset($data['datos'])) {
 
                 <div class="col-md-12 clearfix"><hr></div>
                 <div class="col-md-12 same-heigth">
-                
+                <div class="col-md-4 col-lg-4">
+                      <div class="form-group">
+                          <h4 class="example-title">Kwh</h4>
+                          <p><?php echo (!empty($result['fKwh'])) ? number_format($result['fKwh'],2) : 'N/D'; ?> </p>
+                      </div>
+                    </div>
                     <div class="col-md-4 col-lg-4">
                       <div class="form-group">
                           <h4 class="example-title">PROVEEDOR</h4>

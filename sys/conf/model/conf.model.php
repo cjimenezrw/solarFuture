@@ -37,7 +37,6 @@ Class Conf_Model Extends DLOREAN_Model {
             return FALSE;
         }
         $record = Conn::fetch_assoc($result);
-        Conn::free_result($result);
         return $record;
     }
 
@@ -65,7 +64,7 @@ Class Conf_Model Extends DLOREAN_Model {
             " . escape($this->usuario['skRolDigitalizacion']) . ",
             '" . $_SESSION['usuario']['skUsuario'] . "',
             '" . $this->sysController . "' )";
-
+           
         //$this->log($sql, true);
         $result = Conn::query($sql);
         //$codigo = Conn::fetch_assoc($result);
@@ -73,8 +72,8 @@ Class Conf_Model Extends DLOREAN_Model {
             return false;
         }
         $record = Conn::fetch_assoc($result);
-        Conn::free_result($result);
-        return $record['skUsuario'];
+       
+         return $record['skUsuario'];
     }
 
     public function acciones_usuarios_perfiles() {
@@ -90,8 +89,7 @@ Class Conf_Model Extends DLOREAN_Model {
             return false;
         }
         $record = Conn::fetch_assoc($result);
-        Conn::free_result($result);
-        return $record['skUsuarioPerfil'];
+         return $record['skUsuarioPerfil'];
     }
 
 
@@ -115,8 +113,7 @@ Class Conf_Model Extends DLOREAN_Model {
             return FALSE;
         }
         $record = Conn::fetch_assoc($result);
-        Conn::free_result($result);
-        return $record;
+         return $record;
     }
  
  
@@ -146,7 +143,6 @@ Class Conf_Model Extends DLOREAN_Model {
             utf8($row);
             array_push($data, $row);
         }
-        Conn::free_result($result);
         return $data;
     }
 
@@ -187,10 +183,8 @@ Class Conf_Model Extends DLOREAN_Model {
                 array_push($sucursales, $sucursal);
             }
             $row['sucursales'] = $sucursales;
-            Conn::free_result($result_sucursales);
             array_push($data, $row);
         }
-        Conn::free_result($result);
         return $data;
     }
 
@@ -305,7 +299,6 @@ Class Conf_Model Extends DLOREAN_Model {
             return false;
         }
         $record = Conn::fetch_assoc($result);
-        Conn::free_result($result);
         return $record['skPerfil'];
     }
 
@@ -333,7 +326,6 @@ Class Conf_Model Extends DLOREAN_Model {
             return FALSE;
         }
         $record = Conn::fetch_assoc($result);
-        Conn::free_result($result);
         return $record;
     }
 
@@ -365,7 +357,6 @@ Class Conf_Model Extends DLOREAN_Model {
             utf8($row);
             array_push($r, $row);
         }
-        Conn::free_result($result);
         return $r;
     }
 
@@ -397,7 +388,6 @@ Class Conf_Model Extends DLOREAN_Model {
             utf8($row);
             array_push($r, $row);
         }
-        Conn::free_result($result);
         return $r;
     }
 
@@ -520,7 +510,6 @@ Class Conf_Model Extends DLOREAN_Model {
                  return false;
              }
              $record = Conn::fetch_assoc($result);
-             Conn::free_result($result);
              return $record['skCatalogoSistema'];
      }
 
@@ -1024,7 +1013,6 @@ Class Conf_Model Extends DLOREAN_Model {
             return $result;
         }
         $record = Conn::fetch_assoc($result);
-        Conn::free_result($result);
         return $record;
     }
 

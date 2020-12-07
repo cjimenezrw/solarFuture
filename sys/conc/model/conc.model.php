@@ -34,6 +34,7 @@ Class Conc_Model Extends DLOREAN_Model {
             " .escape(isset($this->conc['fPrecioCompra']) ? $this->conc['fPrecioCompra'] : NULL) . ",
             " .escape(isset($this->conc['fPrecioVenta']) ? $this->conc['fPrecioVenta'] : NULL) . ",
             " .escape(isset($this->conc['skImpuestoConcepto']) ? $this->conc['skImpuestoConcepto'] : NULL) . ",
+            " .escape(isset($this->conc['fKwh']) ? $this->conc['fKwh'] : NULL) . ",
             " .escape(isset($this->conc['axn']) ? $this->conc['axn'] : NULL) . ",
             '" . $_SESSION['usuario']['skUsuario'] . "',
             '" . $this->sysController . "' )";
@@ -71,6 +72,7 @@ Class Conc_Model Extends DLOREAN_Model {
                 cc.skUnidadMedida,
                 cc.iClaveProductoServicio,
                 cc.skEmpresaSocioProveedor,
+                cc.fKwh,
                 ce.sNombre AS estatus,
                 ce.sIcono AS estatusIcono,
                 ce.sColor AS estatusColor,

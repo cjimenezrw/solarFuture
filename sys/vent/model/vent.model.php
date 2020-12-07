@@ -72,6 +72,7 @@ Class Vent_Model Extends DLOREAN_Model {
 
         $sql = "SELECT 
         oc.skCotizacion,
+        oc.iFolio,
         oc.dFechaVigencia,
         oc.skDivisa,
         oc.skEmpresaSocioCliente,
@@ -84,10 +85,12 @@ Class Vent_Model Extends DLOREAN_Model {
         oc.fImporteTotal,
         oc.fTipoCambio,
         cec.sNombre AS cliente,
+        cp.sNombreContacto AS prospecto,
         cec.sRFC AS clienteRFC,
         cu.sNombre AS usuarioCreacion
         FROM ope_cotizaciones oc 
         LEFT JOIN rel_empresasSocios resc ON resc.skEmpresaSocio = oc.skEmpresaSocioCliente
+        LEFT JOIN cat_prospectos cp ON cp.skProspecto = oc.skProspecto
         LEFT JOIN cat_empresas cec ON cec.skEmpresa = resc.skEmpresa
         LEFT JOIN cat_usuarios cu ON cu.skUsuario = oc.skUsuarioCreacion
  
@@ -119,6 +122,8 @@ Class Vent_Model Extends DLOREAN_Model {
                         cse.fPrecioUnitario,
                         cse.fDescuento,
                         cse.fImporte,
+                        rcir.sValor AS RETIVA,
+                        rcit.sValor AS TRAIVA,
                         cc.sNombre AS concepto,
                         cum.sNombre as tipoMedida,
                         (SELECT fImporte FROM rel_cotizaciones_conceptosImpuestos rps where rps.skCotizacion = cse.skCotizacion AND rps.skConcepto = cse.skConcepto AND rps.skImpuesto = 'RETIVA' AND rps.skCotizacionConcepto = cse.skCotizacionConcepto )AS fImpuestosRetenidos,
@@ -126,6 +131,8 @@ Class Vent_Model Extends DLOREAN_Model {
 								
 		                FROM rel_cotizaciones_conceptos cse 
                         INNER JOIN cat_conceptos cc ON cc.skConcepto = cse.skConcepto
+                        LEFT JOIN rel_conceptos_impuestos rcir ON rcir.skConcepto = cse.skConcepto AND rcir.skImpuesto = 'RETIVA'
+                        LEFT JOIN rel_conceptos_impuestos rcit ON rcit.skConcepto = cse.skConcepto AND rcit.skImpuesto = 'TRAIVA'
                         LEFT JOIN cat_unidadesMedidaSAT cum ON cum.skUnidadMedida = cse.skTipoMedida
 		                WHERE cse.skCotizacion = " . escape($this->vent['skCotizacion']);
 
@@ -280,6 +287,40 @@ Class Vent_Model Extends DLOREAN_Model {
 
         if (isset($this->vent['skEmpresaSocio']) && !empty($this->vent['skEmpresaSocio'])) {
             $sql .= " WHERE N1.id = " . escape($this->vent['skEmpresaSocio']);
+        }
+
+        $sql .= " ORDER BY N1.nombre ASC ";
+       
+        $result = Conn::query($sql);
+        if (!$result) {
+            return FALSE;
+        }
+        $records = Conn::fetch_assoc_all($result);
+        utf8($records);
+        return $records;
+    }
+
+     /**
+     * get_empresas
+     *
+     * Consulta Empresas Socios
+     *
+     * @author Luis Valdez <lvaldez@softlab.com.mx>
+     * @return Array Datos | False
+     */
+    public function get_prospectos() {
+
+        $sql = "SELECT N1.* FROM (
+            SELECT
+            cp.skProspecto AS id, cp.sNombreContacto AS nombre
+            FROM cat_prospectos cp
+            WHERE cp.skEstatus = 'NU' "; 
+
+      
+        $sql .= " ) AS N1 ";
+
+        if (isset($this->vent['sNombre']) && !empty(trim($this->vent['sNombre']))) {
+            $sql .= " WHERE N1.nombre LIKE '%" . trim($this->vent['sNombre']) . "%' ";
         }
 
         $sql .= " ORDER BY N1.nombre ASC ";

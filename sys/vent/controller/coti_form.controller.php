@@ -351,6 +351,19 @@ Class Coti_form_Controller Extends Vent_Model {
         }
         return parent::get_empresas();
     }
+    /**
+     * get_prospectos
+     *
+     * Obtener prospectos
+     *
+     * @author Luis Valdez <lvaldez@woodward.com.mx>
+     * @return Array EmpresasSocios
+     */
+    public function get_prospectos(){
+        $this->vent['sNombre'] = (isset($_POST['val']) ? $_POST['val'] : NULL);
+        
+        return parent::get_prospectos();
+    }
 
     
     public function get_medidas(){

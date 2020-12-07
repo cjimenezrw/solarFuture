@@ -42,7 +42,7 @@ if (isset($data['datos'])) {
                       </div>
                    </div>
                    <div class="col-md-4 col-lg-4">
-                            <div class="form-group">
+                        <div class="form-group">
                             <h4 class="example-title">CLIENTE:</h4>
                             <select name="skEmpresaSocioCliente" id="skEmpresaSocioCliente" class="form-control" data-plugin="select2" data-ajax--cache="true" >
                                 <?php
@@ -55,6 +55,20 @@ if (isset($data['datos'])) {
                             </select>
                             </div>
                         </div>
+                    <div class="col-md-4 col-lg-4">
+                    <div class="form-group">
+                        <h4 class="example-title">PROSPECTO:</h4>
+                        <select name="skProspecto" id="skProspecto" class="form-control" data-plugin="select2" data-ajax--cache="true" >
+                            <?php
+                            if (!empty($result['skProspecto'])) {
+                                ?>
+                                <option value="<?php echo $result['skProspecto']; ?>" selected="selected"><?php echo $result['prospecto']; ?></option>
+                                <?php
+                            }//ENDIF
+                            ?>
+                        </select>
+                        </div>
+                    </div>
                               
                               
                                 
@@ -506,6 +520,7 @@ function addCommas(amount) {
                         core.autocomplete2('#skEmpresaSocioCliente', 'get_empresas', window.location.href, 'Cliente',{
                             skEmpresaTipo : '["CLIE"]'
                         });
+                        core.autocomplete2('#skProspecto', 'get_prospectos', window.location.href, 'Prospecto');
                         $("#skDivisa").select2({placeholder: "Moneda", allowClear: true });
 
 

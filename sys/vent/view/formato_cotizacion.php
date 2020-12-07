@@ -260,8 +260,7 @@ if (isset($data)) {
 </div>
 <div class="col-md-12" >
     <div class="condiciones" style="font-size: 10px;">
-        <span>PRECIOS YA INCLUYEN IVA(16%). SE REQUIERE EL 70% DE LA COTIZACION. PRECIOS EN MONEDA NACIONAL (MXN)</span><br>
-        
+        <span class="bold" ><?php echo (isset($datos['sCondicion'])) ? ($datos['sCondicion']) : 'N/D'; ?></span><br>
     </div>
 
 </div>

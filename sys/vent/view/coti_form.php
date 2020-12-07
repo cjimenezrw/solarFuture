@@ -78,7 +78,13 @@ if (isset($data['datos'])) {
                      <hr>
                  </div>
                  <div class="row row-lg col-lg-12">
-                     <div class="col-md-8 col-lg-8">
+                 <div class="col-md-12 col-lg-12">
+                         <div class="form-group">
+                             <h4 class="example-title"> Condicion</h4>
+                             <textarea class="form-control"  name="sCondicion" placeholder="Condicion"><?php echo (isset($result['sCondicion'])) ? ($result['sCondicion']) : ''; ?></textarea>
+                         </div>
+                     </div>
+                     <div class="col-md-12 col-lg-12">
                          <div class="form-group">
                              <h4 class="example-title"> Descripci&oacute;n</h4>
                              <textarea class="form-control"  name="sObservaciones" placeholder="Descripcion de la Cotizacion"><?php echo (isset($result['sObservaciones'])) ? ($result['sObservaciones']) : ''; ?></textarea>

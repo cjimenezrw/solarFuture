@@ -22,6 +22,9 @@ Class Coti_deta_Controller Extends Vent_Model {
         $this->data['datos'] =  parent::_getCotizacion();
         $this->data['conceptosCotizacion']  = parent::_getCotizacionConceptos();
         $this->data['cotizacionCorreos']  = parent::_getCotizacionCorreos();
+        $this->data['cotizacionInformacionProducto'] = parent::_getCotizacionInformacionProducto();
+        $this->data['cotizacionTerminosCondiciones'] = parent::_getCotizacionTerminosCondiciones();
+
 
 
  
@@ -39,6 +42,12 @@ Class Coti_deta_Controller Extends Vent_Model {
         ob_end_clean();
     
         parent::pdf([
+            
+            'waterMark' => [
+            'imgsrc' => IMAGE_WATERMARK_PDF,
+            'opacity' => .09,
+            'size' => [150, 60]
+            ],
             'content' => $content,
             'header' => '<div></div>',
             'defaultFooter' => false,

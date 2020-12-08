@@ -62,6 +62,19 @@ Class Coti_form_Controller Extends Vent_Model {
                Conn::rollback($this->idTran);
                 return $this->data;
             }
+            // Guardar informacion Producto
+            $guardar_cotizacion_productosServicios = $this->guardar_cotizacion_productosServicios();
+            if(!$guardar_cotizacion_productosServicios['success']){
+               Conn::rollback($this->idTran);
+                return $this->data;
+            }
+
+             // Guardar terminos Condiciones
+             $guardar_cotizacion_terminosCondiciones= $this->guardar_cotizacion_terminosCondiciones();
+             if(!$guardar_cotizacion_terminosCondiciones['success']){
+                Conn::rollback($this->idTran);
+                 return $this->data;
+             }
           
 
         //Conn::commit($this->idTran);
@@ -205,6 +218,75 @@ Class Coti_form_Controller Extends Vent_Model {
             $this->data['message'] = 'CONCEPTOS GUARDADOS CON EXITO';
             return $this->data;
         }
+
+         /**
+         * guardar_cotizacion_productosServicios
+         *
+         * Guardar productosServicios
+         *
+         * @author Luis Alberto Valdez Alvarez <lvaldez@woodward.com.mx>
+         * @return Array ['success'=>NULL,'message'=>NULL,'datos'=>NULL]
+         */
+        public function guardar_cotizacion_productosServicios(){
+            $this->data['success'] = TRUE;
+            $this->vent['axn'] = 'guardar_cotizacion_informacionProductos';
+          
+            $delete="DELETE FROM rel_cotizacion_informacionProducto WHERE skCotizacion = '". $this->vent['skCotizacion'] ."'";
+            $result = Conn::query($delete);
+           
+            if(!empty($this->vent['skInformacionProductosServicios'])){
+            
+
+                foreach ($this->vent['skInformacionProductosServicios'] AS $informacionProducto){
+                    $this->vent['axn'] = 'guardar_cotizacion_informacionProductos';
+                    $this->vent['skInformacionProductoServicio']         = (!empty($informacionProducto) ? $informacionProducto : NULL);         
+                     $stpCUD_cotizaciones = parent::stpCUD_cotizaciones();
+                    if(!$stpCUD_cotizaciones || isset($stpCUD_cotizaciones['success']) && $stpCUD_cotizaciones['success'] != 1){
+                        $this->data['success'] = FALSE;
+                        $this->data['message'] = 'HUBO UN ERROR AL GUARDAR LOS DATOS DE  LA INFORMACION PRODUCTOS';
+                        return $this->data;
+                    }
+                }
+            }
+            
+            $this->data['success'] = TRUE;
+            $this->data['message'] = 'INFORMACION PRODUCTO GUARDADOS CON EXITO';
+            return $this->data;
+        }
+        /**
+         * guardar_cotizacion_terminosCondiciones
+         *
+         * Guardar productosServicios
+         *
+         * @author Luis Alberto Valdez Alvarez <lvaldez@woodward.com.mx>
+         * @return Array ['success'=>NULL,'message'=>NULL,'datos'=>NULL]
+         */
+        public function guardar_cotizacion_terminosCondiciones(){
+            $this->data['success'] = TRUE;
+            $this->vent['axn'] = 'guardar_cotizacion_terminosCondiciones';
+          
+            $delete="DELETE FROM rel_cotizaciones_terminosCondiciones WHERE skCotizacion = '". $this->vent['skCotizacion'] ."'";
+            $result = Conn::query($delete);
+           
+            if(!empty($this->vent['terminosCondiciones'])){
+            
+
+                foreach ($this->vent['terminosCondiciones'] AS $terminosCondiciones){
+                    $this->vent['axn'] = 'guardar_cotizacion_terminosCondiciones';
+                    $this->vent['skCatalogoSistemaOpciones']         = (!empty($terminosCondiciones) ? $terminosCondiciones : NULL);         
+                     $stpCUD_cotizaciones = parent::stpCUD_cotizaciones();
+                    if(!$stpCUD_cotizaciones || isset($stpCUD_cotizaciones['success']) && $stpCUD_cotizaciones['success'] != 1){
+                        $this->data['success'] = FALSE;
+                        $this->data['message'] = 'HUBO UN ERROR AL GUARDAR LOS DATOS DE  LA TERMINOS CONDICIONES';
+                        return $this->data;
+                    }
+                }
+            }
+            
+            $this->data['success'] = TRUE;
+            $this->data['message'] = 'TERMINOS CONDICIONES GUARDADOS CON EXITO';
+            return $this->data;
+        }
    
     /**
        * validar_datos_entrada
@@ -316,7 +398,8 @@ Class Coti_form_Controller Extends Vent_Model {
     public function getDatos() {
         $this->data = ['success' => TRUE, 'message' => NULL, 'datos' => NULL];
         $this->vent['skCotizacion'] = (isset($_GET['p1']) && !empty($_GET['p1'])) ? $_GET['p1'] : NULL;
-         
+        $this->data['informacionProducto'] = parent::_getInformacionProducto();
+        $this->data['terminosCondiciones'] = parent::_getTerminosCondiciones();
         $this->data['divisas'] = parent::_getDivisas();
 
         if (!empty($this->vent['skCotizacion'])) {
@@ -325,6 +408,11 @@ Class Coti_form_Controller Extends Vent_Model {
             $this->data['cotizacionesConceptos'] = $cotizacionConceptos;
             $cotizacionCorreos= parent::_getCotizacionCorreos();
             $this->data['cotizacionesCorreos'] = $cotizacionCorreos;
+
+            $this->data['cotizacionInformacionProducto'] = parent::_getCotizacionInformacionProducto();
+            $this->data['cotizacionTerminosCondiciones'] = parent::_getCotizacionTerminosCondiciones();
+            
+            
 
             
         }
@@ -350,6 +438,19 @@ Class Coti_form_Controller Extends Vent_Model {
             $this->vent['skEmpresaTipo'] = $skEmpresaTipo;
         }
         return parent::get_empresas();
+    }
+    /**
+     * get_prospectos
+     *
+     * Obtener prospectos
+     *
+     * @author Luis Valdez <lvaldez@woodward.com.mx>
+     * @return Array EmpresasSocios
+     */
+    public function get_prospectos(){
+        $this->vent['sNombre'] = (isset($_POST['val']) ? $_POST['val'] : NULL);
+        
+        return parent::get_prospectos();
     }
 
     

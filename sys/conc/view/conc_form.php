@@ -83,6 +83,12 @@ if (isset($data['datos'])) {
                             </select>
                             </div>
                         </div>
+                        <div class="col-md-4 col-lg-4">
+                        <div class="form-group">
+                            <h4 class="example-title">KHW  </h4>
+                            <input class="form-control" name="fKwh" value="<?php echo (isset($result['fKwh'])) ? $result['fKwh'] : ''; ?>" placeholder="KWH" autocomplete="off" type="text" >
+                        </div>
+                    </div>
                  </div>
                  <div class="row row-lg col-lg-12">
                      <hr>

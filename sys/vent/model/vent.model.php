@@ -30,6 +30,7 @@ Class Vent_Model Extends DLOREAN_Model {
             " .escape(isset($this->vent['skEmpresaSocioCliente']) ? $this->vent['skEmpresaSocioCliente'] : NULL) . ",
             " .escape(isset($this->vent['skProspecto']) ? $this->vent['skProspecto'] : NULL) . ",
             " .escape(isset($this->vent['sObservaciones']) ? $this->vent['sObservaciones'] : NULL) . ",
+            " .escape(isset($this->vent['sCondicion']) ? $this->vent['sCondicion'] : NULL) . ",
             " .escape(isset($this->vent['fImporteSubtotal']) ? $this->vent['fImporteSubtotal'] : NULL) . ",
             " .escape(isset($this->vent['fDescuento']) ? $this->vent['fDescuento'] : NULL) . ",
             " .escape(isset($this->vent['fImpuestosTrasladados']) ? $this->vent['fImpuestosTrasladados'] : NULL) . ",
@@ -43,7 +44,8 @@ Class Vent_Model Extends DLOREAN_Model {
             " .escape(isset($this->vent['fPrecioUnitario']) ? $this->vent['fPrecioUnitario'] : NULL) . ",
             " .escape(isset($this->vent['fImporte']) ? $this->vent['fImporte'] : NULL) . ",
             " .escape(isset($this->vent['sCorreo']) ? $this->vent['sCorreo'] : NULL) . ",
-           
+            " .escape(isset($this->vent['skInformacionProductoServicio']) ? $this->vent['skInformacionProductoServicio'] : NULL) . ",
+            " .escape(isset($this->vent['skCatalogoSistemaOpciones']) ? $this->vent['skCatalogoSistemaOpciones'] : NULL) . ",
             " .escape(isset($this->vent['axn']) ? $this->vent['axn'] : NULL) . ",
             '" . $_SESSION['usuario']['skUsuario'] . "',
             '" . $this->sysController . "' )";
@@ -72,11 +74,13 @@ Class Vent_Model Extends DLOREAN_Model {
 
         $sql = "SELECT 
         oc.skCotizacion,
+        oc.iFolio,
         oc.dFechaVigencia,
         oc.skDivisa,
         oc.skEmpresaSocioCliente,
         oc.skProspecto,
         oc.sObservaciones,
+        oc.sCondicion,
         oc.fImporteSubtotal,
         oc.fDescuento,
         oc.fImpuestosTrasladados,
@@ -84,10 +88,12 @@ Class Vent_Model Extends DLOREAN_Model {
         oc.fImporteTotal,
         oc.fTipoCambio,
         cec.sNombre AS cliente,
+        cp.sNombreContacto AS prospecto,
         cec.sRFC AS clienteRFC,
         cu.sNombre AS usuarioCreacion
         FROM ope_cotizaciones oc 
         LEFT JOIN rel_empresasSocios resc ON resc.skEmpresaSocio = oc.skEmpresaSocioCliente
+        LEFT JOIN cat_prospectos cp ON cp.skProspecto = oc.skProspecto
         LEFT JOIN cat_empresas cec ON cec.skEmpresa = resc.skEmpresa
         LEFT JOIN cat_usuarios cu ON cu.skUsuario = oc.skUsuarioCreacion
  
@@ -119,6 +125,8 @@ Class Vent_Model Extends DLOREAN_Model {
                         cse.fPrecioUnitario,
                         cse.fDescuento,
                         cse.fImporte,
+                        rcir.sValor AS RETIVA,
+                        rcit.sValor AS TRAIVA,
                         cc.sNombre AS concepto,
                         cum.sNombre as tipoMedida,
                         (SELECT fImporte FROM rel_cotizaciones_conceptosImpuestos rps where rps.skCotizacion = cse.skCotizacion AND rps.skConcepto = cse.skConcepto AND rps.skImpuesto = 'RETIVA' AND rps.skCotizacionConcepto = cse.skCotizacionConcepto )AS fImpuestosRetenidos,
@@ -126,6 +134,8 @@ Class Vent_Model Extends DLOREAN_Model {
 								
 		                FROM rel_cotizaciones_conceptos cse 
                         INNER JOIN cat_conceptos cc ON cc.skConcepto = cse.skConcepto
+                        LEFT JOIN rel_conceptos_impuestos rcir ON rcir.skConcepto = cse.skConcepto AND rcir.skImpuesto = 'RETIVA'
+                        LEFT JOIN rel_conceptos_impuestos rcit ON rcit.skConcepto = cse.skConcepto AND rcit.skImpuesto = 'TRAIVA'
                         LEFT JOIN cat_unidadesMedidaSAT cum ON cum.skUnidadMedida = cse.skTipoMedida
 		                WHERE cse.skCotizacion = " . escape($this->vent['skCotizacion']);
 
@@ -293,6 +303,40 @@ Class Vent_Model Extends DLOREAN_Model {
         return $records;
     }
 
+     /**
+     * get_empresas
+     *
+     * Consulta Empresas Socios
+     *
+     * @author Luis Valdez <lvaldez@softlab.com.mx>
+     * @return Array Datos | False
+     */
+    public function get_prospectos() {
+
+        $sql = "SELECT N1.* FROM (
+            SELECT
+            cp.skProspecto AS id, cp.sNombreContacto AS nombre
+            FROM cat_prospectos cp
+            WHERE cp.skEstatus = 'NU' "; 
+
+      
+        $sql .= " ) AS N1 ";
+
+        if (isset($this->vent['sNombre']) && !empty(trim($this->vent['sNombre']))) {
+            $sql .= " WHERE N1.nombre LIKE '%" . trim($this->vent['sNombre']) . "%' ";
+        }
+
+        $sql .= " ORDER BY N1.nombre ASC ";
+       
+        $result = Conn::query($sql);
+        if (!$result) {
+            return FALSE;
+        }
+        $records = Conn::fetch_assoc_all($result);
+        utf8($records);
+        return $records;
+    }
+
     /**
      * consultar_tiposMedidas
      *
@@ -404,6 +448,73 @@ Class Vent_Model Extends DLOREAN_Model {
         }
         return Conn::fetch_assoc_all($result);
     }
+
+
+    /**
+     * _getInformacionProducto
+     *
+     * Obtiene los tipos de procesos activos para servicios
+     *
+     * @author Luis Alberto Valdez Alvarez <lvaldez@woodward.com.mx>
+     * @return object | false Retorna el objeto de resultados de la consulta o false si algo falla.
+     */
+    public function _getInformacionProducto() {
+        $sql = "SELECT skInformacionProductoServicio,sNombre AS informacionProducto FROM cat_informacionProductoServicio
+        WHERE skEstatus = 'AC' ";
+
+
+        $result = Conn::query($sql);
+        if (!$result) {
+            return FALSE;
+        }
+        return Conn::fetch_assoc_all($result);
+    }
+
+    public function _getCotizacionInformacionProducto() {
+        $select = "SELECT cip.skInformacionProductoServicio,sNombre,sDescripcion,sImagen FROM rel_cotizacion_informacionProducto rci
+        LEFT JOIN cat_informacionProductoServicio cip ON cip.skInformacionProductoServicio = rci.skInformacionProductoServicio
+         where rci.skCotizacion = " . escape($this->vent['skCotizacion']);
+        $result = Conn::query($select);
+        if (!$result) {
+            return FALSE;
+        }
+        return Conn::fetch_assoc_all($result);
+    }
+
+    /**
+     * _getTerminosCondiciones
+     *
+     * Obtiene los tipos de procesos activos para servicios
+     *
+     * @author Luis Alberto Valdez Alvarez <lvaldez@woodward.com.mx>
+     * @return object | false Retorna el objeto de resultados de la consulta o false si algo falla.
+     */
+    public function _getTerminosCondiciones() {
+        $sql = "SELECT skCatalogoSistemaOpciones,sNombre AS terminoCondicion 
+        FROM rel_catalogosSistemasOpciones
+        WHERE skEstatus = 'AC' AND skCatalogoSistema = 'TERCOT' ORDER BY sNombre ASC ";
+
+
+        $result = Conn::query($sql);
+        if (!$result) {
+            return FALSE;
+        }
+        return Conn::fetch_assoc_all($result);
+    }
+
+    public function _getCotizacionTerminosCondiciones() {
+        $select = "SELECT rci.skCatalogoSistemaOpciones,rcs.sNombre AS  terminoCondicion
+        FROM rel_cotizaciones_terminosCondiciones rci
+        LEFT JOIN rel_catalogosSistemasOpciones rcs ON rcs.skCatalogoSistemaOpciones = rci.skCatalogoSistemaOpciones AND rcs.skCatalogoSistema = 'TERCOT'
+         where rci.skCotizacion = " . escape($this->vent['skCotizacion'])." ORDER BY rcs.sNombre ASC ";
+          
+        $result = Conn::query($select);
+        if (!$result) {
+            return FALSE;
+        }
+        return Conn::fetch_assoc_all($result);
+    }
+
 
       
 

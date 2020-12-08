@@ -294,7 +294,8 @@ if (isset($data['cotizacionInformacionProducto'])) {
         ?>
         <div class="col-md-12">
             <div  style="font-size:13px;" class="pull-left col-md-4">
-            <?php echo (!empty($rutaImgen)) ? '<img src="'.$rutaImgen.'" alt="'.$infoProductos['sNombre'].'" width="200" height="200">' : 'N/D'; ?>
+           
+             <?php echo (!empty($rutaImgen)) ? '<img src="'.$rutaImgen.'" alt="'.$infoProductos['sNombre'].'" width="200" height="200">' : 'N/D'; ?>
             </div>
             <div  style="font-size:13px;" class="pull-left col-md-8"><span style="color:#000000;"><?php echo (isset($infoProductos['sNombre'])) ? ($infoProductos['sNombre']) : 'N/D'; ?></span></div>
             <br>

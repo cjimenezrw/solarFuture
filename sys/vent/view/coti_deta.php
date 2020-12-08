@@ -65,9 +65,20 @@ if (isset($data['datos'])) {
 					</div>
 					</div>
 				</div>
+				<div class="col-md-12 clearfix"><hr></div>
+				<div class="col-md-12 same-heigth">
+                  <div class="col-md-12 col-lg-12">
+      								<div class="form-group">
+      										<h4 class="example-title">CONDICION:</h4>
+      										<p><?php echo (!empty($result['sCondicion'])) ? $result['sCondicion'] : 'N/D'; ?> </p>
+      								</div>
+      						</div>
+
+
+      			</div>
                 <div class="col-md-12 clearfix"><hr></div>
                 <div class="col-md-12 same-heigth">
-                  <div class="col-md-12 col-lg-8">
+                  <div class="col-md-12 col-lg-12">
       								<div class="form-group">
       										<h4 class="example-title">OBSERVACIONES:</h4>
       										<p><?php echo (!empty($result['sObservaciones'])) ? $result['sObservaciones'] : 'N/D'; ?> </p>

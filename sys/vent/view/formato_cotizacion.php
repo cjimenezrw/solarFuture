@@ -125,7 +125,7 @@ if (isset($data)) {
 
 <br>
 <div class="col-md-12 " style="margin-bottom: 10px;">
-    <div class="col-md-4 pull-left"><img style="margin-left:40px;" src="<?php echo IMAGE_LOGO_PDF; ?>" width="180px"></div>
+    <div class="col-md-4 pull-left"><img style="margin-left:00px;" src="<?php echo IMAGE_LOGO_PDF; ?>" width="180px"></div>
 
  
     <div class="col-md-8" style="text-align: right; margin-left: 70px;">
@@ -264,21 +264,47 @@ if (isset($data)) {
     </div>
 
 </div>
-<div class="col-md-12" >
-    <p><b>Condiciones</b></p>
-    <div class="condiciones" style="font-size: 12px;">
-        <span>1.- CONDICION 1</span><br>
-        <span>2.- CONDICION 2</span><br>
-        <span>3.- CONDICION 3</span><br>
-        <span>4.- CONDICION 4</span><br>
-        <span>5.- CONDICION 5</span><br>
-        <span>6.- CONDICION 6</span><br>
-        <span>7.- CONDICION 7</span><br>
-        <span>9.- CONDICION 8</span><br>
+ 
+<br>
+<?php
+if (isset($data['cotizacionTerminosCondiciones'])) {
+    foreach ($data['cotizacionTerminosCondiciones'] AS $terminosCondiciones) {
         
-    </div>
+        ?>
+        <div class="col-md-12">
+            
+            <div  style="font-size:13px;" class="pull-left col-md-12"><span ><?php echo (isset($terminosCondiciones['terminoCondicion'])) ? ($terminosCondiciones['terminoCondicion']) : 'N/D'; ?></span></div>
+           
+        </div>
 
-</div>
+        <?php
+    }//FOREACH
+    }
+    ?>
+
+<br>
+<br>
+<?php
+if (isset($data['cotizacionInformacionProducto'])) {
+    foreach ($data['cotizacionInformacionProducto'] AS $infoProductos) {
+        $rutaImgen = "";
+        if(file_exists(SYS_URL.'files/vent/coti-deta/'.$infoProductos['sImagen'])){
+            $rutaImgen = SYS_URL.'files/vent/coti-deta/'.$infoProductos['sImagen'];
+        }
+        ?>
+        <div class="col-md-12">
+            <div  style="font-size:13px;" class="pull-left col-md-4">
+            <?php echo (!empty($rutaImgen)) ? '<img src="'.$rutaImgen.'" alt="'.$infoProductos['sNombre'].'" width="200" height="200">' : 'N/D'; ?>
+            </div>
+            <div  style="font-size:13px;" class="pull-left col-md-8"><span style="color:#000000;"><?php echo (isset($infoProductos['sNombre'])) ? ($infoProductos['sNombre']) : 'N/D'; ?></span></div>
+            <br>
+        </div>
+
+        <?php
+    }//FOREACH
+    }
+    ?>
+ 
 <br>
 
 

@@ -3,6 +3,26 @@ if (isset($data['datos'])) {
     $result = $data['datos'];
     utf8($result);
 }
+
+$arrayInformacionProducto = array();
+
+if (isset($data['cotizacionInformacionProducto'])) {
+    if ($data['cotizacionInformacionProducto']) {
+        foreach ($data['cotizacionInformacionProducto'] as $row) {
+            $arrayInformacionProducto[] = $row['skInformacionProductoServicio'];
+        }
+    }
+}
+$arrayterminoCondicion = array();
+
+if (isset($data['cotizacionTerminosCondiciones'])) {
+    if ($data['cotizacionTerminosCondiciones']) {
+        foreach ($data['cotizacionTerminosCondiciones'] as $row) {
+            $arrayterminoCondicion[] = $row['skCatalogoSistemaOpciones'];
+        }
+    }
+}
+ 
 ?>
 <form class="form-horizontal" id="core-guardar" method="post"  enctype="multipart/form-data">
     <div class="panel panel-bordered panel-primary panel-line">
@@ -78,18 +98,21 @@ if (isset($data['datos'])) {
                      <hr>
                  </div>
                  <div class="row row-lg col-lg-12">
-                 <div class="col-md-12 col-lg-12">
+                    <div class="col-md-6 col-lg-6">
                          <div class="form-group">
                              <h4 class="example-title"> Condicion</h4>
                              <textarea class="form-control"  name="sCondicion" placeholder="Condicion"><?php echo (isset($result['sCondicion'])) ? ($result['sCondicion']) : ''; ?></textarea>
                          </div>
                      </div>
-                     <div class="col-md-12 col-lg-12">
+                     <div class="col-md-6 col-lg-6">
                          <div class="form-group">
-                             <h4 class="example-title"> Descripci&oacute;n</h4>
+                             <h4 class="example-title"> Observaciones</h4>
                              <textarea class="form-control"  name="sObservaciones" placeholder="Descripcion de la Cotizacion"><?php echo (isset($result['sObservaciones'])) ? ($result['sObservaciones']) : ''; ?></textarea>
                          </div>
                      </div>
+                 </div>
+                 <div class="row row-lg col-lg-12">
+                     <hr>
                  </div>
                  <div class="row row-lg col-lg-12">
                      <div class="col-md-8 col-lg-8">
@@ -110,6 +133,52 @@ if (isset($data['datos'])) {
                         </select>                         </div>
                      </div>
                  </div>
+                 <div class="row row-lg col-lg-12">
+                    <div class=" col-md-12">
+                    <div class="form-group">
+                    <h4 class="example-title"> INFORMACION PRODUCTO:</h4>
+                        <?php
+                        if (isset($data['informacionProducto'])) {
+
+
+                            foreach ($data['informacionProducto'] as $val) { ?>
+                                <div class="col-md-4 checkbox-custom checkbox-primary">
+                                    <input type="checkbox" name="skInformacionProductosServicios[]"  <?php echo (in_array($val['skInformacionProductoServicio'], $arrayInformacionProducto) ? 'checked' : '') ?>   value="<?php echo (isset($val['skInformacionProductoServicio'])) ? ($val['skInformacionProductoServicio']) : ''; ?>" id="<?php echo (isset($val['skInformacionProductoServicio'])) ? ($val['skInformacionProductoServicio']) : ''; ?>"    />
+                                    <label for="<?php echo (isset($val['skInformacionProductoServicio'])) ? ($val['skInformacionProductoServicio']) : ''; ?>"><?php echo (isset($val['informacionProducto'])) ? ($val['informacionProducto']) : ''; ?></label>
+                                </div>
+                            <?php  }
+
+                        }
+                        ?>
+
+                    </div>
+                    </div>
+                </div>
+                <div class="row row-lg col-lg-12">
+                     <hr>
+                 </div>
+                <div class="row row-lg col-lg-12">
+                    <div class=" col-md-12">
+                    <div class="form-group">
+                    <h4 class="example-title"> TERMINOS CONDICIONES:</h4>
+                        <?php
+                        if (isset($data['terminosCondiciones'])) {
+
+
+                            foreach ($data['terminosCondiciones'] as $val) { ?>
+                                <div class="col-md-12 checkbox-custom checkbox-primary">
+                                    <input type="checkbox" name="terminosCondiciones[]"  <?php echo (in_array($val['skCatalogoSistemaOpciones'], $arrayterminoCondicion) ? 'checked' : '') ?>   value="<?php echo (isset($val['skCatalogoSistemaOpciones'])) ? ($val['skCatalogoSistemaOpciones']) : ''; ?>" id="<?php echo (isset($val['skCatalogoSistemaOpciones'])) ? ($val['skCatalogoSistemaOpciones']) : ''; ?>"    />
+                                    <label for="<?php echo (isset($val['skCatalogoSistemaOpciones'])) ? ($val['skCatalogoSistemaOpciones']) : ''; ?>"><?php echo (isset($val['terminoCondicion'])) ? ($val['terminoCondicion']) : ''; ?></label>
+                                </div>
+                            <?php  }
+
+                        }
+                        ?>
+
+                    </div>
+                    </div>
+                </div>
+                 
                  
                 </div>
             </div>

@@ -44,7 +44,8 @@ Class Vent_Model Extends DLOREAN_Model {
             " .escape(isset($this->vent['fPrecioUnitario']) ? $this->vent['fPrecioUnitario'] : NULL) . ",
             " .escape(isset($this->vent['fImporte']) ? $this->vent['fImporte'] : NULL) . ",
             " .escape(isset($this->vent['sCorreo']) ? $this->vent['sCorreo'] : NULL) . ",
-           
+            " .escape(isset($this->vent['skInformacionProductoServicio']) ? $this->vent['skInformacionProductoServicio'] : NULL) . ",
+            " .escape(isset($this->vent['skCatalogoSistemaOpciones']) ? $this->vent['skCatalogoSistemaOpciones'] : NULL) . ",
             " .escape(isset($this->vent['axn']) ? $this->vent['axn'] : NULL) . ",
             '" . $_SESSION['usuario']['skUsuario'] . "',
             '" . $this->sysController . "' )";
@@ -447,6 +448,73 @@ Class Vent_Model Extends DLOREAN_Model {
         }
         return Conn::fetch_assoc_all($result);
     }
+
+
+    /**
+     * _getInformacionProducto
+     *
+     * Obtiene los tipos de procesos activos para servicios
+     *
+     * @author Luis Alberto Valdez Alvarez <lvaldez@woodward.com.mx>
+     * @return object | false Retorna el objeto de resultados de la consulta o false si algo falla.
+     */
+    public function _getInformacionProducto() {
+        $sql = "SELECT skInformacionProductoServicio,sNombre AS informacionProducto FROM cat_informacionProductoServicio
+        WHERE skEstatus = 'AC' ";
+
+
+        $result = Conn::query($sql);
+        if (!$result) {
+            return FALSE;
+        }
+        return Conn::fetch_assoc_all($result);
+    }
+
+    public function _getCotizacionInformacionProducto() {
+        $select = "SELECT cip.skInformacionProductoServicio,sNombre,sDescripcion,sImagen FROM rel_cotizacion_informacionProducto rci
+        LEFT JOIN cat_informacionProductoServicio cip ON cip.skInformacionProductoServicio = rci.skInformacionProductoServicio
+         where rci.skCotizacion = " . escape($this->vent['skCotizacion']);
+        $result = Conn::query($select);
+        if (!$result) {
+            return FALSE;
+        }
+        return Conn::fetch_assoc_all($result);
+    }
+
+    /**
+     * _getTerminosCondiciones
+     *
+     * Obtiene los tipos de procesos activos para servicios
+     *
+     * @author Luis Alberto Valdez Alvarez <lvaldez@woodward.com.mx>
+     * @return object | false Retorna el objeto de resultados de la consulta o false si algo falla.
+     */
+    public function _getTerminosCondiciones() {
+        $sql = "SELECT skCatalogoSistemaOpciones,sNombre AS terminoCondicion 
+        FROM rel_catalogosSistemasOpciones
+        WHERE skEstatus = 'AC' AND skCatalogoSistema = 'TERCOT' ORDER BY sNombre ASC ";
+
+
+        $result = Conn::query($sql);
+        if (!$result) {
+            return FALSE;
+        }
+        return Conn::fetch_assoc_all($result);
+    }
+
+    public function _getCotizacionTerminosCondiciones() {
+        $select = "SELECT rci.skCatalogoSistemaOpciones,rcs.sNombre AS  terminoCondicion
+        FROM rel_cotizaciones_terminosCondiciones rci
+        LEFT JOIN rel_catalogosSistemasOpciones rcs ON rcs.skCatalogoSistemaOpciones = rci.skCatalogoSistemaOpciones AND rcs.skCatalogoSistema = 'TERCOT'
+         where rci.skCotizacion = " . escape($this->vent['skCotizacion'])." ORDER BY rcs.sNombre ASC ";
+          
+        $result = Conn::query($select);
+        if (!$result) {
+            return FALSE;
+        }
+        return Conn::fetch_assoc_all($result);
+    }
+
 
       
 

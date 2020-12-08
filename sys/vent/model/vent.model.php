@@ -478,7 +478,9 @@ Class Vent_Model Extends DLOREAN_Model {
         if (!$result) {
             return FALSE;
         }
-        return Conn::fetch_assoc_all($result);
+        $records = Conn::fetch_assoc_all($result);
+        utf8($records);
+        return $records;
     }
 
     /**

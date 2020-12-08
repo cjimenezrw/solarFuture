@@ -129,7 +129,8 @@ if (isset($data)) {
 
  
     <div class="col-md-8" style="text-align: right; margin-left: 70px;">
-        <div class="" style=" color:black;">
+        <div class="" style="color:black;">
+            <span class="bold" style="color:red;font-size: 20px;text-transform: uppercase;">#<?php echo (isset($datos['iFolio'])) ? ($datos['iFolio']) : 'N/D'; ?></span><br>
             <span class="bold" style="font-size: 10px;text-transform: uppercase;">Solar Future Manzanillo S.A.S.</span><br>
             <span class="bold" style="font-size: 10px;">RFC: SFM1905213C3</span><br>
             <span  style="font-size: 10px;">AV. ELIAS ZAMORA VERDUZCO  #3220 "A"</span><br>
@@ -144,11 +145,6 @@ if (isset($data)) {
     <div  style="font-size:13px;" class="pull-left col-md-8"><span style="color:#000000;"><?php echo (isset($datos['cliente'])) ? ($datos['cliente']) : 'N/D'; ?></span></div>
     <br>
 </div>
-<div class="col-md-12" style="font-size:13px;">
-    <div class="pull-left col-md-2"><b>FOLIO:</b> <span style="color:#000000;"></span></div>
-    <div class="pull-left col-md-3"> <span style="color:#000000;"><?php echo (isset($datos['iFolio'])) ? ($datos['iFolio']) : 'N/D'; ?></span></div>
-    
- </div>
 
 <div class="col-md-12" style="font-size:13px;">
     <div class="col-md-offset-1 col-md-6 pull-right text-right"><small>FECHA VIGENCIA:</small> <small style="text-transform: uppercase;"><?php echo (isset($datos['dFechaVigencia']) && !empty($datos['dFechaVigencia'])) ? $this->obtenerFechaEnLetra($datos['dFechaVigencia']) : 'N/D'; ?></small></div>
@@ -196,7 +192,7 @@ if (isset($data)) {
 			    if (isset($conceptos['impuestos'])) {
 				foreach ($conceptos['impuestos'] AS $impuestos) {
 				    ?>
-				    <?php echo "(" . $impuestos['impuesto'] . " %" . $impuestos['fTasa'] . ")--$" . number_format($impuestos['fImporte'], 2); ?>
+				    <?php echo "$".number_format($impuestos['fImporte'], 2)."<br>(" . $impuestos['impuesto'] . " %" . $impuestos['fTasa'] . ")"; ?>
 
 				    <?php
 				}//FOREACH
@@ -288,16 +284,16 @@ if (isset($data['cotizacionTerminosCondiciones'])) {
 if (isset($data['cotizacionInformacionProducto'])) {
     foreach ($data['cotizacionInformacionProducto'] AS $infoProductos) {
         $rutaImgen = "";
-        if(file_exists(SYS_URL.'files/vent/coti-deta/'.$infoProductos['sImagen'])){
-            $rutaImgen = SYS_URL.'files/vent/coti-deta/'.$infoProductos['sImagen'];
+        if(file_exists(DIR_PROJECT.'files/vent/coti-deta/'.$infoProductos['sImagen'])){
+            $rutaImgen = DIR_PROJECT.'files/vent/coti-deta/'.$infoProductos['sImagen'];
         }
         ?>
         <div class="col-md-12">
-            <div  style="font-size:13px;" class="pull-left col-md-4">
+            <div  style="font-size:10px;" class="pull-left col-md-4">
            
-             <?php echo (!empty($rutaImgen)) ? '<img src="'.$rutaImgen.'" alt="'.$infoProductos['sNombre'].'" width="200" height="200">' : 'N/D'; ?>
+             <?php echo (!empty($rutaImgen)) ? '<img src="'.$rutaImgen.'" alt="'.$infoProductos['sNombre'].'" width="100" height="100">' : 'N/D'; ?>
             </div>
-            <div  style="font-size:13px;" class="pull-left col-md-8"><span style="color:#000000;"><?php echo (isset($infoProductos['sNombre'])) ? ($infoProductos['sNombre']) : 'N/D'; ?></span></div>
+            <div  style="font-size:10px;" class="pull-left col-md-8"><span style="color:#000000;"><?php echo (isset($infoProductos['sDescripcion'])) ? (html_entity_decode($infoProductos['sDescripcion'],ENT_QUOTES)) : 'N/D'; ?></span></div>
             <br>
         </div>
 

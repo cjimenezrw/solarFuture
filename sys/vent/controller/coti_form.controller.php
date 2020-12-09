@@ -48,6 +48,13 @@ Class Coti_form_Controller Extends Vent_Model {
                 Conn::rollback($this->idTran);
                 return $this->data;
             }
+            if(empty($this->vent['skEmpresaSocioCliente']) && empty($this->vent['skProspecto'])){
+                Conn::rollback($this->idTran);
+                $this->data['success'] = FALSE;
+                $this->data['message'] = 'EL CLIENTE O PROSPECTO ES REQUERIDO';
+
+                return $this->data;
+            }
 
             // Guardar correos
             $guardar_cotizacion_correos = $this->guardar_cotizacion_correos();
@@ -303,7 +310,6 @@ Class Coti_form_Controller Extends Vent_Model {
 
           $validations = [
               'skDivisa'=>['message'=>'DIVISA'],
-              'skEmpresaSocioCliente'=>['message'=>'CLIENTE'],
               'dFechaVigencia'=>['message'=>'VIGENCIA','validations'=>['date']]
           ];
 

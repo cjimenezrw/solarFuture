@@ -121,7 +121,7 @@ trait DLOREAN_Functions {
 
         $mainPDF['header'] = ($mainPDF['header'] === false ) ? '
                     <div class="pdf_cabecera">
-                        <div class="pdf_left"><img style=""  src="' . CORE_PATH . 'assets/tpl/images/logoPDF.png" width="50" height="50"></div>
+                        <div class="pdf_left"><img style=""  src="' . IMAGE_LOGO_PDF . '" width="120"></div>
                         <div class="pdf_centro">
                           <h3>Documento</h3>
                         </div>
@@ -380,7 +380,7 @@ trait DLOREAN_Functions {
                     ',
             'header_HTML' => '
                     <div class="pdf_cabecera">
-                        <div class="pdf_left"><img style=""  src="' . CORE_PATH . 'assets/tpl/images/logoPDF.png" width="50" height="50"></div>
+                        <div class="pdf_left"><img style=""  src="' . IMAGE_LOGO_PDF . '" width="120"></div>
                         <div class="pdf_centro">
                           <h3>Documento</h3>
                         </div>
@@ -1641,14 +1641,14 @@ trait DLOREAN_Functions {
 
         $this->pdf(array(
             'waterMark' => array(
-                'imgsrc' => CORE_PATH . 'assets/tpl/images/logoOriginal.png',
+                'imgsrc' => IMAGE_WATERMARK_PDF,
                 'opacity' => .09,
-                'size' => [100, 90]
+                'size' => [120, 50]
             ),
             'content' => $variableConNombreREQUETEFORMAL,
             'header' => '
                 <div class="pdf_cabecera">
-                    <div class="pdf_left"><img style=""  src="' . CORE_PATH . 'assets/tpl/images/logoPDF.png" width="50" height="50"></div>
+                    <div class="pdf_left"><img style=""  src="' . IMAGE_LOGO_PDF . '" width="120" ></div>
                     <div class="pdf_centro">
                       <h3>' . $title . '</h3>
                     </div>

@@ -87,15 +87,15 @@ Class Vent_Model Extends DLOREAN_Model {
         oc.fImpuestosRetenidos,
         oc.fImporteTotal,
         oc.fTipoCambio,
-        cec.sNombre AS cliente,
         cp.sNombreContacto AS prospecto,
-        cec.sRFC AS clienteRFC,
-        cu.sNombre AS usuarioCreacion
+        cep.sRFC AS clienteRFC,
+        cu.sNombre AS usuarioCreacion,
+        IF(cep.sNombre IS NOT NULL,cep.sNombre,cp.sNombreContacto) AS cliente
         FROM ope_cotizaciones oc 
         LEFT JOIN rel_empresasSocios resc ON resc.skEmpresaSocio = oc.skEmpresaSocioCliente
         LEFT JOIN cat_prospectos cp ON cp.skProspecto = oc.skProspecto
-        LEFT JOIN cat_empresas cec ON cec.skEmpresa = resc.skEmpresa
-        LEFT JOIN cat_usuarios cu ON cu.skUsuario = oc.skUsuarioCreacion
+        LEFT JOIN cat_empresas cep ON cep.skEmpresa = resc.skEmpresa
+        LEFT JOIN cat_usuarios cu ON cu.skUsuario = oc.skUsuarioCreacion 
  
         WHERE  oc.skCotizacion =  " . escape($this->vent['skCotizacion']);
 

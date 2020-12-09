@@ -179,7 +179,7 @@ class Conn {
                 // BASE DE DATOS DLOREAN
                     switch ($dsn) {
                         case 'mysql':
-                            Conn::$base = new PDO("mysql:host=$hostStr;dbname=$d[DATABASE_DB]", $d["USER_DB"], $d["PASSWORD_DB"]);
+                            Conn::$base = new PDO("mysql:host=$hostStr;dbname=$d[DATABASE_DB];charset=utf8", $d["USER_DB"], $d["PASSWORD_DB"]);
                             break;
                         case 'mssql':
                             Conn::$base = new PDO("$dsn:host=$hostStr;dbname=$d[DATABASE_DB];charset=UTF-8;timeout=0;connect timeout=0", "$d[USER_DB]", "$d[PASSWORD_DB]");
@@ -338,6 +338,7 @@ class Conn {
             try {
                 
                 Conn::$base->query('SELECT 1');
+                //Conn::$base->query('set names utf8');
                 return true;
                 
             } catch (PDOException $e) {
@@ -359,6 +360,7 @@ class Conn {
                 }
 
                 if (Conn::$others[$dbn]->query('SELECT 1')) {
+                    //Conn::$others[$dbn]->query('set names utf8');
                     return true;
                 }
             

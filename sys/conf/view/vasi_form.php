@@ -1,7 +1,6 @@
 <?php
     if(isset($data['datos'])){
         $result = $data['datos'];
-        utf8($result);
     }
 ?>
     <form class="form-horizontal" id="core-guardar" method="post"  enctype="multipart/form-data">

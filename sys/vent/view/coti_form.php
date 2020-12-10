@@ -595,6 +595,9 @@ function addCommas(amount) {
                         core.autocomplete2('#skEmpresaSocioCliente', 'get_empresas', window.location.href, 'Cliente',{
                             skEmpresaTipo : '["CLIE"]'
                         });
+
+                        core.autocomplete2('.skTipoMedida', 'get_medidas', window.location.href, 'Unidad');
+                        core.autocomplete2('.skConcepto', 'get_conceptos', window.location.href, 'Concepto');
                         core.autocomplete2('#skProspecto', 'get_prospectos', window.location.href, 'Prospecto');
                         $("#skDivisa").select2({placeholder: "Moneda", allowClear: true });
 

@@ -128,15 +128,16 @@ Class Vent_Model Extends DLOREAN_Model {
                         rcir.sValor AS RETIVA,
                         rcit.sValor AS TRAIVA,
                         cc.sNombre AS concepto,
+                        cc.sCodigo AS sCodigo,
                         cum.sNombre as tipoMedida,
                         (SELECT fImporte FROM rel_cotizaciones_conceptosImpuestos rps where rps.skCotizacion = cse.skCotizacion AND rps.skConcepto = cse.skConcepto AND rps.skImpuesto = 'RETIVA' AND rps.skCotizacionConcepto = cse.skCotizacionConcepto )AS fImpuestosRetenidos,
                         (SELECT fImporte FROM rel_cotizaciones_conceptosImpuestos rps where rps.skCotizacion = cse.skCotizacion AND rps.skConcepto = cse.skConcepto AND rps.skImpuesto = 'TRAIVA' AND rps.skCotizacionConcepto = cse.skCotizacionConcepto )AS fImpuestosTrasladados
 								
 		                FROM rel_cotizaciones_conceptos cse 
                         INNER JOIN cat_conceptos cc ON cc.skConcepto = cse.skConcepto
+                        LEFT JOIN cat_unidadesMedidaSAT cum ON cum.skUnidadMedida = cse.skTipoMedida
                         LEFT JOIN rel_conceptos_impuestos rcir ON rcir.skConcepto = cse.skConcepto AND rcir.skImpuesto = 'RETIVA'
                         LEFT JOIN rel_conceptos_impuestos rcit ON rcit.skConcepto = cse.skConcepto AND rcit.skImpuesto = 'TRAIVA'
-                        LEFT JOIN cat_unidadesMedidaSAT cum ON cum.skUnidadMedida = cse.skTipoMedida
 		                WHERE cse.skCotizacion = " . escape($this->vent['skCotizacion']);
 
         $result = Conn::query($sql);

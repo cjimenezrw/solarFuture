@@ -166,9 +166,10 @@ if (isset($data)) {
     <table class="table text-right">
 	<thead>
 	    <tr>
-		<th class="text-center">#</th>
+		<th class="text-center">Cod.</th>
  		<th class="text-center" >Servicio</th>
 		<th class="text-center">Cantidad</th>
+		<th class="text-center">Medida</th>
 		<th class="text-center">P. Unit</th>
 		<th class="text-center">Importe </th>
 		<th class="text-center">Desc </th>
@@ -182,10 +183,11 @@ if (isset($data)) {
 		foreach ($data['conceptosCotizacion'] AS $conceptos) {
 		    ?>
 		    <tr>
-			<td style="text-align:center; font-size: 8px; text-transform: uppercase;" ><?php echo $i; ?></td>
+			<td style="text-align:center; font-size: 8px; text-transform: uppercase;" ><?php echo $conceptos['sCodigo']; ?></td>
  			<td style="text-align:left; font-size: 8px; text-transform: uppercase;" ><?php echo $conceptos['concepto']; ?></td>
 			<td style="text-align:right; font-size: 8px; text-transform: uppercase;" ><?php echo number_format($conceptos['fCantidad'], 2); ?></td>
-			<td style="text-align:right; font-size: 8px; text-transform: uppercase;" ><?php echo "$" . number_format($conceptos['fPrecioUnitario'], 2); ?></td>
+            <td style="text-align:left; font-size: 8px; text-transform: uppercase;" ><?php echo $conceptos['tipoMedida']; ?></td>
+            <td style="text-align:right; font-size: 8px; text-transform: uppercase;" ><?php echo "$" . number_format($conceptos['fPrecioUnitario'], 2); ?></td>
 			<td style="text-align:right; font-size: 8px; text-transform: uppercase;" ><?php echo "$" . number_format($conceptos['fImporte'], 2); ?></td>
 			<td style="text-align:right; font-size: 8px; text-transform: uppercase;" ><?php echo "$" . number_format($conceptos['fDescuento'], 2); ?></td>
 			<td style="text-align:right; font-size: 8px; text-transform: uppercase;" > <?php
@@ -211,12 +213,14 @@ if (isset($data)) {
 		<td style="text-align:right; font-size: 8px; text-transform: uppercase;" ></td>
 		<td style="text-align:right; font-size: 8px; text-transform: uppercase;" ></td>
 		<td style="text-align:right; font-size: 8px; text-transform: uppercase;" ></td>
+		<td style="text-align:right; font-size: 8px; text-transform: uppercase;" ></td>
 		<td style="text-align:right; font-size: 8px; text-transform: uppercase;" >SUBTOTAL: </td>
 		<td style="text-align:right; font-size: 8px; text-transform: uppercase;" ><?php echo " $" . number_format($result['fImporteSubtotal'], 2); ?></td>
 	    </tr>
 	    <tr>
 		<td style="text-align:right; font-size: 8px; text-transform: uppercase;" ></td>
  		<td style="text-align:right; font-size: 8px; text-transform: uppercase;" ></td>
+		<td style="text-align:right; font-size: 8px; text-transform: uppercase;" ></td>
 		<td style="text-align:right; font-size: 8px; text-transform: uppercase;" ></td>
 		<td style="text-align:right; font-size: 8px; text-transform: uppercase;" ></td>
 		<td style="text-align:right; font-size: 8px; text-transform: uppercase;" ></td>
@@ -229,6 +233,7 @@ if (isset($data)) {
 		<td style="text-align:right; font-size: 8px; text-transform: uppercase;" ></td>
 		<td style="text-align:right; font-size: 8px; text-transform: uppercase;" ></td>
 		<td style="text-align:right; font-size: 8px; text-transform: uppercase;" ></td>
+		<td style="text-align:right; font-size: 8px; text-transform: uppercase;" ></td>
 		<td style="text-align:right; font-size: 8px; text-transform: uppercase;" >RETENCION: </td>
 		<td style="text-align:right; font-size: 8px; text-transform: uppercase;" ><?php echo " $" . number_format($result['fImpuestosRetenidos'], 2); ?></td>
 	    </tr>
@@ -238,12 +243,14 @@ if (isset($data)) {
 		<td style="text-align:right; font-size: 8px; text-transform: uppercase;" ></td>
 		<td style="text-align:right; font-size: 8px; text-transform: uppercase;" ></td>
 		<td style="text-align:right; font-size: 8px; text-transform: uppercase;" ></td>
+		<td style="text-align:right; font-size: 8px; text-transform: uppercase;" ></td>
 		<td style="text-align:right; font-size: 8px; text-transform: uppercase;" >TRANSLADOS: </td>
 		<td style="text-align:right; font-size: 8px; text-transform: uppercase;" ><?php echo " $" . number_format($result['fImpuestosTrasladados'], 2); ?></td>
 	    </tr>
 	    <tr>
 		<td style="text-align:right; font-size: 8px; text-transform: uppercase;" ></td>
  		<td style="text-align:right; font-size: 8px; text-transform: uppercase;" ></td>
+		<td style="text-align:right; font-size: 8px; text-transform: uppercase;" ></td>
 		<td style="text-align:right; font-size: 8px; text-transform: uppercase;" ></td>
 		<td style="text-align:right; font-size: 8px; text-transform: uppercase;" ></td>
 		<td style="text-align:right; font-size: 8px; text-transform: uppercase;" ></td>

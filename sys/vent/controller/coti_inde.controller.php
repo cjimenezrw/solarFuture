@@ -66,6 +66,7 @@ Class Coti_inde_Controller Extends Vent_Model {
 
                 $row['dFechaCreacion'] = ($row['dFechaCreacion']) ? date('d/m/Y  H:i:s', strtotime($row['dFechaCreacion'])) : '';
                 $row['dFechaVigencia'] = ($row['dFechaVigencia']) ? date('d/m/Y', strtotime($row['dFechaVigencia'])) : '';
+                $row['fImporteTotal'] = (!empty($row['fImporteTotal']) ? "$".number_format($row['fImporteTotal'],2) : '');
                  
                $row['menuEmergente'] = parent::menuEmergente($regla, $row['skCotizacion']);
                 array_push($data['data'],$row);

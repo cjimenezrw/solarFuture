@@ -89,7 +89,15 @@ if (isset($data['cotizacionTerminosCondiciones'])) {
                         </select>
                         </div>
                     </div>
-                              
+                    <div class="col-md-4 col-lg-4">
+                    <div class="form-group">
+                        <h4 class="example-title">COSTO RECIBO:</h4>
+                        <input class="form-control" name="fCostoRecibo" value="<?php echo (isset($result['fCostoRecibo'])) ? $result['fCostoRecibo'] : '0'; ?>" placeholder="COSTO RECIBO" autocomplete="off" type="text" >
+
+                        </div>
+                    </div>
+
+
                               
                                 
                   </div>

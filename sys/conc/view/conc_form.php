@@ -62,14 +62,6 @@ if (isset($data['datos'])) {
                         </div>
                     </div>
                     <div class="col-md-4 col-lg-4">
-                        <div class="form-group">
-                            <h4 class="example-title">PRECIO VENTA  </h4>
-                            <input class="form-control" name="fPrecioVenta" value="<?php echo (isset($result['fPrecioVenta'])) ? $result['fPrecioVenta'] : ''; ?>" placeholder="PRECIO VENTA" autocomplete="off" type="text" >
-                        </div>
-                    </div>
-                 </div>
-                 <div class="row row-lg col-lg-12">
-                    <div class="col-md-4 col-lg-4">
                             <div class="form-group">
                             <h4 class="example-title">PROVEEDOR:</h4>
                             <select name="skEmpresaSocioProveedor" id="skEmpresaSocioProveedor" class="form-control" data-plugin="select2" data-ajax--cache="true" >
@@ -83,12 +75,43 @@ if (isset($data['datos'])) {
                             </select>
                             </div>
                         </div>
-                        <div class="col-md-4 col-lg-4">
+                    
+                 </div>
+                 <div class="row row-lg col-lg-12">
+                    <div class="col-md-4 col-lg-4">
                         <div class="form-group">
                             <h4 class="example-title">KHW  </h4>
                             <input class="form-control" name="fKwh" value="<?php echo (isset($result['fKwh'])) ? $result['fKwh'] : ''; ?>" placeholder="KWH" autocomplete="off" type="text" >
                         </div>
                     </div>
+                </div>
+                 <div class="row row-lg col-lg-12">
+                     <hr>
+                 </div>
+                 <div class="row row-lg col-lg-12">
+                 <h5 class="card-title margin-bottom-20">
+                    <i class="icon wb-layout"></i>
+                    <span>Precio de Venta</span>
+                </h5>
+                    <div class="col-md-3 col-lg-3">
+                        <div class="form-group">
+                            <h4 class="example-title">PRECIO A </h4>
+                            <input class="form-control" name="fPrecioVenta" value="<?php echo (isset($result['fPrecioVenta'])) ? $result['fPrecioVenta'] : '0'; ?>" placeholder="PRECIO A" autocomplete="off" type="text" >
+                        </div>
+                    </div>
+                    <div class="col-md-3 col-lg-3">
+                        <div class="form-group">
+                            <h4 class="example-title">PRECIO B </h4>
+                            <input class="form-control" name="fPrecioVentaB" value="<?php echo (isset($result['fPrecioVentaB'])) ? $result['fPrecioVentaB'] : '0'; ?>" placeholder="PRECIO B" autocomplete="off" type="text" >
+                        </div>
+                    </div>
+                    <div class="col-md-3 col-lg-3">
+                        <div class="form-group">
+                            <h4 class="example-title">PRECIO C </h4>
+                            <input class="form-control" name="fPrecioVentaC" value="<?php echo (isset($result['fPrecioVentaC'])) ? $result['fPrecioVentaC'] : '0'; ?>" placeholder="PRECIO C" autocomplete="off" type="text" >
+                        </div>
+                    </div>
+                    
                  </div>
                  <div class="row row-lg col-lg-12">
                      <hr>

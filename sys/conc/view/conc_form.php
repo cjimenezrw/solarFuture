@@ -86,37 +86,6 @@ if (isset($data['datos'])) {
                     </div>
                 </div>
                  <div class="row row-lg col-lg-12">
-                     <hr>
-                 </div>
-                 <div class="row row-lg col-lg-12">
-                 <h5 class="card-title margin-bottom-20">
-                    <i class="icon wb-layout"></i>
-                    <span>Precio de Venta</span>
-                </h5>
-                    <div class="col-md-3 col-lg-3">
-                        <div class="form-group">
-                            <h4 class="example-title">PRECIO A </h4>
-                            <input class="form-control" name="fPrecioVenta" value="<?php echo (isset($result['fPrecioVenta'])) ? $result['fPrecioVenta'] : '0'; ?>" placeholder="PRECIO A" autocomplete="off" type="text" >
-                        </div>
-                    </div>
-                    <div class="col-md-3 col-lg-3">
-                        <div class="form-group">
-                            <h4 class="example-title">PRECIO B </h4>
-                            <input class="form-control" name="fPrecioVentaB" value="<?php echo (isset($result['fPrecioVentaB'])) ? $result['fPrecioVentaB'] : '0'; ?>" placeholder="PRECIO B" autocomplete="off" type="text" >
-                        </div>
-                    </div>
-                    <div class="col-md-3 col-lg-3">
-                        <div class="form-group">
-                            <h4 class="example-title">PRECIO C </h4>
-                            <input class="form-control" name="fPrecioVentaC" value="<?php echo (isset($result['fPrecioVentaC'])) ? $result['fPrecioVentaC'] : '0'; ?>" placeholder="PRECIO C" autocomplete="off" type="text" >
-                        </div>
-                    </div>
-                    
-                 </div>
-                 <div class="row row-lg col-lg-12">
-                     <hr>
-                 </div>
-                 <div class="row row-lg col-lg-12">
                      <div class="col-md-8 col-lg-8">
                          <div class="form-group">
                              <h4 class="example-title"> Descripci&oacute;n</h4>
@@ -133,7 +102,6 @@ if (isset($data['datos'])) {
     </div>
     <div class="panel-body container-fluid">
             <div class="row row-lg">
-
                 <div class="col-md-12">
                 <label class="col-md-2 control-label"><b>Impuestos a Aplicar</b> </label>
                 <div class="form-group col-md-10">
@@ -152,17 +120,45 @@ if (isset($data['datos'])) {
                     </div>
                     </div>
             </div>
-                 
-              
-                 
-
-
-
-             
-
         </div>
     </div>
 </div>
+
+<div class="panel panel-bordered panel-primary panel-line">
+    <div class="panel-heading">
+        <h3 class="panel-title">Categoría de Precios</h3>
+    </div>
+    <div class="panel-body container-fluid">
+        <div class="row row-lg">
+            <div class="input-group margin-top-20"> <span class="input-group-addon">Filtrar</span>
+                <input id="filter_categorias" type="text" class="form-control" autocomplete="off" placeholder="Escribe aquí...">
+            </div>
+            <table class="table table-striped table-bordered">
+            <thead>
+                <tr>
+                    <th>Categoría</th>
+                    <th>Precio</th>
+                </tr>
+            </thead>
+            <tbody class="tbody_categorias">
+                <?php 
+                if(isset($data['categorias_precios']) && !empty($data['categorias_precios']) && is_array($data['categorias_precios'])){
+                    foreach($data['categorias_precios'] AS $row) { 
+                ?>
+                    <tr>
+                        <td><?php echo (!empty($row['sNombre'])) ? $row['sNombre'] : ''; ?></td>
+                        <td><input type="text" name="CATPRE[<?php echo $row['skCatalogoSistemaOpciones']; ?>]" id="input-<?php echo $row['skCatalogoSistemaOpciones']; ?>" class="form-control" autocomplete="off" value="<?php echo (!empty($row['fPrecioVenta']) ? $row['fPrecioVenta'] : ''); ?>"></td>
+                    </tr>
+                <?php 
+                    }//FOREACH
+                }
+                ?>
+            </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
 
 
 </form>
@@ -173,20 +169,28 @@ if (isset($data['datos'])) {
 
     core.formValidaciones.fields = conc.conc_form.validaciones;
 
- 
-  
     $(document).ready(function () {
+
         $("#skUnidadMedida").select2({placeholder: "Unidad de Medida", allowClear: true });
           
-       core.autocomplete2('#skEmpresaSocioProveedor', 'get_empresas', window.location.href, 'Proveedor',{
-                skEmpresaTipo : '["PROV"]'
-            });
+        core.autocomplete2('#skEmpresaSocioProveedor', 'get_empresas', window.location.href, 'Proveedor',{
+            skEmpresaTipo : '["PROV"]'
+        });
    
         $('#core-guardar').formValidation(core.formValidaciones);
-        $("#skImpuesto").select2({
-                width: "100%"
-            });
 
-   
+        $("#skImpuesto").select2({
+            width: "100%"
+        });
+
+        $('#filter_categorias').keyup(function () {
+            var rex = new RegExp($(this).val(), 'i');
+            $('.tbody_categorias tr').hide();
+            $('.tbody_categorias tr').filter(function () {
+                return rex.test($(this).text());
+            }).show();
+        });
+
     });
+
 </script>

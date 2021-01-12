@@ -22,7 +22,19 @@ Class Conc_deta_Controller Extends Conc_Model {
         $this->data['datos'] =  parent::_getConcepto();
         $this->data['conceptosImpuestos']  = parent::_getConceptoImpuestos();
 
- 
+        // OBTENEMOS LAS CATEGORÍAS DE PRECIOS
+            $_get_categorias_precios = parent::_get_categorias_precios();
+            $this->data['categorias_precios'] = [];
+            foreach($_get_categorias_precios AS $k=>$v){
+                $this->data['categorias_precios'][$v['skCatalogoSistemaOpciones']] = $v;
+            }
+
+        //OBTENEMOS LOS VALORES DE CATEGORÍAS DE PRECIOS
+            $_get_conceptos_precios = parent::_get_conceptos_precios();
+            foreach($_get_conceptos_precios AS $k=>$v){
+                $this->data['categorias_precios'][$v['skCategoriaPrecio']]['fPrecioVenta'] = $v['fPrecioVenta'];
+            }
+            
         return $this->data;
     }
 

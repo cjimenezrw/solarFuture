@@ -119,7 +119,40 @@ if (isset($data['datos'])) {
             </div>
         </div>
 
-
+        <div class="panel panel-bordered panel-primary panel-line">
+    <div class="panel-heading">
+        <h3 class="panel-title">Categoría de Precios</h3>
+    </div>
+    <div class="panel-body container-fluid">
+        <div class="row row-lg">
+            <div class="input-group margin-top-20"> <span class="input-group-addon">Filtrar</span>
+                <input id="filter_categorias" type="text" class="form-control" autocomplete="off" placeholder="Escribe aquí...">
+            </div>
+            <table class="table table-striped table-bordered">
+            <thead>
+                <tr>
+                    <th>Categoría</th>
+                    <th>Precio</th>
+                </tr>
+            </thead>
+            <tbody class="tbody_categorias">
+                <?php 
+                if(isset($data['categorias_precios']) && !empty($data['categorias_precios']) && is_array($data['categorias_precios'])){
+                    foreach($data['categorias_precios'] AS $row) { 
+                ?>
+                    <tr>
+                        <td><?php echo (!empty($row['sNombre'])) ? $row['sNombre'] : ''; ?></td>
+                        <td><?php echo (!empty($row['fPrecioVenta'])) ? '$'.$row['fPrecioVenta'] : ''; ?></td>
+                    </tr>
+                <?php 
+                    }//FOREACH
+                }
+                ?>
+            </tbody>
+            </table>
+        </div>
+    </div>
+</div>
 
 
 </div>
@@ -130,6 +163,14 @@ if (isset($data['datos'])) {
 
     $(document).ready(function () {
         $('#mowi').iziModal('setBackground', '#f1f4f5');
+
+        $('#filter_categorias').keyup(function () {
+            var rex = new RegExp($(this).val(), 'i');
+            $('.tbody_categorias tr').hide();
+            $('.tbody_categorias tr').filter(function () {
+                return rex.test($(this).text());
+            }).show();
+        });
     });
 
 </script>

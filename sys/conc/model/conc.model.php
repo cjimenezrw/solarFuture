@@ -32,6 +32,7 @@ Class Conc_Model Extends DLOREAN_Model {
             " .escape(isset($this->conc['skEmpresaSocioProveedor']) ? $this->conc['skEmpresaSocioProveedor'] : NULL) . ",
             " .escape(isset($this->conc['sDescripcion']) ? $this->conc['sDescripcion'] : NULL) . ",
             " .escape(isset($this->conc['fPrecioCompra']) ? $this->conc['fPrecioCompra'] : NULL) . ",
+            " .escape(isset($this->conc['skCategoriaPrecio']) ? $this->conc['skCategoriaPrecio'] : NULL) . ",
             " .escape(isset($this->conc['fPrecioVenta']) ? $this->conc['fPrecioVenta'] : NULL) . ",
             " .escape(isset($this->conc['skImpuestoConcepto']) ? $this->conc['skImpuestoConcepto'] : NULL) . ",
             " .escape(isset($this->conc['fKwh']) ? $this->conc['fKwh'] : NULL) . ",
@@ -50,6 +51,30 @@ Class Conc_Model Extends DLOREAN_Model {
         return $record; 
     }
 
+    public function _get_conceptos_precios(){
+        $sql = "SELECT rcp.*,cs.sNombre AS catalogo, cso.sNombre AS categoriaPrecio 
+            FROM rel_conceptos_precios rcp 
+            INNER JOIN rel_catalogosSistemasOpciones cso ON cso.skCatalogoSistemaOpciones = rcp.skCategoriaPrecio
+            INNER JOIN cat_catalogosSistemas cs ON cs.skCatalogoSistema = cso.skCatalogoSistema
+            WHERE cs.skCatalogoSistema = 'CATPRE' AND cso.skEstatus = 'AC' 
+            AND rcp.skConcepto = ".escape($this->conc['skConcepto'])." ORDER BY cso.sNombre ASC";
+        $result = Conn::query($sql);
+        if (!$result) {
+            return FALSE;
+        }
+        return Conn::fetch_assoc_all($result);
+    }
+
+    public function _get_categorias_precios(){
+        $sql = "SELECT cso.* FROM cat_catalogosSistemas cs
+            INNER JOIN rel_catalogosSistemasOpciones cso ON cso.skCatalogoSistema = cs.skCatalogoSistema 
+            WHERE cs.skCatalogoSistema = 'CATPRE' AND cso.skEstatus = 'AC' ORDER BY cso.sNombre ASC";
+        $result = Conn::query($sql);
+        if (!$result) {
+            return FALSE;
+        }
+        return Conn::fetch_assoc_all($result);
+    }
 
     /**
      * _getConcepto

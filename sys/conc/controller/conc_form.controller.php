@@ -42,10 +42,6 @@ Class Conc_form_Controller Extends Conc_Model {
                 return $this->data;
             }
 
-            
-
-
-
             $this->conc['skConcepto'] = (isset($_GET['p1']) ? $_GET['p1'] : NULL);
 
             
@@ -57,13 +53,20 @@ Class Conc_form_Controller Extends Conc_Model {
             }
 
             // Guardar impuestos Concepto
-            $guardar_conceptos = $this->guardar_concepto_impuestos();
-            if(!$guardar_conceptos['success']){
+            $guardar_concepto_impuestos = $this->guardar_concepto_impuestos();
+            if(!$guardar_concepto_impuestos['success']){
+               // Conn::rollback($this->idTran);
+                return $this->data;
+            }
+
+            // Guardar Categorías Precios
+            $guardar_concepto_precios = $this->guardar_concepto_precios();
+            if(!$guardar_concepto_precios['success']){
                // Conn::rollback($this->idTran);
                 return $this->data;
             }
           
-
+            
         //Conn::commit($this->idTran);
         //Conn::commit($this->idTran);
         $this->data['datos'] = $this->conc;
@@ -131,6 +134,43 @@ Class Conc_form_Controller Extends Conc_Model {
             
             $this->data['success'] = TRUE;
             $this->data['message'] = 'IMPUESTOS GUARDADOS CON EXITO';
+            return $this->data;
+        }
+
+        /**
+         * guardar_concepto_precios
+         *
+         * Guardar Precios de Concepto
+         *
+         * @author Luis Alberto Valdez Alvarez <lvaldez@woodward.com.mx>
+         * @return Array ['success'=>NULL,'message'=>NULL,'datos'=>NULL]
+         */
+        public function guardar_concepto_precios(){
+            $this->data['success'] = TRUE;
+            $this->conc['axn'] = 'guardar_concepto_precios';
+          
+            $delete = "DELETE FROM rel_conceptos_precios WHERE skConcepto = ".escape($this->conc['skConcepto']);
+            $result = Conn::query($delete);
+
+            if(!empty($this->conc['CATPRE'])){
+                foreach ($this->conc['CATPRE'] AS $k => $v) {
+                    if(!empty($v)){
+                        $this->conc['skCategoriaPrecio']= $k;
+                        $this->conc['fPrecioVenta']= $v;
+
+                        $stpCUD_conceptos = parent::stpCUD_conceptos();
+        
+                        if(!$stpCUD_conceptos || isset($stpCUD_conceptos['success']) && $stpCUD_conceptos['success'] != 1){
+                            $this->data['success'] = FALSE;
+                            $this->data['message'] = 'HUBO UN ERROR AL GUARDAR LOS PRECIOS DEL CONCEPTO';
+                            return $this->data;
+                        }
+                    }
+                }
+            }
+            
+            $this->data['success'] = TRUE;
+            $this->data['message'] = 'PRECIOS GUARDADOS CON EXITO';
             return $this->data;
         }
    
@@ -244,7 +284,14 @@ Class Conc_form_Controller Extends Conc_Model {
         $this->data = ['success' => TRUE, 'message' => NULL, 'datos' => NULL];
         $this->conc['skConcepto'] = (isset($_GET['p1']) && !empty($_GET['p1'])) ? $_GET['p1'] : NULL;
         $this->data['unidadesMedida'] = parent::consultar_unidadesMedida();
-        
+
+        // OBTENEMOS LAS CATEGORÍAS DE PRECIOS
+            $_get_categorias_precios = parent::_get_categorias_precios();
+            $this->data['categorias_precios'] = [];
+            foreach($_get_categorias_precios AS $k=>$v){
+                $this->data['categorias_precios'][$v['skCatalogoSistemaOpciones']] = $v;
+            }
+
         $impuestos = parent::getImpuestos();
           $conImpuestos= array();
           foreach($impuestos AS $k=>$v){
@@ -260,6 +307,12 @@ Class Conc_form_Controller Extends Conc_Model {
                     $conImpuestos[trim($v['nombre'])]['selected'] = 1;
                 }
             }
+
+            //OBTENEMOS LOS VALORES DE CATEGORÍAS DE PRECIOS
+                $_get_conceptos_precios = parent::_get_conceptos_precios();
+                foreach($_get_conceptos_precios AS $k=>$v){
+                    $this->data['categorias_precios'][$v['skCategoriaPrecio']]['fPrecioVenta'] = $v['fPrecioVenta'];
+                }
         }
         $this->data['conceptosImpuestos'] = $conImpuestos;
 

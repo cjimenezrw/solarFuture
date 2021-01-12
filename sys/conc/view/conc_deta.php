@@ -142,7 +142,7 @@ if (isset($data['datos'])) {
                 ?>
                     <tr>
                         <td><?php echo (!empty($row['sNombre'])) ? $row['sNombre'] : ''; ?></td>
-                        <td><?php echo (!empty($row['fPrecioVenta'])) ? '$'.$row['fPrecioVenta'] : ''; ?></td>
+                        <td><?php echo (!empty($row['fPrecioVenta'])) ? '$'.$row['fPrecioVenta'] : '-'; ?></td>
                     </tr>
                 <?php 
                     }//FOREACH

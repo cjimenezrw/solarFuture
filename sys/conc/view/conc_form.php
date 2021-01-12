@@ -25,7 +25,7 @@ if (isset($data['datos'])) {
                               </div>
                               <div class="col-md-4 col-lg-4">
                                 <div class="form-group">
-                                    <h4 class="example-title">Clave Producto/ Servicio <span class="required text-danger">*</span></h4>
+                                    <h4 class="example-title">Clave Producto / Servicio <span class="required text-danger">*</span></h4>
                                     <input class="form-control" name="iClaveProductoServicio" value="<?php echo (isset($result['iClaveProductoServicio'])) ? $result['iClaveProductoServicio'] : ''; ?>"  placeholder="Clave Producto/Servicio" autocomplete="off" type="text" >
                                 </div>
                             </div> 
@@ -88,7 +88,7 @@ if (isset($data['datos'])) {
                  <div class="row row-lg col-lg-12">
                      <div class="col-md-8 col-lg-8">
                          <div class="form-group">
-                             <h4 class="example-title"> Descripci&oacute;n</h4>
+                             <h4 class="example-title"> Descripción</h4>
                              <textarea class="form-control"  name="sDescripcion" placeholder="Descripcion del Concepto"><?php echo (isset($result['sDescripcion'])) ? ($result['sDescripcion']) : ''; ?></textarea>
                          </div>
                      </div>

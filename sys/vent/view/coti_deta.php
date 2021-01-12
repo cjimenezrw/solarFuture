@@ -23,7 +23,12 @@ if (isset($data['datos'])) {
                             <p><?php echo (!empty($result['skDivisa'])) ? $result['skDivisa'] : '';?> </p>
                         </div>
                     </div>
-                    
+                    <div class="col-md-4 col-lg-4">
+                          <div class="form-group">
+                              <h4 class="example-title">CATEGORIA</h4>
+                              <p><?php echo (!empty($result['categoria'])) ? $result['categoria'] : '';?></p>
+                          </div>
+                        </div>
                       <div class="col-md-4 col-lg-4">
                           <div class="form-group">
                               <h4 class="example-title">VIGENCIA</h4>

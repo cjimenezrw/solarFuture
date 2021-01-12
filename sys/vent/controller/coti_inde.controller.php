@@ -62,7 +62,12 @@ Class Coti_inde_Controller Extends Vent_Model {
                 */
                 
             //REGLA DEL MENÚ EMERGENTE
-                $regla = [];
+                $regla = [
+                    'menuEmergente3'=>[
+                        "id"=>$row['skCotizacion'].'/'.'CL',
+                        "clonar"=>'Clonar cotizacion'
+                    ]
+                ];
 
                 $row['dFechaCreacion'] = ($row['dFechaCreacion']) ? date('d/m/Y  H:i:s', strtotime($row['dFechaCreacion'])) : '';
                 $row['dFechaVigencia'] = ($row['dFechaVigencia']) ? date('d/m/Y', strtotime($row['dFechaVigencia'])) : '';

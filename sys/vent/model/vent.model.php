@@ -46,6 +46,8 @@ Class Vent_Model Extends DLOREAN_Model {
             " .escape(isset($this->vent['sCorreo']) ? $this->vent['sCorreo'] : NULL) . ",
             " .escape(isset($this->vent['skInformacionProductoServicio']) ? $this->vent['skInformacionProductoServicio'] : NULL) . ",
             " .escape(isset($this->vent['skCatalogoSistemaOpciones']) ? $this->vent['skCatalogoSistemaOpciones'] : NULL) . ",
+            " .escape(isset($this->vent['fCostoRecibo']) ? $this->vent['fCostoRecibo'] : NULL) . ",
+            " .escape(isset($this->vent['skCategoriaPrecio']) ? $this->vent['skCategoriaPrecio'] : NULL) . ",
             " .escape(isset($this->vent['axn']) ? $this->vent['axn'] : NULL) . ",
             '" . $_SESSION['usuario']['skUsuario'] . "',
             '" . $this->sysController . "' )";
@@ -87,8 +89,11 @@ Class Vent_Model Extends DLOREAN_Model {
         oc.fImpuestosRetenidos,
         oc.fImporteTotal,
         oc.fTipoCambio,
+        oc.fCostoRecibo,
+        oc.skCategoriaPrecio,
         cp.sNombreContacto AS prospecto,
         cep.sRFC AS clienteRFC,
+        rca.sNombre AS categoria,
         cu.sNombre AS usuarioCreacion,
         IF(cep.sNombre IS NOT NULL,cep.sNombre,cp.sNombreContacto) AS cliente
         FROM ope_cotizaciones oc 
@@ -96,6 +101,7 @@ Class Vent_Model Extends DLOREAN_Model {
         LEFT JOIN cat_prospectos cp ON cp.skProspecto = oc.skProspecto
         LEFT JOIN cat_empresas cep ON cep.skEmpresa = resc.skEmpresa
         LEFT JOIN cat_usuarios cu ON cu.skUsuario = oc.skUsuarioCreacion 
+        LEFT JOIN rel_catalogosSistemasOpciones rca ON rca.skCatalogoSistema = oc.skCategoriaPrecio
  
         WHERE  oc.skCotizacion =  " . escape($this->vent['skCotizacion']);
 
@@ -442,6 +448,25 @@ Class Vent_Model Extends DLOREAN_Model {
 		                cd.skDivisa,
                         cd.sNombre 
 		                FROM cat_divisas cd WHERE skEstatus='AC'";
+
+        $result = Conn::query($sql);
+        if (!$result) {
+            return FALSE;
+        }
+        return Conn::fetch_assoc_all($result);
+    }
+    /**
+     * _getCategorias
+     *
+     *
+     * @author Luis Alberto Valdez Alvarez <lvaldez@woodward.com.mx>
+     * @return array | false Retorna array de datos o false en caso de error
+     */
+    public function _getCategorias() {
+
+        $sql = "SELECT cso.sNombre,cso.skCatalogoSistemaOpciones AS skCategoriaPrecio  FROM cat_catalogosSistemas cs
+        INNER JOIN rel_catalogosSistemasOpciones cso ON cso.skCatalogoSistema = cs.skCatalogoSistema 
+        WHERE cs.skCatalogoSistema = 'CATPRE' AND cso.skEstatus = 'AC'";
 
         $result = Conn::query($sql);
         if (!$result) {

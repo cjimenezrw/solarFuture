@@ -400,7 +400,17 @@ Class Vent_Model Extends DLOREAN_Model {
      */
     public function consultar_conceptos_datos() {
 
-        $sql = "SELECT cse.fPrecioVenta FROM cat_conceptos cse WHERE cse.skConcepto = " . escape($this->vent['skConcepto']);
+        $sql = "SELECT   rcp.fPrecioVenta 
+        FROM cat_conceptos cse 
+        LEFT JOIN rel_conceptos_precios rcp ON rcp.skConcepto = cse.skConcepto 
+        WHERE cse.skConcepto = " . escape($this->vent['skConcepto']);
+
+        if (isset($this->vent['skCategoriaPrecio']) && !empty($this->vent['skCategoriaPrecio'])) {
+            $sql .= " AND rcp.skCategoriaPrecio = ".escape($this->vent['skCategoriaPrecio'])." LIMIT 1 ";
+        }else{
+            $sql .= " ORDER BY rcp.fPrecioVenta DESC LIMIT 1 ";
+        } 
+
 
         $result = Conn::query($sql);
         if (!$result) {

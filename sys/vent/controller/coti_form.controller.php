@@ -482,6 +482,8 @@ Class Coti_form_Controller Extends Vent_Model {
     }
     public function get_conceptos_datos(){
         $this->vent['skConcepto'] = (isset($_POST['skConcepto']) ? $_POST['skConcepto'] : NULL);
+        $this->vent['skCategoriaPrecio'] = (isset($_POST['skCategoriaPrecio']) ? $_POST['skCategoriaPrecio'] : NULL);
+       
         return parent::consultar_conceptos_datos();
   
     }

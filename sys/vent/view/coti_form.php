@@ -431,11 +431,12 @@ function addCommas(amount) {
         function obtenerDatos(obj){
         var skConcepto = $(obj).closest('tr').find('td').eq(2).find('select').val();
         var tr = $(obj).parent().parent();
-
+        var skCategoriaPrecio = $("#skCategoriaPrecio").val();
         $.post(window.location.href,
                                 {
                                     axn: 'get_conceptos_datos',
-                                    skConcepto: skConcepto
+                                    skConcepto: skConcepto,
+                                    skCategoriaPrecio:skCategoriaPrecio
                                 },
                                 function (data) {
                                     if(data){

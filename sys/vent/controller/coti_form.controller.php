@@ -41,7 +41,7 @@ Class Coti_form_Controller Extends Vent_Model {
                 Conn::rollback($this->idTran);
                 return $this->data;
             }
-            $this->vent['skCotizacion'] = (isset($_GET['p1']) ? $_GET['p1'] : NULL);  
+            $this->vent['skCotizacion'] = (isset($_POST['skCotizacion']) ? $_POST['skCotizacion'] : NULL);  
             // Guardar cotizacion
             $guardar_cotizacion = $this->guardar_cotizacion();
             if(!$guardar_cotizacion['success']){
@@ -404,11 +404,15 @@ Class Coti_form_Controller Extends Vent_Model {
     public function getDatos() {
         $this->data = ['success' => TRUE, 'message' => NULL, 'datos' => NULL];
         $this->vent['skCotizacion'] = (isset($_GET['p1']) && !empty($_GET['p1'])) ? $_GET['p1'] : NULL;
+        $this->vent['sClonar'] = (isset($_GET['p2']) && !empty($_GET['p2'])) ? $_GET['p2'] : NULL;
         $this->data['informacionProducto'] = parent::_getInformacionProducto();
         $this->data['terminosCondiciones'] = parent::_getTerminosCondiciones();
         $this->data['divisas'] = parent::_getDivisas();
+        $this->data['categoria'] = parent::_getCategorias();
+
 
         if (!empty($this->vent['skCotizacion'])) {
+            
             $this->data['datos'] = parent::_getCotizacion();
             $cotizacionConceptos = parent::_getCotizacionConceptos();
             $this->data['cotizacionesConceptos'] = $cotizacionConceptos;
@@ -417,6 +421,11 @@ Class Coti_form_Controller Extends Vent_Model {
 
             $this->data['cotizacionInformacionProducto'] = parent::_getCotizacionInformacionProducto();
             $this->data['cotizacionTerminosCondiciones'] = parent::_getCotizacionTerminosCondiciones();
+
+            if(!empty($this->vent['sClonar'])){
+                $this->data['datos']['skCotizacion'] = NULL;
+                $this->data['datos']['skCotizacion'] = NULL;
+            }
             
             
 

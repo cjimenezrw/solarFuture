@@ -25,6 +25,8 @@ if (isset($data['cotizacionTerminosCondiciones'])) {
  
 ?>
 <form class="form-horizontal" id="core-guardar" method="post"  enctype="multipart/form-data">
+<input value="<?php echo (!empty($result['skCotizacion']) ? $result['skCotizacion'] : '');?>" name="skCotizacion" id="skCotizacion"  type="hidden">
+
     <div class="panel panel-bordered panel-primary panel-line">
         <div class="panel-heading">
             <h3 class="panel-title">Datos Generales</h3>
@@ -50,7 +52,26 @@ if (isset($data['cotizacionTerminosCondiciones'])) {
                              </select>
                          </div>
                      </div>
-                     <div class="col-md-4 col-lg-3">
+                     <div class="col-md-4 col-lg-4">
+                     <div class="form-group">
+                             <h4 class="example-title">CATEGORIA <span class="required text-danger">*</span></h4>
+                             <select id="skCategoriaPrecio"  name="skCategoriaPrecio" class="form-control" data-plugin="select2" select2Simple>
+                                 <option value="">Seleccionar</option>
+                                 <?php
+                                 if ($data['categoria']) {
+                                 foreach (  $data['categoria'] as $row) {
+                                     utf8($row);
+                                     ?>
+                                     <option <?php echo(isset($result['skCategoriaPrecio']) && $result['skCategoriaPrecio'] == $row['skCategoriaPrecio'] ? 'selected="selected"' : '') ?>
+                                         value="<?php echo $row['skCategoriaPrecio']; ?>"> <?php echo $row['sNombre']; ?> </option>
+                                     <?php
+                                     }//ENDWHILE
+                                 }//ENDIF
+                                 ?>
+                             </select>
+                         </div>
+                   </div>
+                   <div class="col-md-4 col-lg-4">
                       <div class="form-group">
                           <h4 class="example-title">VIGENCIA </h4>
                           <div class="input-group">
@@ -608,6 +629,8 @@ function addCommas(amount) {
                         core.autocomplete2('.skConcepto', 'get_conceptos', window.location.href, 'Concepto');
                         core.autocomplete2('#skProspecto', 'get_prospectos', window.location.href, 'Prospecto');
                         $("#skDivisa").select2({placeholder: "Moneda", allowClear: true });
+                        $("#skCategoriaPrecio").select2({placeholder: "CATEGORIA", allowClear: true });
+                        
 
 
 

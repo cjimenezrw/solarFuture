@@ -62,3 +62,20 @@ vent.coti_form.validaciones = {
     } 
 
 };
+
+vent.coti_inde.clonar = function clonar(obj) {
+  
+    $.ajax({
+        url: '/sys',
+        type: 'POST',
+        data: {
+            axn: 'clonar',
+            skCotizacion: $(obj).val()
+        },
+        cache: false,
+        processData: true,
+        success: function (data) {
+             
+        }
+    });
+};

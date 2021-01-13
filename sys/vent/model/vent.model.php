@@ -95,7 +95,7 @@ Class Vent_Model Extends DLOREAN_Model {
         cep.sRFC AS clienteRFC,
         rca.sNombre AS categoria,
         cu.sNombre AS usuarioCreacion,
-        (ROUND(ROUND(oc.fImporteTotal/oc.fCostoRecibo)/12,1)) AS recuperacionInversion,
+        ROUND(ROUND(oc.fImporteTotal/oc.fCostoRecibo,1)/6,1) AS recuperacionInversion,
         IF(cep.sNombre IS NOT NULL,cep.sNombre,cp.sNombreContacto) AS cliente
         FROM ope_cotizaciones oc 
         LEFT JOIN rel_empresasSocios resc ON resc.skEmpresaSocio = oc.skEmpresaSocioCliente

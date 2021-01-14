@@ -95,13 +95,14 @@ Class Vent_Model Extends DLOREAN_Model {
         cep.sRFC AS clienteRFC,
         rca.sNombre AS categoria,
         cu.sNombre AS usuarioCreacion,
+        ROUND(ROUND(oc.fImporteTotal/oc.fCostoRecibo,1)/6,1) AS recuperacionInversion,
         IF(cep.sNombre IS NOT NULL,cep.sNombre,cp.sNombreContacto) AS cliente
         FROM ope_cotizaciones oc 
         LEFT JOIN rel_empresasSocios resc ON resc.skEmpresaSocio = oc.skEmpresaSocioCliente
         LEFT JOIN cat_prospectos cp ON cp.skProspecto = oc.skProspecto
         LEFT JOIN cat_empresas cep ON cep.skEmpresa = resc.skEmpresa
         LEFT JOIN cat_usuarios cu ON cu.skUsuario = oc.skUsuarioCreacion 
-        LEFT JOIN rel_catalogosSistemasOpciones rca ON rca.skCatalogoSistema = oc.skCategoriaPrecio
+        LEFT JOIN rel_catalogosSistemasOpciones rca ON rca.skCatalogoSistemaOpciones = oc.skCategoriaPrecio
  
         WHERE  oc.skCotizacion =  " . escape($this->vent['skCotizacion']);
 

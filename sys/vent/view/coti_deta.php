@@ -29,26 +29,35 @@ if (isset($data['datos'])) {
                               <p><?php echo (!empty($result['categoria'])) ? $result['categoria'] : '';?></p>
                           </div>
                         </div>
+						
                       <div class="col-md-4 col-lg-4">
                           <div class="form-group">
                               <h4 class="example-title">VIGENCIA</h4>
                               <p><?php echo (!empty($result['dFechaVigencia'])) ? date('d/m/Y', strtotime($result['dFechaVigencia'])) : ''; ?></p>
                           </div>
                         </div>
+						
                         <div class="col-md-4 col-lg-4">
                             <div class="form-group">
                                 <h4 class="example-title">CLIENTE:</h4>
                                 <p><?php echo (!empty($result['cliente'])) ? $result['cliente'] : '';?> </p>
                             </div>
                         </div>
-                </div>
-				<div class="col-md-12 same-heigth">
-				<div class="col-md-4 col-lg-4">
+						<div class="col-md-4 col-lg-4">
                             <div class="form-group">
                                 <h4 class="example-title">PROSPECTO:</h4>
                                 <p><?php echo (!empty($result['prospecto'])) ? $result['prospecto'] : '';?> </p>
                             </div>
                         </div>
+						<div class="col-md-4 col-lg-4">
+                            <div class="form-group">
+                                <h4 class="example-title">COSTO RECIBO:</h4>
+                                <p><?php echo (!empty($result['fCostoRecibo'])) ? $result['fCostoRecibo'] : '';?> </p>
+                            </div>
+                        </div>
+                </div>
+				<div class="col-md-12 same-heigth">
+				
 					<div class="col-md-8">
 					<div class="form-group">
 						<h4 class="example-title">EMAILS:</h4>
@@ -76,6 +85,12 @@ if (isset($data['datos'])) {
       								<div class="form-group">
       										<h4 class="example-title">CONDICION:</h4>
       										<p><?php echo (!empty($result['sCondicion'])) ? $result['sCondicion'] : 'N/D'; ?> </p>
+      								</div>
+      						</div>
+							  <div class="col-md-12 col-lg-12">
+      								<div class="form-group">
+      										<h4 class="example-title">RETORNO DE INVERSION:</h4>
+      										<p><?php echo (!empty($result['recuperacionInversion'])) ? $result['recuperacionInversion'] : 'N/D'; ?> ANOS </p>
       								</div>
       						</div>
 

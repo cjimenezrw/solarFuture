@@ -42,12 +42,6 @@ Class Coti_deta_Controller Extends Vent_Model {
         ob_end_clean();
     
         parent::pdf([
-            
-            'waterMark' => [
-            'imgsrc' => IMAGE_WATERMARK_PDF,
-            'opacity' => .09,
-            'size' => [150, 60]
-            ],
             'content' => $content,
             'header' => '<div></div>',
             'defaultFooter' => false,

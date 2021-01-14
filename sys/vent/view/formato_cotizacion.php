@@ -7,119 +7,125 @@ if (isset($data)) {
 
 
 ?>
+
 <style>
 
-    table {
-        background: white;
-        border-radius:4em;
-        border-collapse: collapse;
-        margin: auto;
-        padding:2px;
-        width: 100%;
-    }
+@page {
+    background: url('<?php echo ASSETS_PATH . 'assets/custom/img/bgpdf.svg'; ?>') no-repeat 0 0;
+    background-image-resize: 6;
+}
 
-    th {
-        color: #fff;;
-        background: #313234;
-        border-bottom:4px solid #9ea7af;
-        border-right: 1px solid #343a45;
-        font-size: 12px;
-        font-weight: 300;
-        padding:4px;
-        text-align:center;
-        text-shadow: 0 1px 1px rgba(0, 0, 0, 0.1);
-        vertical-align:middle;
-    }
+table {
+    background: white;
+    border-radius:4em;
+    border-collapse: collapse;
+    margin: auto;
+    padding:2px;
+    width: 100%;
+}
 
-    th:first-child {
-        border-top-left-radius:4em;
-    }
+th {
+    color: #fff;;
+    background: #313234;
+    border-bottom:4px solid #9ea7af;
+    border-right: 1px solid #343a45;
+    font-size: 12px;
+    font-weight: 300;
+    padding:4px;
+    text-align:center;
+    text-shadow: 0 1px 1px rgba(0, 0, 0, 0.1);
+    vertical-align:middle;
+}
 
-    th:last-child {
-        border-top-right-radius:4em;
-        border-right:none;
-    }
+th:first-child {
+    border-top-left-radius:4em;
+}
 
-    tr {
-        border-top: 1px solid #C1C3D1;
-        border-bottom-: 1px solid #C1C3D1;
-        color:#666B85;
-        font-size: 12px;
-        font-weight:normal;
-        text-shadow: 0 1px 1px rgba(256, 256, 256, 0.1);
-    }
+th:last-child {
+    border-top-right-radius:4em;
+    border-right:none;
+}
 
-    tr:hover td {
-        background:#4E5066;
-        color:#FFFFFF;
-        border-top: 1px solid #22262e;
-    }
+tr {
+    border-top: 1px solid #C1C3D1;
+    border-bottom-: 1px solid #C1C3D1;
+    color:#666B85;
+    font-size: 12px;
+    font-weight:normal;
+    text-shadow: 0 1px 1px rgba(256, 256, 256, 0.1);
+}
 
-    tr:first-child {
-        border-top:none;
-    }
+tr:hover td {
+    background:#4E5066;
+    color:#FFFFFF;
+    border-top: 1px solid #22262e;
+}
 
-    tr:last-child {
-        border-bottom:none;
-    }
+tr:first-child {
+    border-top:none;
+}
 
-    tr:nth-child(odd) td {
-        background:#EBEBEB;
-    }
+tr:last-child {
+    border-bottom:none;
+}
 
-    tr:nth-child(odd):hover td {
-        background:#4E5066;
-    }
+tr:nth-child(odd) td {
+    background:#EBEBEB;
+}
 
-    tr:last-child td:first-child {
-        border-bottom-left-radius:3px;
-    }
+tr:nth-child(odd):hover td {
+    background:#4E5066;
+}
 
-    tr:last-child td:last-child {
-        border-bottom-right-radius:3px;
-    }
+tr:last-child td:first-child {
+    border-bottom-left-radius:3px;
+}
 
-    td {
-        background:#FFFFFF;
-        padding:10px;
-        text-align:left;
-        vertical-align:middle;
-        font-weight:300;
-        font-size: 13px;
-        border-right: 1px solid #C1C3D1;
-    }
+tr:last-child td:last-child {
+    border-bottom-right-radius:3px;
+}
 
-    td:last-child {
-        border-right: 0px;
-    }
+td {
+    background:#FFFFFF;
+    padding:10px;
+    text-align:left;
+    vertical-align:middle;
+    font-weight:300;
+    font-size: 13px;
+    border-right: 1px solid #C1C3D1;
+}
 
-    th.text-left {
-        text-align: left;
-    }
+td:last-child {
+    border-right: 0px;
+}
 
-    th.text-center {
-        text-align: center;
-    }
+th.text-left {
+    text-align: left;
+}
 
-    th.text-right {
-        text-align: right;
-    }
+th.text-center {
+    text-align: center;
+}
 
-    td.text-left {
-        text-align: left;
-    }
+th.text-right {
+    text-align: right;
+}
 
-    td.text-center {
-        text-align: center;
-    }
+td.text-left {
+    text-align: left;
+}
 
-    td.text-right {
-        text-align: right;
-    }
+td.text-center {
+    text-align: center;
+}
 
-    .input-group {
-        display: none;
-    }
+td.text-right {
+    text-align: right;
+}
+
+.input-group {
+    display: none;
+}
 
 </style>
 
@@ -130,7 +136,7 @@ if (isset($data)) {
  
     <div class="col-md-8" style="text-align: right; margin-left: 70px;">
         <div class="" style="color:black;">
-            <span class="bold" style="color:red;font-size: 20px;text-transform: uppercase;">#<?php echo (isset($datos['iFolio'])) ? ($datos['iFolio']) : 'N/D'; ?></span><br>
+            <span class="bold" style="color:red;font-size: 20px;text-transform: uppercase;">Folio #<?php echo (isset($datos['iFolio'])) ? ($datos['iFolio']) : 'N/D'; ?></span><br>
             <span class="bold" style="font-size: 10px;text-transform: uppercase;">Solar Future Manzanillo S.A.S.</span><br>
             <span class="bold" style="font-size: 10px;">RFC: SFM1905213C3</span><br>
             <span  style="font-size: 10px;">AV. ELIAS ZAMORA VERDUZCO  #3220 "A"</span><br>
@@ -140,14 +146,15 @@ if (isset($data)) {
     </div>
 </div>
 <br>
-<div class="col-md-6">
-    <div  style="font-size:13px;" class="pull-left col-md-4"><b>CLIENTE:</b></div>
-    <div  style="font-size:13px;" class="pull-left col-md-8"><span style="color:#000000;"><?php echo (isset($datos['cliente'])) ? ($datos['cliente']) : 'N/D'; ?></span></div>
-    <br>
+<div class="col-md-12" style="font-size:13px;font-weight:bold;">
+    CLIENTE:
+</div>
+<div class="col-md-6" style="font-size:13px;color:#000000;">
+<?php echo (isset($datos['cliente'])) ? ($datos['cliente']) : 'N/D'; ?>
 </div>
 
 <div class="col-md-12" style="font-size:13px;">
-    <div class="col-md-offset-1 col-md-6 pull-right text-right"><small>FECHA VIGENCIA:</small> <small style="text-transform: uppercase;"><?php echo (isset($datos['dFechaVigencia']) && !empty($datos['dFechaVigencia'])) ? $this->obtenerFechaEnLetra($datos['dFechaVigencia']) : 'N/D'; ?></small></div>
+    <div class="col-md-offset-1 col-md-6 pull-right text-right"><small><b>FECHA VIGENCIA:</b></small> <small style="text-transform: uppercase;"><?php echo (isset($datos['dFechaVigencia']) && !empty($datos['dFechaVigencia'])) ? $this->obtenerFechaEnLetra($datos['dFechaVigencia']) : 'N/D'; ?></small></div>
     
 </div>
 
@@ -167,9 +174,8 @@ if (isset($data)) {
 	<thead>
 	    <tr>
 		<th class="text-center">Cod.</th>
- 		<th class="text-center" >Servicio</th>
+ 		<th class="text-left" >Producto / Servicio</th>
 		<th class="text-center">Cantidad</th>
-		<th class="text-center">Medida</th>
 		<th class="text-center">P. Unit</th>
 		<th class="text-center">Importe </th>
 		<th class="text-center">Desc </th>
@@ -186,7 +192,6 @@ if (isset($data)) {
 			<td style="text-align:center; font-size: 8px; text-transform: uppercase;" ><?php echo $conceptos['sCodigo']; ?></td>
  			<td style="text-align:left; font-size: 8px; text-transform: uppercase;" ><?php echo $conceptos['concepto']; ?></td>
 			<td style="text-align:right; font-size: 8px; text-transform: uppercase;" ><?php echo number_format($conceptos['fCantidad'], 2); ?></td>
-            <td style="text-align:left; font-size: 8px; text-transform: uppercase;" ><?php echo $conceptos['tipoMedida']; ?></td>
             <td style="text-align:right; font-size: 8px; text-transform: uppercase;" ><?php echo "$" . number_format($conceptos['fPrecioUnitario'], 2); ?></td>
 			<td style="text-align:right; font-size: 8px; text-transform: uppercase;" ><?php echo "$" . number_format($conceptos['fImporte'], 2); ?></td>
 			<td style="text-align:right; font-size: 8px; text-transform: uppercase;" ><?php echo "$" . number_format($conceptos['fDescuento'], 2); ?></td>
@@ -208,62 +213,42 @@ if (isset($data)) {
 	    }//ENDIF
 	    ?>
 	    <tr>
-		<td style="text-align:right; font-size: 8px; text-transform: uppercase;" ></td>
- 		<td style="text-align:right; font-size: 8px; text-transform: uppercase;" ></td>
-		<td style="text-align:right; font-size: 8px; text-transform: uppercase;" ></td>
-		<td style="text-align:right; font-size: 8px; text-transform: uppercase;" ></td>
-		<td style="text-align:right; font-size: 8px; text-transform: uppercase;" ></td>
-		<td style="text-align:right; font-size: 8px; text-transform: uppercase;" ></td>
-		<td style="text-align:right; font-size: 8px; text-transform: uppercase;" >SUBTOTAL: </td>
-		<td style="text-align:right; font-size: 8px; text-transform: uppercase;" ><?php echo " $" . number_format($result['fImporteSubtotal'], 2); ?></td>
+            <td colspan="6" style="text-align:right; font-size: 9px; text-transform: uppercase; font-weight:bold;" >SUBTOTAL: </td>
+            <td style="text-align:right; font-size: 9px; text-transform: uppercase;" ><?php echo " $" . number_format($result['fImporteSubtotal'], 2); ?></td>
 	    </tr>
 	    <tr>
-		<td style="text-align:right; font-size: 8px; text-transform: uppercase;" ></td>
- 		<td style="text-align:right; font-size: 8px; text-transform: uppercase;" ></td>
-		<td style="text-align:right; font-size: 8px; text-transform: uppercase;" ></td>
-		<td style="text-align:right; font-size: 8px; text-transform: uppercase;" ></td>
-		<td style="text-align:right; font-size: 8px; text-transform: uppercase;" ></td>
-		<td style="text-align:right; font-size: 8px; text-transform: uppercase;" ></td>
-		<td style="text-align:right; font-size: 8px; text-transform: uppercase;" >DESCUENTO: </td>
-		<td style="text-align:right; font-size: 8px; text-transform: uppercase;" ><?php echo " $" . number_format($result['fDescuento'], 2); ?></td>
+            <td colspan="6" style="text-align:right; font-size: 9px; text-transform: uppercase; font-weight:bold;" >DESCUENTO: </td>
+            <td style="text-align:right; font-size: 9px; text-transform: uppercase;" ><?php echo " $" . number_format($result['fDescuento'], 2); ?></td>
+	    </tr>
+	    <!--<tr>
+            <td colspan="6" style="text-align:right; font-size: 9px; text-transform: uppercase; font-weight:bold;" >RETENCION: </td>
+            <td style="text-align:right; font-size: 9px; text-transform: uppercase;" ><?php echo " $" . number_format($result['fImpuestosRetenidos'], 2); ?></td>
+	    </tr>!-->
+	    <!--<tr>
+		    <td colspan="6" style="text-align:right; font-size: 9px; text-transform: uppercase; font-weight:bold;" >TRANSLADOS: </td>
+		    <td style="text-align:right; font-size: 9px; text-transform: uppercase;" ><?php echo " $" . number_format($result['fImpuestosTrasladados'], 2); ?></td>
+	    </tr>!-->
+        <tr>
+		    <td colspan="6" style="text-align:right; font-size: 9px; text-transform: uppercase; font-weight:bold;" >IVA: </td>
+		    <td style="text-align:right; font-size: 9px; text-transform: uppercase;" ><?php echo " $" . number_format($result['fImpuestosTrasladados'], 2); ?></td>
 	    </tr>
 	    <tr>
-		<td style="text-align:right; font-size: 8px; text-transform: uppercase;" ></td>
- 		<td style="text-align:right; font-size: 8px; text-transform: uppercase;" ></td>
-		<td style="text-align:right; font-size: 8px; text-transform: uppercase;" ></td>
-		<td style="text-align:right; font-size: 8px; text-transform: uppercase;" ></td>
-		<td style="text-align:right; font-size: 8px; text-transform: uppercase;" ></td>
-		<td style="text-align:right; font-size: 8px; text-transform: uppercase;" ></td>
-		<td style="text-align:right; font-size: 8px; text-transform: uppercase;" >RETENCION: </td>
-		<td style="text-align:right; font-size: 8px; text-transform: uppercase;" ><?php echo " $" . number_format($result['fImpuestosRetenidos'], 2); ?></td>
+            <td colspan="1" style="text-align:right; font-size: 9px; text-transform: uppercase; border-right: none; font-weight:bold;" >IMPORTE CON LETRA: </td>
+            <td colspan="4" style="text-align:left; font-size: 9px; text-transform: uppercase; border-right: none;" ><?php echo NumeroALetras::convertir($result['fImporteTotal'],'PESOS','CENTAVOS',true). ' 20/100M.N.'; ?></td>
+            <td colspan="1" style="text-align:right; font-size: 9px; text-transform: uppercase; font-weight:bold;" >TOTAL: </td>
+            <td style="text-align:right; font-size: 9px; text-transform: uppercase;" ><?php echo " $" . number_format($result['fImporteTotal'], 2); ?></td>
 	    </tr>
-	    <tr>
-		<td style="text-align:right; font-size: 8px; text-transform: uppercase;" ></td>
- 		<td style="text-align:right; font-size: 8px; text-transform: uppercase;" ></td>
-		<td style="text-align:right; font-size: 8px; text-transform: uppercase;" ></td>
-		<td style="text-align:right; font-size: 8px; text-transform: uppercase;" ></td>
-		<td style="text-align:right; font-size: 8px; text-transform: uppercase;" ></td>
-		<td style="text-align:right; font-size: 8px; text-transform: uppercase;" ></td>
-		<td style="text-align:right; font-size: 8px; text-transform: uppercase;" >TRANSLADOS: </td>
-		<td style="text-align:right; font-size: 8px; text-transform: uppercase;" ><?php echo " $" . number_format($result['fImpuestosTrasladados'], 2); ?></td>
-	    </tr>
-	    <tr>
-		<td style="text-align:right; font-size: 8px; text-transform: uppercase;" ></td>
- 		<td style="text-align:right; font-size: 8px; text-transform: uppercase;" ></td>
-		<td style="text-align:right; font-size: 8px; text-transform: uppercase;" ></td>
-		<td style="text-align:right; font-size: 8px; text-transform: uppercase;" ></td>
-		<td style="text-align:right; font-size: 8px; text-transform: uppercase;" ></td>
-		<td style="text-align:right; font-size: 8px; text-transform: uppercase;" ></td>
-		<td style="text-align:right; font-size: 8px; text-transform: uppercase;" >TOTAL: </td>
-		<td style="text-align:right; font-size: 8px; text-transform: uppercase;" ><?php echo " $" . number_format($result['fImporteTotal'], 2); ?></td>
-	    </tr>
+        <!--<tr>
+            <td colspan="3" style="text-align:right; font-size: 10px; text-transform: uppercase;border-right: none;" >IMPORTE CON LETRA: </td>
+            <td colspan="4" style="text-align:right; font-size: 10px; text-transform: uppercase;" ><?php echo NumeroALetras::convertir($result['fImporteTotal'],'PESOS','CENTAVOS',true); ?></td>
+	    </tr>!-->
 
 	</tbody>
     </table>
 </div>
-<div class="col-md-12" >
+<div class="col-md-12 clearfix" >
     <div class="condiciones" style="font-size: 10px;">
-        <span class="bold" ><?php echo (isset($datos['sCondicion'])) ? ($datos['sCondicion']) : 'N/D'; ?></span><br>
+        <span class="bold" ><?php echo (isset($datos['sCondicion'])) ? ($datos['sCondicion']) : ''; ?></span><br>
     </div>
 
 </div>
@@ -298,9 +283,9 @@ if (isset($data['cotizacionInformacionProducto'])) {
         <div class="col-md-12">
             <div  style="font-size:10px;" class="pull-left col-md-4">
            
-             <?php echo (!empty($rutaImgen)) ? '<img src="'.$rutaImgen.'" alt="'.$infoProductos['sNombre'].'" width="100" height="100">' : 'N/D'; ?>
+             <?php echo (!empty($rutaImgen)) ? '<img src="'.$rutaImgen.'" alt="'.$infoProductos['sNombre'].'" width="100" height="100">' : ''; ?>
             </div>
-            <div  style="font-size:10px;" class="pull-left col-md-8"><span style="color:#000000;"><?php echo (isset($infoProductos['sDescripcion'])) ? (html_entity_decode($infoProductos['sDescripcion'],ENT_QUOTES)) : 'N/D'; ?></span></div>
+            <div  style="font-size:10px;" class="pull-left col-md-8"><span style="color:#000000;"><?php echo (isset($infoProductos['sDescripcion'])) ? (html_entity_decode($infoProductos['sDescripcion'],ENT_QUOTES)) : ''; ?></span></div>
             <br>
         </div>
 

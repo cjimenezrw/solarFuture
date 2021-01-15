@@ -1,17 +1,10 @@
-<?php
-if (isset($data)) {
-    $datos = $data['datos'];
-    $result = $data['datos'];
-    //utf8($result);
-}
-
-
+<?php 
+    //exit('<pre>'.print_r($data,1).'</pre>');
 ?>
-
 <style>
 
 @page {
-    background: url('<?php echo ASSETS_PATH . 'assets/custom/img/bgpdf.svg'; ?>') no-repeat 0 0;
+    background: url('<?php echo ASSETS_PATH . 'assets/custom/img/bgpdf3.svg'; ?>') no-repeat 0 0;
     background-image-resize: 6;
 }
 
@@ -136,7 +129,7 @@ td.text-right {
  
     <div class="col-md-8" style="text-align: right; margin-left: 70px;">
         <div class="" style="color:black;">
-            <span class="bold" style="color:red;font-size: 20px;text-transform: uppercase;">Folio #<?php echo (isset($datos['iFolio'])) ? ($datos['iFolio']) : 'N/D'; ?></span><br>
+            <span class="bold" style="color:red;font-size: 20px;text-transform: uppercase;">Folio #<?php echo (isset($data['datos']['iFolio'])) ? ($data['datos']['iFolio']) : 'N/D'; ?></span><br>
             <span class="bold" style="font-size: 10px;text-transform: uppercase;">Solar Future Manzanillo S.A.S.</span><br>
             <span class="bold" style="font-size: 10px;">RFC: SFM1905213C3</span><br>
             <span  style="font-size: 10px;">AV. ELIAS ZAMORA VERDUZCO  #3220 "A"</span><br>
@@ -145,31 +138,23 @@ td.text-right {
         </div>
     </div>
 </div>
-<br>
-<div class="col-md-12" style="font-size:13px;font-weight:bold;">
-    CLIENTE:
+
+<div class="col-md-12 clearfix" style="font-size:13px;font-weight:bold;">
+    RECEPTOR:
 </div>
+
 <div class="col-md-6" style="font-size:13px;color:#000000;">
-<?php echo (isset($datos['cliente'])) ? ($datos['cliente']) : 'N/D'; ?>
+    <?php echo (isset($data['datos']['cliente'])) ? ($data['datos']['cliente']) : 'N/D'; ?>
 </div>
 
-<div class="col-md-12" style="font-size:13px;">
-    <div class="col-md-offset-1 col-md-6 pull-right text-right"><small><b>FECHA VIGENCIA:</b></small> <small style="text-transform: uppercase;"><?php echo (isset($datos['dFechaVigencia']) && !empty($datos['dFechaVigencia'])) ? $this->obtenerFechaEnLetra($datos['dFechaVigencia']) : 'N/D'; ?></small></div>
-    
+<div class="col-md-12 clearfix" style="font-size:13px;margin-top: 50px;">
+    <div class="col-md-offset-1 col-md-6 pull-right text-right">
+        <small><b>ELABORADO POR:</b></small> <small style="text-transform: uppercase;"><?php echo (!empty($data['datos']['usuarioCreacion']) ? $data['datos']['usuarioCreacion'] : ''); ?></small><br>
+        <small><b>FECHA VIGENCIA:</b></small> <small style="text-transform: uppercase;"><?php echo (isset($data['datos']['dFechaVigencia']) && !empty($data['datos']['dFechaVigencia'])) ? $this->obtenerFechaEnLetra($data['datos']['dFechaVigencia']) : 'N/D'; ?></small>
+    </div>
 </div>
 
-
-
-<div><br></div>
-
-
-
-
-
-
- 
-
-<div class="col-md-12 page-invoice-table table-responsive font-size-12">
+<div class="col-md-12 page-invoice-table table-responsive font-size-12" style="margin-top: 10px;">
     <table class="table text-right">
 	<thead>
 	    <tr>
@@ -214,87 +199,79 @@ td.text-right {
 	    ?>
 	    <tr>
             <td colspan="6" style="text-align:right; font-size: 9px; text-transform: uppercase; font-weight:bold;" >SUBTOTAL: </td>
-            <td style="text-align:right; font-size: 9px; text-transform: uppercase;" ><?php echo " $" . number_format($result['fImporteSubtotal'], 2); ?></td>
+            <td style="text-align:right; font-size: 9px; text-transform: uppercase;" ><?php echo " $" . number_format($data['datos']['fImporteSubtotal'], 2); ?></td>
 	    </tr>
 	    <tr>
             <td colspan="6" style="text-align:right; font-size: 9px; text-transform: uppercase; font-weight:bold;" >DESCUENTO: </td>
-            <td style="text-align:right; font-size: 9px; text-transform: uppercase;" ><?php echo " $" . number_format($result['fDescuento'], 2); ?></td>
+            <td style="text-align:right; font-size: 9px; text-transform: uppercase;" ><?php echo " $" . number_format($data['datos']['fDescuento'], 2); ?></td>
 	    </tr>
 	    <!--<tr>
             <td colspan="6" style="text-align:right; font-size: 9px; text-transform: uppercase; font-weight:bold;" >RETENCION: </td>
-            <td style="text-align:right; font-size: 9px; text-transform: uppercase;" ><?php echo " $" . number_format($result['fImpuestosRetenidos'], 2); ?></td>
+            <td style="text-align:right; font-size: 9px; text-transform: uppercase;" ><?php echo " $" . number_format($data['datos']['fImpuestosRetenidos'], 2); ?></td>
 	    </tr>!-->
 	    <!--<tr>
 		    <td colspan="6" style="text-align:right; font-size: 9px; text-transform: uppercase; font-weight:bold;" >TRANSLADOS: </td>
-		    <td style="text-align:right; font-size: 9px; text-transform: uppercase;" ><?php echo " $" . number_format($result['fImpuestosTrasladados'], 2); ?></td>
+		    <td style="text-align:right; font-size: 9px; text-transform: uppercase;" ><?php echo " $" . number_format($data['datos']['fImpuestosTrasladados'], 2); ?></td>
 	    </tr>!-->
         <tr>
 		    <td colspan="6" style="text-align:right; font-size: 9px; text-transform: uppercase; font-weight:bold;" >IVA: </td>
-		    <td style="text-align:right; font-size: 9px; text-transform: uppercase;" ><?php echo " $" . number_format($result['fImpuestosTrasladados'], 2); ?></td>
+		    <td style="text-align:right; font-size: 9px; text-transform: uppercase;" ><?php echo " $" . number_format($data['datos']['fImpuestosTrasladados'], 2); ?></td>
 	    </tr>
 	    <tr>
             <td colspan="1" style="text-align:right; font-size: 9px; text-transform: uppercase; border-right: none; font-weight:bold;" >IMPORTE CON LETRA: </td>
-            <td colspan="4" style="text-align:left; font-size: 9px; text-transform: uppercase; border-right: none;" ><?php echo NumeroALetras::convertir($result['fImporteTotal'],'PESOS','CENTAVOS',true). ' 20/100M.N.'; ?></td>
+            <td colspan="4" style="text-align:left; font-size: 9px; text-transform: uppercase; border-right: none;" ><?php echo NumeroALetras::convertir($data['datos']['fImporteTotal'],'PESOS','CENTAVOS',true). ' 20/100M.N.'; ?></td>
             <td colspan="1" style="text-align:right; font-size: 9px; text-transform: uppercase; font-weight:bold;" >TOTAL: </td>
-            <td style="text-align:right; font-size: 9px; text-transform: uppercase;" ><?php echo " $" . number_format($result['fImporteTotal'], 2); ?></td>
+            <td style="text-align:right; font-size: 9px; text-transform: uppercase;" ><?php echo " $" . number_format($data['datos']['fImporteTotal'], 2); ?></td>
 	    </tr>
-        <!--<tr>
-            <td colspan="3" style="text-align:right; font-size: 10px; text-transform: uppercase;border-right: none;" >IMPORTE CON LETRA: </td>
-            <td colspan="4" style="text-align:right; font-size: 10px; text-transform: uppercase;" ><?php echo NumeroALetras::convertir($result['fImporteTotal'],'PESOS','CENTAVOS',true); ?></td>
-	    </tr>!-->
-
 	</tbody>
     </table>
 </div>
-<div class="col-md-12 clearfix" >
-    <div class="condiciones" style="font-size: 10px;">
-        <span class="bold" ><?php echo (isset($datos['sCondicion'])) ? ($datos['sCondicion']) : ''; ?></span><br>
-    </div>
 
+<?php if(!empty($data['datos']['sCondicion'])){ ?>
+<div class="col-md-12 clearfix">
+    <span style="font-size:13px;font-weight:bold;">CONDICIONES</span><br>
+    <span style="font-size:9px;"><?php echo nl2br($data['datos']['sCondicion']); ?></span>
 </div>
- 
-<br>
-<?php
-if (isset($data['cotizacionTerminosCondiciones'])) {
-    foreach ($data['cotizacionTerminosCondiciones'] AS $terminosCondiciones) {
-        
-        ?>
-        <div class="col-md-12">
-            
-            <div  style="font-size:13px;" class="pull-left col-md-12"><span ><?php echo (isset($terminosCondiciones['terminoCondicion'])) ? ($terminosCondiciones['terminoCondicion']) : 'N/D'; ?></span></div>
-           
-        </div>
+<?php }//ENDIF ?>
 
-        <?php
-    }//FOREACH
-    }
-    ?>
+<?php if(!empty($data['datos']['sCondicion'])){ ?>
+    <div class="col-md-12" style="font-size:13px;margin-top: 10px;">
+<?php foreach ($data['cotizacionTerminosCondiciones'] AS $terminosCondiciones) { ?>
+    <div class="pull-left col-md-12" style="font-size:9px;">
+        <span ><?php echo (isset($terminosCondiciones['terminoCondicion'])) ? ($terminosCondiciones['terminoCondicion']) : ''; ?></span>
+    </div>
+<?php }//FOREACH ?>
+    </div>
+<?php }//ENDIF ?>
 
-<br>
-<br>
-<?php
-if (isset($data['cotizacionInformacionProducto'])) {
-    foreach ($data['cotizacionInformacionProducto'] AS $infoProductos) {
+<?php if(isset($data['cotizacionInformacionProducto'])){ ?>
+    <div class="col-md-12" style="margin-top: 10px;">
+<?php foreach ($data['cotizacionInformacionProducto'] AS $infoProductos){ 
         $rutaImgen = "";
         if(file_exists(DIR_PROJECT.'files/vent/coti-deta/'.$infoProductos['sImagen'])){
             $rutaImgen = DIR_PROJECT.'files/vent/coti-deta/'.$infoProductos['sImagen'];
         }
-        ?>
-        <div class="col-md-12">
-            <div  style="font-size:10px;" class="pull-left col-md-4">
-           
-             <?php echo (!empty($rutaImgen)) ? '<img src="'.$rutaImgen.'" alt="'.$infoProductos['sNombre'].'" width="100" height="100">' : ''; ?>
+?>
+        <div class="col-md-12 clearfix">
+            <div  style="font-size:9px;" class="pull-left col-md-4">
+                <?php echo (!empty($rutaImgen)) ? '<img src="'.$rutaImgen.'" alt="'.$infoProductos['sNombre'].'" width="100" height="100">' : ''; ?>
             </div>
-            <div  style="font-size:10px;" class="pull-left col-md-8"><span style="color:#000000;"><?php echo (isset($infoProductos['sDescripcion'])) ? (html_entity_decode($infoProductos['sDescripcion'],ENT_QUOTES)) : ''; ?></span></div>
-            <br>
+            <div  style="font-size:9px;" class="pull-left col-md-8">
+                <span style="color:#000000;"><?php echo (isset($infoProductos['sDescripcion'])) ? (html_entity_decode($infoProductos['sDescripcion'],ENT_QUOTES)) : ''; ?></span>
+            </div>
         </div>
+<?php }//FOREACH ?>
+    </div>
+<?php }//ENDIF ?>
 
-        <?php
-    }//FOREACH
-    }
-    ?>
- 
-<br>
+<?php if(!empty($data['PIECOT'])){ ?>
+<div class="col-md-12 clearfix" style="font-size: 9px;">
+        <?php echo nl2br($data['PIECOT']); ?>
+</div>
+<?php }//ENDIF ?>
 
-
-
+<?php if(!empty($data['BANCOT'])){ ?>
+<div class="col-md-12 clearfix" style="font-size: 9px;">
+        <?php echo nl2br($data['BANCOT']); ?>
+</div>
+<?php }//ENDIF ?>

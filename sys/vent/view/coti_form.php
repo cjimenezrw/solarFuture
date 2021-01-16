@@ -110,13 +110,7 @@ if (isset($data['cotizacionTerminosCondiciones'])) {
                         </select>
                         </div>
                     </div>
-                    <div class="col-md-4 col-lg-4">
-                    <div class="form-group">
-                        <h4 class="example-title">COSTO RECIBO:</h4>
-                        <input class="form-control" name="fCostoRecibo" value="<?php echo (isset($result['fCostoRecibo'])) ? $result['fCostoRecibo'] : '0'; ?>" placeholder="COSTO RECIBO" autocomplete="off" type="text" >
-
-                        </div>
-                    </div>
+                    
 
 
                               
@@ -126,16 +120,24 @@ if (isset($data['cotizacionTerminosCondiciones'])) {
                  <div class="row row-lg col-lg-12">
                      <hr>
                  </div>
+                 
+                 
                  <div class="row row-lg col-lg-12">
-                    <div class="col-md-6 col-lg-6">
+                    <div class="col-md-12 col-lg-12">
                          <div class="form-group">
-                             <h4 class="example-title"> Condicion</h4>
+                             <h4 class="example-title"> Condicion  <i
+                                    class="icon wb-help-circle help-text" aria-hidden="true"
+                                    data-content="La condicion se mostrara en el archivo PDF de la cotizacion"
+                                    data-trigger="hover"></i></h4>
                              <textarea class="form-control"  name="sCondicion" placeholder="Condicion"><?php echo (isset($result['sCondicion'])) ? ($result['sCondicion']) : ''; ?></textarea>
                          </div>
                      </div>
-                     <div class="col-md-6 col-lg-6">
+                     <div class="col-md-12 col-lg-12">
                          <div class="form-group">
-                             <h4 class="example-title"> Observaciones</h4>
+                             <h4 class="example-title"> Observaciones   <i
+                                    class="icon wb-help-circle help-text" aria-hidden="true"
+                                    data-content="No aparecen en la cotizacion"
+                                    data-trigger="hover"></i></h4>
                              <textarea class="form-control"  name="sObservaciones" placeholder="Descripcion de la Cotizacion"><?php echo (isset($result['sObservaciones'])) ? ($result['sObservaciones']) : ''; ?></textarea>
                          </div>
                      </div>
@@ -144,7 +146,45 @@ if (isset($data['cotizacionTerminosCondiciones'])) {
                      <hr>
                  </div>
                  <div class="row row-lg col-lg-12">
-                     <div class="col-md-8 col-lg-8">
+                    <h5 class="card-title margin-bottom-20">
+                    
+                    <div class="checkbox-custom checkbox-primary">
+                                    <input type="checkbox" name="iInformacionPanel"  <?php echo (isset($result['iInformacionPanel']) && !empty($result['iInformacionPanel']) ) ? 'checked' : ''; ?> value="1" id="iInformacionPanel"    />
+                                    <label for="iInformacionPanel">Informacion adicional de Panel Solar</label>
+                    </div>
+                        
+                        
+                        
+                    </h5>
+                 </div>
+                 <div class="row row-lg col-lg-12">
+                 
+                 <div class="col-md-4 col-lg-4">
+                        <div class="form-group">
+                        <h4 class="example-title">Kw Gastados: <i
+                                    class="icon wb-help-circle help-text" aria-hidden="true"
+                                    data-content="Promedio de Kw gastados por bimestre"
+                                    data-trigger="hover"></i></h4>
+                        <input class="form-control" name="fKwGastados" value="<?php echo (isset($result['fKwGastados'])) ? $result['fKwGastados'] : ''; ?>" placeholder="KW Gastados" autocomplete="off" type="text" >
+
+                    </div>
+                </div>
+                 <div class="col-md-4 col-lg-4">
+                        <div class="form-group">
+                        <h4 class="example-title">COSTO RECIBO: <i
+                                    class="icon wb-help-circle help-text" aria-hidden="true"
+                                    data-content="Capturar el costo promedio del recibo Bimestral"
+                                    data-trigger="hover"></i></h4>
+                        <input class="form-control" name="fCostoRecibo" value="<?php echo (isset($result['fCostoRecibo'])) ? $result['fCostoRecibo'] : '0'; ?>" placeholder="COSTO RECIBO" autocomplete="off" type="text" >
+
+                        </div>
+                    </div>
+                 </div>
+                 <div class="row row-lg col-lg-12">
+                     <hr>
+                 </div>
+                 <div class="row row-lg col-lg-12">
+                     <div class="col-md-12 col-lg-12">
                          <div class="form-group">
                              <h4 class="example-title"> Correos</h4>
                              <select name="sCorreos[]" id="sCorreos" class="form-control select2"  autocomplete="off" multiple="multiple" data-plugin="select2">
@@ -477,6 +517,7 @@ function addCommas(amount) {
  
     var tr_concepto = '';
     $(document).ready(function () {
+        $('.help-text').webuiPopover();
         $('#sCorreos').tagsinput({
 					    trimValue: true,
 					    freeInput: true,

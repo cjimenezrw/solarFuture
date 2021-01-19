@@ -47,6 +47,9 @@ Class Vent_Model Extends DLOREAN_Model {
             " .escape(isset($this->vent['skInformacionProductoServicio']) ? $this->vent['skInformacionProductoServicio'] : NULL) . ",
             " .escape(isset($this->vent['skCatalogoSistemaOpciones']) ? $this->vent['skCatalogoSistemaOpciones'] : NULL) . ",
             " .escape(isset($this->vent['fCostoRecibo']) ? $this->vent['fCostoRecibo'] : NULL) . ",
+            " .escape(isset($this->vent['iInformacionPanel']) ? $this->vent['iInformacionPanel'] : NULL) . ",
+            " .escape(isset($this->vent['fKwGastados']) ? $this->vent['fKwGastados'] : NULL) . ",
+            
             " .escape(isset($this->vent['skCategoriaPrecio']) ? $this->vent['skCategoriaPrecio'] : NULL) . ",
             " .escape(isset($this->vent['axn']) ? $this->vent['axn'] : NULL) . ",
             '" . $_SESSION['usuario']['skUsuario'] . "',
@@ -90,6 +93,8 @@ Class Vent_Model Extends DLOREAN_Model {
         oc.fImporteTotal,
         oc.fTipoCambio,
         oc.fCostoRecibo,
+        oc.iInformacionPanel,
+        oc.fKwGastados,
         oc.skCategoriaPrecio,
         cp.sNombreContacto AS prospecto,
         cep.sRFC AS clienteRFC,

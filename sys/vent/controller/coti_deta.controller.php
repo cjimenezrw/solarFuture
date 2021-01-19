@@ -31,30 +31,50 @@ Class Coti_deta_Controller Extends Vent_Model {
     }
 
     public function formatoPDF() {
-        //$data = [];
+        
         $this->data = $this->consultar();
         
-        
         ob_start();
-        $this->load_view('formato_cotizacion', $this->data, NULL, FALSE);
-        $content = ob_get_contents();
+            $this->load_view('formato_cotizacion', $this->data, NULL, FALSE);
+            $formato_cotizacion = ob_get_contents();
         ob_end_clean();
-    
+
+        ob_start();
+            $this->load_view('formato_cotizacion_analisis', $this->data, NULL, FALSE);
+            $formato_cotizacion_analisis = ob_get_contents();
+        ob_end_clean();
+
         parent::pdf([
-            'content' => $content,
-            'header' => '<div></div>',
-            'defaultFooter' => false,
-            'footer' => '',
-            'pdf' => array(
-            'contentMargins' => [10, 15, 5, 5],
-            'format' => 'LETTER',
-            'vertical' => 'L',
-            'footerMargin' => 5,
-            'headerMargin' => 5,
-            'fileName' => 'Cotizacion.pdf'
-            )
+            [
+                'content' => $formato_cotizacion,
+                'header' => '<div></div>',
+                'defaultFooter' => false,
+                'footer' => '',
+                'pdf' => [
+                    'contentMargins' => [10, 15, 5, 5],
+                    'format' => 'LETTER',
+                    'vertical' => 'L',
+                    'footerMargin' => 5,
+                    'headerMargin' => 5,
+                    'fileName' => 'Cotizacion.pdf'
+                ]
+            ],
+            [
+                'content' => $formato_cotizacion_analisis,
+                'header' => '<div></div>',
+                'defaultFooter' => false,
+                'footer' => '',
+                'pdf' => [
+                    'contentMargins' => [10, 15, 5, 5],
+                    'format' => 'LETTER',
+                    'vertical' => 'L',
+                    'footerMargin' => 5,
+                    'headerMargin' => 5
+                ]
+            ]
         ]);
+
         return true;
-        }
+    }
 
 }

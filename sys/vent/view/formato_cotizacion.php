@@ -122,7 +122,6 @@ td.text-right {
 
 </style>
 
-<br>
 <div class="col-md-12 " style="margin-bottom: 10px;">
     <div class="col-md-4 pull-left"><img style="margin-left:00px;" src="<?php echo IMAGE_LOGO_PDF; ?>" width="180px"></div>
 

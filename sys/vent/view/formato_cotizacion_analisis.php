@@ -189,7 +189,7 @@ td.text-right {
 
 <div class="col-md-offset-1 col-md-5" style="text-align:center;background:#FBD47B;border-radius:10px;height:155px;padding-top:10px;">
     <span style="text-align:center; font-size: 18px;font-weight:bold;color:#000000;margin-top:190px;">$57,644.01</span><br>
-    <img src="<?php echo ASSETS_PATH . 'assets/custom/img/icons/graph_up_color2.png'; ?>" width="98px"/><br>
+    <img src="<?php echo ASSETS_PATH . 'assets/custom/img/icons/graph_up_color.png'; ?>" width="98px"/><br>
     <span style="text-align:center; font-size: 11px;text-decoration:underline;font-weight:bold;color:#5C5C5C;">CONSUMO TOTAL A CFE EL ÚLTIMO AÑO<span>
 </div>
 
@@ -283,7 +283,7 @@ td.text-right {
 <div class="col-md-12" style="border: 1px solid #C1C3D1;border-left: 4px solid #29ACF0;border-radius:5px;padding:10px;height:185px;">
     <div class="col-md-7" style="border-right: 2px solid #C1C3D1;">
         <div class="col-md-12">
-            <span style="font-size:14px;font-weight:bold;">Tu Instalación Solar</span><br><br>
+            <span style="font-size:14px;font-weight:bold;">Instalación Solar</span><br><br>
         </div>
         <div class="col-md-12 clearfix"></div>
         <div class="col-md-4" style="text-align:center;">

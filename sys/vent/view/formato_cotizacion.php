@@ -195,7 +195,9 @@ td.text-right {
 		    <?php
 		    $i++;
 		}//FOREACH
-	    }//ENDIF
+        }//ENDIF
+            $centavos = explode('.',$data['datos']['fImporteTotal']);
+            $centavos = ($centavos[1]);
 	    ?>
 	    <tr>
             <td colspan="6" style="text-align:right; font-size: 9px; text-transform: uppercase; font-weight:bold;" >SUBTOTAL: </td>
@@ -219,7 +221,7 @@ td.text-right {
 	    </tr>
 	    <tr>
             <td colspan="1" style="text-align:right; font-size: 9px; text-transform: uppercase; border-right: none; font-weight:bold;" >IMPORTE CON LETRA: </td>
-            <td colspan="4" style="text-align:left; font-size: 9px; text-transform: uppercase; border-right: none;" ><?php echo NumeroALetras::convertir($data['datos']['fImporteTotal'],'PESOS','CENTAVOS',true). ' 20/100M.N.'; ?></td>
+            <td colspan="4" style="text-align:left; font-size: 9px; text-transform: uppercase; border-right: none;" ><?php echo NumeroALetras::convertir($data['datos']['fImporteTotal'],'PESOS','CENTAVOS',true). ' '.$centavos.'/100M.N.'; ?></td>
             <td colspan="1" style="text-align:right; font-size: 9px; text-transform: uppercase; font-weight:bold;" >TOTAL: </td>
             <td style="text-align:right; font-size: 9px; text-transform: uppercase;" ><?php echo " $" . number_format($data['datos']['fImporteTotal'], 2); ?></td>
 	    </tr>

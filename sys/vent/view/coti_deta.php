@@ -110,7 +110,63 @@ if (isset($data['datos'])) {
 
             </div>
         </div>
-        
+		<?php if(!empty($result['iInformacionPanel'])){ ?>
+        <div class="row">
+          <!-- First Row -->
+          <div class="col-xl-3 col-md-6 info-panel">
+            <div class="card card-shadow">
+              <div class="card-block bg-white p-20">
+                <button type="button" class="btn btn-floating btn-sm btn-warning">
+                  <i class="icon fa-credit-card"></i>
+                </button>
+                <span class="ml-15 font-weight-400">Gasto Total</span>
+                <div class="content-text text-center mb-0">
+                  <span class="font-size-20 font-weight-100"><?php echo (!empty($result['gastoAnual'])) ? "$".number_format($result['gastoAnual'],2) : '0';?></span>
+                </div>
+              </div>
+            </div>
+          </div>
+		  <div class="col-xl-3 col-md-6 info-panel">
+            <div class="card card-shadow">
+              <div class="card-block bg-white p-20">
+                <button type="button" class="btn btn-floating btn-sm btn-danger">
+                  <i class="icon fa-bolt"></i>
+                </button>
+                <span class="ml-15 font-weight-400">Consumo Total</span>
+                <div class="content-text text-center mb-0">
+                  <span class="font-size-20 font-weight-100"><?php echo (!empty($result['consumoAnual'])) ? number_format($result['consumoAnual'],2)." Kwh" : '0';?></span>
+                </div>
+              </div>
+            </div>
+          </div>
+		  <div class="col-xl-3 col-md-6 info-panel">
+            <div class="card card-shadow">
+              <div class="card-block bg-white p-20">
+                <button type="button" class="btn btn-floating btn-sm btn-success">
+                  <i class="icon fa-credit-card"></i>
+                </button>
+                <span class="ml-15 font-weight-400">Produccion Total</span>
+                <div class="content-text text-center mb-0">
+                  <span class="font-size-20 font-weight-100"><?php echo (!empty($result['produccionAnual'])) ? number_format($result['produccionAnual'],2)." Kwh" : '0';?></span>
+                </div>
+              </div>
+            </div>
+          </div>
+		  <div class="col-xl-3 col-md-6 info-panel">
+            <div class="card card-shadow">
+              <div class="card-block bg-white p-20">
+                <button type="button" class="btn btn-floating btn-sm btn-success">
+                  <i class="icon fa-bolt"></i>
+                </button>
+                <span class="ml-15 font-weight-400">Porcentaje Cubierto</span>
+                <div class="content-text text-center mb-0">
+                  <span class="font-size-20 font-weight-100"><?php echo (!empty($result['porcentajeAnualCubierto'])) ? number_format($result['porcentajeAnualCubierto'],2)."%" : '0';?></span>
+                </div>
+              </div>
+            </div>
+          </div>
+          </div>
+		  <?php } ?>
          <div class="panel panel-bordered panel-primary panel-line" style="display: block;">
             
             <div class="panel-heading">

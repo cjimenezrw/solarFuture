@@ -147,10 +147,10 @@ td.text-right {
 
 <div class="col-md-offset-1 col-md-6" style="border: 1px solid #C1C3D1;border-left: 4px solid #5C5C5C;border-radius:5px;padding:10px;height:110px;">
     <span style="font-size:14px;font-weight:bold;">Información General</span><br><br>
-    <span style="font-size:12px;font-weight:bold;color:#5C5C5C;">Nombre:</span><span style="font-size:10px;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Christian Josué Jímenez Sánchez</span><br>
-    <span style="font-size:12px;font-weight:bold;color:#5C5C5C;">Tarifa CFE:</span><span style="font-size:10px;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;DAC</span><br>
-    <span style="font-size:12px;font-weight:bold;color:#5C5C5C;">Nombre CFE:</span><span style="font-size:10px;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Christian Josué Jímenez Sánchez</span><br>
-    <span style="font-size:12px;font-weight:bold;color:#5C5C5C;">Número CFE:</span><span style="font-size:10px;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;3453564575</span><br>
+    <span style="font-size:12px;font-weight:bold;color:#5C5C5C;">Nombre:</span><span style="font-size:10px;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<?php echo (isset($data['datos']['cliente'])) ? ($data['datos']['cliente']) : 'N/D'; ?>/span><br>
+    <span style="font-size:12px;font-weight:bold;color:#5C5C5C;"><!--Tarifa CFE:</span><span style="font-size:10px;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;DAC</span>--><br>
+    <span style="font-size:12px;font-weight:bold;color:#5C5C5C;">Nombre CFE:</span><span style="font-size:10px;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<?php echo (isset($data['datos']['cliente'])) ? ($data['datos']['cliente']) : 'N/D'; ?></span><br>
+    <span style="font-size:12px;font-weight:bold;color:#5C5C5C;"><!--Número CFE:</span><span style="font-size:10px;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;3453564575</span-->><br>
 </div>
 
 
@@ -168,11 +168,11 @@ td.text-right {
     <tr>
     <tr>
         <td style="text-align:center;height:70px;">
-            <span style="text-align:center; font-size: 12px; font-weight:bold;">$57,644.01</span><br>
+            <span style="text-align:center; font-size: 12px; font-weight:bold;"><?php echo (isset($data['datos']['fImporteTotal'])) ? "$ ".number_format($data['datos']['fImporteTotal'],2) : 'N/D'; ?></span><br>
             <span style="text-align:center; font-size: 10px;">Gasto Total</span>
         </td>
         <td style="text-align:center;height:70px;">
-            <span style="text-align:center; font-size: 12px; font-weight:bold;">7,152 Kwh</span><br>
+            <span style="text-align:center; font-size: 12px; font-weight:bold;"><?php echo (isset($data['datos']['consumoAnual'])) ? "$ ".number_format($data['datos']['consumoAnual'],0) : 'N/D'; ?> Kwh</span><br>
             <span style="text-align:center; font-size: 10px;">Consumo Total</span>
         </td>
         <td style="text-align:center;height:70px;">
@@ -180,7 +180,7 @@ td.text-right {
             <span style="text-align:center; font-size: 10px;">Precio Promedio</span>
         </td>
         <td style="text-align:center;height:70px;">
-            <span style="text-align:center; font-size: 12px; font-weight:bold;">238%</span><br>
+            <span style="text-align:center; font-size: 12px; font-weight:bold;"><?php echo (isset($data['datos']['porcentajeAnualCubierto'])) ? "$ ".number_format($data['datos']['porcentajeAnualCubierto'],2) : 'N/D'; ?>%</span><br>
             <span style="text-align:center; font-size: 10px;">Arriba límite DAC</span>
         </td>
     <tr>
@@ -188,7 +188,7 @@ td.text-right {
 </div>
 
 <div class="col-md-offset-1 col-md-5" style="text-align:center;background:#FBD47B;border-radius:10px;height:155px;padding-top:10px;">
-    <span style="text-align:center; font-size: 18px;font-weight:bold;color:#000000;margin-top:190px;">$57,644.01</span><br>
+    <span style="text-align:center; font-size: 18px;font-weight:bold;color:#000000;margin-top:190px;">$<?php echo (isset($data['datos']['gastoAnual'])) ? number_format($data['datos']['gastoAnual'],2) : 'N/D'; ?></span><br>
     <img src="<?php echo ASSETS_PATH . 'assets/custom/img/icons/graph_up_color.png'; ?>" width="98px"/><br>
     <span style="text-align:center; font-size: 11px;text-decoration:underline;font-weight:bold;color:#5C5C5C;">CONSUMO TOTAL A CFE EL ÚLTIMO AÑO<span>
 </div>
@@ -221,10 +221,10 @@ td.text-right {
     <div class="col-md-6" style="text-align:center;border-right: 1px solid #C1C3D1;height:150px;">
         <div class="col-md-12" style="font-size:14px;font-weight:bold;">Anual</div>
         <div class="col-md-12 clearfix"></div>
-        <div class="col-md-offset-1 col-md-5" style="text-align:center;background:#FC5555;height:100px;border: 1px solid #FC5555;border-radius:5px;color:#FFFFFF;font-size:10px;font-weight:bold;"><br><br><br>$57,644.01</div>
+        <div class="col-md-offset-1 col-md-5" style="text-align:center;background:#FC5555;height:100px;border: 1px solid #FC5555;border-radius:5px;color:#FFFFFF;font-size:10px;font-weight:bold;"><br><br><br>$<?php echo (isset($data['datos']['gastoAnual'])) ? number_format($data['datos']['gastoAnual'],2) : 'N/D'; ?></div>
         <div class="col-md-offset-1 col-md-5" style="text-align:center;">
             <div class="col-md-12" style="text-align:center;height:80px;"></div>
-            <div class="col-md-12" style="text-align:center;background:#49C526;height:20px;border: 1px solid #49C526;border-radius:5px;color:#FFFFFF;font-size:10px;font-weight:bold;">$0.00</div>
+            <div class="col-md-12" style="text-align:center;background:#49C526;height:20px;border: 1px solid #49C526;border-radius:5px;color:#FFFFFF;font-size:10px;font-weight:bold;">$300.00</div>
         </div>
         <div class="col-md-6" style="font-size:10px;font-weight:normal;">SIN PANEL</div>
         <div class="col-md-6" style="font-size:10px;font-weight:normal;">CON PANEL</div>
@@ -234,11 +234,11 @@ td.text-right {
         <div class="col-md-12 clearfix"></div>
         <div class="col-md-offset-1 col-md-6" style="text-align:center;">
             <div class="col-md-12" style="text-align:center;height:40px;"></div>
-            <div class="col-md-12" style="text-align:center;background:#FC5555;height:60px;border: 1px solid #FC5555;border-radius:5px;color:#FFFFFF;font-size:10px;font-weight:bold;"><br><br>$7,000.00</div>
+            <div class="col-md-12" style="text-align:center;background:#FC5555;height:60px;border: 1px solid #FC5555;border-radius:5px;color:#FFFFFF;font-size:10px;font-weight:bold;"><br><br>$<?php echo (isset($data['datos']['fCostoRecibo'])) ? number_format($data['datos']['fCostoRecibo'],2) : 'N/D'; ?></div>
         </div>
         <div class="col-md-offset-1 col-md-5" style="text-align:center;">
             <div class="col-md-12" style="text-align:center;height:80px;"></div>
-            <div class="col-md-12" style="text-align:center;background:#49C526;height:20px;border: 1px solid #49C526;border-radius:5px;color:#FFFFFF;font-size:10px;font-weight:bold;">$0.00</div>
+            <div class="col-md-12" style="text-align:center;background:#49C526;height:20px;border: 1px solid #49C526;border-radius:5px;color:#FFFFFF;font-size:10px;font-weight:bold;">$50.00</div>
         </div>
         <div class="col-md-6" style="font-size:10px;font-weight:normal;">SIN PANEL</div>
         <div class="col-md-6" style="font-size:10px;font-weight:normal;">CON PANEL</div>
@@ -259,11 +259,11 @@ td.text-right {
     <tr>
     <tr>
         <td style="text-align:center;height:70px;">
-            <span style="text-align:center; font-size: 14px; font-weight:bold;">$83,234.00</span><br>
+            <span style="text-align:center; font-size: 14px; font-weight:bold;">$<?php echo (isset($data['datos']['fImporteTotal'])) ? number_format($data['datos']['fImporteTotal'],2) : 'N/D'; ?></span><br>
             <span style="text-align:center; font-size: 12px;">Monto Total</span>
         </td>
         <td style="text-align:center;height:70px;">
-            <span style="text-align:center; font-size: 14px; font-weight:bold;">2.8 Años</span><br>
+            <span style="text-align:center; font-size: 14px; font-weight:bold;"><?php echo (isset($data['datos']['recuperacionInversion'])) ? ($data['datos']['recuperacionInversion']) : 'N/D'; ?> Años</span><br>
             <span style="text-align:center; font-size: 12px;">Retorno de Inversión</span>
         </td>
         <td style="text-align:center;height:70px;">
@@ -271,7 +271,7 @@ td.text-right {
             <span style="text-align:center; font-size: 12px;">Años Garantizados</span>
         </td>
         <td style="text-align:center;height:70px;">
-            <span style="text-align:center; font-size: 14px; font-weight:bold;">101%</span><br>
+            <span style="text-align:center; font-size: 14px; font-weight:bold;"><?php echo (isset($data['datos']['porcentajeAnualCubierto'])) ? number_format($data['datos']['porcentajeAnualCubierto'],2) : 'N/D'; ?>%</span><br>
             <span style="text-align:center; font-size: 12px;">Ahorro del primer año</span>
         </td>
     <tr>
@@ -290,7 +290,7 @@ td.text-right {
             <div class="dot">
                 <img src="<?php echo ASSETS_PATH . 'assets/custom/img/icons/energy_circle.png'; ?>" width="50px"/><span><br>
                 <span  style="text-align:center; font-size: 10px;color:#000000;font-weight:bold;">Capacidad<span><br>
-                <span  style="text-align:center; font-size: 10px;color:#000000;font-weight:normal;">4.62kW<span>
+                <span  style="text-align:center; font-size: 10px;color:#000000;font-weight:normal;"><?php echo (isset($data['datos']['capacidad'])) ? number_format($data['datos']['capacidad'],2) : 'N/D'; ?>kW<span>
             </div>
         </div>
         <div class="col-md-4" style="text-align:center; font-size: 10px;color:#000000;font-weight:bold;">
@@ -317,14 +317,14 @@ td.text-right {
             <div class="dot">
                 <img src="<?php echo ASSETS_PATH . 'assets/custom/img/icons/battery.png'; ?>" width="40px"/><span><br>
                 <span  style="text-align:center; font-size: 10px;color:#000000;font-weight:bold;">Energía Producida<span><br>
-                <span  style="text-align:center; font-size: 10px;color:#000000;font-weight:normal;">7,249 kW<span>
+                <span  style="text-align:center; font-size: 10px;color:#000000;font-weight:normal;"><?php echo (isset($data['datos']['produccionAnual'])) ? number_format($data['datos']['produccionAnual'],0) : 'N/D'; ?> kW<span>
             </div>
         </div>
         <div class="col-md-offset-1 col-md-6" style="text-align:center; font-size: 10px;color:#000000;font-weight:bold;">
             <div class="dot">
                 <img src="<?php echo ASSETS_PATH . 'assets/custom/img/icons/renewable_energy.png'; ?>" width="50px"/><span><br>
                 <span  style="text-align:center; font-size: 10px;color:#000000;font-weight:bold;">Consumo Total<span><br>
-                <span  style="text-align:center; font-size: 10px;color:#000000;font-weight:normal;">101%<span>
+                <span  style="text-align:center; font-size: 10px;color:#000000;font-weight:normal;"><?php echo (isset($data['datos']['porcentajeAnualCubierto'])) ? number_format($data['datos']['porcentajeAnualCubierto'],2) : 'N/D'; ?>%<span>
             </div>
         </div>
     </div>

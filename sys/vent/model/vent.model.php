@@ -100,7 +100,16 @@ Class Vent_Model Extends DLOREAN_Model {
         cep.sRFC AS clienteRFC,
         rca.sNombre AS categoria,
         cu.sNombre AS usuarioCreacion,
+        (SELECT  (SUM(fKwConcepto)/1000) FROM rel_cotizaciones_conceptos WHERE skCotizacion = oc.skCotizacion  ) AS capacidad,
+        (SELECT  ((SUM(fKwConcepto)*4.5)/1000) FROM rel_cotizaciones_conceptos WHERE skCotizacion = oc.skCotizacion  ) AS produccionDiaria,
+        (SELECT  ((SUM(fKwConcepto)*4.5)/1000)*30 FROM rel_cotizaciones_conceptos WHERE skCotizacion = oc.skCotizacion  ) AS produccionMensual,
+        (SELECT  ((SUM(fKwConcepto)*4.5)/1000)*60 FROM rel_cotizaciones_conceptos WHERE skCotizacion = oc.skCotizacion  ) AS produccionBimestral,
+        (SELECT  ((SUM(fKwConcepto)*4.5)/1000)*365 FROM rel_cotizaciones_conceptos WHERE skCotizacion = oc.skCotizacion  ) AS produccionAnual,
+        (SELECT  ((((SUM(fKwConcepto)*4.5)/1000)*365) /(oc.fKwGastados*6)*100) FROM rel_cotizaciones_conceptos WHERE skCotizacion = oc.skCotizacion  ) AS porcentajeAnualCubierto,
+
         ROUND(ROUND(oc.fImporteTotal/oc.fCostoRecibo,1)/6,1) AS recuperacionInversion,
+        (oc.fCostoRecibo * 6) AS gastoAnual,
+        (oc.fKwGastados * 6) AS consumoAnual,
         IF(cep.sNombre IS NOT NULL,cep.sNombre,cp.sNombreContacto) AS cliente
         FROM ope_cotizaciones oc 
         LEFT JOIN rel_empresasSocios resc ON resc.skEmpresaSocio = oc.skEmpresaSocioCliente

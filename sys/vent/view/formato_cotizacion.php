@@ -3,7 +3,7 @@
 ?>
 <style>
 
-@page {
+@page :first {
     background: url('<?php echo ASSETS_PATH . 'assets/custom/img/bgpdf3.svg'; ?>') no-repeat 0 0;
     background-image-resize: 6;
 }
@@ -122,6 +122,7 @@ td.text-right {
 
 </style>
 
+<br>
 <div class="col-md-12 " style="margin-bottom: 10px;">
     <div class="col-md-4 pull-left"><img style="margin-left:00px;" src="<?php echo IMAGE_LOGO_PDF; ?>" width="180px"></div>
 

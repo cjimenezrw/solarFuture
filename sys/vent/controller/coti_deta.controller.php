@@ -47,9 +47,11 @@ Class Coti_deta_Controller Extends Vent_Model {
         parent::pdf([
             [
                 'content' => $formato_cotizacion,
+                'defaultWatermark' => false,
                 'header' => '<div></div>',
+                'footer' => '<div></div>',
                 'defaultFooter' => false,
-                'footer' => '',
+                'defaultHeader' => false,
                 'pdf' => [
                     'contentMargins' => [10, 15, 5, 5],
                     'format' => 'LETTER',
@@ -61,9 +63,11 @@ Class Coti_deta_Controller Extends Vent_Model {
             ],
             [
                 'content' => $formato_cotizacion_analisis,
+                'defaultWatermark' => false,
                 'header' => '<div></div>',
+                'footer' => '<div></div>',
                 'defaultFooter' => false,
-                'footer' => '',
+                'defaultHeader' => false,
                 'pdf' => [
                     'contentMargins' => [10, 15, 5, 5],
                     'format' => 'LETTER',

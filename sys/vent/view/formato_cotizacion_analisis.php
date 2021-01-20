@@ -187,12 +187,11 @@ td.text-right {
     </table>
 </div>
 
-<div class="col-md-offset-1 col-md-5" style="text-align:center;background:#FBD47B;border: 0px solid #FBD47B;border-radius:10px;height:155px;padding-top:10px;">
-    <span style="text-align:center; font-size: 16px;font-weight:bold;color:#000000;margin-top:190px;">$57,644.01</span><br>
-    <span style="text-align:center; font-size: 10px;color:#000000;margin-top:190px;">Fue tu consumo total a la CFE el último año.<span><br>
-    <img src="<?php echo ASSETS_PATH . 'assets/custom/img/icons/graph_up_color.png'; ?>" width="98px"/>
+<div class="col-md-offset-1 col-md-5" style="text-align:center;background:#FBD47B;border-radius:10px;height:155px;padding-top:10px;">
+    <span style="text-align:center; font-size: 18px;font-weight:bold;color:#000000;margin-top:190px;">$57,644.01</span><br>
+    <img src="<?php echo ASSETS_PATH . 'assets/custom/img/icons/graph_up_color2.png'; ?>" width="98px"/><br>
+    <span style="text-align:center; font-size: 11px;text-decoration:underline;font-weight:bold;color:#5C5C5C;">CONSUMO TOTAL A CFE EL ÚLTIMO AÑO<span>
 </div>
-
 
 <div class="col-md-12 clearfix"></div>
 
@@ -323,7 +322,7 @@ td.text-right {
         </div>
         <div class="col-md-offset-1 col-md-6" style="text-align:center; font-size: 10px;color:#000000;font-weight:bold;">
             <div class="dot">
-                <img src="<?php echo ASSETS_PATH . 'assets/custom/img/icons/renewable_energy.png'; ?>" width="40px"/><span><br>
+                <img src="<?php echo ASSETS_PATH . 'assets/custom/img/icons/renewable_energy.png'; ?>" width="50px"/><span><br>
                 <span  style="text-align:center; font-size: 10px;color:#000000;font-weight:bold;">Consumo Total<span><br>
                 <span  style="text-align:center; font-size: 10px;color:#000000;font-weight:normal;">101%<span>
             </div>

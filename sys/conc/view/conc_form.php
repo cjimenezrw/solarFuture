@@ -55,6 +55,7 @@ if (isset($data['datos'])) {
                              </select>
                          </div>
                      </div>
+
                     <div class="col-md-4 col-lg-4">
                         <div class="form-group">
                             <h4 class="example-title">PRECIO COMPRA </h4>
@@ -84,6 +85,31 @@ if (isset($data['datos'])) {
                             <input class="form-control" name="fKwh" value="<?php echo (isset($result['fKwh'])) ? $result['fKwh'] : ''; ?>" placeholder="KWH" autocomplete="off" type="text" >
                         </div>
                     </div>
+                    <div class="col-md-4 col-lg-4">
+                        <div class="form-group">
+                            <h4 class="example-title">METROS 2</h4>
+                            <input class="form-control" name="fMetros2" value="<?php echo (isset($result['fMetros2'])) ? $result['fMetros2'] : ''; ?>" placeholder="M2" autocomplete="off" type="text" >
+                        </div>
+                    </div>
+                    <div class="col-md-4 col-lg-4">
+                         <div class="form-group">
+                             <h4 class="example-title">CATEGORÍA PRODUCTO <span class="required text-danger">*</span></h4>
+                             <select id="skCategoriaProducto"  name="skCategoriaProducto" class="form-control" data-plugin="select2" select2Simple>
+                                 <option value="">Seleccionar</option>
+                                 <?php
+                                 if ($data['categorias_producto']) {
+                                 foreach (  $data['categorias_producto'] as $row) {
+                                     utf8($row);
+                                     ?>
+                                     <option <?php echo(isset($result['skCategoriaProducto']) && $result['skCategoriaProducto'] == $row['skClave'] ? 'selected="selected"' : '') ?>
+                                         value="<?php echo $row['skClave']; ?>"> <?php echo $row['sNombre']; ?> </option>
+                                     <?php
+                                     }//ENDWHILE
+                                 }//ENDIF
+                                 ?>
+                             </select>
+                         </div>
+                     </div>
                 </div>
                  <div class="row row-lg col-lg-12">
                      <div class="col-md-8 col-lg-8">
@@ -171,9 +197,10 @@ if (isset($data['datos'])) {
 
     $(document).ready(function () {
 
-        $("#skUnidadMedida").select2({placeholder: "Unidad de Medida", allowClear: true });
+        $("#skUnidadMedida").select2({placeholder: "UNIDAD DE MEDIDA", allowClear: true });
+        $("#skCategoriaProducto").select2({placeholder: "CATEGORÍA PRODUCTO", allowClear: true });
           
-        core.autocomplete2('#skEmpresaSocioProveedor', 'get_empresas', window.location.href, 'Proveedor',{
+        core.autocomplete2('#skEmpresaSocioProveedor', 'get_empresas', window.location.href, 'PROVEEDOR',{
             skEmpresaTipo : '["PROV"]'
         });
    

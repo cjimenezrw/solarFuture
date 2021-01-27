@@ -286,11 +286,15 @@ Class Conc_form_Controller Extends Conc_Model {
         $this->data['unidadesMedida'] = parent::consultar_unidadesMedida();
 
         // OBTENEMOS LAS CATEGORÍAS DE PRECIOS
-            $_get_categorias_precios = parent::_get_categorias_precios();
+            //$_get_categorias_precios = parent::_get_categorias_precios();
+            $_get_categorias_precios = parent::getCatalogoSistema(['skCatalogoSistema'=>'CATPRE']);
             $this->data['categorias_precios'] = [];
             foreach($_get_categorias_precios AS $k=>$v){
                 $this->data['categorias_precios'][$v['skCatalogoSistemaOpciones']] = $v;
             }
+
+        // OBTENEMOS LAS CATEGORÍAS DE PRECIOS
+            $this->data['categorias_producto'] = parent::getCatalogoSistema(['skCatalogoSistema'=>'CATPRO']);
 
         $impuestos = parent::getImpuestos();
           $conImpuestos= array();
@@ -315,7 +319,7 @@ Class Conc_form_Controller Extends Conc_Model {
                 }
         }
         $this->data['conceptosImpuestos'] = $conImpuestos;
-
+        
         return $this->data;
     }
 

@@ -26,8 +26,8 @@ if (isset($data['datos'])) {
                     
                       <div class="col-md-4 col-lg-4">
                           <div class="form-group">
-                              <h4 class="example-title">CODIGO</h4>
-                              <p><?php echo (!empty($result['sCodigo'])) ? $result['sCodigo'] : 'N/D'; ?> </p>
+                              <h4 class="example-title">CÓDIGO</h4>
+                              <p><?php echo (!empty($result['sCodigo'])) ? $result['sCodigo'] : '-'; ?> </p>
                           </div>
                         </div>
                         <div class="col-md-4 col-lg-4">
@@ -43,45 +43,62 @@ if (isset($data['datos'])) {
                     <div class="col-md-4 col-lg-4">
                       <div class="form-group">
                           <h4 class="example-title">UNIDAD DE MEDIDA</h4>
-                          <p><?php echo (!empty($result['unidadMedida'])) ? $result['unidadMedida'] : 'N/D'; ?> </p>
+                          <p><?php echo (!empty($result['unidadMedida'])) ? $result['unidadMedida'] : '-'; ?> </p>
                       </div>
                     </div>
                     <div class="col-md-4 col-lg-4">
                       <div class="form-group">
                           <h4 class="example-title">PRECIO DE COMPRA</h4>
-                          <p><?php echo (!empty($result['fPrecioCompra'])) ? number_format($result['fPrecioCompra'],2) : 'N/D'; ?> </p>
+                          <p><?php echo (!empty($result['fPrecioCompra'])) ? number_format($result['fPrecioCompra'],2) : '-'; ?> </p>
                       </div>
                     </div>
                     <div class="col-md-4 col-lg-4">
                       <div class="form-group">
                           <h4 class="example-title">PRECIO DE VENTA</h4>
-                          <p><?php echo (!empty($result['fPrecioVenta'])) ? number_format($result['fPrecioVenta'],2) : 'N/D'; ?> </p>
+                          <p><?php echo (!empty($result['fPrecioVenta'])) ? number_format($result['fPrecioVenta'],2) : '-'; ?> </p>
                       </div>
                     </div>
                 </div>
 
 
                 <div class="col-md-12 clearfix"><hr></div>
+
+                <div class="col-md-12 same-heigth">
+                    <div class="col-md-4 col-lg-4">
+                        <div class="form-group">
+                            <h4 class="example-title">Kwh</h4>
+                            <p><?php echo (!empty($result['fKwh'])) ? number_format($result['fKwh'],2) : '-'; ?> </p>
+                        </div>
+                    </div>
+                    <div class="col-md-4 col-lg-4">
+                        <div class="form-group">
+                            <h4 class="example-title">METROS 2</h4>
+                            <p><?php echo (!empty($result['fMetros2'])) ? $result['fMetros2'] : '-'; ?> </p>
+                        </div>
+                    </div>
+                    <div class="col-md-4 col-lg-4">
+                        <div class="form-group">
+                            <h4 class="example-title">CATEGORÍA PRODUCTO</h4>
+                            <p><?php echo (!empty($result['categoriaProducto'])) ? $result['categoriaProducto'] : '-'; ?> </p>
+                        </div>
+                    </div>
+                </div>
+
                 <div class="col-md-12 same-heigth">
                 <div class="col-md-4 col-lg-4">
                       <div class="form-group">
-                          <h4 class="example-title">Kwh</h4>
-                          <p><?php echo (!empty($result['fKwh'])) ? number_format($result['fKwh'],2) : 'N/D'; ?> </p>
-                      </div>
-                    </div>
-                    <div class="col-md-4 col-lg-4">
-                      <div class="form-group">
                           <h4 class="example-title">PROVEEDOR</h4>
-                          <p><?php echo (!empty($result['proveedor'])) ? $result['proveedor'] : 'N/D'; ?> </p>
+                          <p><?php echo (!empty($result['proveedor'])) ? $result['proveedor'] : '-'; ?> </p>
                       </div>
                     </div>
                 </div>
+
                 <div class="col-md-12 clearfix"><hr></div>
                 <div class="col-md-12 same-heigth">
                   <div class="col-md-12 col-lg-8">
       								<div class="form-group">
-      										<h4 class="example-title">DESCRIPCION:</h4>
-      										<p><?php echo (!empty($result['sDescripcion'])) ? $result['sDescripcion'] : 'N/D'; ?> </p>
+      										<h4 class="example-title">DESCRIPCIÓN:</h4>
+      										<p><?php echo (!empty($result['sDescripcion'])) ? $result['sDescripcion'] : '-'; ?> </p>
       								</div>
       						</div>
 
@@ -121,7 +138,7 @@ if (isset($data['datos'])) {
 
         <div class="panel panel-bordered panel-primary panel-line">
     <div class="panel-heading">
-        <h3 class="panel-title">Categoría de Precios</h3>
+        <h3 class="panel-title">CATEGORÍA DE PRECIOS</h3>
     </div>
     <div class="panel-body container-fluid">
         <div class="row row-lg">

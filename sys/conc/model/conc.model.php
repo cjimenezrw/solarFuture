@@ -36,6 +36,8 @@ Class Conc_Model Extends DLOREAN_Model {
             " .escape(isset($this->conc['fPrecioVenta']) ? $this->conc['fPrecioVenta'] : NULL) . ",
             " .escape(isset($this->conc['skImpuestoConcepto']) ? $this->conc['skImpuestoConcepto'] : NULL) . ",
             " .escape(isset($this->conc['fKwh']) ? $this->conc['fKwh'] : NULL) . ",
+            " .escape(isset($this->conc['skCategoriaProducto']) ? $this->conc['skCategoriaProducto'] : NULL) . ",
+            " .escape(isset($this->conc['fMetros2']) ? $this->conc['fMetros2'] : NULL) . ",
             " .escape(isset($this->conc['axn']) ? $this->conc['axn'] : NULL) . ",
             '" . $_SESSION['usuario']['skUsuario'] . "',
             '" . $this->sysController . "' )";
@@ -98,6 +100,9 @@ Class Conc_Model Extends DLOREAN_Model {
                 cc.iClaveProductoServicio,
                 cc.skEmpresaSocioProveedor,
                 cc.fKwh,
+                cc.skCategoriaProducto,
+                cso.sNombre AS categoriaProducto,
+                cc.fMetros2,
                 ce.sNombre AS estatus,
                 ce.sIcono AS estatusIcono,
                 ce.sColor AS estatusColor,
@@ -111,9 +116,8 @@ Class Conc_Model Extends DLOREAN_Model {
                 LEFT JOIN rel_empresasSocios resp ON resp.skEmpresaSocio = cc.skEmpresaSocioProveedor
                 LEFT JOIN cat_empresas cep ON cep.skEmpresa = resp.skEmpresa
                 LEFT JOIN cat_unidadesMedidaSAT cum ON cum.skUnidadMedida = cc.skUnidadMedida
-            
-                WHERE  cc.skConcepto =  " . escape($this->conc['skConcepto']);
-
+                LEFT JOIN rel_catalogosSistemasOpciones cso ON cso.skClave = cc.skCategoriaProducto AND cso.skCatalogoSistema = 'CATPRO'
+                WHERE cc.skConcepto =  " . escape($this->conc['skConcepto']);
 
         $result = Conn::query($sql);
         if (!$result) {

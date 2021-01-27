@@ -297,14 +297,14 @@ td.text-right {
             <div class="dot">
                 <img src="<?php echo ASSETS_PATH . 'assets/custom/img/icons/solar_panel.png'; ?>" width="50px"/><span><br>
                 <span  style="text-align:center; font-size: 10px;color:#000000;font-weight:bold;">Paneles<span><br>
-                <span  style="text-align:center; font-size: 10px;color:#000000;font-weight:normal;">14<span>
+                <span  style="text-align:center; font-size: 10px;color:#000000;font-weight:normal;"><?php echo (isset($data['datos']['cantidadPanel'])) ? number_format($data['datos']['cantidadPanel'],0) : '0'; ?> <span>
             </div>
         </div>
         <div class="col-md-4" style="text-align:center; font-size: 10px;color:#000000;font-weight:bold;">
             <div class="dot">
                 <img src="<?php echo ASSETS_PATH . 'assets/custom/img/icons/roof.png'; ?>" width="64px"/><span><br>
                 <span  style="text-align:center; font-size: 10px;color:#000000;font-weight:bold;">Instalación<span><br>
-                <span  style="text-align:center; font-size: 10px;color:#000000;font-weight:normal;">32 m2<span>
+                <span  style="text-align:center; font-size: 10px;color:#000000;font-weight:normal;"><?php echo (isset($data['datos']['metros2'])) ? number_format($data['datos']['metros2'],0) : '0'; ?> m2<span>
             </div>
         </div>
     </div>

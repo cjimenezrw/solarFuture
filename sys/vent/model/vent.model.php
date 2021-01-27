@@ -100,6 +100,12 @@ Class Vent_Model Extends DLOREAN_Model {
         cep.sRFC AS clienteRFC,
         rca.sNombre AS categoria,
         cu.sNombre AS usuarioCreacion,
+        (SELECT SUM(cc2.fMetros2*rcc.fCantidad) FROM rel_cotizaciones_conceptos rcc  
+        INNER JOIN cat_conceptos cc2 ON cc2.skConcepto = rcc.skConcepto AND cc2.skCategoriaProducto = 'PANSOL' 
+        WHERE rcc.skCotizacion = oc.skCotizacion ) AS metros2,
+        (SELECT SUM(rcc.fCantidad) FROM rel_cotizaciones_conceptos rcc  
+        INNER JOIN cat_conceptos cc2 ON cc2.skConcepto = rcc.skConcepto AND cc2.skCategoriaProducto = 'PANSOL' 
+        WHERE rcc.skCotizacion = oc.skCotizacion ) AS cantidadPanel,
         (SELECT  (SUM(fKwConcepto)/1000) FROM rel_cotizaciones_conceptos WHERE skCotizacion = oc.skCotizacion  ) AS capacidad,
         (SELECT  ((SUM(fKwConcepto)*4.5)/1000) FROM rel_cotizaciones_conceptos WHERE skCotizacion = oc.skCotizacion  ) AS produccionDiaria,
         (SELECT  ((SUM(fKwConcepto)*4.5)/1000)*30 FROM rel_cotizaciones_conceptos WHERE skCotizacion = oc.skCotizacion  ) AS produccionMensual,

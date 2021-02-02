@@ -1,4 +1,8 @@
-<?php
+<?php 
+
+$Date = date('Y-m-d');
+$fechaVigencia = date('d/m/Y', strtotime($Date. ' + 15 days'));
+
 if (isset($data['datos'])) {
     $result = $data['datos'];
     utf8($result);
@@ -43,7 +47,7 @@ if (isset($data['cotizacionTerminosCondiciones'])) {
                                  foreach (  $data['divisas'] as $row) {
                                      utf8($row);
                                      ?>
-                                     <option <?php echo(isset($result['skDivisa']) && $result['skDivisa'] == $row['skDivisa'] ? 'selected="selected"' : '') ?>
+                                     <option <?php echo(isset($result['skDivisa']) && $result['skDivisa'] == $row['skDivisa'] ? 'selected="selected"' : (!isset($result['skDivisa']) && $row['skDivisa'] == 'MXN' ? 'selected="selected"' : '')); ?>
                                          value="<?php echo $row['skDivisa']; ?>"> <?php echo $row['sNombre']; ?> </option>
                                      <?php
                                      }//ENDWHILE
@@ -62,7 +66,7 @@ if (isset($data['cotizacionTerminosCondiciones'])) {
                                  foreach (  $data['categoria'] as $row) {
                                      utf8($row);
                                      ?>
-                                     <option <?php echo(isset($result['skCategoriaPrecio']) && $result['skCategoriaPrecio'] == $row['skCategoriaPrecio'] ? 'selected="selected"' : '') ?>
+                                     <option <?php echo(isset($result['skCategoriaPrecio']) && $result['skCategoriaPrecio'] == $row['skCategoriaPrecio'] ? 'selected="selected"' : (!isset($result['skCategoriaPrecio']) && $row['skCategoriaPrecio'] == 'a9ee53c7-546e-11eb-8849-44a8422a117f' ? 'selected="selected"' : '')) ?>
                                          value="<?php echo $row['skCategoriaPrecio']; ?>"> <?php echo $row['sNombre']; ?> </option>
                                      <?php
                                      }//ENDWHILE
@@ -78,13 +82,13 @@ if (isset($data['cotizacionTerminosCondiciones'])) {
                               <span class="input-group-addon">
                                   <i class="wb-calendar" aria-hidden="true"></i>
                               </span>
-                              <input class="form-control input-datepicker" id="dFechaVigencia" name="dFechaVigencia" value="<?php echo (!empty($result['dFechaVigencia'])) ? date('d/m/Y', strtotime($result['dFechaVigencia'])) : ''; ?>" placeholder="DD/MM/YYYY" autocomplete="off" type="text" data-plugin="datepicker">
+                              <input class="form-control input-datepicker" id="dFechaVigencia" name="dFechaVigencia" value="<?php echo (!empty($result['dFechaVigencia']) ? date('d/m/Y', strtotime($result['dFechaVigencia'])) : $fechaVigencia); ?>" placeholder="DD/MM/YYYY" autocomplete="off" type="text" data-plugin="datepicker">
                           </div>
                       </div>
                    </div>
                    <div class="col-md-4 col-lg-4">
                         <div class="form-group">
-                            <h4 class="example-title">CLIENTE:</h4>
+                            <h4 class="example-title">CLIENTE / PROSPECTO:</h4>
                             <select name="skEmpresaSocioCliente" id="skEmpresaSocioCliente" class="form-control" data-plugin="select2" data-ajax--cache="true" >
                                 <?php
                                 if (!empty($result['skEmpresaSocioCliente'])) {
@@ -96,7 +100,7 @@ if (isset($data['cotizacionTerminosCondiciones'])) {
                             </select>
                             </div>
                         </div>
-                    <div class="col-md-4 col-lg-4">
+                    <!--<div class="col-md-4 col-lg-4">
                     <div class="form-group">
                         <h4 class="example-title">PROSPECTO:</h4>
                         <select name="skProspecto" id="skProspecto" class="form-control" data-plugin="select2" data-ajax--cache="true" >
@@ -109,7 +113,7 @@ if (isset($data['cotizacionTerminosCondiciones'])) {
                             ?>
                         </select>
                         </div>
-                    </div>
+                    </div>-->
                     
 
 
@@ -293,9 +297,9 @@ if (isset($data['cotizacionTerminosCondiciones'])) {
                     <tr>
                         <th class="text-center" nowrap style="text-transform: uppercase;">SE</th>
                         <th class="col-xs-1  text-center" style="text-transform: uppercase;"><b style="color:red;">*</b> Unidad</th>
-                        <th class=" col-xs-2  text-center" style="text-transform: uppercase;"><b style="color:red;">*</b> Concepto</th>
-                        <th class="col-xs-1 text-center" style="text-transform: uppercase;"><b style="color:red;">*</b> Cantidad</th>
-                        <th class="col-xs-1  text-center" style="text-transform: uppercase;"><b style="color:red;">*</b> P. Unitario</th>
+                        <th class=" col-xs-1  text-center" style="text-transform: uppercase;"><b style="color:red;">*</b> Concepto</th>
+                        <th class="col-xs-2 text-center" style="text-transform: uppercase;"><b style="color:red;">*</b> Cantidad</th>
+                        <th class="col-xs-2  text-center" style="text-transform: uppercase;"><b style="color:red;">*</b> P. Unitario</th>
                         <th class="col-xs-1  text-center" style="text-transform: uppercase;">IVA</th>
                         <th class="col-xs-1  text-center" style="text-transform: uppercase;">RET IVA</th>
                         <th class="col-xs-1  text-center" style="text-transform: uppercase;">Importe</th>
@@ -326,12 +330,12 @@ if (isset($data['cotizacionTerminosCondiciones'])) {
                                     <select name="conceptos[<?php echo $cont; ?>][skConcepto]" onchange="obtenerDatos(this);" class="skConcepto form-control js-data-example-ajax" data-plugin="select2" data-ajax--cache="true">
                                         <option value="<?php echo (isset($row['skConcepto']) ? $row['skConcepto'] : ''); ?>"><?php echo (isset($row['concepto']) ? $row['concepto'] : ''); ?></option>
                                     </select>
-                                <td><input class="form-control" onpaste="return filterFloat(event,this);"  onkeypress="return filterFloat(event,this);" value="<?php echo (isset($row['fCantidad']) ? number_format($row['fCantidad'],4) : '');?>"  onchange="actualizarImporte(this);" name="conceptos[<?php echo $cont; ?>][fCantidad]" placeholder="Cantidad" autocomplete="off" type="text"></td>
-                                <td><input class="form-control" onpaste="return filterFloat(event,this);"  onkeypress="return filterFloat(event,this);" value="<?php echo  (isset($row['fPrecioUnitario']) ? number_format($row['fPrecioUnitario'],2) : '');?>"  onchange="actualizarImporte(this);" name="conceptos[<?php echo $cont; ?>][fPrecioUnitario]" placeholder="P. Unitario" autocomplete="off" type="text"></td>
-                                <td><input class="form-control" value="<?php echo $row['fImpuestosTrasladados'];?>" name="conceptos[<?php echo $cont; ?>][fImpuestosTrasladados]"  type="hidden"><label class="text-center" > <?php echo (isset($row['fImpuestosTrasladados']) ? number_format($row['fImpuestosTrasladados'],2) : ''); ?> </label>  </td>
-                                <td><input class="form-control" value="<?php echo $row['fImpuestosRetenidos'];?>" name="conceptos[<?php echo $cont; ?>][fImpuestosRetenidos]"  type="hidden"><label class="text-center" > <?php echo (isset($row['fImpuestosRetenidos']) ? number_format($row['fImpuestosRetenidos'],2) : ''); ?> </label>  </td>
-                                <td><input class="form-control" value="<?php echo $row['fImporte'];?>" name="conceptos[<?php echo $cont; ?>][fImporte]"  type="hidden"><label class="text-center" > <?php echo (isset($row['fImporte']) ? number_format($row['fImporte'],2) : ''); ?> </label>  </td>
-                                <td><input class="form-control" value="<?php echo $row['fDescuento'];?>" name="conceptos[<?php echo $cont; ?>][fDescuento]"  type="hidden"><label class="text-center" id="descuentoConcepto<?php echo $cont; ?>" > <?php echo (isset($row['fDescuento']) ? number_format($row['fDescuento'],2) : ''); ?> </label>  </td>
+                                <td><input class="form-control" style="min-width:100px;" onpaste="return filterFloat(event,this);"  onkeypress="return filterFloat(event,this);" value="<?php echo (isset($row['fCantidad']) ? number_format($row['fCantidad'],2) : '');?>"  onchange="actualizarImporte(this);" name="conceptos[<?php echo $cont; ?>][fCantidad]" placeholder="Cantidad" autocomplete="off" type="text"></td>
+                                <td><input class="form-control" style="min-width:100px;" onpaste="return filterFloat(event,this);"  onkeypress="return filterFloat(event,this);" value="<?php echo  (isset($row['fPrecioUnitario']) ? str_replace(',','', number_format($row['fPrecioUnitario'],2)) : '');?>"  onchange="actualizarImporte(this);" name="conceptos[<?php echo $cont; ?>][fPrecioUnitario]" placeholder="P. Unitario" autocomplete="off" type="text"></td>
+                                <td><input class="form-control" value="<?php echo $row['fImpuestosTrasladados'];?>" name="conceptos[<?php echo $cont; ?>][fImpuestosTrasladados]"  type="hidden"><label class="text-center" > <?php echo (isset($row['fImpuestosTrasladados']) ? str_replace(',','',number_format($row['fImpuestosTrasladados'],2)) : ''); ?> </label>  </td>
+                                <td><input class="form-control" value="<?php echo $row['fImpuestosRetenidos'];?>" name="conceptos[<?php echo $cont; ?>][fImpuestosRetenidos]"  type="hidden"><label class="text-center" > <?php echo (isset($row['fImpuestosRetenidos']) ? str_replace(',','',number_format($row['fImpuestosRetenidos'],2)) : ''); ?> </label>  </td>
+                                <td><input class="form-control" value="<?php echo $row['fImporte'];?>" name="conceptos[<?php echo $cont; ?>][fImporte]"  type="hidden"><label class="text-center" > <?php echo (isset($row['fImporte']) ? str_replace(',','',number_format($row['fImporte'],2)) : ''); ?> </label>  </td>
+                                <td><input class="form-control" value="<?php echo $row['fDescuento'];?>" name="conceptos[<?php echo $cont; ?>][fDescuento]"  type="hidden"><label class="text-center" id="descuentoConcepto<?php echo $cont; ?>" > <?php echo (isset($row['fDescuento']) ? str_replace(',','',number_format($row['fDescuento'],2)) : ''); ?> </label>  </td>
                                 <td><button type="button" class="btn btn-outline btn-danger pull-right concepto-eliminar" onclick="eliminarConcepto(this);"><i class="icon wb-trash" aria-hidden="true"></i> Eliminar</button></td>
                             </tr>
                             <?php $cont++; }
@@ -581,7 +585,6 @@ function addCommas(amount) {
                       actualizarSubtotal = function () {
                           var subtotal = 0;
                           $("#conceptos tbody tr").each(function (index) {
-                                   //subtotal += parseFloat($(this).closest('tr').find('td').eq(8).find('input').val());
                                    subtotal += Math.round(parseFloat($(this).closest('tr').find('td').eq(7).find('input').val())* 100) / 100;
 
                           });
@@ -597,7 +600,6 @@ function addCommas(amount) {
 
                           $("#conceptos tbody tr").each(function (index) {
                               if($(this).closest('tr').find('td').eq(5).find('input').val()){
-                                   //impuestosTrasladados += parseFloat($(this).closest('tr').find('td').eq(6).find('input').val());
                                    impuestosTrasladados += Math.round(parseFloat($(this).closest('tr').find('td').eq(5).find('input').val())* 100) / 100;
 
                                }
@@ -607,8 +609,7 @@ function addCommas(amount) {
 
                           $("#conceptos tbody tr").each(function (index) {
                               if($(this).closest('tr').find('td').eq(6).find('input').val()){
-                                  //impuestosRetenciones += parseFloat($(this).closest('tr').find('td').eq(7).find('input').val());
-                                  impuestosRetenciones += Math.round(parseFloat($(this).closest('tr').find('td').eq(6).find('input').val())* 100) / 100;
+                                   impuestosRetenciones += Math.round(parseFloat($(this).closest('tr').find('td').eq(6).find('input').val())* 100) / 100;
 
                               }
                           });
@@ -663,9 +664,7 @@ function addCommas(amount) {
                             core.autocomplete2('.skTipoMedida', 'get_medidas', window.location.href, 'Unidad');
                             core.autocomplete2('.skConcepto', 'get_conceptos', window.location.href, 'Concepto');
                         });
-                        core.autocomplete2('#skEmpresaSocioCliente', 'get_empresas', window.location.href, 'Cliente',{
-                            skEmpresaTipo : '["CLIE"]'
-                        });
+                        core.autocomplete2('#skEmpresaSocioCliente', 'get_empresasProspectos', window.location.href, 'Cliente / Prospecto');
 
                         core.autocomplete2('.skTipoMedida', 'get_medidas', window.location.href, 'Unidad');
                         core.autocomplete2('.skConcepto', 'get_conceptos', window.location.href, 'Concepto');

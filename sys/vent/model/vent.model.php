@@ -116,10 +116,10 @@ Class Vent_Model Extends DLOREAN_Model {
         ROUND(ROUND(oc.fImporteTotal/oc.fCostoRecibo,1)/6,1) AS recuperacionInversion,
         (oc.fCostoRecibo * 6) AS gastoAnual,
         (oc.fKwGastados * 6) AS consumoAnual,
-        IF(cep.sNombre IS NOT NULL,cep.sNombre,cp.sNombreContacto) AS cliente
+        IF(cep.sNombre IS NOT NULL,cep.sNombre,IF(cp.sNombreContacto IS NOT NULL,cp.sNombreContacto,NULL)) AS cliente
         FROM ope_cotizaciones oc 
         LEFT JOIN rel_empresasSocios resc ON resc.skEmpresaSocio = oc.skEmpresaSocioCliente
-        LEFT JOIN cat_prospectos cp ON cp.skProspecto = oc.skProspecto
+        LEFT JOIN cat_prospectos cp ON cp.skProspecto = oc.skEmpresaSocioCliente
         LEFT JOIN cat_empresas cep ON cep.skEmpresa = resc.skEmpresa
         LEFT JOIN cat_usuarios cu ON cu.skUsuario = oc.skUsuarioCreacion 
         LEFT JOIN rel_catalogosSistemasOpciones rca ON rca.skCatalogoSistemaOpciones = oc.skCategoriaPrecio
@@ -321,6 +321,47 @@ Class Vent_Model Extends DLOREAN_Model {
         }
 
         $sql .= " ORDER BY N1.nombre ASC ";
+       
+        $result = Conn::query($sql);
+        if (!$result) {
+            return FALSE;
+        }
+        $records = Conn::fetch_assoc_all($result);
+        utf8($records);
+        return $records;
+    }
+    /**
+     * get_empresasProspectos
+     *
+     * Consulta Empresas Socios
+     *
+     * @author Luis Valdez <lvaldez@softlab.com.mx>
+     * @return Array Datos | False
+     */
+    public function get_empresasProspectos() {
+
+        $sql = "SELECT N1.* FROM (
+            SELECT
+            cp.skProspecto AS id, CONCAT(cp.sNombreContacto,' - Prospecto') AS nombre
+            FROM cat_prospectos cp
+            WHERE cp.skEstatus = 'NU'
+            UNION 
+            SELECT
+            es.skEmpresaSocio AS id, CONCAT(e.sNombre,' (',e.sRFC,') - Cliente') AS nombre
+            FROM rel_empresasSocios es
+            INNER JOIN cat_empresas e ON e.skEmpresa = es.skEmpresa
+            WHERE es.skEstatus = 'AC' AND e.skEstatus = 'AC' AND es.skEmpresaTipo IN ('CLIE') "; 
+
+      
+        $sql .= " ) AS N1 ";
+        
+
+        if (isset($this->vent['sNombre']) && !empty(trim($this->vent['sNombre']))) {
+            $sql .= " WHERE N1.nombre LIKE '%" . trim($this->vent['sNombre']) . "%' ";
+        }
+
+        $sql .= " ORDER BY N1.nombre ASC ";
+    
        
         $result = Conn::query($sql);
         if (!$result) {

@@ -61,6 +61,11 @@ Class Vent_Controller Extends Vent_Model {
                 header('Content-Type: application/json');
                 echo json_encode($coti_form->get_prospectos());
             break;
+            case 'get_empresasProspectos':
+                header('Content-Type: application/json');
+                echo json_encode($coti_form->get_empresasProspectos());
+            break;
+            
             case 'get_conceptos':
                 header('Content-Type: application/json');
                 echo json_encode($coti_form->get_conceptos());

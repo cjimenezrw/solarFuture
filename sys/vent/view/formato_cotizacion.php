@@ -1,5 +1,5 @@
 <?php 
-    //exit('<pre>'.print_r($data['cotizacionInformacionProducto'],1).'</pre>');
+    //exit('<pre>'.print_r($data,1).'</pre>');
 ?>
 <style>
 

@@ -306,15 +306,11 @@ if (isset($data['cotizacionTerminosCondiciones'])) {
             <table class="table table-striped table-bordered" id="conceptos">
                 <thead>
                     <tr>
-                        <th class="text-center" nowrap style="text-transform: uppercase;">SE</th>
                         <th class="col-xs-1  text-center" style="text-transform: uppercase;"><b style="color:red;">*</b> Unidad</th>
                         <th class=" col-xs-1  text-center" style="text-transform: uppercase;"><b style="color:red;">*</b> Concepto</th>
                         <th class="col-xs-2 text-center" style="text-transform: uppercase;"><b style="color:red;">*</b> Cantidad</th>
                         <th class="col-xs-2  text-center" style="text-transform: uppercase;"><b style="color:red;">*</b> P. Unitario</th>
-                        <th class="col-xs-1  text-center" style="text-transform: uppercase;">IVA</th>
-                        <th class="col-xs-1  text-center" style="text-transform: uppercase;">RET IVA</th>
                         <th class="col-xs-1  text-center" style="text-transform: uppercase;">Importe</th>
-                        <th class="col-xs-1  text-center" style="text-transform: uppercase;">Descuento</th>
                         <th class="col-xs-1 col-md-1 text-center">ACCIONES</th>
                     </tr>
                 </thead>
@@ -326,12 +322,7 @@ if (isset($data['cotizacionTerminosCondiciones'])) {
                             foreach ($data['cotizacionesConceptos'] as $row){ ?>
 
 
-                            <tr <?php echo (!empty($row['TRAIVA']) ? "TRAIVA = '".$row['TRAIVA']."' " : ''); ?> <?php echo (!empty($row['RETIVA']) ? "RETIVA = '".$row['RETIVA']."' " : ''); ?>>
-                                <td>
-                                    <div class="radio-custom radio-primary ">
-                                       <input type="radio" class="descuentoConcepto" id="inputchk<?php echo $cont; ?>" name="chk" value="<?php echo $cont; ?>" />
-                                       <label for="inputchk<?php echo $cont; ?>">&nbsp;</label></div>
-                                </td>
+                            <tr> 
                                 <td>
                                     <select name="conceptos[<?php echo $cont; ?>][skTipoMedida]" class="skTipoMedida form-control js-data-example-ajax" data-plugin="select2" data-ajax--cache="true">
                                         <option value="<?php echo (isset($row['skTipoMedida']) ? $row['skTipoMedida'] : ''); ?>"><?php echo (isset($row['tipoMedida']) ? $row['tipoMedida'] : ''); ?></option>
@@ -341,12 +332,10 @@ if (isset($data['cotizacionTerminosCondiciones'])) {
                                     <select name="conceptos[<?php echo $cont; ?>][skConcepto]" onchange="obtenerDatos(this);" class="skConcepto form-control js-data-example-ajax" data-plugin="select2" data-ajax--cache="true">
                                         <option value="<?php echo (isset($row['skConcepto']) ? $row['skConcepto'] : ''); ?>"><?php echo (isset($row['concepto']) ? $row['concepto'] : ''); ?></option>
                                     </select>
+                                </td>
                                 <td><input class="form-control" style="min-width:100px;" onpaste="return filterFloat(event,this);"  onkeypress="return filterFloat(event,this);" value="<?php echo (isset($row['fCantidad']) ? number_format($row['fCantidad'],2) : '');?>"  onchange="actualizarImporte(this);" name="conceptos[<?php echo $cont; ?>][fCantidad]" placeholder="Cantidad" autocomplete="off" type="text"></td>
                                 <td><input class="form-control" style="min-width:100px;" onpaste="return filterFloat(event,this);"  onkeypress="return filterFloat(event,this);" value="<?php echo  (isset($row['fPrecioUnitario']) ? str_replace(',','', number_format($row['fPrecioUnitario'],2)) : '');?>"  onchange="actualizarImporte(this);" name="conceptos[<?php echo $cont; ?>][fPrecioUnitario]" placeholder="P. Unitario" autocomplete="off" type="text"></td>
-                                <td><input class="form-control" value="<?php echo $row['fImpuestosTrasladados'];?>" name="conceptos[<?php echo $cont; ?>][fImpuestosTrasladados]"  type="hidden"><label class="text-center" > <?php echo (isset($row['fImpuestosTrasladados']) ? str_replace(',','',number_format($row['fImpuestosTrasladados'],2)) : ''); ?> </label>  </td>
-                                <td><input class="form-control" value="<?php echo $row['fImpuestosRetenidos'];?>" name="conceptos[<?php echo $cont; ?>][fImpuestosRetenidos]"  type="hidden"><label class="text-center" > <?php echo (isset($row['fImpuestosRetenidos']) ? str_replace(',','',number_format($row['fImpuestosRetenidos'],2)) : ''); ?> </label>  </td>
                                 <td><input class="form-control" value="<?php echo $row['fImporte'];?>" name="conceptos[<?php echo $cont; ?>][fImporte]"  type="hidden"><label class="text-center" > <?php echo (isset($row['fImporte']) ? str_replace(',','',number_format($row['fImporte'],2)) : ''); ?> </label>  </td>
-                                <td><input class="form-control" value="<?php echo $row['fDescuento'];?>" name="conceptos[<?php echo $cont; ?>][fDescuento]"  type="hidden"><label class="text-center" id="descuentoConcepto<?php echo $cont; ?>" > <?php echo (isset($row['fDescuento']) ? str_replace(',','',number_format($row['fDescuento'],2)) : ''); ?> </label>  </td>
                                 <td><button type="button" class="btn btn-outline btn-danger pull-right concepto-eliminar" onclick="eliminarConcepto(this);"><i class="icon wb-trash" aria-hidden="true"></i> Eliminar</button></td>
                             </tr>
                             <?php $cont++; }
@@ -381,13 +370,7 @@ if (isset($data['cotizacionTerminosCondiciones'])) {
               <input type="hidden"  id="inImpuestoTrasladado" name="fImpuestosTrasladados" value="<?php echo (isset($result['fImpuestosTrasladados'])) ? $result['fImpuestosTrasladados'] : ''; ?>"  />
             </div>
         </div>
-        <div class="col-md-12 form-inline ">
-            <div class="form-group pull-right">
-              <label class="control-label">Retenciones</label>
-              <label type="text" disabled class="form-control input-sm" id="dinImpuestoRetenido"><?php echo (!empty($result['fImpuestosRetenidos']) ? number_format($result['fImpuestosRetenidos'],2) : '0.00'); ?></label>
-              <input type="hidden"  id="inImpuestoRetenido" name="fImpuestosRetenidos"  value="<?php echo (isset($result['fImpuestosRetenidos'])) ? $result['fImpuestosRetenidos'] : ''; ?>"   />
-            </div>
-        </div>
+         
 
         <div class="col-md-12 form-inline ">
             <div class="form-group pull-right">
@@ -477,26 +460,25 @@ function addCommas(amount) {
                     var tipo = $(".descuento:checked").val();
                     var descuentoAplicar = $("#descuentoAplicar").val();
                     var cont = $(".descuentoConcepto:checked").val();
-                    var importe = $('input[name="conceptos['+cont+'][fImporte]"]').val();
+                    var subtotal =  ($("#inSubtotal").val()  != '' ? parseFloat($("#inSubtotal").val().replace(',', '' )) : 0);
 
                     if(tipo =='porc'){
-                            descuento =  ((descuentoAplicar*importe) /100);
-                            $('input[name="conceptos['+cont+'][fDescuento]"]').val(descuento);
-                            $('#descuentoConcepto'+cont).html(parseFloat(descuento));
-                    }
+                            descuento =  ((descuentoAplicar*subtotal) /100);
+                            $('input[name="fDescuento"]').val(descuento);
+                            $("#dinDescuento").html(addCommas(descuento)); 
+                     }
                     if(tipo =='cant'){
                         descuento =  descuentoAplicar;
-                        $('input[name="conceptos['+cont+'][fDescuento]"]').val(descuento);
-                        $('#descuentoConcepto'+cont).html(parseFloat(descuento));
-
+                        $('input[name="fDescuento"]').val(descuento);
+                        $("#dinDescuento").html(addCommas(descuento)); 
+  
                     }
-                    var obj = $('input[name="conceptos['+cont+'][fImporte]"]');
-                     actualizarImporte(obj);
+                    impuestos();
 
                 }
                 
         function obtenerDatos(obj){
-        var skConcepto = $(obj).closest('tr').find('td').eq(2).find('select').val();
+        var skConcepto = $(obj).closest('tr').find('td').eq(1).find('select').val();
         var tr = $(obj).parent().parent();
         var skCategoriaPrecio = $("#skCategoriaPrecio").val();
         $.post(window.location.href,
@@ -507,38 +489,19 @@ function addCommas(amount) {
                                 },
                                 function (data) {
                                     if(data){
+                                        $(obj).closest('tr').find('td').eq(2).find('input').removeAttr("disabled");
                                         $(obj).closest('tr').find('td').eq(3).find('input').removeAttr("disabled");
-                                        $(obj).closest('tr').find('td').eq(4).find('input').removeAttr("disabled");
-                                        $(obj).closest('tr').find('td').eq(3).find('input').val('1');
-                                        $(obj).closest('tr').find('td').eq(4).find('input').val(data.fPrecioVenta);
+                                        $(obj).closest('tr').find('td').eq(2).find('input').val('1');
+                                        $(obj).closest('tr').find('td').eq(3).find('input').val(data.fPrecioVenta);
                                     }
                             });
            
             datosConcepto(obj);
         };
         function datosConcepto(obj){
-
-            var skConcepto = $(obj).closest('tr').find('td').eq(2).find('select').val();
-            var tr = $(obj).parent().parent();
-            $(tr).removeAttr("traiva");
-            $(tr).removeAttr("retiva");
-                if (skConcepto) {
-                    $.post(window.location.href,
-                        {
-                            axn: 'get_conceptos_impuestos',
-                            skConcepto: skConcepto
-                        },
-                        function (data) {
-                            if(data){
-                                $.each(data, function (k, v) {
-                                    $(tr).attr(v.skImpuesto, v.sValor);
-                                    });
-                            }
-                    });
-                }
                 setTimeout(() => {
                     actualizarImporte(obj);
-           }, '1000');
+                }, '1000');
              };
         
  
@@ -576,40 +539,23 @@ function addCommas(amount) {
                       };
 
                       actualizarImporte = function (obj) {
+                    
                           var tr = $(obj).parent().parent();
                           var importe = 0;
-                          var fImpuestoTrasladado = 0;
-                          var fImpuestoRetenido = 0;
-                          var traiva = 0;
-                          var retiva = 0;
 
-                          var cantidad = $(obj).closest('tr').find('td').eq(3).find('input').val().replace(',', '' );
-                          var precioUnitario = $(obj).closest('tr').find('td').eq(4).find('input').val().replace(',', '' );
-                          var descuento = $(obj).closest('tr').find('td').eq(8).find('input').val().replace(',', '' );
-                          var traiva = $(tr).attr('traiva');
-                          var retiva = $(tr).attr('retiva');
+                          var cantidad = $(obj).closest('tr').find('td').eq(2).find('input').val().replace(',', '' );
+                          var precioUnitario = $(obj).closest('tr').find('td').eq(3).find('input').val().replace(',', '' );
+                   
+                   
                    
 
                           if(cantidad != '' && precioUnitario != ''){
                               importe = (cantidad * precioUnitario);
-                              $(obj).closest('tr').find('td').eq(7).find('input').val(importe);
-                              $(obj).closest('tr').find('td').eq(7).find('label').html(addCommas(importe));
-
-                              if (typeof traiva !== typeof undefined && traiva !== false) {
-
-                                  fImpuestoTrasladado = ((importe-descuento) * traiva / 100);
-                                  fImpuestoTrasladado = Math.round(fImpuestoTrasladado * 100) / 100;
-                                }
-
-                                $(obj).closest('tr').find('td').eq(5).find('input').val(fImpuestoTrasladado);
-                                $(obj).closest('tr').find('td').eq(5).find('label').html(addCommas(fImpuestoTrasladado));
-                                if (typeof retiva !== typeof undefined && retiva !== false) {
-                                    fImpuestoRetenido = ((importe-descuento) * retiva / 100);
-                                    fImpuestoRetenido = Math.round(fImpuestoRetenido * 100) / 100;
-                                }
-                                $(obj).closest('tr').find('td').eq(6).find('input').val(fImpuestoRetenido);
-                                $(obj).closest('tr').find('td').eq(6).find('label').html(addCommas(fImpuestoRetenido));
-
+                            
+                              $(obj).closest('tr').find('td').eq(4).find('input').val(importe);
+                              $(obj).closest('tr').find('td').eq(4).find('label').html(addCommas(importe));
+                        
+                           
                               actualizarSubtotal();
                           }
                       };
@@ -617,54 +563,31 @@ function addCommas(amount) {
                       actualizarSubtotal = function () {
                           var subtotal = 0;
                           $("#conceptos tbody tr").each(function (index) {
-                                   subtotal += Math.round(parseFloat($(this).closest('tr').find('td').eq(7).find('input').val())* 100) / 100;
+                                   subtotal += Math.round(parseFloat($(this).closest('tr').find('td').eq(4).find('input').val())* 100) / 100;
 
-                          });
-
+                          }); 
                          $("#inSubtotal").val(parseFloat(subtotal));
                          $("#dinSubtotal").html(addCommas(subtotal));
                              impuestos();
                        };
                       impuestos = function () {
-                          var impuestosTrasladados = 0;
-                          var impuestosRetenciones = 0;
-                          var descuento = 0;
+                            var descuento = 0;
+                            var subtotal = 0;
 
-                          $("#conceptos tbody tr").each(function (index) {
-                              if($(this).closest('tr').find('td').eq(5).find('input').val()){
-                                   impuestosTrasladados += Math.round(parseFloat($(this).closest('tr').find('td').eq(5).find('input').val())* 100) / 100;
-
-                               }
-                          });
-                          $("#inImpuestoTrasladado").val(parseFloat(impuestosTrasladados));
-                          $("#dinImpuestoTrasladado").html(addCommas(impuestosTrasladados));
-
-                          $("#conceptos tbody tr").each(function (index) {
-                              if($(this).closest('tr').find('td').eq(6).find('input').val()){
-                                   impuestosRetenciones += Math.round(parseFloat($(this).closest('tr').find('td').eq(6).find('input').val())* 100) / 100;
-
-                              }
-                          });
-                          $("#inImpuestoRetenido").val(parseFloat(impuestosRetenciones));
-                          $("#dinImpuestoRetenido").html(addCommas(impuestosRetenciones));
-
-                          $("#conceptos tbody tr").each(function (index) {
-                              if($(this).closest('tr').find('td').eq(8).find('input').val()){
-                                  descuento += parseFloat($(this).closest('tr').find('td').eq(8).find('input').val());
-                              }
-                          });
-                          $("#inDescuento").val(parseFloat(descuento));
-                          $("#dinDescuento").html(addCommas(descuento));
-
+                            var subtotal =  ($("#inSubtotal").val()  != '' ? parseFloat($("#inSubtotal").val().replace(',', '' )) : 0);
+                            var descuento =  ($("#inDescuento").val()  != '' ? parseFloat($("#inDescuento").val().replace(',', '' )) : 0);
+                            var impuestoTrasladado = ( (subtotal-descuento) * .16 );
+                            $("#inImpuestoTrasladado").val(parseFloat(impuestoTrasladado));
+                            $("#dinImpuestoTrasladado").html(addCommas(impuestoTrasladado));
+ 
                              actualizartotal();
                       };
                       actualizartotal = function () {
                           var total = 0;
                           var subtotal =  ($("#inSubtotal").val()  != '' ? parseFloat($("#inSubtotal").val().replace(',', '' )) : 0);
                           var impuestoTrasladado =  ($("#inImpuestoTrasladado").val() != '' ? parseFloat($("#inImpuestoTrasladado").val().replace(',', '' )) : 0);
-                          var impuestoRetenido =  ($("#inImpuestoRetenido").val()  != '' ? parseFloat($("#inImpuestoRetenido").val().replace(',', '' )) : 0);
                           var descuento =  ($("#inDescuento").val()  != '' ? parseFloat($("#inDescuento").val().replace(',', '' )) : 0);
-                          total = ( (subtotal+impuestoTrasladado-impuestoRetenido) - descuento);
+                          total = ( (subtotal+impuestoTrasladado) - descuento);
 
                           $("#inTotal").val(parseFloat(total));
                           $("#dinTotal").html(addCommas(total));
@@ -679,17 +602,12 @@ function addCommas(amount) {
                             cont++;
                             tr_concepto=   '<tr>'+
 
-                            '<td><div class="radio-custom radio-primary ">'+
-                               '<input type="radio" class="descuentoConcepto" id="inputchk' + cont + '" name="chk" value="' + cont + '" />'+
-                               '<label for="inputchk' + cont + '">&nbsp;</label></div></td>'+
+                 
                             '<td><select name="conceptos[' + cont + '][skTipoMedida]" class="skTipoMedida form-control js-data-example-ajax" data-plugin="select2" data-ajax--cache="true">  </select></td>'+
                             '<td><select name="conceptos[' + cont + '][skConcepto]" onchange="obtenerDatos(this);" class="skConcepto form-control js-data-example-ajax" data-plugin="select2" data-ajax--cache="true">  </select></td>'+
                             '<td fCantidad ><input class="form-control" disabled name="conceptos[' + cont + '][fCantidad]" onpaste="return filterFloat(event,this);"  onkeypress="return filterFloat(event,this);"  onchange="actualizarImporte(this);" placeholder="Cantidad" autocomplete="off" type="text"></td>'+
                             '<td fPrecioUnitario ><input class="form-control" disabled name="conceptos[' + cont + '][fPrecioUnitario]" onpaste="return filterFloat(event,this);"  onkeypress="return filterFloat(event,this);"  onchange="actualizarImporte(this);" placeholder="P. Unitario" autocomplete="off" type="text"></td>'+
-                            '<td><input class="form-control" name="conceptos[' + cont + '][fImpuestosTrasladados]" type="hidden"> <label class="text-center" > - </label> </td>'+
-                            '<td><input class="form-control" name="conceptos[' + cont + '][fImpuestosRetenidos]" type="hidden"> <label class="text-center" > - </label> </td>'+
                             '<td><input class="form-control" name="conceptos[' + cont + '][fImporte]" type="hidden"> <label class="text-center" > - </label> </td>'+
-                            '<td><input class="form-control" name="conceptos[' + cont + '][fDescuento]" type="hidden"> <label class="text-center" id="descuentoConcepto' + cont + '" > - </label> </td>'+
                             '<td><button type="button" class="btn btn-outline btn-danger pull-right concepto-eliminar" onclick="eliminarConcepto(this);"><i class="icon wb-trash" aria-hidden="true"></i> Eliminar</button></td>'+
                             '</tr>';
                             $("#conceptos-body").append(tr_concepto);

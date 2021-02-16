@@ -120,6 +120,12 @@ Class Coti_form_Controller Extends Vent_Model {
             return $this->data;
         }
 
+        if(isset($this->vent['skEmpresaSocioCliente']) || !empty($this->vent['skEmpresaSocioCliente'])){
+            $this->data['success'] = TRUE;
+            $this->data['message'] = 'CLIENTE EXISTENTE';
+            return $this->data;
+        }
+
         $registrar_cliente = $this->sysAPI('empr','emso_form','guardar',[
             'POST'=>[
                 'sRFC'=>$this->vent['sRFC'],

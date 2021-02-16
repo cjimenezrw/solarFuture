@@ -190,8 +190,6 @@ if (isset($data['datos'])) {
 				    <th class="text-right">Cantidad</th>
 				    <th class="text-right">P. Unit</th>
 				    <th class="text-right">Importe </th>
-				    <th class="text-right">Desc </th>
-				    <th class="text-right" >Impuestos </th>
 				</tr>
 			    </thead>
 			    <tbody>
@@ -207,18 +205,7 @@ if (isset($data['datos'])) {
 					    <td style="text-align:right; text-transform: uppercase;" ><?php echo number_format($conceptos['fCantidad'], 4); ?></td>
 					    <td style="text-align:right; text-transform: uppercase;" ><?php echo "$" . number_format($conceptos['fPrecioUnitario'], 2); ?></td>
 					    <td style="text-align:right; text-transform: uppercase;" ><?php echo "$" . number_format($conceptos['fImporte'], 2); ?></td>
-					    <td style="text-align:right; text-transform: uppercase;" ><?php echo "$" . number_format($conceptos['fDescuento'], 2); ?></td>
-					    <td> <?php
-						if (isset($conceptos['impuestos'])) {
-						    foreach ($conceptos['impuestos'] AS $impuestos) {
-							?>
-							<?php echo "(" . $impuestos['impuesto'] . " %" . $impuestos['fTasa'] . ")--$" . number_format($impuestos['fImporte'], 2); ?>
-
-							<?php
-						    }//FOREACH
-						}
-						?>
-					    </td>
+					    
 					</tr>
 					<?php
 					$i++;
@@ -235,9 +222,6 @@ if (isset($data['datos'])) {
 			    </p>
 			    <p>Descuento:
 				<span><?php echo "$" . number_format($result['fDescuento'], 2); ?></span>
-			    </p>
-			    <p>Retenciones:
-				<span><?php echo "$" . number_format($result['fImpuestosRetenidos'], 2); ?></span>
 			    </p>
 			    <p>Traslados:
 				<span><?php echo "$" . number_format($result['fImpuestosTrasladados'], 2); ?></span>

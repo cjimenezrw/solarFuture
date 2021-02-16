@@ -163,8 +163,6 @@ td.text-right {
 		<th class="text-center">Cantidad</th>
 		<th class="text-center">P. Unit</th>
 		<th class="text-center">Importe </th>
-		<th class="text-center">Desc </th>
-		<th class="text-center" >Impuestos </th>
 	    </tr>
 	</thead>
 	<tbody>
@@ -179,18 +177,6 @@ td.text-right {
 			<td style="text-align:right; font-size: 8px; text-transform: uppercase;" ><?php echo number_format($conceptos['fCantidad'], 2); ?></td>
             <td style="text-align:right; font-size: 8px; text-transform: uppercase;" ><?php echo "$" . number_format($conceptos['fPrecioUnitario'], 2); ?></td>
 			<td style="text-align:right; font-size: 8px; text-transform: uppercase;" ><?php echo "$" . number_format($conceptos['fImporte'], 2); ?></td>
-			<td style="text-align:right; font-size: 8px; text-transform: uppercase;" ><?php echo "$" . number_format($conceptos['fDescuento'], 2); ?></td>
-			<td style="text-align:right; font-size: 8px; text-transform: uppercase;" > <?php
-			    if (isset($conceptos['impuestos'])) {
-				foreach ($conceptos['impuestos'] AS $impuestos) {
-				    ?>
-				    <?php echo "$".number_format($impuestos['fImporte'], 2)."<br>(" . $impuestos['impuesto'] . " %" . $impuestos['fTasa'] . ")"; ?>
-
-				    <?php
-				}//FOREACH
-			    }
-			    ?>
-			</td>
 		    </tr>
 		    <?php
 		    $i++;
@@ -200,28 +186,20 @@ td.text-right {
             $centavos = ($centavos[1]);
 	    ?>
 	    <tr>
-            <td colspan="6" style="text-align:right; font-size: 9px; text-transform: uppercase; font-weight:bold;" >SUBTOTAL: </td>
+            <td colspan="4" style="text-align:right; font-size: 9px; text-transform: uppercase; font-weight:bold;" >SUBTOTAL: </td>
             <td style="text-align:right; font-size: 9px; text-transform: uppercase;" ><?php echo " $" . number_format($data['datos']['fImporteSubtotal'], 2); ?></td>
 	    </tr>
 	    <tr>
-            <td colspan="6" style="text-align:right; font-size: 9px; text-transform: uppercase; font-weight:bold;" >DESCUENTO: </td>
+            <td colspan="4" style="text-align:right; font-size: 9px; text-transform: uppercase; font-weight:bold;" >DESCUENTO: </td>
             <td style="text-align:right; font-size: 9px; text-transform: uppercase;" ><?php echo " $" . number_format($data['datos']['fDescuento'], 2); ?></td>
 	    </tr>
-	    <!--<tr>
-            <td colspan="6" style="text-align:right; font-size: 9px; text-transform: uppercase; font-weight:bold;" >RETENCION: </td>
-            <td style="text-align:right; font-size: 9px; text-transform: uppercase;" ><?php echo " $" . number_format($data['datos']['fImpuestosRetenidos'], 2); ?></td>
-	    </tr>!-->
-	    <!--<tr>
-		    <td colspan="6" style="text-align:right; font-size: 9px; text-transform: uppercase; font-weight:bold;" >TRANSLADOS: </td>
-		    <td style="text-align:right; font-size: 9px; text-transform: uppercase;" ><?php echo " $" . number_format($data['datos']['fImpuestosTrasladados'], 2); ?></td>
-	    </tr>!-->
         <tr>
-		    <td colspan="6" style="text-align:right; font-size: 9px; text-transform: uppercase; font-weight:bold;" >IVA: </td>
+		    <td colspan="4" style="text-align:right; font-size: 9px; text-transform: uppercase; font-weight:bold;" >IVA: </td>
 		    <td style="text-align:right; font-size: 9px; text-transform: uppercase;" ><?php echo " $" . number_format($data['datos']['fImpuestosTrasladados'], 2); ?></td>
 	    </tr>
 	    <tr>
             <td colspan="1" style="text-align:right; font-size: 9px; text-transform: uppercase; border-right: none; font-weight:bold;" >IMPORTE CON LETRA: </td>
-            <td colspan="4" style="text-align:left; font-size: 9px; text-transform: uppercase; border-right: none;" ><?php echo NumeroALetras::convertir($data['datos']['fImporteTotal'],'PESOS','CENTAVOS',true). ' '.$centavos.'/100M.N.'; ?></td>
+            <td colspan="2" style="text-align:left; font-size: 9px; text-transform: uppercase; border-right: none;" ><?php echo NumeroALetras::convertir($data['datos']['fImporteTotal'],'PESOS','CENTAVOS',true). ' '.$centavos.'/100M.N.'; ?></td>
             <td colspan="1" style="text-align:right; font-size: 9px; text-transform: uppercase; font-weight:bold;" >TOTAL: </td>
             <td style="text-align:right; font-size: 9px; text-transform: uppercase;" ><?php echo " $" . number_format($data['datos']['fImporteTotal'], 2); ?></td>
 	    </tr>

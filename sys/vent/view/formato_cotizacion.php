@@ -1,5 +1,5 @@
 <?php 
-    //exit('<pre>'.print_r($data,1).'</pre>');
+    //exit('<pre>'.print_r($data['cotizacionInformacionProducto'],1).'</pre>');
 ?>
 <style>
 
@@ -147,7 +147,7 @@ td.text-right {
     <?php echo (isset($data['datos']['cliente'])) ? ($data['datos']['cliente']) : 'N/D'; ?>
 </div>
 
-<div class="col-md-12 clearfix" style="font-size:13px;margin-top: 50px;">
+<div class="col-md-12 clearfix" style="font-size:13px;">
     <div class="col-md-offset-1 col-md-6 pull-right text-right">
         <small><b>ELABORADO POR:</b></small> <small style="text-transform: uppercase;"><?php echo (!empty($data['datos']['usuarioCreacion']) ? $data['datos']['usuarioCreacion'] : ''); ?></small><br>
         <small><b>FECHA VIGENCIA:</b></small> <small style="text-transform: uppercase;"><?php echo (isset($data['datos']['dFechaVigencia']) && !empty($data['datos']['dFechaVigencia'])) ? $this->obtenerFechaEnLetra($data['datos']['dFechaVigencia']) : 'N/D'; ?></small>

@@ -37,6 +37,47 @@ if (isset($data['cotizacionTerminosCondiciones'])) {
         </div>
         <div class="panel-body container-fluid">
                   <div class="row row-lg col-lg-12">
+
+                    <div class="col-md-4 col-lg-4">
+                        <div class="form-group">
+                            <h4 class="example-title"><b class="text-danger"></b>CLIENTE REGISTRADO:</h4>
+                            <input onchange="clienteRegistrado();" type="checkbox" name="iClienteRegistrado" id="iClienteRegistrado" value="1" 
+                            <?php echo (isset($result['skEmpresaSocioCliente']) ? 'checked': ''); ?>
+                            class="js-switch-large" data-plugin="switchery" data-color="#4d94ff" />
+                        </div>
+                    </div>
+
+                
+                    <div class="col-md-4 col-lg-4 cliente_nuevo" <?php echo (isset($result['skEmpresaSocioCliente']) ? 'style="display:none;"': ''); ?>>
+                        <div class="form-group">
+                            <h4 class="example-title"><b class="text-danger">*</b> RAZÓN SOCIAL:</h4>
+                            <input class="form-control" name="sRazonSocial" value="<?php echo (isset($result['sRazonSocial'])) ? $result['sRazonSocial'] : ''; ?>" placeholder="RAZÓN SOCIAL" autocomplete="off" type="text">
+                        </div>
+                    </div>
+                    <div class="col-md-4 col-lg-4 cliente_nuevo" <?php echo (isset($result['skEmpresaSocioCliente']) ? 'style="display:none;"': ''); ?>>
+                        <div class="form-group">
+                            <h4 class="example-title"><b class="text-danger"></b>RFC:</h4>
+                            <input class="form-control" name="sRFC" value="<?php echo (isset($result['sRFC'])) ? $result['sRFC'] : ''; ?>" placeholder="XAXX010101000" autocomplete="off" type="text">
+                        </div>
+                    </div>
+
+                    <div class="col-md-4 col-lg-4 cliente_registrado" <?php echo (isset($result['skEmpresaSocioCliente']) ? 'style="display:block;"': 'style="display:none;"'); ?>>
+                        <div class="form-group">
+                            <h4 class="example-title"><b class="text-danger">*</b> CLIENTE:</h4>
+                            <select name="skEmpresaSocioCliente" id="skEmpresaSocioCliente" class="form-control" data-plugin="select2" data-ajax--cache="true" >
+                                <?php
+                                if (!empty($result['skEmpresaSocioCliente'])) {
+                                    ?>
+                                    <option value="<?php echo $result['skEmpresaSocioCliente']; ?>" selected="selected"><?php echo $result['cliente'] . ' (' . $result['clienteRFC'] . ')'; ?></option>
+                                    <?php
+                                }//ENDIF
+                                ?>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="col-md-12 col-lg-12"><hr></div>
+
                   <div class="col-md-4 col-lg-4">
                          <div class="form-group">
                              <h4 class="example-title">MONEDA <span class="required text-danger">*</span></h4>
@@ -58,7 +99,7 @@ if (isset($data['cotizacionTerminosCondiciones'])) {
                      </div>
                      <div class="col-md-4 col-lg-4">
                      <div class="form-group">
-                             <h4 class="example-title">CATEGORIA <span class="required text-danger">*</span></h4>
+                             <h4 class="example-title">CATEGORÍA <span class="required text-danger">*</span></h4>
                              <select id="skCategoriaPrecio"  name="skCategoriaPrecio" class="form-control" data-plugin="select2" select2Simple>
                                  <option value="">Seleccionar</option>
                                  <?php
@@ -86,36 +127,6 @@ if (isset($data['cotizacionTerminosCondiciones'])) {
                           </div>
                       </div>
                    </div>
-                   <div class="col-md-4 col-lg-4">
-                        <div class="form-group">
-                            <h4 class="example-title">CLIENTE / PROSPECTO:</h4>
-                            <select name="skEmpresaSocioCliente" id="skEmpresaSocioCliente" class="form-control" data-plugin="select2" data-ajax--cache="true" >
-                                <?php
-                                if (!empty($result['skEmpresaSocioCliente'])) {
-                                    ?>
-                                    <option value="<?php echo $result['skEmpresaSocioCliente']; ?>" selected="selected"><?php echo $result['cliente'] . ' (' . $result['clienteRFC'] . ')'; ?></option>
-                                    <?php
-                                }//ENDIF
-                                ?>
-                            </select>
-                            </div>
-                        </div>
-                    <!--<div class="col-md-4 col-lg-4">
-                    <div class="form-group">
-                        <h4 class="example-title">PROSPECTO:</h4>
-                        <select name="skProspecto" id="skProspecto" class="form-control" data-plugin="select2" data-ajax--cache="true" >
-                            <?php
-                            if (!empty($result['skProspecto'])) {
-                                ?>
-                                <option value="<?php echo $result['skProspecto']; ?>" selected="selected"><?php echo $result['prospecto']; ?></option>
-                                <?php
-                            }//ENDIF
-                            ?>
-                        </select>
-                        </div>
-                    </div>-->
-                    
-
 
                               
                                 
@@ -129,9 +140,9 @@ if (isset($data['cotizacionTerminosCondiciones'])) {
                  <div class="row row-lg col-lg-12">
                     <div class="col-md-12 col-lg-12">
                          <div class="form-group">
-                             <h4 class="example-title"> Condicion  <i
+                             <h4 class="example-title"> CONDICIÓN  <i
                                     class="icon wb-help-circle help-text" aria-hidden="true"
-                                    data-content="La condicion se mostrara en el archivo PDF de la cotizacion"
+                                    data-content="La condición se mostrará en el archivo PDF de la cotización"
                                     data-trigger="hover"></i></h4>
                              <textarea class="form-control"  name="sCondicion" placeholder="Condicion"><?php echo (isset($result['sCondicion'])) ? ($result['sCondicion']) : ''; ?></textarea>
                          </div>
@@ -397,6 +408,18 @@ if (isset($data['cotizacionTerminosCondiciones'])) {
 <script type="text/javascript">
 
     core.formValidaciones.fields = vent.coti_form.validaciones;
+
+    function clienteRegistrado(){
+        console.log($("#iClienteRegistrado").prop('checked'));
+        if($("#iClienteRegistrado").prop('checked')){
+            $(".cliente_nuevo").hide();
+            $(".cliente_registrado").show();
+        }else{
+            $(".cliente_registrado").hide();
+            $(".cliente_nuevo").show();
+        }
+    }
+
     function filterFloat(evt,input){
 
 // Backspace = 8, Enter = 13, ‘0′ = 48, ‘9′ = 57, ‘.’ = 46, ‘-’ = 43
@@ -521,6 +544,15 @@ function addCommas(amount) {
  
     var tr_concepto = '';
     $(document).ready(function () {
+
+        //componente de checkbox
+            $('[data-plugin="switchery"]').each(function () {
+                new Switchery(this, {
+                    color: $(this).data('color'),
+                    size: $(this).data('size')
+                });
+            });
+
         $('.help-text').webuiPopover();
         $('#sCorreos').tagsinput({
 					    trimValue: true,

@@ -78,7 +78,6 @@ Class Emso_form_Controller Extends Empr_Model
         $this->empresaSocio['skEstatus'] = isset($_POST['skEstatus']) ? $_POST['skEstatus'] : NULL;
         $this->empresaSocio['skEmpresaTipo'] = isset($_POST['skEmpresaTipo']) ? $_POST['skEmpresaTipo'] : NULL;
         $skCaracteristicaEmpresaSocio = isset($_POST['skCaracteristicaEmpresaSocio']) ? $_POST['skCaracteristicaEmpresaSocio'] : NULL;
-
  
         $skEmpresaSocio = parent::stpCUD_empresaSocio();
         if(!$skEmpresaSocio){
@@ -87,6 +86,7 @@ Class Emso_form_Controller Extends Empr_Model
         }
 
         $this->empresaSocio['skEmpresaSocio'] = isset($skEmpresaSocio["skEmpresaSocio"]) ? $skEmpresaSocio["skEmpresaSocio"] : NULL;
+        $this->data['skEmpresaSocio'] = isset($skEmpresaSocio["skEmpresaSocio"]) ? $skEmpresaSocio["skEmpresaSocio"] : NULL;
       
         if($skCaracteristicaEmpresaSocio){
             $this->empresaSocio['skEmpresaSocio'] = $skEmpresaSocio['skEmpresaSocio'];

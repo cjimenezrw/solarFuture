@@ -41,18 +41,29 @@ Class Coti_form_Controller Extends Vent_Model {
                 Conn::rollback($this->idTran);
                 return $this->data;
             }
+            
+
             $this->vent['skCotizacion'] = (isset($_POST['skCotizacion']) ? $_POST['skCotizacion'] : NULL);  
-            // Guardar cotizacion
-            $guardar_cotizacion = $this->guardar_cotizacion();
-            if(!$guardar_cotizacion['success']){
+
+            // REGISTRAR CLIENTE NUEVO
+            $registrar_cliente = $this->registrar_cliente();
+            if(!$registrar_cliente['success']){
                 Conn::rollback($this->idTran);
                 return $this->data;
             }
+
             if(empty($this->vent['skEmpresaSocioCliente']) && empty($this->vent['skProspecto'])){
                 Conn::rollback($this->idTran);
                 $this->data['success'] = FALSE;
                 $this->data['message'] = 'EL CLIENTE O PROSPECTO ES REQUERIDO';
 
+                return $this->data;
+            }
+
+            // Guardar cotizacion
+            $guardar_cotizacion = $this->guardar_cotizacion();
+            if(!$guardar_cotizacion['success']){
+                Conn::rollback($this->idTran);
                 return $this->data;
             }
 
@@ -92,6 +103,45 @@ Class Coti_form_Controller Extends Vent_Model {
        
         return $this->data;
     }
+
+    public function registrar_cliente(){
+
+        $validarEmpresaSocio = $this->sysAPI('empr','emso_form','validarEmpresaSocio',[
+            'POST'=>[
+                'sRFC'=>$this->vent['sRFC'],
+                'skEmpresaTipo'=>'CLIE'
+            ]
+        ]);
+
+        if(!empty($validarEmpresaSocio['skEmpresaSocio'])){
+            $this->vent['skEmpresaSocioCliente'] = $validarEmpresaSocio['skEmpresaSocio'];
+            $this->data['success'] = TRUE;
+            $this->data['message'] = 'CLIENTE EXISTENTE';
+            return $this->data;
+        }
+
+        $registrar_cliente = $this->sysAPI('empr','emso_form','guardar',[
+            'POST'=>[
+                'sRFC'=>$this->vent['sRFC'],
+                'sNombre'=>$this->vent['sRazonSocial'],
+                'sNombreCorto'=>$this->vent['sRazonSocial'],
+                'skEstatus'=>'AC',
+                'skEmpresaTipo'=>'CLIE',
+            ]
+        ]);
+        
+        if(!empty($registrar_cliente['skEmpresaSocio'])){
+            $this->vent['skEmpresaSocioCliente'] = $registrar_cliente['skEmpresaSocio'];
+            $this->data['success'] = TRUE;
+            $this->data['message'] = 'CLIENTE REGISTRADO';
+            return $this->data;
+        }else{
+            $this->data['success'] = FALSE;
+            $this->data['message'] = 'HUBO UN ERROR AL REGISTRAR EL CLIENTE';
+            return $this->data; 
+        }
+    }
+
     /**
        * guardar_comprobante
        *
@@ -351,6 +401,10 @@ Class Coti_form_Controller Extends Vent_Model {
               }
           }
 
+        if(!isset($this->vent['iClienteRegistrado']) && isset($this->vent['sRFC']) && empty($this->vent['sRFC'])){
+            $this->vent['sRFC'] = 'XAXX010101000';
+        }
+
           return $this->data;
       }
 
@@ -431,7 +485,7 @@ Class Coti_form_Controller Extends Vent_Model {
 
             
         }
- 
+ //exit('<pre>'.print_r($this->data,1).'</pre>');
         return $this->data;
     }
 

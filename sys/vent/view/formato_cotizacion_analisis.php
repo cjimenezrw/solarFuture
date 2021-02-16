@@ -176,7 +176,7 @@ td.text-right {
             <span style="text-align:center; font-size: 10px;">Consumo Total</span>
         </td>
         <td style="text-align:center;height:70px;">
-            <span style="text-align:center; font-size: 12px; font-weight:bold;">$8.06 / Kwh</span><br>
+            <span style="text-align:center; font-size: 12px; font-weight:bold;"><?php echo (isset($data['datos']['precioPromedio'])) ? "$ ".number_format($data['datos']['precioPromedio'],2) : 'N/D'; ?>/ Kwh</span><br>
             <span style="text-align:center; font-size: 10px;">Precio Promedio</span>
         </td>
         <td style="text-align:center;height:70px;">

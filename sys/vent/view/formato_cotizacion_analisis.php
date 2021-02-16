@@ -147,10 +147,10 @@ td.text-right {
 
 <div class="col-md-offset-1 col-md-6" style="border: 1px solid #C1C3D1;border-left: 4px solid #5C5C5C;border-radius:5px;padding:10px;height:110px;">
     <span style="font-size:14px;font-weight:bold;">Información General</span><br><br>
-    <span style="font-size:12px;font-weight:bold;color:#5C5C5C;">Nombre:</span><span style="font-size:10px;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<?php echo (isset($data['datos']['cliente'])) ? ($data['datos']['cliente']) : 'N/D'; ?>/span><br>
+    <span style="font-size:12px;font-weight:bold;color:#5C5C5C;">Nombre:</span><span style="font-size:10px;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<?php echo (isset($data['datos']['cliente'])) ? ($data['datos']['cliente']) : 'N/D'; ?></span><br>
     <span style="font-size:12px;font-weight:bold;color:#5C5C5C;"><!--Tarifa CFE:</span><span style="font-size:10px;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;DAC</span>--><br>
     <span style="font-size:12px;font-weight:bold;color:#5C5C5C;">Nombre CFE:</span><span style="font-size:10px;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<?php echo (isset($data['datos']['cliente'])) ? ($data['datos']['cliente']) : 'N/D'; ?></span><br>
-    <span style="font-size:12px;font-weight:bold;color:#5C5C5C;"><!--Número CFE:</span><span style="font-size:10px;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;3453564575</span-->><br>
+    <span style="font-size:12px;font-weight:bold;color:#5C5C5C;"><!--Número CFE:</span><span style="font-size:10px;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;3453564575</span--><br>
 </div>
 
 
@@ -176,7 +176,7 @@ td.text-right {
             <span style="text-align:center; font-size: 10px;">Consumo Total</span>
         </td>
         <td style="text-align:center;height:70px;">
-            <span style="text-align:center; font-size: 12px; font-weight:bold;">$8.06 / Kwh</span><br>
+            <span style="text-align:center; font-size: 12px; font-weight:bold;"><?php echo (isset($data['datos']['precioPromedio'])) ? "$ ".number_format($data['datos']['precioPromedio'],2) : 'N/D'; ?>/ Kwh</span><br>
             <span style="text-align:center; font-size: 10px;">Precio Promedio</span>
         </td>
         <td style="text-align:center;height:70px;">

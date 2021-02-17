@@ -309,6 +309,7 @@ if (isset($data['cotizacionTerminosCondiciones'])) {
                         <th class="col-xs-1  text-center" style="text-transform: uppercase;"><b style="color:red;">*</b> Unidad</th>
                         <th class=" col-xs-1  text-center" style="text-transform: uppercase;"><b style="color:red;">*</b> Concepto</th>
                         <th class="col-xs-2 text-center" style="text-transform: uppercase;"><b style="color:red;">*</b> Cantidad</th>
+                        <th class="col-xs-2 text-center" style="text-transform: uppercase;"><b style="color:red;">*</b> Descripcion</th>
                         <th class="col-xs-2  text-center" style="text-transform: uppercase;"><b style="color:red;">*</b> P. Unitario</th>
                         <th class="col-xs-1  text-center" style="text-transform: uppercase;">Importe</th>
                         <th class="col-xs-1 col-md-1 text-center">ACCIONES</th>
@@ -333,8 +334,9 @@ if (isset($data['cotizacionTerminosCondiciones'])) {
                                         <option value="<?php echo (isset($row['skConcepto']) ? $row['skConcepto'] : ''); ?>"><?php echo (isset($row['concepto']) ? $row['concepto'] : ''); ?></option>
                                     </select>
                                 </td>
-                                <td><input class="form-control" style="min-width:100px;" onpaste="return filterFloat(event,this);"  onkeypress="return filterFloat(event,this);" value="<?php echo (isset($row['fCantidad']) ? number_format($row['fCantidad'],2) : '');?>"  onchange="actualizarImporte(this);" name="conceptos[<?php echo $cont; ?>][fCantidad]" placeholder="Cantidad" autocomplete="off" type="text"></td>
-                                <td><input class="form-control" style="min-width:100px;" onpaste="return filterFloat(event,this);"  onkeypress="return filterFloat(event,this);" value="<?php echo  (isset($row['fPrecioUnitario']) ? str_replace(',','', number_format($row['fPrecioUnitario'],2)) : '');?>"  onchange="actualizarImporte(this);" name="conceptos[<?php echo $cont; ?>][fPrecioUnitario]" placeholder="P. Unitario" autocomplete="off" type="text"></td>
+                                <td><input class="form-control"     value="<?php echo (isset($row['sDescripcion']) ? $row['sDescripcion'] : '');?>"   name="conceptos[<?php echo $cont; ?>][sDescripcion]" placeholder="Descripcion" autocomplete="off" type="text"></td>
+                                <td><input class="form-control" style="min-width:100px;max-width:100px;" onpaste="return filterFloat(event,this);"  onkeypress="return filterFloat(event,this);" value="<?php echo (isset($row['fCantidad']) ? number_format($row['fCantidad'],2) : '');?>"  onchange="actualizarImporte(this);" name="conceptos[<?php echo $cont; ?>][fCantidad]" placeholder="Cantidad" autocomplete="off" type="text"></td>
+                                <td><input class="form-control" style="min-width:100px;max-width:100px;" onpaste="return filterFloat(event,this);"  onkeypress="return filterFloat(event,this);" value="<?php echo  (isset($row['fPrecioUnitario']) ? str_replace(',','', number_format($row['fPrecioUnitario'],2)) : '');?>"  onchange="actualizarImporte(this);" name="conceptos[<?php echo $cont; ?>][fPrecioUnitario]" placeholder="P. Unitario" autocomplete="off" type="text"></td>
                                 <td><input class="form-control" value="<?php echo $row['fImporte'];?>" name="conceptos[<?php echo $cont; ?>][fImporte]"  type="hidden"><label class="text-center" > <?php echo (isset($row['fImporte']) ? str_replace(',','',number_format($row['fImporte'],2)) : ''); ?> </label>  </td>
                                 <td><button type="button" class="btn btn-outline btn-danger pull-right concepto-eliminar" onclick="eliminarConcepto(this);"><i class="icon wb-trash" aria-hidden="true"></i> Eliminar</button></td>
                             </tr>
@@ -489,10 +491,10 @@ function addCommas(amount) {
                                 },
                                 function (data) {
                                     if(data){
-                                        $(obj).closest('tr').find('td').eq(2).find('input').removeAttr("disabled");
                                         $(obj).closest('tr').find('td').eq(3).find('input').removeAttr("disabled");
-                                        $(obj).closest('tr').find('td').eq(2).find('input').val('1');
-                                        $(obj).closest('tr').find('td').eq(3).find('input').val(data.fPrecioVenta);
+                                        $(obj).closest('tr').find('td').eq(4).find('input').removeAttr("disabled");
+                                        $(obj).closest('tr').find('td').eq(3).find('input').val('1');
+                                        $(obj).closest('tr').find('td').eq(4).find('input').val(data.fPrecioVenta);
                                     }
                             });
            
@@ -543,8 +545,8 @@ function addCommas(amount) {
                           var tr = $(obj).parent().parent();
                           var importe = 0;
 
-                          var cantidad = $(obj).closest('tr').find('td').eq(2).find('input').val().replace(',', '' );
-                          var precioUnitario = $(obj).closest('tr').find('td').eq(3).find('input').val().replace(',', '' );
+                          var cantidad = $(obj).closest('tr').find('td').eq(3).find('input').val().replace(',', '' );
+                          var precioUnitario = $(obj).closest('tr').find('td').eq(4).find('input').val().replace(',', '' );
                    
                    
                    
@@ -552,8 +554,8 @@ function addCommas(amount) {
                           if(cantidad != '' && precioUnitario != ''){
                               importe = (cantidad * precioUnitario);
                             
-                              $(obj).closest('tr').find('td').eq(4).find('input').val(importe);
-                              $(obj).closest('tr').find('td').eq(4).find('label').html(addCommas(importe));
+                              $(obj).closest('tr').find('td').eq(5).find('input').val(importe);
+                              $(obj).closest('tr').find('td').eq(5).find('label').html(addCommas(importe));
                         
                            
                               actualizarSubtotal();
@@ -563,7 +565,7 @@ function addCommas(amount) {
                       actualizarSubtotal = function () {
                           var subtotal = 0;
                           $("#conceptos tbody tr").each(function (index) {
-                                   subtotal += Math.round(parseFloat($(this).closest('tr').find('td').eq(4).find('input').val())* 100) / 100;
+                                   subtotal += Math.round(parseFloat($(this).closest('tr').find('td').eq(5).find('input').val())* 100) / 100;
 
                           }); 
                          $("#inSubtotal").val(parseFloat(subtotal));
@@ -605,8 +607,9 @@ function addCommas(amount) {
                  
                             '<td><select name="conceptos[' + cont + '][skTipoMedida]" class="skTipoMedida form-control js-data-example-ajax" data-plugin="select2" data-ajax--cache="true">  </select></td>'+
                             '<td><select name="conceptos[' + cont + '][skConcepto]" onchange="obtenerDatos(this);" class="skConcepto form-control js-data-example-ajax" data-plugin="select2" data-ajax--cache="true">  </select></td>'+
-                            '<td fCantidad ><input class="form-control" disabled name="conceptos[' + cont + '][fCantidad]" onpaste="return filterFloat(event,this);"  onkeypress="return filterFloat(event,this);"  onchange="actualizarImporte(this);" placeholder="Cantidad" autocomplete="off" type="text"></td>'+
-                            '<td fPrecioUnitario ><input class="form-control" disabled name="conceptos[' + cont + '][fPrecioUnitario]" onpaste="return filterFloat(event,this);"  onkeypress="return filterFloat(event,this);"  onchange="actualizarImporte(this);" placeholder="P. Unitario" autocomplete="off" type="text"></td>'+
+                            '<td ><input  class="form-control"  name="conceptos[' + cont + '][sDescripcion]" placeholder="Descripcion" autocomplete="off" type="text"></td>'+
+                            '<td fCantidad ><input style="min-width:100px;max-width:100px;"  class="form-control" disabled name="conceptos[' + cont + '][fCantidad]" onpaste="return filterFloat(event,this);"  onkeypress="return filterFloat(event,this);"  onchange="actualizarImporte(this);" placeholder="Cantidad" autocomplete="off" type="text"></td>'+
+                            '<td fPrecioUnitario ><input style="min-width:100px;max-width:100px;"  class="form-control" disabled name="conceptos[' + cont + '][fPrecioUnitario]" onpaste="return filterFloat(event,this);"  onkeypress="return filterFloat(event,this);"  onchange="actualizarImporte(this);" placeholder="P. Unitario" autocomplete="off" type="text"></td>'+
                             '<td><input class="form-control" name="conceptos[' + cont + '][fImporte]" type="hidden"> <label class="text-center" > - </label> </td>'+
                             '<td><button type="button" class="btn btn-outline btn-danger pull-right concepto-eliminar" onclick="eliminarConcepto(this);"><i class="icon wb-trash" aria-hidden="true"></i> Eliminar</button></td>'+
                             '</tr>';

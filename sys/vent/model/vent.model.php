@@ -40,6 +40,7 @@ Class Vent_Model Extends DLOREAN_Model {
             " .escape(isset($this->vent['skConcepto']) ? $this->vent['skConcepto'] : NULL) . ",
             " .escape(isset($this->vent['skTipoMedida']) ? $this->vent['skTipoMedida'] : NULL) . ",
             " .escape(isset($this->vent['skImpuesto']) ? $this->vent['skImpuesto'] : NULL) . ",
+            " .escape(isset($this->vent['sDescripcion']) ? $this->vent['sDescripcion'] : NULL) . ",
             " .escape(isset($this->vent['fCantidad']) ? $this->vent['fCantidad'] : NULL) . ",
             " .escape(isset($this->vent['fPrecioUnitario']) ? $this->vent['fPrecioUnitario'] : NULL) . ",
             " .escape(isset($this->vent['fImporte']) ? $this->vent['fImporte'] : NULL) . ",
@@ -152,6 +153,7 @@ Class Vent_Model Extends DLOREAN_Model {
                         cse.fCantidad,
                         cse.fPrecioUnitario,
                         cse.fImporte,
+                        cse.sDescripcion,
                         cc.sNombre AS concepto,
                         cc.sCodigo AS sCodigo,
                         cum.sNombre as tipoMedida

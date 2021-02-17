@@ -230,6 +230,7 @@ Class Coti_form_Controller Extends Vent_Model {
                     $this->vent['axn'] = 'guardar_cotizacion_conceptos';
                     //$this->vent['skCotizacionConcepto']           = (isset($con['skCotizacionConcepto']) ? $con['skCotizacionConcepto'] : NULL);
                     $this->vent['skConcepto']         = (isset($con['skConcepto']) ? $con['skConcepto'] : NULL);
+                    $this->vent['sDescripcion']       = (isset($con['sDescripcion']) ? $con['sDescripcion'] : NULL);
                     $this->vent['skTipoMedida']       = (isset($con['skTipoMedida']) ? $con['skTipoMedida'] : NULL);
                     $this->vent['fCantidad']          = (isset($con['fCantidad']) ? str_replace(',','',$con['fCantidad']) : NULL);
                     $this->vent['fPrecioUnitario']    = (isset($con['fPrecioUnitario']) ? str_replace(',','',$con['fPrecioUnitario']) : NULL);

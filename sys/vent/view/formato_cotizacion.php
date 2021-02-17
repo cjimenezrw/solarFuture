@@ -173,7 +173,7 @@ td.text-right {
 		    ?>
 		    <tr>
 			<td style="text-align:center; font-size: 8px; text-transform: uppercase;" ><?php echo $conceptos['sCodigo']; ?></td>
- 			<td style="text-align:left; font-size: 8px; text-transform: uppercase;" ><?php echo $conceptos['concepto']; ?></td>
+ 			<td style="text-align:left; font-size: 8px; text-transform: uppercase;" ><?php echo (!empty($conceptos['sDescripcion']) ? $conceptos['sDescripcion'] : $conceptos['concepto']); ?></td>
 			<td style="text-align:right; font-size: 8px; text-transform: uppercase;" ><?php echo number_format($conceptos['fCantidad'], 2); ?></td>
             <td style="text-align:right; font-size: 8px; text-transform: uppercase;" ><?php echo "$" . number_format($conceptos['fPrecioUnitario'], 2); ?></td>
 			<td style="text-align:right; font-size: 8px; text-transform: uppercase;" ><?php echo "$" . number_format($conceptos['fImporte'], 2); ?></td>

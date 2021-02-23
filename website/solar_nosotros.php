@@ -1,11 +1,10 @@
-<section name="section-nosotros" id="section-nosotros">
         <div class="container">
             <div class="row">
                 <div class="col-md-6 col-lg-6 col-sm-12 col-xs-12">
                     <div class="sw_disc_txt_wrapper">
 
                         <div class="sw_left_heading_wraper">
-                            <h1>NOSOTROS!</h1><br>
+                            <h1 id="section-nosotros">NOSOTROS!</h1><br>
                             <p>Donec quis magna sit amet risus vulputate maximus eget eget arcu. Praesent sed molestie tortor. </p>
                         </div>
 
@@ -150,4 +149,3 @@
     <!-- sw choose service wrapper end-->
     </div>
     </div>
-    </section>

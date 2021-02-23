@@ -23,7 +23,7 @@
                         <nav id="primary-nav" class="dropdown nav_left_margin">
                             <ul class="dropdown menu navigation cart_dropdown_wrapper">
                                 <li><a href="index.php" title="Inicio">Inicio</a></li>
-                                <li><a href="#section-nosotros" title="NOSOTROS">Nosotros</a></li>
+                                <li><a class="section-scroll" href="#section-nosotros" title="NOSOTROS">Nosotros</a></li>
                                 <li><a href="#section-servicios" title="Servicios">Servicios</a></li>
                                 <li><a href="#section-faq" title="Preguntas Frecuentes">Preguntas Frecuentes</a></li>
                                 <li><a href="#section-galeria" title="Galería">Galería</a></li>

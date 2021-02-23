@@ -130,6 +130,44 @@
     <script src="js/custom_2.js"></script>
     <!--js code-->
 
+    <script type='text/javascript'>
+         function sendMail(){
+            $.ajax({
+              url: 'PHPMailer/sendMail1.php',
+              type: 'POST',
+              data: {
+              	  nombre: $("#form-name").val(),
+                  correo: $("#form-email").val(),
+                  asunto: $("#form-subject").val(),
+                  mensaje: $("#form-message").val()
+              },
+              cache: false,
+              beforeSend: function () {
+                  
+              },
+              success: function (response) {
+                  if (response.success == false) {
+                     alert(response.message);
+                     return false;
+                  }
+                  alert(response.message);
+                  return true;
+              }
+               });      
+         }
+
+         $(document).ready(function () {
+         
+            $('a.section-scroll').on('click', function (event) {
+                $('html, body').animate({
+                    scrollTop: $($(this).attr('href')).offset().top - 200
+                }, 1500);
+            });
+
+         });
+         
+    </script>
+
 </body>
 
 </html>

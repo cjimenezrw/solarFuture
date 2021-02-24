@@ -15,7 +15,7 @@
                     <div class="main-menu-wrapper clear-fix">
 
                         <div class="logo float-left">
-                            <a href="index.html"><img src="images/hd_logo.png" class="img-responsive" alt="logo"></a>
+                            <a href=""><img src="images/hd_logo.png" class="img-responsive" alt="logo"></a>
                         </div>
 
                     </div>
@@ -32,9 +32,9 @@
                                 <div class="sw_icon_bar">
                                     <ul class="tc_login_btn_wrapper">
                                         <li class="dropdown tc_login_btn">
-                                            <a class="dropdown-toggle hvr-float-shadow active waves-effect waves-light" data-toggle="dropdown" href="index.html#"><i class="fa fa-ellipsis-v"></i></a>
+                                            <a class="dropdown-toggle hvr-float-shadow active waves-effect waves-light" data-toggle="dropdown" href="#"><i class="fa fa-ellipsis-v"></i></a>
                                             <ul class="dropdown-menu tc_menu_fixed_border">
-                                                <li class="dropdown_hover"><a href="index.html#">Iniciar Sesión</a></li>
+                                                <li class="dropdown_hover"><a href="#">Iniciar Sesión</a></li>
                                             </ul>
                                         </li>
                                     </ul>

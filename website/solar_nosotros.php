@@ -1,11 +1,12 @@
         <div class="container">
             <div class="row">
-                <div class="col-md-6 col-lg-6 col-sm-12 col-xs-12">
+                <div class="col-md-12 col-lg-12 col-sm-12 col-xs-12">
                     <div class="sw_disc_txt_wrapper">
 
                         <div class="sw_left_heading_wraper">
                             <h1 id="section-nosotros">NOSOTROS!</h1><br>
-                            <p>Donec quis magna sit amet risus vulputate maximus eget eget arcu. Praesent sed molestie tortor. </p>
+                            <p>Somos una empresa innovadora en Manzanillo que busca satisfacer las necesidades de sus clientes residenciales, comerciales e industriales en materia solar por medio de sistemas fotovoltaicos. </p>
+                            <p>Somos profesionales certificados con los mejores estándares de calidad en el diseño, instalación, puesta en marcha, monitoreo y mantenimiento de los sistemas solares.</p>
                         </div>
 
                     </div>
@@ -31,8 +32,8 @@
                             </div>
 
                             <div class="chose_icon_content_left">
-                                <h4><a href="about_us.html#">Long Time to Use</a></h4>
-                                <p>Quisque ut nunc elit. Lorem ipsum dolor Sit amet consectetur.</p>
+                                <h4><a href="#">Largo tiempo de uso</a></h4>
+                                <p>Hasta 30 años de vida útil.</p>
                             </div>
 
                         </div>
@@ -43,8 +44,8 @@
                             </div>
 
                             <div class="chose_icon_content_left">
-                                <h4><a href="about_us.html#">Alaways Clean Energy</a></h4>
-                                <p>Quisque ut nunc elit. Lorem ipsum dolor Sit amet consectetur.</p>
+                                <h4><a href="#">Energia Limpia</a></h4>
+                                <p>El sol genera energía gratuita e inagotable.</p>
                             </div>
 
                         </div>
@@ -55,8 +56,8 @@
                             </div>
 
                             <div class="chose_icon_content_left">
-                                <h4><a href="about_us.html#">Energy Can Be Reused</a></h4>
-                                <p>Quisque ut nunc elit. Lorem ipsum dolor Sit amet consectetur.</p>
+                                <h4><a href="#">Energia Sustentable</a></h4>
+                                <p>Demuestra su compromiso con la sustentabilidad y el medio ambiente.</p>
                             </div>
 
                         </div>
@@ -71,8 +72,8 @@
                     <div class="chose_text_wrapper_right">
                         <div class="chose_icon_wrapper_list">
                             <div class="icon_content_right">
-                                <h4><a href="about_us.html#">Used for Many Purposes</a></h4>
-                                <p>Quisque ut nunc elit. Lorem ipsum dolor Sit amet consectetur.</p>
+                                <h4><a href="#">Incentivos fiscales</a></h4>
+                                <p>Incentivos fiscales del Gobierno Federal por el uso de paneles solares.</p>
                             </div>
 
                             <div class="chose_icon_img_list">
@@ -83,8 +84,8 @@
                         <div class="chose_icon_wrapper_list">
 
                             <div class="icon_content_right">
-                                <h4><a href="about_us.html#">Low Installation Costs</a></h4>
-                                <p>Quisque ut nunc elit. Lorem ipsum dolor Sit amet consectetur.</p>
+                                <h4><a href="#">Retorno de Inversion</a></h4>
+                                <p>Inversión recuperable desde el segundo año.</p>
                             </div>
 
                             <div class="chose_icon_img_list">
@@ -95,8 +96,8 @@
                         <div class="chose_icon_wrapper_list">
 
                             <div class="icon_content_right">
-                                <h4><a href="about_us.html#">Easy Installation</a></h4>
-                                <p>Quisque ut nunc elit. Lorem ipsum dolor Sit amet consectetur.</p>
+                                <h4><a href="#">Ahorro de Energia</a></h4>
+                                <p>Efectos nulos o bajos por incrementos en las tarifas de energia eléctrica..</p>
                             </div>
 
                             <div class="chose_icon_img_list">
@@ -113,7 +114,7 @@
                                 <img src="images/ser_img_3.png" alt="title">
                             </div>
                             <div class="icon_content_right">
-                                <h4><a href="about_us.html#">Used for Many Purposes</a></h4>
+                                <h4><a href="#">Used for Many Purposes</a></h4>
                                 <p>Quisque ut nunc elit. Lorem ipsum dolor Sit amet consectetur.</p>
                             </div>
                         </div>
@@ -124,7 +125,7 @@
                             </div>
 
                             <div class="icon_content_right">
-                                <h4><a href="about_us.html#">Low Installation Costs</a></h4>
+                                <h4><a href="#">Low Installation Costs</a></h4>
                                 <p>Quisque ut nunc elit. Lorem ipsum dolor Sit amet consectetur.</p>
                             </div>
                         </div>
@@ -134,7 +135,7 @@
 
                             </div>
                             <div class="icon_content_right">
-                                <h4><a href="about_us.html#">Easy Installation</a></h4>
+                                <h4><a href="#">Easy Installation</a></h4>
                                 <p>Quisque ut nunc elit. Lorem ipsum dolor Sit amet consectetur.</p>
                             </div>
                         </div>

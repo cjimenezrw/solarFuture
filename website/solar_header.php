@@ -50,6 +50,8 @@
             padding: 40px;
             border-radius: 20px;
             margin-bottom:30px;
+            min-height: 400px;
+            max-height: 400px;
             box-shadow:0 8px 20px 0 rgba(0, 0, 0, 0.06);
         }
          .gb_icon_wrapper:hover .gb_icon_img img{

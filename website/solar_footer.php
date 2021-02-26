@@ -14,16 +14,16 @@
                         <div class="col-lg-4 col-md-4 col-xs-12 col-sm-12">
                             <div class="wrapper_second_about">
                                 <div class="wrapper_first_image">
-                                    <a href="index.html"><img src="images/hd_logo.png" class="img-responsive" alt="logo" /></a>
+                                    <a href=""><img src="images/hd_logo.png" class="img-responsive" alt="logo" /></a>
                                 </div>
                                 <div class="abotus_content">
-                                    <p>Consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis aks nostrud exercitation ullamco.</p>
+                                    <p>Somos profesionales certificados con los mejores estándares de calidad en el diseño, instalación, puesta en marcha, monitoreo y mantenimiento de los sistemas solares.</p>
                                     <ul>
-                                        <li><a href="index.html#"><i class="fa fa-facebook"></i></a></li>
-                                        <li><a href="index.html#"><i class="fa fa-twitter"></i></a></li>
-                                        <li><a href="index.html#"><i class="fa fa-youtube-play"></i></a></li>
-                                        <li><a href="index.html#"><i class="fa fa-linkedin"></i></a></li>
-                                        <li><a href="index.html#"><i class="fa fa-instagram"></i></a></li>
+                                        <li><a href="www.facebook.com/solarfuturemanzanillo"><i class="fa fa-facebook"></i></a></li>
+                                        <li><a href="#"><i class="fa fa-twitter"></i></a></li>
+                                        <li><a href="#"><i class="fa fa-youtube-play"></i></a></li>
+                                        <li><a href="#"><i class="fa fa-linkedin"></i></a></li>
+                                        <li><a href="#"><i class="fa fa-instagram"></i></a></li>
                                     </ul>
                                 </div>
 
@@ -32,24 +32,24 @@
 
                         <div class="col-lg-2 col-md-2 col-xs-12 col-sm-4">
                             <div class="wrapper_second_useful">
-                                <h4>useful links </h4>
+                                <h4>Secciones </h4>
                                 <img src="images/hd_line_dark.png" alt="title" class="pd_btm_3">
                                 <ul>
-                                    <li><a href="index.html#"><i class="fa fa-angle-right"></i>About us</a>
+                                    <li><a href="#section-nosotros"><i class="fa fa-angle-right"></i>Nosotros</a>
                                     </li>
-                                    <li><a href="index.html#"><i class="fa fa-angle-right"></i>events </a>
+                                    <li><a href="#section-servicios"><i class="fa fa-angle-right"></i>Servicios </a>
                                     </li>
-                                    <li><a href="index.html#"><i class="fa fa-angle-right"></i>contact </a>
+                                    <li><a href="#section-faq"><i class="fa fa-angle-right"></i>Preg. Frecuentes </a>
                                     </li>
-                                    <li><a href="index.html#"><i class="fa fa-angle-right"></i>history</a>
+                                    <li><a href="#section-galeria"><i class="fa fa-angle-right"></i>Galera</a>
                                     </li>
-                                    <li><a href="index.html#"><i class="fa fa-angle-right"></i>news</a> </li>
+                                    <li><a href="#section-contacto"><i class="fa fa-angle-right"></i>Contacto</a> </li>
                                 </ul>
 
                             </div>
                         </div>
                         <div class="col-lg-2 col-md-2 col-xs-12 col-sm-4">
-                            <div class="wrapper_second_useful wrapper_second_links">
+                            <!-- <div class="wrapper_second_useful wrapper_second_links">
 
                                 <ul>
                                     <li><a href="index.html#"><i class="fa fa-angle-right"></i>sitemap</a>
@@ -63,22 +63,22 @@
                                     <li><a href="index.html#"><i class="fa fa-angle-right"></i>career</a> </li>
                                 </ul>
 
-                            </div>
+                            </div>-->
                         </div>
 
                         <div class="col-lg-4 col-md-4 col-xs-12 col-sm-12">
                             <div class="wrapper_second_useful wrapper_second_useful_2">
-                                <h4>contact  us</h4>
+                                <h4>Contacto</h4>
                                 <img src="images/hd_line_dark.png" alt="title" class="pd_btm_3">
                                 <ul>
 									<li>
-                                     <h1>+800 568 322</h1></li>
-									 <li><a href="index.html#"><i class="flaticon-new-email-outline"></i>sunwind@example.com</a>
+                                     <h1>+(314)137-8133</h1></li>
+									 <li><a href="#"><i class="flaticon-new-email-outline"></i>ventas@solarfuturemanzanillo.com</a>
                                     </li>
-									 <li><a href="index.html#"><i class="flaticon-internet"></i>www.example.com</a>
+									 <li><a href="#"><i class="flaticon-internet"></i>solarfuturemanzanillo.com</a>
                                     </li>
                                   
-                                    <li><i class="flaticon-placeholder"></i>Timposn, Suite 247 USA, 222
+                                    <li><i class="flaticon-placeholder"></i>Av. Elias Zamora Verduzco Lote 4 Manzana 244, Salagua, Manzanillo, Colima
                                     </li>                                   
                                 </ul>
                             </div>
@@ -87,7 +87,7 @@
                 </div>
                 <div class="col-lg-12 col-md-12 col-xs-12 col-sm-12">
                     <div class="section3_copyright">
-                        <p>Copyright 2018 <a href="index.html"> sun & wind energy</a>. all right reserved - design by <a href="index.html">webstrot</a></p>
+                        <p>Copyright 2021 <a href=""> SolarFuture</a>.Todos los derechos Reservados<a href="">SoftLab</a></p>
                     </div>
                 </div>
             </div>

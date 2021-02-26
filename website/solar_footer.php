@@ -131,30 +131,32 @@
     <!--js code-->
 
     <script type='text/javascript'>
-         function sendMail(){
-            $.ajax({
-              url: 'PHPMailer/sendMail1.php',
-              type: 'POST',
-              data: {
-              	  nombre: $("#form-name").val(),
-                  correo: $("#form-email").val(),
-                  asunto: $("#form-subject").val(),
-                  mensaje: $("#form-message").val()
-              },
-              cache: false,
-              beforeSend: function () {
-                  
-              },
-              success: function (response) {
-                  if (response.success == false) {
-                     alert(response.message);
-                     return false;
-                  }
-                  alert(response.message);
-                  return true;
-              }
-               });      
-         }
+
+    function sendMail(){
+        $.ajax({
+            url: 'PHPMailer/sendMail.php',
+            type: 'POST',
+            data: {
+                nombre: $("#form-name").val(),
+                telefono: $("#form-phone").val(),
+                correo: $("#form-email").val(),
+                asunto: $("#form-subject").val(),
+                mensaje: $("#form-message").val()
+            },
+            cache: false,
+            beforeSend: function () {
+                
+            },
+            success: function (response) {
+                if (response.success == false) {
+                    alert(response.message);
+                    return false;
+                }
+                alert(response.message);
+                return true;
+            }
+        });      
+    }
 
          $(document).ready(function () {
          
@@ -162,6 +164,7 @@
                 $('html, body').animate({
                     scrollTop: $($(this).attr('href')).offset().top - 200
                 }, 1500);
+                return true;
             });
 
          });

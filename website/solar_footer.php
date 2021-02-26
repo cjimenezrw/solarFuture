@@ -35,15 +35,15 @@
                                 <h4>Secciones </h4>
                                 <img src="images/hd_line_dark.png" alt="title" class="pd_btm_3">
                                 <ul>
-                                    <li><a href="#section-nosotros"><i class="fa fa-angle-right"></i>Nosotros</a>
+                                    <li><a class="section-scroll" href="#section-nosotros"><i class="fa fa-angle-right"></i>Nosotros</a>
                                     </li>
-                                    <li><a href="#section-servicios"><i class="fa fa-angle-right"></i>Servicios </a>
+                                    <li><a class="section-scroll" href="#section-servicios"><i class="fa fa-angle-right"></i>Servicios </a>
                                     </li>
-                                    <li><a href="#section-faq"><i class="fa fa-angle-right"></i>Preg. Frecuentes </a>
+                                    <li><a class="section-scroll" href="#section-faq"><i class="fa fa-angle-right"></i>Preg. Frecuentes </a>
                                     </li>
-                                    <li><a href="#section-galeria"><i class="fa fa-angle-right"></i>Galera</a>
+                                    <li><a class="section-scroll" href="#section-galeria"><i class="fa fa-angle-right"></i>Galera</a>
                                     </li>
-                                    <li><a href="#section-contacto"><i class="fa fa-angle-right"></i>Contacto</a> </li>
+                                    <li><a class="section-scroll" href="#section-contacto"><i class="fa fa-angle-right"></i>Contacto</a> </li>
                                 </ul>
 
                             </div>
@@ -160,10 +160,10 @@
 
          $(document).ready(function () {
          
-            $('a.section-scroll').on('click', function (event) {
+            $('.section-scroll').on('click', function (event) {
                 $('html, body').animate({
                     scrollTop: $($(this).attr('href')).offset().top - 200
-                }, 1500);
+                }, 2000);
                 return true;
             });
 

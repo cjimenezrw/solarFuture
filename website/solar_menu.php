@@ -15,18 +15,18 @@
                     <div class="main-menu-wrapper clear-fix">
 
                         <div class="logo float-left">
-                            <a href=""><img src="images/hd_logo.png" class="img-responsive" alt="logo"></a>
+                            <a class="section-scroll" href="#section-inicio"><img src="images/solar_future.png" class="img-responsive"  style="height: 67px !important;" alt="Solar Future"></a>
                         </div>
 
                     </div>
                     <div class="sc_navigation hidden-sm hidden-xs">
                         <nav id="primary-nav" class="dropdown nav_left_margin">
                             <ul class="dropdown menu navigation cart_dropdown_wrapper">
-                                <li><a href="index.php" title="Inicio">Inicio</a></li>
+                                <li><a class="section-scroll" href="#section-inicio" title="Inicio">Inicio</a></li>
                                 <li><a class="section-scroll" href="#section-nosotros" title="NOSOTROS">Nosotros</a></li>
-                                <li><a href="#section-servicios" title="Servicios">Servicios</a></li>
-                                <li><a href="#section-faq" title="Preguntas Frecuentes">Preguntas Frecuentes</a></li>
-                                <li><a href="#section-galeria" title="Galería">Galería</a></li>
+                                <li><a class="section-scroll" href="#section-servicios" title="Servicios">Servicios</a></li>
+                                <li><a class="section-scroll" href="#section-faq" title="Preguntas Frecuentes">Preguntas Frecuentes</a></li>
+                                <li><a class="section-scroll" href="#section-galeria" title="Galería">Galería</a></li>
                             </ul>
                             <div class="header_right_main_wrapper">
                                 <div class="sw_icon_bar">
@@ -42,7 +42,7 @@
                                 <div class="header_btn">
                                     <ul>
                                         <li>
-                                            <a href="#section-contacto" class="waves-effect waves-light waves-ripple">Contáctanos</a>
+                                            <a class="section-scroll" href="#section-contacto" class="waves-effect waves-light waves-ripple">Contáctanos</a>
                                         </li>
                                     </ul>
                                 </div>

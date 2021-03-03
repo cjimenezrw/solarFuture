@@ -42,7 +42,7 @@
                                 <div class="header_btn">
                                     <ul>
                                         <li>
-                                            <a class="section-scroll" href="#section-contacto" class="waves-effect waves-light waves-ripple">Contáctanos</a>
+                                            <a class="waves-effect waves-light waves-ripple section-scroll" href="#section-contacto">Contáctanos</a>
                                         </li>
                                     </ul>
                                 </div>
@@ -51,7 +51,7 @@
                         </nav>
                     </div>
                     <!-- /.main-menu-wrapper -->
-                    <!-- mobile menu area start -->
+                    <!-- mobile menu area start --> 
                     <div class="mobile-menu-area visible-sm visible-xs">
                         <div class="container-fluid header_container">
                             <div class="row">

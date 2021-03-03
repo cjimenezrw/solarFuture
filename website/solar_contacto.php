@@ -11,6 +11,7 @@
                 <div class="cmnt_area_div_mn">
                     <div class="sw_left_heading_wraper sw_dark_heading_wraper">
                         <h1 id="section-contacto">CONTÁCTANOS</h1>
+                        <img src="images/hd_line_dark.png" alt="title">
                         <div class="col-md-12"><p>Av. Elias Zamora Verduzco Lote 4 Manzana 244, Salagua, Manzanillo, Colima</p></div>
                         <div class="col-md-6"><p><i class="fa fa-phone" aria-hidden="true"></i> (314)137-8133</p></div>
                         <div class="col-md-6"><p><i class="fa fa-mobile-phone" aria-hidden="true"></i> (314)121-3237</p></div>

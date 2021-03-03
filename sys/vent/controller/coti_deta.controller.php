@@ -38,11 +38,29 @@ Class Coti_deta_Controller Extends Vent_Model {
             $this->load_view('formato_cotizacion', $this->data, NULL, FALSE);
             $formato_cotizacion = ob_get_contents();
         ob_end_clean();
+
+        
+        $pdf_cotizacion_analisis = [];
         if(!empty($this->data['datos']['iInformacionPanel'])){
             ob_start();
             $this->load_view('formato_cotizacion_analisis', $this->data, NULL, FALSE);
             $formato_cotizacion_analisis = ob_get_contents();
-             ob_end_clean();
+            ob_end_clean();
+            $pdf_cotizacion_analisis = [
+                'content' => $formato_cotizacion_analisis,
+                'defaultWatermark' => false,
+                'header' => '<div></div>',
+                'footer' => '<div></div>',
+                'defaultFooter' => false,
+                'defaultHeader' => false,
+                'pdf' => [
+                    'contentMargins' => [10, 15, 5, 5],
+                    'format' => 'LETTER',
+                    'vertical' => 'L',
+                    'footerMargin' => 5,
+                    'headerMargin' => 5
+                ]
+            ];
         }
        
 
@@ -62,22 +80,8 @@ Class Coti_deta_Controller Extends Vent_Model {
                     'headerMargin' => 5,
                     'fileName' => 'Cotizacion.pdf'
                 ]
-            ],
-            [
-                'content' => $formato_cotizacion_analisis,
-                'defaultWatermark' => false,
-                'header' => '<div></div>',
-                'footer' => '<div></div>',
-                'defaultFooter' => false,
-                'defaultHeader' => false,
-                'pdf' => [
-                    'contentMargins' => [10, 15, 5, 5],
-                    'format' => 'LETTER',
-                    'vertical' => 'L',
-                    'footerMargin' => 5,
-                    'headerMargin' => 5
-                ]
-            ]
+            ],$pdf_cotizacion_analisis
+            
         ]);
 
         return true;

@@ -14,16 +14,19 @@
                         <div class="col-lg-4 col-md-4 col-xs-12 col-sm-12">
                             <div class="wrapper_second_about">
                                 <div class="wrapper_first_image">
-                                    <a href=""><img src="images/hd_logo.png" class="img-responsive" alt="logo" /></a>
+                                    <a class="section-scroll" href="#section-inicio"><img src="images/solar_future.png" style="width: 80%;" class="img-responsive" alt="logo" /></a>
                                 </div>
                                 <div class="abotus_content">
                                     <p>Somos profesionales certificados con los mejores estándares de calidad en el diseño, instalación, puesta en marcha, monitoreo y mantenimiento de los sistemas solares.</p>
                                     <ul>
                                         <li><a href="www.facebook.com/solarfuturemanzanillo"><i class="fa fa-facebook"></i></a></li>
+                                        <li><a href="#"><i class="fa fa-whatsapp"></i></a></li>
+                                        <!--
                                         <li><a href="#"><i class="fa fa-twitter"></i></a></li>
                                         <li><a href="#"><i class="fa fa-youtube-play"></i></a></li>
                                         <li><a href="#"><i class="fa fa-linkedin"></i></a></li>
                                         <li><a href="#"><i class="fa fa-instagram"></i></a></li>
+                                        !-->
                                     </ul>
                                 </div>
 

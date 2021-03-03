@@ -54,7 +54,7 @@
                 <div class="col-md-5 col-md-offset-1 col-lg-5 col-lg-offset-1 col-sm-12 col-xs-12 clm_img">
                     <div class="sw_right_img_wrapper">
                         <div class="sw_disc_img_overlay"></div>
-                        <img src="images/disc_lft_bg.jpg" alt="About" class="img-responsive sw_right_img_div">
+                        <img src="images/slider_bg.jpg" alt="About" class="img-responsive sw_right_img_div">
 
                         <div class="sw_disc_img_btm">
                             <img src="images/disc_lft.jpg" alt="About" class="img-responsive">

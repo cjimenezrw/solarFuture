@@ -3,7 +3,8 @@
         <div class="col-md-6 col-lg-6 col-sm-12 col-xs-12">
             <div class="sw_disc_txt_wrapper">
                 <div class="sw_left_heading_wraper">
-                    <h1 id="section-faq">PREGUNTAS FRECUENTES!</h1><br>
+                    <h1 id="section-faq">PREGUNTAS FRECUENTES!</h1>
+                    <img src="images/heading_line.png" alt="title">
                     <p>Algunas preguntas frecuentes realizadas por nuestros clientes. </p>
                 </div>
             </div>

@@ -34,17 +34,13 @@
                             <div class="gallery-list img-effect zoom-slow">
                                 <div class="sp_img_box_overlay"></div>
                                 <div class="over">
-
-                                    <img src="images/pj_1.jpg" alt="" class="img-responsive" />
-
+                                    <img src="images/1.jpeg" style="width: 295px; height: 227px;" alt="" class="img-responsive" />
                                     <div class="tab_img_overlay">
-                                        <a href="images/pj_1.jpg" class="venobox info" data-title="PROJECT TITTLE" data-gall="gall12">
+                                        <a href="images/1.jpeg" class="venobox info" data-title="PANELES SOLARES" data-gall="gall12">
                                             <i class="fa fa-arrows-alt"></i> </a>
-                                        <h1>project title here</h1>
-                                        <p>(solar pannels)</p>
-
+                                        <h1>Peneles Solares</h1>
+                                        <p>(Paneles Solares)</p>
                                     </div>
-
                                 </div>
                             </div>
                         </div>
@@ -53,16 +49,13 @@
                             <div class="gallery-list img-effect zoom-slow">
                                 <div class="sp_img_box_overlay"></div>
                                 <div class="over">
-
-                                    <img src="images/pj_2.jpg" alt="" class="img-responsive" />
+                                    <img src="images/2.jpeg" style="width: 295px; height: 227px;" alt="" class="img-responsive" />
                                     <div class="tab_img_overlay">
-
-                                        <a href="images/pj_2.jpg" class="venobox info" data-title="PROJECT TITTLE" data-gall="gall12">
+                                        <a href="images/2.jpeg" class="venobox info" data-title="PANELES SOLARES" data-gall="gall12">
                                             <i class="fa fa-arrows-alt"></i> </a>
-                                        <h1>project title here</h1>
-                                        <p>(solar pannels)</p>
+                                        <h1>Peneles Solares</h1>
+                                        <p>(Paneles Solares)</p>
                                     </div>
-
                                 </div>
                             </div>
                         </div>
@@ -71,16 +64,13 @@
                             <div class="gallery-list img-effect zoom-slow">
                                 <div class="sp_img_box_overlay"></div>
                                 <div class="over">
-
-                                    <img src="images/pj_3.jpg" alt="" class="img-responsive" />
+                                    <img src="images/3.jpeg" style="width: 295px; height: 227px;" alt="" class="img-responsive" />
                                     <div class="tab_img_overlay">
-
-                                        <a href="images/pj_3.jpg" class="venobox info" data-title="PROJECT TITTLE" data-gall="gall12">
+                                        <a href="images/3.jpeg" class="venobox info" data-title="PANELES SOLARES" data-gall="gall12">
                                             <i class="fa fa-arrows-alt"></i> </a>
-                                        <h1>project title here</h1>
-                                        <p>(solar pannels)</p>
+                                        <h1>Peneles Solares</h1>
+                                        <p>(Paneles Solares)</p>
                                     </div>
-
                                 </div>
                             </div>
                         </div>
@@ -89,16 +79,13 @@
                             <div class="gallery-list img-effect zoom-slow">
                                 <div class="sp_img_box_overlay"></div>
                                 <div class="over">
-
-                                    <img src="images/pj_4.jpg" alt="" class="img-responsive" />
+                                    <img src="images/4.jpeg" style="width: 295px; height: 227px;" alt="" class="img-responsive" />
                                     <div class="tab_img_overlay">
-
-                                        <a href="images/pj_4.jpg" class="venobox info" data-title="PROJECT TITTLE" data-gall="gall12">
+                                        <a href="images/4.jpeg" class="venobox info" data-title="PANELES SOLARES" data-gall="gall12">
                                             <i class="fa fa-arrows-alt"></i> </a>
-                                        <h1>project title here</h1>
-                                        <p>(solar pannels)</p>
+                                        <h1>Peneles Solares</h1>
+                                        <p>(Paneles Solares)</p>
                                     </div>
-
                                 </div>
                             </div>
                         </div>
@@ -106,16 +93,13 @@
                             <div class="gallery-list img-effect zoom-slow">
                                 <div class="sp_img_box_overlay"></div>
                                 <div class="over">
-
-                                    <img src="images/pj_11.jpg" alt="" class="img-responsive" />
+                                    <img src="images/5.jpeg" style="width: 295px; height: 227px;" alt="" class="img-responsive" />
                                     <div class="tab_img_overlay">
-
-                                        <a href="images/pj_11.jpg" class="venobox info" data-title="PROJECT TITTLE" data-gall="gall12">
+                                        <a href="images/5.jpeg" class="venobox info" data-title="PANELES SOLARES" data-gall="gall12">
                                             <i class="fa fa-arrows-alt"></i> </a>
-                                        <h1>project title here</h1>
-                                        <p>(solar pannels)</p>
+                                        <h1>Peneles Solares</h1>
+                                        <p>(Paneles Solares)</p>
                                     </div>
-
                                 </div>
                             </div>
                         </div>
@@ -123,33 +107,27 @@
                             <div class="gallery-list img-effect zoom-slow">
                                 <div class="sp_img_box_overlay"></div>
                                 <div class="over">
-
-                                    <img src="images/pj_12.jpg" alt="" class="img-responsive" />
+                                    <img src="images/6.jpeg" style="width: 295px; height: 227px;" alt="" class="img-responsive" />
                                     <div class="tab_img_overlay">
-
-                                        <a href="images/pj_12.jpg" class="venobox info" data-title="PROJECT TITTLE" data-gall="gall12">
+                                        <a href="images/6.jpeg" class="venobox info" data-title="PANELES SOLARES" data-gall="gall12">
                                             <i class="fa fa-arrows-alt"></i> </a>
-                                        <h1>project title here</h1>
-                                        <p>(solar pannels)</p>
+                                        <h1>Peneles Solares</h1>
+                                        <p>(Paneles Solares)</p>
                                     </div>
-
                                 </div>
                             </div>
                         </div>
                         <div class="grid-item rresentation photoshop branding pd_2">
                             <div class="gallery-list img-effect zoom-slow">
                                 <div class="sp_img_box_overlay"></div>
-                                <div class="over ">
-
-                                    <img src="images/pj_5.jpg" alt="" class="img-responsive" />
+                                <div class="over">
+                                    <img src="images/7.jpeg" style="width: 295px; height: 227px;" alt="" class="img-responsive" />
                                     <div class="tab_img_overlay">
-
-                                        <a href="images/pj_5.jpg" class="venobox info" data-title="PROJECT TITTLE" data-gall="gall12">
+                                        <a href="images/7.jpeg" class="venobox info" data-title="PANELES SOLARES" data-gall="gall12">
                                             <i class="fa fa-arrows-alt"></i> </a>
-                                        <h1>project title here</h1>
-                                        <p>(solar pannels)</p>
+                                        <h1>Peneles Solares</h1>
+                                        <p>(Paneles Solares)</p>
                                     </div>
-
                                 </div>
                             </div>
 
@@ -158,16 +136,13 @@
                             <div class="gallery-list img-effect zoom-slow">
                                 <div class="sp_img_box_overlay"></div>
                                 <div class="over">
-
-                                    <img src="images/pj_6.jpg" alt="" class="img-responsive" />
+                                    <img src="images/8.jpeg" style="width: 295px; height: 227px;" alt="" class="img-responsive" />
                                     <div class="tab_img_overlay">
-
-                                        <a href="images/pj_6.jpg" class="venobox info" data-title="Instalación de 4 Paneles Solares y 2 Microinversores APS" data-gall="gall12">
+                                        <a href="images/8.jpeg" class="venobox info" data-title="PANELES SOLARES" data-gall="gall12">
                                             <i class="fa fa-arrows-alt"></i> </a>
-                                        <h1>Instalación de 4 Paneles Solares y 2 Microinversores APS</h1>
+                                        <h1>Peneles Solares</h1>
                                         <p>(Paneles Solares)</p>
                                     </div>
-
                                 </div>
                             </div>
 
@@ -176,16 +151,13 @@
                             <div class="gallery-list img-effect zoom-slow">
                                 <div class="sp_img_box_overlay"></div>
                                 <div class="over">
-
-                                    <img src="images/pj_7.jpg" alt="" class="img-responsive" />
+                                    <img src="images/9.jpeg" style="width: 295px; height: 227px;" alt="" class="img-responsive" />
                                     <div class="tab_img_overlay">
-
-                                        <a href="images/pj_7.jpg" class="venobox info" data-title="PROJECT TITTLE" data-gall="gall12">
+                                        <a href="images/9.jpeg" class="venobox info" data-title="PANELES SOLARES" data-gall="gall12">
                                             <i class="fa fa-arrows-alt"></i> </a>
-                                        <h1>Instalación de 8 Paneles Solares y Un Inversor Solis 2K</h1>
-                                        <p>( Paneles solares)</p>
+                                        <h1>Peneles Solares</h1>
+                                        <p>(Paneles Solares)</p>
                                     </div>
-
                                 </div>
                             </div>
 
@@ -194,16 +166,13 @@
                             <div class="gallery-list img-effect zoom-slow">
                                 <div class="sp_img_box_overlay"></div>
                                 <div class="over">
-
-                                    <img src="images/pj_8.jpg" alt="" class="img-responsive" />
+                                    <img src="images/10.jpeg" style="width: 295px; height: 227px;" alt="" class="img-responsive" />
                                     <div class="tab_img_overlay">
-
-                                        <a href="images/pj_8.jpg" class="venobox info" data-title="PROJECT TITTLE" data-gall="gall12">
+                                        <a href="images/10.jpeg" class="venobox info" data-title="PANELES SOLARES" data-gall="gall12">
                                             <i class="fa fa-arrows-alt"></i> </a>
-                                        <h1>project title here</h1>
+                                        <h1>Peneles Solares</h1>
                                         <p>(Paneles Solares)</p>
                                     </div>
-
                                 </div>
                             </div>
 

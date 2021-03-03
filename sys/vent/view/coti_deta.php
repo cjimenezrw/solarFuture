@@ -212,7 +212,7 @@ if (isset($data['datos'])) {
 				    }//FOREACH
 				}//ENDIF
 				?>
-			    </tbody>
+        </tbody>
 			</table>
 		    </div>
 		    <div class="text-right clearfix">
@@ -221,7 +221,7 @@ if (isset($data['datos'])) {
 				<span><?php echo "$" . number_format($result['fImporteSubtotal'], 2); ?></span>
 			    </p>
 			    <p>Descuento:
-				<span><?php echo "$" . number_format($result['fDescuento'], 2); ?></span>
+				<span><?php echo (!empty($result['fDescuento']) ? "$" . number_format($result['fDescuento'], 2) : "$0.00"); ?></span>
 			    </p>
 			    <p>Traslados:
 				<span><?php echo "$" . number_format($result['fImpuestosTrasladados'], 2); ?></span>

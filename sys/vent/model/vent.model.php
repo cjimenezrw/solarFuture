@@ -50,8 +50,12 @@ Class Vent_Model Extends DLOREAN_Model {
             " .escape(isset($this->vent['fCostoRecibo']) ? $this->vent['fCostoRecibo'] : NULL) . ",
             " .escape(isset($this->vent['iInformacionPanel']) ? $this->vent['iInformacionPanel'] : NULL) . ",
             " .escape(isset($this->vent['fKwGastados']) ? $this->vent['fKwGastados'] : NULL) . ",
-            
             " .escape(isset($this->vent['skCategoriaPrecio']) ? $this->vent['skCategoriaPrecio'] : NULL) . ",
+            " .escape(isset($this->vent['sDireccion']) ? $this->vent['sDireccion'] : NULL) . ",
+            " .escape(isset($this->vent['sRPU']) ? $this->vent['sRPU'] : NULL) . ",
+            " .escape(isset($this->vent['sTelefono']) ? $this->vent['sTelefono'] : NULL) . ",
+            " .escape(isset($this->vent['TARIFA']) ? $this->vent['TARIFA'] : NULL) . ",
+
             " .escape(isset($this->vent['axn']) ? $this->vent['axn'] : NULL) . ",
             '" . $_SESSION['usuario']['skUsuario'] . "',
             '" . $this->sysController . "' )";
@@ -97,6 +101,10 @@ Class Vent_Model Extends DLOREAN_Model {
         oc.iInformacionPanel,
         oc.fKwGastados,
         oc.skCategoriaPrecio,
+        oc.sDireccion,
+        oc.sRPU,
+        oc.sTelefono,
+        oc.TARIFA,
         cp.sNombreContacto AS prospecto,
         cep.sRFC AS clienteRFC,
         rca.sNombre AS categoria,
@@ -564,7 +572,7 @@ Class Vent_Model Extends DLOREAN_Model {
     }
 
     public function _getCotizacionInformacionProducto() {
-        $select = "SELECT cip.skInformacionProductoServicio,sNombre,sDescripcion,sImagen FROM rel_cotizacion_informacionProducto rci
+        $select = "SELECT cip.skInformacionProductoServicio,sNombre,sDescripcionHoja1,sDescripcionHoja2,sImagen FROM rel_cotizacion_informacionProducto rci
         LEFT JOIN cat_informacionProductoServicio cip ON cip.skInformacionProductoServicio = rci.skInformacionProductoServicio
          where rci.skCotizacion = " . escape($this->vent['skCotizacion']);
         $result = Conn::query($select);

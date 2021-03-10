@@ -26,6 +26,7 @@ Class Coti_deta_Controller Extends Vent_Model {
         $this->data['cotizacionTerminosCondiciones'] = parent::_getCotizacionTerminosCondiciones();
         $this->data['BANCOT'] = parent::getVariable('BANCOT');
         $this->data['PIECOT'] = parent::getVariable('PIECOT');
+        $this->data['TARIFA'] = json_decode(parent::getVariable('TARIFA'),true,512);
  
         return $this->data;
     }
@@ -39,6 +40,7 @@ Class Coti_deta_Controller Extends Vent_Model {
             $formato_cotizacion = ob_get_contents();
         ob_end_clean();
 
+        //exit($formato_cotizacion);
         
         $pdf_cotizacion_analisis = [];
         if(!empty($this->data['datos']['iInformacionPanel'])){

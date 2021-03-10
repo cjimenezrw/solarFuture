@@ -444,7 +444,7 @@ Class Coti_form_Controller Extends Vent_Model {
         $this->data['terminosCondiciones'] = parent::_getTerminosCondiciones();
         $this->data['divisas'] = parent::_getDivisas();
         $this->data['categoria'] = parent::_getCategorias();
-
+        $this->data['TARIFA'] = json_decode(parent::getVariable('TARIFA'),true,512);
 
         if (!empty($this->vent['skCotizacion'])) {
             

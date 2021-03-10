@@ -16,6 +16,56 @@ Class Conc_Model Extends DLOREAN_Model {
     public function __destruct() {
 
     }
+
+    public function _get_informacionProductoServicio(){
+        $sql = "SELECT
+            ips.skInformacionProductoServicio
+            ,ips.skEstatus
+            ,ips.sNombre
+            ,ips.sDescripcionHoja1
+            ,ips.sDescripcionHoja2
+            ,ips.sImagen
+            ,ips.skUsuarioCreacion
+            ,ips.dFechaCreacion
+            ,ips.skUsuarioModificacion
+            ,ips.dFechaModificacion
+            ,ce.sNombre AS estatus
+            ,ce.sIcono AS estatusIcono
+            ,ce.sColor AS estatusColor
+            ,cu.sNombre AS usuarioCreacion
+        FROM cat_informacionProductoServicio ips
+        INNER JOIN core_estatus ce ON ce.skEstatus = ips.skEstatus
+        INNER JOIN cat_usuarios cu ON cu.skUsuario = ips.skUsuarioCreacion
+        WHERE ips.skInformacionProductoServicio = ".escape($this->conc['skInformacionProductoServicio']);
+        $result = Conn::query($sql);
+        if (!$result) {
+            return FALSE;
+        }
+        $records = Conn::fetch_assoc($result);
+        utf8($records);
+        return $records;
+    }
+
+    public function stpCUD_informacionProductoServicio(){
+        $sql = "CALL stpCUD_informacionProductoServicio (
+            " .escape(isset($this->conc['skInformacionProductoServicio']) ? $this->conc['skInformacionProductoServicio'] : NULL) . ",
+            " .escape(isset($this->conc['sNombre']) ? $this->conc['sNombre'] : NULL) . ",
+            " .escape(isset($this->conc['sDescripcionHoja1']) ? $this->conc['sDescripcionHoja1'] : NULL) . ",
+            " .escape(isset($this->conc['sDescripcionHoja2']) ? $this->conc['sDescripcionHoja2'] : NULL) . ",
+            " .escape(isset($this->conc['sImagen']) ? $this->conc['sImagen'] : NULL). ",
+
+            " .escape(isset($this->conc['axn']) ? $this->conc['axn'] : NULL) . ",
+            '" . $_SESSION['usuario']['skUsuario'] . "',
+            '" . $this->sysController . "' )";
+       
+        //$this->log($sql, true);
+        $result = Conn::query($sql);
+        if (!$result) {
+            return false;
+        }
+        $record = Conn::fetch_assoc($result);
+        return $record;
+    }
    
  
      

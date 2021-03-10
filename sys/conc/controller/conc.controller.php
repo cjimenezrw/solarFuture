@@ -15,7 +15,54 @@ Class Conc_Controller Extends Conc_Model {
     public function __destruct() {
 
     }
- 
+    
+    public function prod_inde() {
+        $this->load_class("prod_inde", "controller");
+        $prod_inde = new Prod_inde_Controller();
+        $axn = (isset($_POST['axn']) ? $_POST['axn'] : (isset($_GET['axn']) ? $_GET['axn'] : NULL));
+        switch ($axn) {
+            case 'consulta':
+                $data = $prod_inde->consulta();
+                header('Content-Type: application/json');
+                echo json_encode($data);
+                break;
+            case 'generarExcel':
+                $prod_inde->generarExcel();
+                break;
+            case 'pdf':
+                $prod_inde->generarPDF();
+                break;
+            default:
+                $this->load_view('prod_inde');
+                break;
+        }
+        return TRUE;
+    }
+
+    public function prod_form() {
+        $this->load_class("prod_form", "controller");
+        $prod_form = new Prod_form_Controller();
+        $axn = (isset($_POST['axn']) ? $_POST['axn'] : (isset($_GET['axn']) ? $_GET['axn'] : NULL));
+        $ckCsrfToken = (isset($_POST['ckCsrfToken']) ? $_POST['ckCsrfToken'] : (isset($_GET['ckCsrfToken']) ? $_GET['ckCsrfToken'] : NULL));
+        if ($ckCsrfToken) {
+            $axn = 'ckEditor_upload';
+        }
+        switch ($axn) {
+            case 'guardar':
+                header('Content-Type: application/json');
+                echo json_encode($prod_form->guardar());
+                break;
+            case 'ckEditor_upload':
+                header('Content-Type: application/json');
+                echo json_encode($prod_form->ckEditor_upload());
+                break;
+            default:
+                $this->data = $prod_form->getDatos();
+                $this->load_view('prod_form', $this->data);
+                break;
+        }
+        return true;
+    }
 
  
 
@@ -29,7 +76,6 @@ Class Conc_Controller Extends Conc_Model {
                 $data = $conc_inde->consulta();
                 header('Content-Type: application/json');
                 echo json_encode($data);
-                return TRUE;
                 break;
             case 'generarExcel':
                 $conc_inde->generarExcel();

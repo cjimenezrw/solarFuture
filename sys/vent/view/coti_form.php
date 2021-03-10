@@ -50,7 +50,7 @@ if (isset($data['cotizacionTerminosCondiciones'])) {
                 
                     <div class="col-md-4 col-lg-4 cliente_nuevo" <?php echo (isset($result['skEmpresaSocioCliente']) ? 'style="display:none;"': ''); ?>>
                         <div class="form-group">
-                            <h4 class="example-title"><b class="text-danger">*</b> RAZÓN SOCIAL:</h4>
+                            <h4 class="example-title"><b class="text-danger">*</b> RAZÓN SOCIAL / NOMBRE:</h4>
                             <input class="form-control" name="sRazonSocial" value="<?php echo (isset($result['sRazonSocial'])) ? $result['sRazonSocial'] : ''; ?>" placeholder="RAZÓN SOCIAL" autocomplete="off" type="text">
                         </div>
                     </div>
@@ -73,6 +73,29 @@ if (isset($data['cotizacionTerminosCondiciones'])) {
                                 }//ENDIF
                                 ?>
                             </select>
+                        </div>
+                    </div>
+                    
+                    <div class="col-md-12 col-lg-12 clearfix"></div>
+
+                    <div class="col-md-4 col-lg-4">
+                        <div class="form-group">
+                            <h4 class="example-title"><b class="text-danger"></b>DIRECCIÓN:</h4>
+                            <input class="form-control" name="sDireccion" value="<?php echo (isset($result['sDireccion'])) ? $result['sDireccion'] : ''; ?>" placeholder="DIRECCIÓN" autocomplete="off" type="text">
+                        </div>
+                    </div>
+
+                    <div class="col-md-4 col-lg-4">
+                        <div class="form-group">
+                            <h4 class="example-title"><b class="text-danger"></b>RPU:</h4>
+                            <input class="form-control" name="sRPU" value="<?php echo (isset($result['sRPU'])) ? $result['sRPU'] : ''; ?>" placeholder="RPU" autocomplete="off" type="text">
+                        </div>
+                    </div>
+
+                    <div class="col-md-4 col-lg-4">
+                        <div class="form-group">
+                            <h4 class="example-title"><b class="text-danger"></b>TELÉFONO:</h4>
+                            <input class="form-control" name="sTelefono" value="<?php echo (isset($result['sTelefono'])) ? $result['sTelefono'] : ''; ?>" placeholder="TELÉFONO" autocomplete="off" type="text">
                         </div>
                     </div>
 
@@ -140,18 +163,18 @@ if (isset($data['cotizacionTerminosCondiciones'])) {
                  <div class="row row-lg col-lg-12">
                     <div class="col-md-12 col-lg-12">
                          <div class="form-group">
-                             <h4 class="example-title"> CONDICIÓN  <i
-                                    class="icon wb-help-circle help-text" aria-hidden="true"
-                                    data-content="La condición se mostrará en el archivo PDF de la cotización"
+                             <h4 class="example-title"> OBSERVACIONES DE COTIZACIÓN  
+                             <i class="icon wb-help-circle help-text" aria-hidden="true"
+                                    data-content="OBSERVACIONES DE COTIZACIÓN (APARECEN EN LA COTIZACIÓN DEBAJO DE LOS PRODUCTOS)"
                                     data-trigger="hover"></i></h4>
                              <textarea class="form-control"  name="sCondicion" placeholder="Condicion"><?php echo (isset($result['sCondicion'])) ? ($result['sCondicion']) : ''; ?></textarea>
                          </div>
                      </div>
                      <div class="col-md-12 col-lg-12">
                          <div class="form-group">
-                             <h4 class="example-title"> Observaciones   <i
-                                    class="icon wb-help-circle help-text" aria-hidden="true"
-                                    data-content="No aparecen en la cotizacion"
+                             <h4 class="example-title"> OBSERVACIONES INTERNAS   
+                             <i class="icon wb-help-circle help-text" aria-hidden="true"
+                                    data-content="OBSERVACIONES INTERNAS (NO APARECEN EN LA COTIZACIÓN)"
                                     data-trigger="hover"></i></h4>
                              <textarea class="form-control"  name="sObservaciones" placeholder="Descripcion de la Cotizacion"><?php echo (isset($result['sObservaciones'])) ? ($result['sObservaciones']) : ''; ?></textarea>
                          </div>
@@ -194,6 +217,26 @@ if (isset($data['cotizacionTerminosCondiciones'])) {
 
                         </div>
                     </div>
+                    <div class="col-md-4 col-lg-4">
+                        <div class="form-group">
+                        <h4 class="example-title">TARIFA DE CFE:</h4>
+                            <select id="TARIFA"  name="TARIFA" class="form-control" data-plugin="select2" select2Simple>
+                                 <option value="">- SELECCIONAR -</option>
+                                 <?php
+                                 if ($data['TARIFA']) {
+                                 foreach ($data['TARIFA'] AS $k=>$v) {
+                                     ?>
+                                     <option <?php echo(isset($result['TARIFA']) && $result['TARIFA'] == $k ? 'selected="selected"' : ''); ?>
+                                         value="<?php echo $k; ?>"><?php echo $k; ?> $<?php echo number_format($v,2); ?></option>
+                                     <?php
+                                     }//ENDWHILE
+                                 }//ENDIF
+                                 ?>
+                             </select>
+                        </div>
+                    </div>
+
+
                  </div>
                  <div class="row row-lg col-lg-12">
                      <hr>
@@ -238,6 +281,8 @@ if (isset($data['cotizacionTerminosCondiciones'])) {
                     </div>
                     </div>
                 </div>
+
+                <!--
                 <div class="row row-lg col-lg-12">
                      <hr>
                  </div>
@@ -262,6 +307,7 @@ if (isset($data['cotizacionTerminosCondiciones'])) {
                     </div>
                     </div>
                 </div>
+                !-->
                  
                  
                 </div>
@@ -308,8 +354,8 @@ if (isset($data['cotizacionTerminosCondiciones'])) {
                     <tr>
                         <th class="col-xs-1  text-center" style="text-transform: uppercase;"><b style="color:red;">*</b> Unidad</th>
                         <th class=" col-xs-1  text-center" style="text-transform: uppercase;"><b style="color:red;">*</b> Concepto</th>
+                        <th class="col-xs-2 text-center" style="text-transform: uppercase;"><b style="color:red;">*</b> Descripción</th>
                         <th class="col-xs-2 text-center" style="text-transform: uppercase;"><b style="color:red;">*</b> Cantidad</th>
-                        <th class="col-xs-2 text-center" style="text-transform: uppercase;"><b style="color:red;">*</b> Descripcion</th>
                         <th class="col-xs-2  text-center" style="text-transform: uppercase;"><b style="color:red;">*</b> P. Unitario</th>
                         <th class="col-xs-1  text-center" style="text-transform: uppercase;">Importe</th>
                         <th class="col-xs-1 col-md-1 text-center">ACCIONES</th>
@@ -334,7 +380,7 @@ if (isset($data['cotizacionTerminosCondiciones'])) {
                                         <option value="<?php echo (isset($row['skConcepto']) ? $row['skConcepto'] : ''); ?>"><?php echo (isset($row['concepto']) ? $row['concepto'] : ''); ?></option>
                                     </select>
                                 </td>
-                                <td><input class="form-control"     value="<?php echo (isset($row['sDescripcion']) ? $row['sDescripcion'] : '');?>"   name="conceptos[<?php echo $cont; ?>][sDescripcion]" placeholder="Descripcion" autocomplete="off" type="text"></td>
+                                <td><input class="form-control"     value="<?php echo (isset($row['sDescripcion']) ? $row['sDescripcion'] : '');?>"   name="conceptos[<?php echo $cont; ?>][sDescripcion]" placeholder="Descripción" autocomplete="off" type="text"></td>
                                 <td><input class="form-control" style="min-width:100px;max-width:100px;" onpaste="return filterFloat(event,this);"  onkeypress="return filterFloat(event,this);" value="<?php echo (isset($row['fCantidad']) ? number_format($row['fCantidad'],2) : '');?>"  onchange="actualizarImporte(this);" name="conceptos[<?php echo $cont; ?>][fCantidad]" placeholder="Cantidad" autocomplete="off" type="text"></td>
                                 <td><input class="form-control" style="min-width:100px;max-width:100px;" onpaste="return filterFloat(event,this);"  onkeypress="return filterFloat(event,this);" value="<?php echo  (isset($row['fPrecioUnitario']) ? str_replace(',','', number_format($row['fPrecioUnitario'],2)) : '');?>"  onchange="actualizarImporte(this);" name="conceptos[<?php echo $cont; ?>][fPrecioUnitario]" placeholder="P. Unitario" autocomplete="off" type="text"></td>
                                 <td><input class="form-control" value="<?php echo $row['fImporte'];?>" name="conceptos[<?php echo $cont; ?>][fImporte]"  type="hidden"><label class="text-center" > <?php echo (isset($row['fImporte']) ? str_replace(',','',number_format($row['fImporte'],2)) : ''); ?> </label>  </td>
@@ -351,30 +397,28 @@ if (isset($data['cotizacionTerminosCondiciones'])) {
 
 
         </div>
-        <div class="col-md-12 form-inline ">
+        <div class="col-lg-12 col-md-12 col-xs-12">
             <div class="form-group pull-right">
               <label class="control-label">Subtotal</label>
               <label  disabled class="form-control input-sm" id="dinSubtotal"  > <?php echo (!empty($result['fImporteSubtotal'])) ? number_format($result['fImporteSubtotal'],2) : ''; ?></label>
               <input type="hidden"  id="inSubtotal" name="fImporteSubtotal"  value="<?php echo (isset($result['fImporteSubtotal'])) ? $result['fImporteSubtotal'] : ''; ?>" />
             </div>
         </div>
-        <div class="col-md-12 form-inline ">
+        <div class="col-lg-12 col-md-12 col-xs-12">
             <div class="form-group pull-right">
               <label class="control-label">Descuento</label>
               <label type="text" disabled class="form-control input-sm" id="dinDescuento"><?php echo (!empty($result['fDescuento'])) ? number_format($result['fDescuento'],2) : ''; ?> </label>
               <input type="hidden"  id="inDescuento" name="fDescuento" value="<?php echo (isset($result['fDescuento'])) ? $result['fDescuento'] : ''; ?>"  />
             </div>
         </div>
-        <div class="col-md-12 form-inline ">
+        <div class="col-lg-12 col-md-12 col-xs-12">
             <div class="form-group pull-right">
               <label class="control-label">Traslados</label>
               <label type="text" disabled class="form-control input-sm" id="dinImpuestoTrasladado"><?php echo (!empty($result['fImpuestosTrasladados'])) ? number_format($result['fImpuestosTrasladados'],2) : ''; ?></label>
               <input type="hidden"  id="inImpuestoTrasladado" name="fImpuestosTrasladados" value="<?php echo (isset($result['fImpuestosTrasladados'])) ? $result['fImpuestosTrasladados'] : ''; ?>"  />
             </div>
         </div>
-         
-
-        <div class="col-md-12 form-inline ">
+        <div class="col-lg-12 col-md-12 col-xs-12">
             <div class="form-group pull-right">
               <label class="control-label">Total</label>
               <label type="text" disabled class="form-control input-sm" id="dinTotal"><?php echo (!empty($result['fImporteTotal'])) ? number_format($result['fImporteTotal'],2) : ''; ?></label>
@@ -624,6 +668,7 @@ function addCommas(amount) {
                         core.autocomplete2('#skProspecto', 'get_prospectos', window.location.href, 'Prospecto');
                         $("#skDivisa").select2({placeholder: "Moneda", allowClear: true });
                         $("#skCategoriaPrecio").select2({placeholder: "CATEGORIA", allowClear: true });
+                        $("#TARIFA").select2({placeholder: "TARIFA", allowClear: true });
                         
 
 

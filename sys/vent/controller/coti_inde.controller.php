@@ -25,7 +25,7 @@ Class Coti_inde_Controller Extends Vent_Model {
 
         //$configuraciones['log'] = TRUE;
         $configuraciones['query'] = "SELECT oc.skCotizacion,
-        oc.iFolio, 
+        CONCAT('SFM',RIGHT(CONCAT('0000',CAST(oc.iFolio AS VARCHAR(4))),4)) AS iFolio,
         oc.dFechaCreacion, 
         oc.fImporteTotal,
         oc.skDivisa,

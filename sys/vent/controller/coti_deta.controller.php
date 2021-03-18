@@ -40,8 +40,6 @@ Class Coti_deta_Controller Extends Vent_Model {
             $formato_cotizacion = ob_get_contents();
         ob_end_clean();
 
-        //exit($formato_cotizacion);
-        
         $pdf_cotizacion_analisis = [];
         if(!empty($this->data['datos']['iInformacionPanel'])){
             ob_start();
@@ -80,7 +78,7 @@ Class Coti_deta_Controller Extends Vent_Model {
                     'vertical' => 'L',
                     'footerMargin' => 5,
                     'headerMargin' => 5,
-                    'fileName' => 'Cotizacion.pdf'
+                    'fileName' => 'Cotización '.$this->data['datos']['iFolio'].'.pdf'
                 ]
             ],$pdf_cotizacion_analisis
             

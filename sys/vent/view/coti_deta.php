@@ -13,6 +13,11 @@ if (isset($data['datos'])) {
         <div class="panel panel-bordered panel-primary panel-line" style="display: block;">
             <div class="panel-heading">
                 <h3 class="panel-title">DATOS GENERALES</h3>
+                <ul class="panel-actions panel-actions-keep">
+                    <li>
+                        <a href="javascript:void(0);" class="btn btn-squared btn-outline btn-primary btn-sm" onclick="formatoPDF();"> Formato Cotizacion</a>
+                    </li>
+                </ul>
             </div>
 
             <div class="panel-body container-fluid"  >

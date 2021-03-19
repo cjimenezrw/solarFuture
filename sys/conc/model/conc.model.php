@@ -53,6 +53,7 @@ Class Conc_Model Extends DLOREAN_Model {
             " .escape(isset($this->conc['sDescripcionHoja1']) ? $this->conc['sDescripcionHoja1'] : NULL) . ",
             " .escape(isset($this->conc['sDescripcionHoja2']) ? $this->conc['sDescripcionHoja2'] : NULL) . ",
             " .escape(isset($this->conc['sImagen']) ? $this->conc['sImagen'] : NULL). ",
+            " .escape(isset($this->conc['sObservacionesCancelacion']) ? $this->conc['sObservacionesCancelacion'] : NULL) . ",
 
             " .escape(isset($this->conc['axn']) ? $this->conc['axn'] : NULL) . ",
             '" . $_SESSION['usuario']['skUsuario'] . "',
@@ -81,6 +82,7 @@ Class Conc_Model Extends DLOREAN_Model {
             " .escape(isset($this->conc['iClaveProductoServicio']) ? $this->conc['iClaveProductoServicio'] : NULL) . ",
             " .escape(isset($this->conc['skEmpresaSocioProveedor']) ? $this->conc['skEmpresaSocioProveedor'] : NULL) . ",
             " .escape(isset($this->conc['sDescripcion']) ? $this->conc['sDescripcion'] : NULL) . ",
+            " .escape(isset($this->conc['sObservacionesCancelacion']) ? $this->conc['sObservacionesCancelacion'] : NULL) . ",
             " .escape(isset($this->conc['fPrecioCompra']) ? $this->conc['fPrecioCompra'] : NULL) . ",
             " .escape(isset($this->conc['skCategoriaPrecio']) ? $this->conc['skCategoriaPrecio'] : NULL) . ",
             " .escape(isset($this->conc['fPrecioVenta']) ? $this->conc['fPrecioVenta'] : NULL) . ",

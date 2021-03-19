@@ -29,13 +29,16 @@ Class Vent_Controller Extends Vent_Model {
                 $data = $coti_inde->consulta();
                 header('Content-Type: application/json');
                 echo json_encode($data);
-                return TRUE;
                 break;
             case 'generarExcel':
                 $coti_inde->generarExcel();
                 break;
             case 'pdf':
                 $coti_inde->generarPDF();
+                break;
+            case 'cancelar':
+                header('Content-Type: application/json');
+                echo json_encode($coti_inde->cancelar(),true,512);
                 break;
             default:
                 $this->load_view('coti_inde');

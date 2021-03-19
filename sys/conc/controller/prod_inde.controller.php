@@ -58,7 +58,10 @@ Class Prod_inde_Controller Extends Conc_Model {
                 utf8($row);
                 
             //REGLA DEL MENÚ EMERGENTE
-                $regla = [];
+                $regla = [
+                    'menuEmergente1'=>($row['skEstatus'] == 'AC' ? SELF::HABILITADO : SELF::DESHABILITADO),
+                    'menuEmergente2'=>($row['skEstatus'] == 'AC' ? SELF::HABILITADO : SELF::DESHABILITADO)
+                ];
 
                 $row['dFechaCreacion'] = ($row['dFechaCreacion']) ? date('d/m/Y  H:i:s', strtotime($row['dFechaCreacion'])) : '';
                  
@@ -81,6 +84,24 @@ Class Prod_inde_Controller Extends Conc_Model {
            $_POST['headers'], 
            $this->consulta()
         );
+    }
+
+    public function cancelar(){
+        $this->data = ['success' => TRUE, 'message' => NULL, 'datos' => NULL];
+
+        $this->conc['axn'] = 'cancelar_informacionProductoServicio';
+        $this->conc['skInformacionProductoServicio'] = (isset($_POST['id']) && !empty($_POST['id'])) ? $_POST['id'] : NULL;
+        $this->conc['sObservacionesCancelacion'] = (isset($_POST['sObservaciones']) && !empty($_POST['sObservaciones'])) ? $_POST['sObservaciones'] : NULL;
+        
+        $stpCUD_informacionProductoServicio = parent::stpCUD_informacionProductoServicio();
+        
+        if(!$stpCUD_informacionProductoServicio || isset($stpCUD_informacionProductoServicio['success']) && $stpCUD_informacionProductoServicio['success'] != 1){
+            $this->data['success'] = FALSE;
+            $this->data['message'] = 'HUBO UN ERROR AL CANCELAR EL REGISTRO';
+            return $this->data;
+        }
+
+        return $this->data;
     }
 }
     

@@ -31,12 +31,12 @@ Class Coti_inde_Controller Extends Vent_Model {
         oc.skDivisa,
         oc.dFechaVigencia,
         oc.sObservaciones,
+        oc.skEstatus,
         ce.sNombre AS estatus,
         ce.sIcono AS estatusIcono,
         ce.sColor AS estatusColor, 
         cu.sNombre AS usuarioCreacion,
         IF(cep.sNombre IS NOT NULL,cep.sNombre,IF(cp.sNombreContacto IS NOT NULL,cp.sNombreContacto,NULL)) AS cliente
-
         FROM ope_cotizaciones oc
         INNER JOIN core_estatus ce ON ce.skEstatus = oc.skEstatus
         INNER JOIN cat_usuarios cu ON cu.skUsuario = oc.skUsuarioCreacion
@@ -64,10 +64,13 @@ Class Coti_inde_Controller Extends Vent_Model {
                 
             //REGLA DEL MENÚ EMERGENTE
                 $regla = [
+                    'menuEmergente1'=>($row['skEstatus'] == 'NU' ? SELF::HABILITADO : SELF::DESHABILITADO),
                     'menuEmergente3'=>[
                         "id"=>$row['skCotizacion'].'/'.'CL',
-                        "clonar"=>'Clonar cotizacion'
-                    ]
+                        "titulo"=>'Clonar',
+                        "estatus"=>($row['skEstatus'] == 'NU' ? SELF::HABILITADO : SELF::DESHABILITADO)
+                    ],
+                    'menuEmergente5'=>($row['skEstatus'] == 'NU' ? SELF::HABILITADO : SELF::DESHABILITADO),
                 ];
 
                 $row['dFechaCreacion'] = ($row['dFechaCreacion']) ? date('d/m/Y  H:i:s', strtotime($row['dFechaCreacion'])) : '';
@@ -93,6 +96,23 @@ Class Coti_inde_Controller Extends Vent_Model {
            $_POST['headers'], 
            $this->consulta()
         );
+    }
+
+    public function cancelar(){
+        $this->data = ['success' => TRUE, 'message' => NULL, 'datos' => NULL];
+
+        $this->vent['axn'] = 'cancelar_cotizacion';
+        $this->vent['skCotizacion'] = (isset($_POST['id']) && !empty($_POST['id'])) ? $_POST['id'] : NULL;
+        $this->vent['sObservacionesCancelacion'] = (isset($_POST['sObservaciones']) && !empty($_POST['sObservaciones'])) ? $_POST['sObservaciones'] : NULL;
+
+        $stpCUD_cotizaciones = parent::stpCUD_cotizaciones();  
+        if(!$stpCUD_cotizaciones || isset($stpCUD_cotizaciones['success']) && $stpCUD_cotizaciones['success'] != 1){
+            $this->data['success'] = FALSE;
+            $this->data['message'] = 'HUBO UN ERROR AL CANCELAR EL REGISTRO';
+            return $this->data;
+        }
+
+        return $this->data;
     }
 }
     

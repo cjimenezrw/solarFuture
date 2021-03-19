@@ -32,6 +32,11 @@ Class Conc_Controller Extends Conc_Model {
             case 'pdf':
                 $prod_inde->generarPDF();
                 break;
+                break;
+            case 'cancelar':
+                header('Content-Type: application/json');
+                echo json_encode($prod_inde->cancelar(),true,512);
+                break;
             default:
                 $this->load_view('prod_inde');
                 break;
@@ -82,6 +87,10 @@ Class Conc_Controller Extends Conc_Model {
                 break;
             case 'pdf':
                 $conc_inde->generarPDF();
+                break;
+            case 'cancelar':
+                header('Content-Type: application/json');
+                echo json_encode($conc_inde->cancelar(),true,512);
                 break;
             default:
                 $this->load_view('conc_inde');

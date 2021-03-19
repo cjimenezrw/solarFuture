@@ -51,13 +51,13 @@ if (isset($data['cotizacionTerminosCondiciones'])) {
                     <div class="col-md-4 col-lg-4 cliente_nuevo" <?php echo (isset($result['skEmpresaSocioCliente']) ? 'style="display:none;"': ''); ?>>
                         <div class="form-group">
                             <h4 class="example-title"><b class="text-danger">*</b> RAZÓN SOCIAL / NOMBRE:</h4>
-                            <input class="form-control" name="sRazonSocial" value="<?php echo (isset($result['sRazonSocial'])) ? $result['sRazonSocial'] : ''; ?>" placeholder="RAZÓN SOCIAL" autocomplete="off" type="text">
+                            <input class="form-control" name="sRazonSocial" id="sRazonSocial" value="<?php echo (isset($result['sRazonSocial'])) ? $result['sRazonSocial'] : ''; ?>" placeholder="RAZÓN SOCIAL" autocomplete="off" type="text">
                         </div>
                     </div>
                     <div class="col-md-4 col-lg-4 cliente_nuevo" <?php echo (isset($result['skEmpresaSocioCliente']) ? 'style="display:none;"': ''); ?>>
                         <div class="form-group">
                             <h4 class="example-title"><b class="text-danger"></b>RFC:</h4>
-                            <input class="form-control" name="sRFC" value="<?php echo (isset($result['sRFC'])) ? $result['sRFC'] : ''; ?>" placeholder="XAXX010101000" autocomplete="off" type="text">
+                            <input class="form-control" name="sRFC" id="sRFC" value="<?php echo (isset($result['sRFC'])) ? $result['sRFC'] : ''; ?>" placeholder="XAXX010101000" autocomplete="off" type="text">
                         </div>
                     </div>
 
@@ -439,7 +439,9 @@ if (isset($data['cotizacionTerminosCondiciones'])) {
     core.formValidaciones.fields = vent.coti_form.validaciones;
 
     function clienteRegistrado(){
-        console.log($("#iClienteRegistrado").prop('checked'));
+        $("#skEmpresaSocioCliente").val(null).trigger("change");
+        $("#sRazonSocial").val("");
+        $("#sRFC").val("");
         if($("#iClienteRegistrado").prop('checked')){
             $(".cliente_nuevo").hide();
             $(".cliente_registrado").show();

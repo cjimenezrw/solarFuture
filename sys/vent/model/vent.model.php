@@ -30,6 +30,7 @@ Class Vent_Model Extends DLOREAN_Model {
             " .escape(isset($this->vent['skEmpresaSocioCliente']) ? $this->vent['skEmpresaSocioCliente'] : NULL) . ",
             " .escape(isset($this->vent['skProspecto']) ? $this->vent['skProspecto'] : NULL) . ",
             " .escape(isset($this->vent['sObservaciones']) ? $this->vent['sObservaciones'] : NULL) . ",
+            " .escape(isset($this->vent['sObservacionesCancelacion']) ? $this->vent['sObservacionesCancelacion'] : NULL) . ",
             " .escape(isset($this->vent['sCondicion']) ? $this->vent['sCondicion'] : NULL) . ",
             " .escape(isset($this->vent['fImporteSubtotal']) ? $this->vent['fImporteSubtotal'] : NULL) . ",
             " .escape(isset($this->vent['fDescuento']) ? $this->vent['fDescuento'] : NULL) . ",

@@ -29,6 +29,7 @@ Class Conc_inde_Controller Extends Conc_Model {
         cc.sCodigo,
         cc.dFechaCreacion,
         cc.sNombre,
+        cc.skEstatus,
         ce.sNombre AS estatus,
         ce.sIcono AS estatusIcono,
         ce.sColor AS estatusColor,
@@ -57,7 +58,10 @@ Class Conc_inde_Controller Extends Conc_Model {
                 */
                 
             //REGLA DEL MENÚ EMERGENTE
-                $regla = [];
+                $regla = [
+                    'menuEmergente1'=>($row['skEstatus'] == 'NU' ? SELF::HABILITADO : SELF::DESHABILITADO),
+                    'menuEmergente2'=>($row['skEstatus'] == 'NU' ? SELF::HABILITADO : SELF::DESHABILITADO)
+                ];
 
                 $row['dFechaCreacion'] = ($row['dFechaCreacion']) ? date('d/m/Y  H:i:s', strtotime($row['dFechaCreacion'])) : '';
                  
@@ -80,6 +84,24 @@ Class Conc_inde_Controller Extends Conc_Model {
            $_POST['headers'], 
            $this->consulta()
         );
+    }
+
+    public function cancelar(){
+        $this->data = ['success' => TRUE, 'message' => NULL, 'datos' => NULL];
+
+        $this->conc['axn'] = 'cancelar_concepto';
+        $this->conc['skConcepto'] = (isset($_POST['id']) && !empty($_POST['id'])) ? $_POST['id'] : NULL;
+        $this->conc['sObservacionesCancelacion'] = (isset($_POST['sObservaciones']) && !empty($_POST['sObservaciones'])) ? $_POST['sObservaciones'] : NULL;
+        
+        $stpCUD_conceptos = parent::stpCUD_conceptos();
+           
+        if(!$stpCUD_conceptos || isset($stpCUD_conceptos['success']) && $stpCUD_conceptos['success'] != 1){
+            $this->data['success'] = FALSE;
+            $this->data['message'] = 'HUBO UN ERROR AL CANCELAR EL REGISTRO';
+            return $this->data;
+        }
+
+        return $this->data;
     }
 }
     

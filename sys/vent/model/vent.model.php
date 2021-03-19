@@ -61,9 +61,8 @@ Class Vent_Model Extends DLOREAN_Model {
             '" . $_SESSION['usuario']['skUsuario'] . "',
             '" . $this->sysController . "' )";
          
-        //$this->log($sql, true);
+        
         $result = Conn::query($sql);
-        //$codigo = Conn::fetch_assoc($result);
         if (!$result) {
             return false;
         }

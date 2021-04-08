@@ -42,7 +42,13 @@ Class Prod_inde_Controller Extends Conc_Model {
             ,cu.sNombre AS usuarioCreacion
         FROM cat_informacionProductoServicio ips
         INNER JOIN core_estatus ce ON ce.skEstatus = ips.skEstatus
-        INNER JOIN cat_usuarios cu ON cu.skUsuario = ips.skUsuarioCreacion";            
+        INNER JOIN cat_usuarios cu ON cu.skUsuario = ips.skUsuarioCreacion
+        WHERE 1=1 ";
+        
+        if(!isset($_POST['filters'])){
+            $configuraciones['query'] .= " AND ips.skEstatus != 'CA' ";
+        }
+
         // SE EJECUTA LA CONSULTA //
         $data = parent::crear_consulta($configuraciones);
         

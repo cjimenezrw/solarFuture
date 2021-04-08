@@ -62,7 +62,6 @@ Class Coti_deta_Controller Extends Vent_Model {
                 ]
             ];
         }
-       
 
         parent::pdf([
             [
@@ -78,7 +77,8 @@ Class Coti_deta_Controller Extends Vent_Model {
                     'vertical' => 'L',
                     'footerMargin' => 5,
                     'headerMargin' => 5,
-                    'fileName' => 'Cotización '.$this->data['datos']['iFolio'].'.pdf'
+                    'fileName' => 'Cotización '.$this->data['datos']['iFolio'].'.pdf',
+                    'directDownloadFile' => (isset($_GET['directDownloadFile']) && $_GET['directDownloadFile'] == true ? true : false)
                 ]
             ],$pdf_cotizacion_analisis
             

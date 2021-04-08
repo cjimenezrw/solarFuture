@@ -43,8 +43,12 @@ Class Coti_inde_Controller Extends Vent_Model {
         LEFT JOIN rel_empresasSocios resc ON resc.skEmpresaSocio = oc.skEmpresaSocioCliente
         LEFT JOIN cat_prospectos cp ON cp.skProspecto = oc.skEmpresaSocioCliente
         LEFT JOIN cat_empresas cep ON cep.skEmpresa = resc.skEmpresa
-         
-            ";            
+        WHERE 1=1 ";
+        
+        if(!isset($_POST['filters'])){
+            $configuraciones['query'] .= " AND oc.skEstatus != 'CA' ";
+        }
+
         // SE EJECUTA LA CONSULTA //
         $data = parent::crear_consulta($configuraciones);
         
@@ -114,6 +118,16 @@ Class Coti_inde_Controller Extends Vent_Model {
 
         return $this->data;
     }
+
+    public function cotizacionPDF(){
+        $formatoPDF = $this->sysAPI('vent', 'coti_deta', 'formatoPDF', [
+            'GET' => [
+                'p1' => (isset($_GET['id']) ? $_GET['id'] :  NULL),
+                'directDownloadFile' => true
+            ]
+         ]);
+         return true;
+    }  
 }
     
 

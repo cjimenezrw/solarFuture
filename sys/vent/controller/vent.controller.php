@@ -15,10 +15,6 @@ Class Vent_Controller Extends Vent_Model {
     public function __destruct() {
 
     }
- 
-
- 
-
 
     public function coti_inde() {
         $this->load_class("coti_inde", "controller");
@@ -35,6 +31,9 @@ Class Vent_Controller Extends Vent_Model {
                 break;
             case 'pdf':
                 $coti_inde->generarPDF();
+                break;
+            case 'cotizacionPDF':
+                $coti_inde->cotizacionPDF();
                 break;
             case 'cancelar':
                 header('Content-Type: application/json');

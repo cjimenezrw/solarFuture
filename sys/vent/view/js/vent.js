@@ -50,7 +50,22 @@ vent.coti_inde.dataTableConf = {
             
         }
     ]
-}
+};
+
+vent.coti_inde.visualizarCotizacionPDF = function visualizarCotizacionPDF(obj){
+    window.open(core.SYS_URL+'sys/vent/coti-deta/detalle-cotizacion/'+obj.id+'/?axn=formatoPDF');
+    return true;
+};
+
+vent.coti_inde.descargarCotizacionPDF = function descargarCotizacionPDF(obj){
+    core.download(window.location.href,'GET', {
+        axn: 'cotizacionPDF',
+        id: obj.id
+    });
+    return true;
+};
+
+
 
 vent.coti_form.validaciones = {
     skDivisa: {

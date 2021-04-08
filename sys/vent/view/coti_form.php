@@ -353,7 +353,7 @@ if (isset($data['cotizacionTerminosCondiciones'])) {
                 <thead>
                     <tr>
                         <th class="col-xs-1  text-center" style="text-transform: uppercase;"><b style="color:red;">*</b> Unidad</th>
-                        <th class=" col-xs-1  text-center" style="text-transform: uppercase;"><b style="color:red;">*</b> Concepto</th>
+                        <th class="col-lg-4 col-md-4 col-xs-4 text-center" style="text-transform: uppercase;"><b style="color:red;">*</b> Concepto</th>
                         <th class="col-xs-2 text-center" style="text-transform: uppercase;"><b style="color:red;">*</b> Descripción</th>
                         <th class="col-xs-2 text-center" style="text-transform: uppercase;"><b style="color:red;">*</b> Cantidad</th>
                         <th class="col-xs-2  text-center" style="text-transform: uppercase;"><b style="color:red;">*</b> P. Unitario</th>
@@ -376,11 +376,11 @@ if (isset($data['cotizacionTerminosCondiciones'])) {
                                     </select>
                                 </td>
                                 <td>
-                                    <select name="conceptos[<?php echo $cont; ?>][skConcepto]" onchange="obtenerDatos(this);" class="skConcepto form-control js-data-example-ajax" data-plugin="select2" data-ajax--cache="true">
+                                    <select style="min-width:500px;max-width:500px;" name="conceptos[<?php echo $cont; ?>][skConcepto]" onchange="obtenerDatos(this);" class="skConcepto form-control js-data-example-ajax" data-plugin="select2" data-ajax--cache="true">
                                         <option value="<?php echo (isset($row['skConcepto']) ? $row['skConcepto'] : ''); ?>"><?php echo (isset($row['concepto']) ? $row['concepto'] : ''); ?></option>
                                     </select>
                                 </td>
-                                <td><input class="form-control"     value="<?php echo (isset($row['sDescripcion']) ? $row['sDescripcion'] : '');?>"   name="conceptos[<?php echo $cont; ?>][sDescripcion]" placeholder="Descripción" autocomplete="off" type="text"></td>
+                                <td><input class="form-control" value="<?php echo (isset($row['sDescripcion']) ? $row['sDescripcion'] : '');?>"   name="conceptos[<?php echo $cont; ?>][sDescripcion]" placeholder="Descripción" autocomplete="off" type="text"></td>
                                 <td><input class="form-control" style="min-width:100px;max-width:100px;" onpaste="return filterFloat(event,this);"  onkeypress="return filterFloat(event,this);" value="<?php echo (isset($row['fCantidad']) ? number_format($row['fCantidad'],2) : '');?>"  onchange="actualizarImporte(this);" name="conceptos[<?php echo $cont; ?>][fCantidad]" placeholder="Cantidad" autocomplete="off" type="text"></td>
                                 <td><input class="form-control" style="min-width:100px;max-width:100px;" onpaste="return filterFloat(event,this);"  onkeypress="return filterFloat(event,this);" value="<?php echo  (isset($row['fPrecioUnitario']) ? str_replace(',','', number_format($row['fPrecioUnitario'],2)) : '');?>"  onchange="actualizarImporte(this);" name="conceptos[<?php echo $cont; ?>][fPrecioUnitario]" placeholder="P. Unitario" autocomplete="off" type="text"></td>
                                 <td><input class="form-control" value="<?php echo $row['fImporte'];?>" name="conceptos[<?php echo $cont; ?>][fImporte]"  type="hidden"><label class="text-center" > <?php echo (isset($row['fImporte']) ? str_replace(',','',number_format($row['fImporte'],2)) : ''); ?> </label>  </td>

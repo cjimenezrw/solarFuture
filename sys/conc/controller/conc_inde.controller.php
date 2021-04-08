@@ -39,7 +39,13 @@ Class Conc_inde_Controller Extends Conc_Model {
         INNER JOIN core_estatus ce ON ce.skEstatus = cc.skEstatus
         INNER JOIN cat_usuarios cu ON cu.skUsuario = cc.skUsuarioCreacion
         LEFT JOIN rel_empresasSocios resp ON resp.skEmpresaSocio = cc.skEmpresaSocioProveedor
-        LEFT JOIN cat_empresas cep ON cep.skEmpresa = resp.skEmpresa";            
+        LEFT JOIN cat_empresas cep ON cep.skEmpresa = resp.skEmpresa
+        WHERE cc.skEstatus != 'CA' ";
+        
+        if(!isset($_POST['filters'])){
+            //$configuraciones['query'] .= " AND cc.skEstatus != 'CA' ";
+        }
+
         // SE EJECUTA LA CONSULTA //
         $data = parent::crear_consulta($configuraciones);
         

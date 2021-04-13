@@ -375,7 +375,7 @@ if (isset($data['cotizacionTerminosCondiciones'])) {
                                         <option value="<?php echo (isset($row['skTipoMedida']) ? $row['skTipoMedida'] : ''); ?>"><?php echo (isset($row['tipoMedida']) ? $row['tipoMedida'] : ''); ?></option>
                                     </select>
                                 </td>
-                                <td>
+                                <td style="min-width:350px;max-width:350px;">
                                     <select style="min-width:500px;max-width:500px;" name="conceptos[<?php echo $cont; ?>][skConcepto]" onchange="obtenerDatos(this);" class="skConcepto form-control js-data-example-ajax" data-plugin="select2" data-ajax--cache="true">
                                         <option value="<?php echo (isset($row['skConcepto']) ? $row['skConcepto'] : ''); ?>"><?php echo (isset($row['concepto']) ? $row['concepto'] : ''); ?></option>
                                     </select>
@@ -650,9 +650,9 @@ function addCommas(amount) {
                             cont++;
                             tr_concepto=   '<tr>'+
 
-                 
+                
                             '<td><select name="conceptos[' + cont + '][skTipoMedida]" class="skTipoMedida form-control js-data-example-ajax" data-plugin="select2" data-ajax--cache="true">  </select></td>'+
-                            '<td><select name="conceptos[' + cont + '][skConcepto]" onchange="obtenerDatos(this);" class="skConcepto form-control js-data-example-ajax" data-plugin="select2" data-ajax--cache="true">  </select></td>'+
+                            '<td style="min-width:350px;max-width:350px;"><select name="conceptos[' + cont + '][skConcepto]" onchange="obtenerDatos(this);" class="skConcepto form-control js-data-example-ajax" data-plugin="select2" data-ajax--cache="true">  </select></td>'+
                             '<td ><input  class="form-control"  name="conceptos[' + cont + '][sDescripcion]" placeholder="Descripcion" autocomplete="off" type="text"></td>'+
                             '<td fCantidad ><input style="min-width:100px;max-width:100px;"  class="form-control" disabled name="conceptos[' + cont + '][fCantidad]" onpaste="return filterFloat(event,this);"  onkeypress="return filterFloat(event,this);"  onchange="actualizarImporte(this);" placeholder="Cantidad" autocomplete="off" type="text"></td>'+
                             '<td fPrecioUnitario ><input style="min-width:100px;max-width:100px;"  class="form-control" disabled name="conceptos[' + cont + '][fPrecioUnitario]" onpaste="return filterFloat(event,this);"  onkeypress="return filterFloat(event,this);"  onchange="actualizarImporte(this);" placeholder="P. Unitario" autocomplete="off" type="text"></td>'+

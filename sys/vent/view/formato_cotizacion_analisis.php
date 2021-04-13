@@ -163,15 +163,15 @@ td.text-right {
     <tr>
     <tr>
         <td style="text-align:center;">
-            <span style="text-align:center; font-size: 12px; font-weight:bold;"><?php echo (isset($data['datos']['fImporteTotal'])) ? "$ ".number_format($data['datos']['fImporteTotal'],2) : 'N/D'; ?></span><br>
+            <span style="text-align:center; font-size: 12px; font-weight:bold;"><?php echo (isset($data['datos']['gastoAnual'])) ? "$".number_format($data['datos']['gastoAnual'],2) : 'N/D'; ?></span><br>
             <span style="text-align:center; font-size: 10px;">Gasto Total</span>
         </td>
         <td style="text-align:center;">
-            <span style="text-align:center; font-size: 12px; font-weight:bold;"><?php echo (isset($data['datos']['consumoAnual'])) ? "$ ".number_format($data['datos']['consumoAnual'],0) : 'N/D'; ?> Kwh</span><br>
+            <span style="text-align:center; font-size: 12px; font-weight:bold;"><?php echo (isset($data['datos']['consumoAnual'])) ? number_format($data['datos']['consumoAnual'],0) : 'N/D'; ?> Kwh</span><br>
             <span style="text-align:center; font-size: 10px;">Consumo Total</span>
         </td>
         <td style="text-align:center;">
-            <span style="text-align:center; font-size: 12px; font-weight:bold;"><?php echo (isset($data['datos']['precioPromedio'])) ? "$ ".number_format($data['datos']['precioPromedio'],2) : 'N/D'; ?>/ Kwh</span><br>
+            <span style="text-align:center; font-size: 12px; font-weight:bold;"><?php echo (isset($data['datos']['precioPromedio'])) ? "$".number_format($data['datos']['precioPromedio'],2) : 'N/D'; ?>/ Kwh</span><br>
             <span style="text-align:center; font-size: 10px;">Precio Promedio</span>
         </td>
     <tr>

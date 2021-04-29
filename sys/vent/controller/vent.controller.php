@@ -98,6 +98,7 @@ Class Vent_Controller Extends Vent_Model {
         }
         return true;
     }
+
     public function coti_deta() {
         $this->load_class("coti_deta", "controller");
         $coti_deta = new Coti_deta_Controller();
@@ -115,6 +116,31 @@ Class Vent_Controller Extends Vent_Model {
                 $this->data = $coti_deta->consultar();
                 $this->load_view('coti_deta', $this->data);
             break;
+        }
+        return true;
+    }
+
+    public function vent_coti() {
+        $this->load_class("vent_coti", "controller");
+        $vent_coti = new Vent_coti_Controller();
+
+        $axn = (isset($_POST['axn']) ? $_POST['axn'] : (isset($_GET['axn']) ? $_GET['axn'] : NULL));
+
+        switch ($axn) {
+            case 'get_empresas':
+                header('Content-Type: application/json');
+                echo json_encode($vent_coti->get_empresas());
+            break;
+             
+            
+            case 'guardar':
+                header('Content-Type: application/json');
+                echo json_encode($vent_coti->guardar());
+                break;
+            default:
+                $this->data = $vent_coti->getDatos();
+                $this->load_view('vent_coti', $this->data);
+                break;
         }
         return true;
     }

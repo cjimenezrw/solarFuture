@@ -164,6 +164,7 @@ Class Vent_Model Extends DLOREAN_Model {
                         cse.sDescripcion,
                         cc.sNombre AS concepto,
                         cc.sCodigo AS sCodigo,
+                        cc.iDetalle,
                         cum.sNombre as tipoMedida
 		                FROM rel_cotizaciones_conceptos cse 
                         INNER JOIN cat_conceptos cc ON cc.skConcepto = cse.skConcepto

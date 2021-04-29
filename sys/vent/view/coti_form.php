@@ -47,6 +47,7 @@ if (isset($data['cotizacionTerminosCondiciones'])) {
                         </div>
                     </div>
 
+                    <div class="col-md-12 col-lg-12 clearfix"></div>
                 
                     <div class="col-md-4 col-lg-4 cliente_nuevo" <?php echo (isset($result['skEmpresaSocioCliente']) ? 'style="display:none;"': ''); ?>>
                         <div class="form-group">
@@ -54,6 +55,7 @@ if (isset($data['cotizacionTerminosCondiciones'])) {
                             <input class="form-control" name="sRazonSocial" id="sRazonSocial" value="<?php echo (isset($result['sRazonSocial'])) ? $result['sRazonSocial'] : ''; ?>" placeholder="RAZÓN SOCIAL" autocomplete="off" type="text">
                         </div>
                     </div>
+
                     <div class="col-md-4 col-lg-4 cliente_nuevo" <?php echo (isset($result['skEmpresaSocioCliente']) ? 'style="display:none;"': ''); ?>>
                         <div class="form-group">
                             <h4 class="example-title"><b class="text-danger"></b>RFC:</h4>

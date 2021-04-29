@@ -24,7 +24,7 @@ vent.coti_inde.dataTableConf = {
          {'title': 'Total', 'data': 'fImporteTotal', 'dataType': 'string'},
          {'title': 'Moneda', 'data': 'skDivisa', 'dataType': 'string'},
         {'title': 'F. Vigencia', 'data': 'dFechaVigencia', 'dataType': 'date'},
-        {'title': 'Cliente', 'data': 'cliente', 'dataType': 'string'},
+        {'title': 'Cliente', 'data': 'cliente', 'dataType': 'string'}
     ],
 
     "drawCallback": function () {

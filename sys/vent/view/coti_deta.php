@@ -41,7 +41,7 @@ if (isset($data['datos'])) {
                               <p><?php echo (!empty($result['dFechaVigencia'])) ? date('d/m/Y', strtotime($result['dFechaVigencia'])) : ''; ?></p>
                           </div>
                         </div>
-						
+                        
                         <div class="col-md-4 col-lg-4">
                             <div class="form-group">
                                 <h4 class="example-title">CLIENTE:</h4>

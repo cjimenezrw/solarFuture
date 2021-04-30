@@ -41,9 +41,9 @@ Class Vent_coti_Controller Extends Vent_Model {
                 Conn::rollback($this->idTran);
                 return $this->data;
             }
-            echo "<PRE>";
+            /*echo "<PRE>";
             print_r($this->vent);
-            die();
+            die();*/
 
             $this->vent['skCotizacion'] = (isset($_POST['skCotizacion']) ? $_POST['skCotizacion'] : NULL);  
 
@@ -86,6 +86,7 @@ Class Vent_coti_Controller Extends Vent_Model {
 
                 if(!empty($row['skCotizacionConcepto'])){
                     $this->vent['fCantidad'] = 1;
+                    $this->vent['iDetalle'] = $row['iDetalle'];
                     $this->vent['skConcepto'] = $row['skConcepto'];
                     foreach($row['skCotizacionConcepto'] AS $rowConcepto){
                         $this->vent['skCotizacionConcepto'] = $rowConcepto;
@@ -100,6 +101,7 @@ Class Vent_coti_Controller Extends Vent_Model {
                 }else{
                     $this->vent['fCantidad'] = $row['fCantidad'];
                     $this->vent['skCotizacionConcepto'] = NULL;
+                    $this->vent['iDetalle'] = NULL;
                     $this->vent['skConcepto'] = $row['skConcepto'];
                     $stpCUD_conceptosInventario = parent::stpCUD_conceptosInventario();
                     if(!$stpCUD_conceptosInventario || isset($stpCUD_conceptosInventario['success']) && $stpCUD_conceptosInventario['success'] != 1){

@@ -64,6 +64,7 @@ if (isset($data['datos'])) {
                     <input type="hidden" name="concepto[<?php echo $i;?>][fCantidad]" value="<?php  echo $conceptos['fCantidad']; ?>">
                     <!--<input type="hidden" name="concepto[<?php echo $i;?>][skCotizacionConcepto] " value="<?php  echo $conceptos['skCotizacionConcepto']; ?>">-->
                     <input type="hidden" name="concepto[<?php echo $i;?>][skConcepto]" value="<?php  echo $conceptos['skConcepto']; ?>">
+                    <input type="hidden" name="concepto[<?php echo $i;?>][iDetalle]" value="<?php  echo (!empty($conceptos['iDetalle']) ? $conceptos['iDetalle'] : NULL ); ?>"></td>
                     <?php echo number_format($conceptos['fCantidad'], 2); ?></td>    
                     <td style="text-align:left; text-transform: uppercase;" >
                     <?php echo $conceptos['concepto'].(!empty($conceptos['sDescripcion']) ? " (".$conceptos['sDescripcion'].")" : ''); ?></td>
@@ -72,7 +73,7 @@ if (isset($data['datos'])) {
                       // for sobre la cantidad 
                       for ($j=0; $j < $conceptos['fCantidad']; $j++) {  ?> 
                          <tr>
-                         <td></td>
+                         <td>
                          <td> <select name="concepto[<?php echo $i;?>][skCotizacionConcepto][<?php echo $j;?>]"  class="<?php  echo $conceptos['skConcepto']; ?> form-control js-data-example-ajax" data-plugin="select2" data-ajax--cache="true">  </select></td>
                          </tr>
 

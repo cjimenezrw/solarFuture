@@ -41,15 +41,17 @@ Class Vent_coti_Controller Extends Vent_Model {
                 Conn::rollback($this->idTran);
                 return $this->data;
             }
-            
+            echo "<PRE>";
+            print_r($this->vent);
+            die();
 
             $this->vent['skCotizacion'] = (isset($_POST['skCotizacion']) ? $_POST['skCotizacion'] : NULL);  
 
             
 
             // Guardar cotizacion
-            $guardar_cotizacion = $this->guardar_cotizacion();
-            if(!$guardar_cotizacion['success']){
+            $descontar_concepto_inventario = $this->descontar_concepto_inventario();
+            if(!$descontar_concepto_inventario['success']){
                 Conn::rollback($this->idTran);
                 return $this->data;
             }
@@ -68,30 +70,48 @@ Class Vent_coti_Controller Extends Vent_Model {
     
 
     /**
-       * guardar_cotizacion
+       * descontar_concepto_inventario
        *
-       * Guardar guardar_cotizacion
+       * Guardar descontar_concepto_inventario
        *
        * @author Luis Alberto Valdez Alvarez <lvaldez@woodward.com.mx>
        * @return Array ['success'=>NULL,'message'=>NULL,'datos'=>NULL]
        */
-      public function guardar_cotizacion(){
+      public function descontar_concepto_inventario(){
           $this->data['success'] = TRUE;
-          $this->vent['axn'] = 'guardar_cotizacion';
+          $this->vent['axn'] = 'descontar_concepto_inventario';
           $this->vent['skEstatus'] = 'NU';
-            /*echo "<PRE>";
-            print_r($this->vent);
-            die();*/
+          if(!empty($this->vent['concepto'])){
+            foreach($this->vent['concepto'] AS $key => $row){
 
-          $stpCUD_cotizaciones = parent::stpCUD_cotizaciones();
-           
-          if(!$stpCUD_cotizaciones || isset($stpCUD_cotizaciones['success']) && $stpCUD_cotizaciones['success'] != 1){
-              $this->data['success'] = FALSE;
-              $this->data['message'] = 'HUBO UN ERROR AL GUARDAR LOS DATOS DE LA COTIZACION';
-              return $this->data;
-          }
+                if(!empty($row['skCotizacionConcepto'])){
+                    $this->vent['fCantidad'] = 1;
+                    $this->vent['skConcepto'] = $row['skConcepto'];
+                    foreach($row['skCotizacionConcepto'] AS $rowConcepto){
+                        $this->vent['skCotizacionConcepto'] = $rowConcepto;
+                        $stpCUD_conceptosInventario = parent::stpCUD_conceptosInventario();
+                        if(!$stpCUD_conceptosInventario || isset($stpCUD_conceptosInventario['success']) && $stpCUD_conceptosInventario['success'] != 1){
+                            $this->data['success'] = FALSE;
+                            $this->data['message'] = 'HUBO UN ERROR AL GUARDAR LOS DATOS DE LA COTIZACION';
+                            return $this->data;
+                        }
 
-          $this->vent['skCotizacion'] = $stpCUD_cotizaciones['skCotizacion'];
+                    }
+                }else{
+                    $this->vent['fCantidad'] = $row['fCantidad'];
+                    $this->vent['skCotizacionConcepto'] = NULL;
+                    $this->vent['skConcepto'] = $row['skConcepto'];
+                    $stpCUD_conceptosInventario = parent::stpCUD_conceptosInventario();
+                    if(!$stpCUD_conceptosInventario || isset($stpCUD_conceptosInventario['success']) && $stpCUD_conceptosInventario['success'] != 1){
+                        $this->data['success'] = FALSE;
+                        $this->data['message'] = 'HUBO UN ERROR AL GUARDAR LOS DATOS DE LA COTIZACION';
+                        return $this->data;
+                    }
+                }
+            }  
+        }
+          
+ 
 
           $this->data['success'] = TRUE;
           $this->data['message'] = 'DATOS DE COTIZACION GUARDADOS';
@@ -223,6 +243,21 @@ Class Vent_coti_Controller Extends Vent_Model {
  //exit('<pre>'.print_r($this->data,1).'</pre>');
         return $this->data;
     }
+     /**
+     * get_empresas
+     *
+     * Obtener Empresas
+     *
+     * @author Luis Valdez <lvaldez@woodward.com.mx>
+     * @return Array EmpresasSocios
+     */
+    public function get_conceptosInventario(){
+        $this->vent['sNombre'] = (isset($_POST['val']) ? $_POST['val'] : NULL);
+        $this->vent['skConcepto'] = (isset($_POST['skConcepto']) ? $_POST['skConcepto'] : NULL);
+        
+        return parent::get_conceptosInventario();
+    }
+    
 
   
  

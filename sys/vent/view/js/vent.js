@@ -2,6 +2,7 @@ var vent = {};
 
 vent.coti_inde = {};
 vent.coti_form = {};
+vent.vent_coti = {};
 
 vent.coti_inde.dataTableConf = {
     'serverSide': true,
@@ -75,6 +76,10 @@ vent.coti_form.validaciones = {
             }
         }
     } 
+
+};
+vent.vent_coti.validaciones = {
+ 
 
 };
 

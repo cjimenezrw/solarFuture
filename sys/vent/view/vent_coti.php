@@ -50,7 +50,7 @@ if (isset($data['datos'])) {
                 <thead>
                   <tr> 
                     <th class="text-right">Cantidad</th>
-                    <th class="text-left" >Concepto</th>  
+                    <th class="text-left" >Concepto</th>   
                   </tr>
                 </thead>
               <tbody>
@@ -61,15 +61,34 @@ if (isset($data['datos'])) {
                     ?>
                     <tr> 
                     <td style="text-align:right; text-transform: uppercase;" >
-                    <input type="hidden" name="fCantidad[<?php echo $i;?>] " value="<?php  echo $conceptos['fCantidad']; ?>">
-                    <input type="hidden" name="skCotizacionConcepto[<?php echo $i;?>] " value="<?php  echo $conceptos['skCotizacionConcepto']; ?>">
-                    <input type="hidden" name="skConcepto[<?php echo $i;?>] " value="<?php  echo $conceptos['skConcepto']; ?>">
+                    <input type="hidden" name="concepto[<?php echo $i;?>][fCantidad]" value="<?php  echo $conceptos['fCantidad']; ?>">
+                    <!--<input type="hidden" name="concepto[<?php echo $i;?>][skCotizacionConcepto] " value="<?php  echo $conceptos['skCotizacionConcepto']; ?>">-->
+                    <input type="hidden" name="concepto[<?php echo $i;?>][skConcepto]" value="<?php  echo $conceptos['skConcepto']; ?>">
                     <?php echo number_format($conceptos['fCantidad'], 2); ?></td>    
-                    <td style="text-align:left; text-transform: uppercase;" ><?php echo $conceptos['concepto'].(!empty($conceptos['sDescripcion']) ? " (".$conceptos['sDescripcion'].")" : ''); ?></td>
+                    <td style="text-align:left; text-transform: uppercase;" >
+                    <?php echo $conceptos['concepto'].(!empty($conceptos['sDescripcion']) ? " (".$conceptos['sDescripcion'].")" : ''); ?></td>
                     </tr>
+                    <?php if(!empty($conceptos['iDetalle']) && $conceptos['iDetalle'] == 1 ){  
+                      // for sobre la cantidad 
+                      for ($j=0; $j < $conceptos['fCantidad']; $j++) {  ?> 
+                         <tr>
+                         <td></td>
+                         <td> <select name="concepto[<?php echo $i;?>][skCotizacionConcepto][<?php echo $j;?>]"  class="<?php  echo $conceptos['skConcepto']; ?> form-control js-data-example-ajax" data-plugin="select2" data-ajax--cache="true">  </select></td>
+                         </tr>
+
+                        
+                     <?php  } //ENDFOR ?>
+                     <script type="text/javascript">
+ 
+                      core.autocomplete2('.<?php  echo $conceptos['skConcepto']; ?>', 'get_conceptosInventario', window.location.href, 'Concepto', { skConcepto : '<?php  echo $conceptos['skConcepto']; ?>'});
+                     </script>
+
+
+                    <?php  } //ENDIF  ?>
                     <?php
+                     $i++;
                   }//FOREACH
-                  $i++;
+                 
                 }//ENDIF
                 ?>
               </tbody>
@@ -83,10 +102,12 @@ if (isset($data['datos'])) {
 <script src="<?php echo SYS_URL; ?><?php echo $this->sysProject; ?>/<?php echo $this->sysModule; ?>/view/js/<?php echo VERSION; ?>/<?php echo $this->sysModule; ?>.js"></script>
 
 <script type="text/javascript">
+core.formValidaciones.fields = vent.vent_coti.validaciones;
 
   
     $(document).ready(function () {
         $('#mowi').iziModal('setBackground', '#f1f4f5');
+        $('#core-guardar').formValidation(core.formValidaciones);
     });
 
 </script>

@@ -127,10 +127,11 @@ Class Vent_Controller Extends Vent_Model {
         $axn = (isset($_POST['axn']) ? $_POST['axn'] : (isset($_GET['axn']) ? $_GET['axn'] : NULL));
 
         switch ($axn) {
-            case 'get_empresas':
+            case 'get_conceptosInventario':
                 header('Content-Type: application/json');
-                echo json_encode($vent_coti->get_empresas());
+                echo json_encode($vent_coti->get_conceptosInventario());
             break;
+            
              
             
             case 'guardar':

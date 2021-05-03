@@ -80,16 +80,20 @@ Class Vent_coti_Controller Extends Vent_Model {
       public function descontar_concepto_inventario(){
           $this->data['success'] = TRUE;
           $this->vent['axn'] = 'descontar_concepto_inventario';
-          $this->vent['skEstatus'] = 'NU';
+          $this->vent['skEstatus'] = NULL;
           if(!empty($this->vent['concepto'])){
+        
             foreach($this->vent['concepto'] AS $key => $row){
 
-                if(!empty($row['skCotizacionConcepto'])){
+                if(!empty($row['skConceptoInventario'])){
                     $this->vent['fCantidad'] = 1;
                     $this->vent['iDetalle'] = $row['iDetalle'];
                     $this->vent['skConcepto'] = $row['skConcepto'];
-                    foreach($row['skCotizacionConcepto'] AS $rowConcepto){
-                        $this->vent['skCotizacionConcepto'] = $rowConcepto;
+                    $this->vent['skCotizacionConcepto'] = $row['skCotizacionConcepto'];
+                    foreach($row['skConceptoInventario'] AS $rowConcepto){
+                      
+                        $this->vent['skConceptoInventario'] = $rowConcepto; 
+                        
                         $stpCUD_conceptosInventario = parent::stpCUD_conceptosInventario();
                         if(!$stpCUD_conceptosInventario || isset($stpCUD_conceptosInventario['success']) && $stpCUD_conceptosInventario['success'] != 1){
                             $this->data['success'] = FALSE;
@@ -99,8 +103,9 @@ Class Vent_coti_Controller Extends Vent_Model {
 
                     }
                 }else{
-                    $this->vent['fCantidad'] = $row['fCantidad'];
+                    $this->vent['fCantidad'] = number_format($row['fCantidad'],2);
                     $this->vent['skCotizacionConcepto'] = NULL;
+                    $this->vent['skConceptoInventario'] = NULL;
                     $this->vent['iDetalle'] = NULL;
                     $this->vent['skConcepto'] = $row['skConcepto'];
                     $stpCUD_conceptosInventario = parent::stpCUD_conceptosInventario();

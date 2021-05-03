@@ -131,9 +131,6 @@ Class Vent_Controller Extends Vent_Model {
                 header('Content-Type: application/json');
                 echo json_encode($vent_coti->get_conceptosInventario());
             break;
-            
-             
-            
             case 'guardar':
                 header('Content-Type: application/json');
                 echo json_encode($vent_coti->guardar());

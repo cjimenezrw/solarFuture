@@ -668,7 +668,7 @@ Class Vent_Model Extends DLOREAN_Model {
             " .escape(isset($this->vent['axn']) ? $this->vent['axn'] : NULL) . ",
             '" . $_SESSION['usuario']['skUsuario'] . "',
             '" . $this->sysController . "' )";
-   
+ 
         $result = Conn::query($sql);
         if (!$result) {
             return false;

@@ -17,6 +17,30 @@ Class Conc_Model Extends DLOREAN_Model {
 
     }
 
+    public function stpCUD_conceptosInventario(){
+        $sql = "CALL stpCUD_conceptosInventario (
+            " .escape(isset($this->conc['skConcepto']) ? $this->conc['skConcepto'] : NULL) . ",
+            " .escape(isset($this->conc['skCotizacionConcepto']) ? $this->conc['skCotizacionConcepto'] : NULL) . ",
+            " .escape(isset($this->conc['skConceptoInventario']) ? $this->conc['skConceptoInventario'] : NULL) . ",
+            " .escape(isset($this->conc['skEstatus']) ? $this->conc['skEstatus'] : NULL) . ",
+            " .escape(isset($this->conc['fCantidad']) ? $this->conc['fCantidad'] : NULL). ",
+            " .escape(isset($this->conc['sNumeroSerie']) ? $this->conc['sNumeroSerie'] : NULL) . ",
+            " .escape(isset($this->conc['sMarca']) ? $this->conc['sMarca'] : NULL) . ",
+            " .escape(isset($this->conc['sModelo']) ? $this->conc['sModelo'] : NULL) . ",
+
+            " .escape(isset($this->conc['axn']) ? $this->conc['axn'] : NULL) . ",
+            " .escape($_SESSION['usuario']['skUsuario']). ",
+            " .escape($this->sysController)." )";
+       
+        //$this->log($sql, true);
+        $result = Conn::query($sql);
+        if (!$result) {
+            return false;
+        }
+        $record = Conn::fetch_assoc($result);
+        return $record;
+    } 
+
     public function _get_informacionProductoServicio(){
         $sql = "SELECT
             ips.skInformacionProductoServicio

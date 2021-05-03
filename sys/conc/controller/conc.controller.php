@@ -15,6 +15,44 @@ Class Conc_Controller Extends Conc_Model {
     public function __destruct() {
 
     }
+
+    public function inve_inde() {
+        $this->load_class("inve_inde", "controller");
+        $inve_inde = new Inve_inde_Controller();
+        $axn = (isset($_POST['axn']) ? $_POST['axn'] : (isset($_GET['axn']) ? $_GET['axn'] : NULL));
+        switch ($axn) {
+            case 'consulta':
+                header('Content-Type: application/json');
+                echo json_encode($inve_inde->consulta());
+                break;
+            case 'generarExcel':
+                $inve_inde->generarExcel();
+                break;
+            case 'pdf':
+                $inve_inde->generarPDF();
+                break;
+            default:
+                $this->load_view('inve_inde');
+                break;
+        }
+        return TRUE;
+    }
+
+    public function inve_form() {
+        $this->load_class("inve_form", "controller");
+        $inve_form = new Inve_form_Controller();
+        $axn = (isset($_POST['axn']) ? $_POST['axn'] : (isset($_GET['axn']) ? $_GET['axn'] : NULL));
+        switch ($axn) {
+            case 'guardar':
+                header('Content-Type: application/json');
+                echo json_encode($inve_form->guardar());
+                break;
+            default:
+                $this->load_view('inve_form', $inve_form->getDatos());
+                break;
+        }
+        return true;
+    }
     
     public function prod_inde() {
         $this->load_class("prod_inde", "controller");

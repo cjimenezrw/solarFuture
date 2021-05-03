@@ -164,6 +164,7 @@ Class Vent_Model Extends DLOREAN_Model {
                         cse.sDescripcion,
                         cc.sNombre AS concepto,
                         cc.sCodigo AS sCodigo,
+                        cc.iDetalle,
                         cum.sNombre as tipoMedida
 		                FROM rel_cotizaciones_conceptos cse 
                         INNER JOIN cat_conceptos cc ON cc.skConcepto = cse.skConcepto
@@ -616,6 +617,65 @@ Class Vent_Model Extends DLOREAN_Model {
             return FALSE;
         }
         return Conn::fetch_assoc_all($result);
+    }
+
+     /**
+     * get_conceptosInventario
+     *
+     * Consulta 
+     *
+     * @author Luis Valdez <lvaldez@softlab.com.mx>
+     * @return Array Datos | False
+     */
+    public function get_conceptosInventario() {
+        $sql = "SELECT N1.* FROM (
+            SELECT
+            rci.skConceptoInventario AS id, rci.sNumeroSerie AS nombre 
+            FROM rel_conceptos_inventarios rci 
+            WHERE rci.skEstatus = 'NU' AND rci.skConcepto = " . escape($this->vent['skConcepto']);
+
+  
+
+        $sql .= " ) AS N1 ";
+
+        if (isset($this->vent['sNombre']) && !empty(trim($this->vent['sNombre']))) {
+            $sql .= " WHERE N1.nombre LIKE '%" . trim($this->vent['sNombre']) . "%' ";
+        }
+ 
+
+        $sql .= " ORDER BY N1.nombre ASC ";
+  
+       
+        $result = Conn::query($sql);
+        if (!$result) {
+            return FALSE;
+        }
+        $records = Conn::fetch_assoc_all($result);
+        utf8($records);
+        return $records;
+    }
+    public function stpCUD_conceptosInventario() {
+
+        $sql = "CALL stpCUD_conceptosInventario (
+            " .escape(isset($this->vent['skConcepto']) ? $this->vent['skConcepto'] : NULL) . ",
+            " .escape(isset($this->vent['skCotizacionConcepto']) ? $this->vent['skCotizacionConcepto'] : NULL) . ",
+            " .escape(isset($this->vent['skConceptoInventario']) ? $this->vent['skConceptoInventario'] : NULL) . ",
+            " .escape(isset($this->vent['skEstatus']) ? $this->vent['skEstatus'] : NULL) . ",
+            " .escape(isset($this->vent['fCantidad']) ? $this->vent['fCantidad'] : NULL) . ",
+            " .escape(isset($this->vent['sNumeroSerie']) ? $this->vent['sNumeroSerie'] : NULL) . ",
+            " .escape(isset($this->vent['sMarca']) ? $this->vent['sMarca'] : NULL) . ",
+            " .escape(isset($this->vent['sModelo']) ? $this->vent['sModelo'] : NULL) . ", 
+            " .escape(isset($this->vent['axn']) ? $this->vent['axn'] : NULL) . ",
+            '" . $_SESSION['usuario']['skUsuario'] . "',
+            '" . $this->sysController . "' )";
+ 
+        $result = Conn::query($sql);
+        if (!$result) {
+            return false;
+        }
+        $record = Conn::fetch_assoc($result);
+        utf8($record);
+        return $record; 
     }
 
 

@@ -67,6 +67,7 @@ Class Inve_inde_Controller Extends Conc_Model {
                         'menuEmergente1'=>SELF::HABILITADO
                     ];
 
+                $row['fCantidad'] = ($row['fCantidad']) ? number_format($row['fCantidad'],2) : '';
                 $row['dFechaCreacion'] = ($row['dFechaCreacion']) ? date('d/m/Y  H:i:s', strtotime($row['dFechaCreacion'])) : '';
                 
                 $row['menuEmergente'] = parent::menuEmergente($regla, $row['skConcepto']);

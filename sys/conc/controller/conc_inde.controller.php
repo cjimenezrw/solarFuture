@@ -30,6 +30,7 @@ Class Conc_inde_Controller Extends Conc_Model {
         cc.dFechaCreacion,
         cc.sNombre,
         cc.skEstatus,
+        cc.fCantidad,
         ce.sNombre AS estatus,
         ce.sIcono AS estatusIcono,
         ce.sColor AS estatusColor,
@@ -69,6 +70,7 @@ Class Conc_inde_Controller Extends Conc_Model {
                     'menuEmergente2'=>($row['skEstatus'] == 'NU' ? SELF::HABILITADO : SELF::DESHABILITADO)
                 ];
 
+                $row['fCantidad'] = ($row['fCantidad']) ? number_format($row['fCantidad'],2) : '';
                 $row['dFechaCreacion'] = ($row['dFechaCreacion']) ? date('d/m/Y  H:i:s', strtotime($row['dFechaCreacion'])) : '';
                  
                $row['menuEmergente'] = parent::menuEmergente($regla, $row['skConcepto']);

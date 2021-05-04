@@ -77,8 +77,7 @@ vent.coti_form.validaciones = {
         }
     } 
 
-};
-vent.vent_coti.validaciones = {};
+}; 
 
 vent.coti_inde.clonar = function clonar(obj) {
   

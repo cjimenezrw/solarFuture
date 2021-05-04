@@ -678,6 +678,24 @@ Class Vent_Model Extends DLOREAN_Model {
         return $record; 
     }
 
+    public function stpCUD_ventas() {
+
+        $sql = "CALL stpCUD_ventas (
+            " .escape(isset($this->vent['skVenta']) ? $this->vent['skVenta'] : NULL) . ",
+            " .escape(isset($this->vent['skCotizacion']) ? $this->vent['skCotizacion'] : NULL) . ", 
+            " .escape(isset($this->vent['axn']) ? $this->vent['axn'] : NULL) . ",
+            '" . $_SESSION['usuario']['skUsuario'] . "',
+            '" . $this->sysController . "' )";
+ 
+        $result = Conn::query($sql);
+        if (!$result) {
+            return false;
+        }
+        $record = Conn::fetch_assoc($result);
+        utf8($record);
+        return $record; 
+    }
+
 
       
 

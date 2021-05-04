@@ -17,18 +17,18 @@ if (isset($data['datos'])) {
            
           </div>
 
-          <div class="panel-body container-fluid"  >
+          <div class="panel-body container-fluid" >
             <div class="col-md-12 same-heigth">
                 <div class="col-md-4 col-lg-4">
                   <div class="form-group">
                     <h4 class="example-title">MONEDA :</h4>
-                    <p><?php echo (!empty($result['skDivisa'])) ? $result['skDivisa'] : '';?> </p>
+                    <p><?php echo (!empty($result['skDivisa']) ? $result['skDivisa'] : '');?> </p>
                   </div>
               </div>
             <div class="col-md-4 col-lg-4">
               <div class="form-group">
                 <h4 class="example-title">CATEGORIA</h4>
-                <p><?php echo (!empty($result['categoria'])) ? $result['categoria'] : '';?></p>
+                <p><?php echo (!empty($result['categoria']) ? $result['categoria'] : '');?></p>
               </div>
             </div>
 
@@ -99,18 +99,19 @@ if (isset($data['datos'])) {
             </div>
           </div>
     </div>
+
     </form>
 </div>
 
 <script src="<?php echo SYS_URL; ?><?php echo $this->sysProject; ?>/<?php echo $this->sysModule; ?>/view/js/<?php echo VERSION; ?>/<?php echo $this->sysModule; ?>.js"></script>
 
 <script type="text/javascript">
-  core.formValidaciones.fields = vent.vent_coti.validaciones;
+   
 
   
     $(document).ready(function () {
-        $('#mowi').iziModal('setBackground', '#f1f4f5');
-        $('#core-guardar').formValidation(core.formValidaciones);
+      $('#core-guardar').formValidation(core.formValidaciones);
+         
     });
 
 </script>

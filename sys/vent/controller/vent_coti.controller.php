@@ -50,6 +50,15 @@ Class Vent_coti_Controller Extends Vent_Model {
             
 
             // Guardar cotizacion
+            
+             // guardar_venta 
+             $guardar_venta = $this->guardar_venta();
+             if(!$guardar_venta['success']){
+                 Conn::rollback($this->idTran);
+                 return $this->data;
+             }
+             
+
             $descontar_concepto_inventario = $this->descontar_concepto_inventario();
             if(!$descontar_concepto_inventario['success']){
                 Conn::rollback($this->idTran);
@@ -68,6 +77,34 @@ Class Vent_coti_Controller Extends Vent_Model {
     }
 
     
+     /**
+       * guardar_venta
+       *
+       * Guardar guardar_venta
+       *
+       * @author Luis Alberto Valdez Alvarez <lvaldez@woodward.com.mx>
+       * @return Array ['success'=>NULL,'message'=>NULL,'datos'=>NULL]
+       */
+      public function guardar_venta(){
+        $this->data['success'] = TRUE;
+        $this->vent['axn'] = 'guardar_venta';
+        $this->vent['skVenta'] = NULL;
+ 
+
+        $stpCUD_ventas = parent::stpCUD_ventas();
+        if(!$stpCUD_ventas || isset($stpCUD_ventas['success']) && $stpCUD_ventas['success'] != 1){
+            $this->data['success'] = FALSE;
+            $this->data['message'] = 'HUBO UN ERROR AL GUARDAR LOS DATOS DE LA COTIZACION';
+            return $this->data;
+        }
+
+        
+
+
+        $this->data['success'] = TRUE;
+        $this->data['message'] = 'DATOS DE VENTA GUARDADOS';
+        return $this->data;
+    }
 
     /**
        * descontar_concepto_inventario

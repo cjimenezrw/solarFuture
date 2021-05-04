@@ -18,7 +18,7 @@ Class Inve_form_Controller Extends Conc_Model {
     public function guardar() {
         $this->data = ['success' => TRUE, 'message' => NULL, 'datos' => NULL];
         //Conn::begin($this->idTran);
-
+        $this->log('GUARDANDO', true, true);
         // Obtener datos de entrada de información
             $getInputData = $this->getInputData();
             if(!$getInputData['success']){
@@ -52,23 +52,45 @@ Class Inve_form_Controller Extends Conc_Model {
 
       public function guardar_concepto_productos(){
           $this->data['success'] = TRUE;
-          $this->conc['axn'] = 'guardar_concepto';
+          $this->conc['axn'] = 'guardar_concepto_inventario';
           $this->conc['skEstatus'] = 'NU';
-
-          $stpCUD_conceptosInventario = parent::stpCUD_conceptosInventario();
+        
+        if(isset($this->conc['sNumeroSerie']) && is_array($this->conc['sNumeroSerie'])){
            
-          if(!$stpCUD_conceptosInventario || isset($stpCUD_conceptosInventario['success']) && $stpCUD_conceptosInventario['success'] != 1){
-              $this->data['success'] = FALSE;
-              $this->data['message'] = 'HUBO UN ERROR AL GUARDAR LOS PRODUCTOS DEL CONCEPTO';
-              return $this->data;
-          }
+            $sMarca = $this->conc['sMarca'];
+            $sModelo = $this->conc['sModelo'];
+            $sNumeroSerie = $this->conc['sNumeroSerie'];
+            foreach($sNumeroSerie AS $k=>$v){
+                $this->conc['sMarca'] = $sMarca[$k];
+                $this->conc['sModelo'] = $sModelo[$k];
+                $this->conc['sNumeroSerie'] = $v;
+                $this->conc['fCantidad'] = 1;
 
-          $this->conc['skConcepto'] = $stpCUD_conceptosInventario['skConcepto'];
+                $stpCUD_conceptosInventario = parent::stpCUD_conceptosInventario();
+            
+                if(!$stpCUD_conceptosInventario || isset($stpCUD_conceptosInventario['success']) && $stpCUD_conceptosInventario['success'] != 1){
+                    $this->data['success'] = FALSE;
+                    $this->data['message'] = 'HUBO UN ERROR AL GUARDAR LOS PRODUCTOS DEL CONCEPTO';
+                    return $this->data;
+                }
+            }
 
-          $this->data['success'] = TRUE;
-          $this->data['message'] = 'DATOS DE LOS PRODUCTOS GUARDADOS';
-          return $this->data;
-      }
+        }else{
+                $stpCUD_conceptosInventario = parent::stpCUD_conceptosInventario();
+            
+                if(!$stpCUD_conceptosInventario || isset($stpCUD_conceptosInventario['success']) && $stpCUD_conceptosInventario['success'] != 1){
+                    $this->data['success'] = FALSE;
+                    $this->data['message'] = 'HUBO UN ERROR AL GUARDAR LOS PRODUCTOS DEL CONCEPTO';
+                    return $this->data;
+                }
+        }
+
+        $this->conc['skConcepto'] = $stpCUD_conceptosInventario['skConcepto'];
+
+        $this->data['success'] = TRUE;
+        $this->data['message'] = 'DATOS DE LOS PRODUCTOS GUARDADOS';
+        return $this->data;
+    }
    
     /**
        * validar_datos_entrada
@@ -84,7 +106,7 @@ Class Inve_form_Controller Extends Conc_Model {
 
 
           $validations = [
-              'sCodigo'=>['message'=>'fCantidad']
+              //'sCodigo'=>['message'=>'fCantidad']
           ];
 
           foreach($validations AS $k=>$v){

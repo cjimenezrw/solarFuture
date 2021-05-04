@@ -165,3 +165,9 @@ conc.inve_inde.dataTableConf = {
         }
     ]
 }
+
+conc.inve_form = {};
+
+conc.inve_form.validaciones = {
+    
+};

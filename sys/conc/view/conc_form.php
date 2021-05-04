@@ -31,9 +31,20 @@ if (isset($data['datos'])) {
                             </div> 
                                 
                   </div>
-                  <div class="row row-lg col-lg-12">
-                      <hr>
-                  </div>
+
+                    <div class="row row-lg col-lg-12">
+
+                        <div class="form-group col-md-12">
+                            <div class="checkbox-custom checkbox-primary">
+                                <input type="checkbox" id="iDetalle" name="iDetalle" value="1" <?php echo (isset($result['iDetalle']) && $result['iDetalle'] == 1) ? 'checked="checked"' : ''; ?>/>
+                                <label for="iDetalle"><b>INVENTARIO DE PRODUCTOS CON NUMEROS DE SERIE</b></label>
+                            </div>
+                        </div>
+
+                    </div>
+
+                  <div class="row row-lg col-lg-12"><hr></div>
+
                  <div class="row row-lg col-lg-12">
                      
                      <div class="col-md-4 col-lg-4">
@@ -111,8 +122,11 @@ if (isset($data['datos'])) {
                          </div>
                      </div>
                 </div>
+                
+                <div class="row row-lg col-lg-12 clearfix"><hr></div>
+
                  <div class="row row-lg col-lg-12">
-                     <div class="col-md-8 col-lg-8">
+                     <div class="col-md-12 col-lg-12">
                          <div class="form-group">
                              <h4 class="example-title"> Descripción</h4>
                              <textarea class="form-control"  name="sDescripcion" placeholder="Descripcion del Concepto"><?php echo (isset($result['sDescripcion'])) ? ($result['sDescripcion']) : ''; ?></textarea>

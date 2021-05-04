@@ -32,7 +32,7 @@ Class Conc_Model Extends DLOREAN_Model {
             " .escape($_SESSION['usuario']['skUsuario']). ",
             " .escape($this->sysController)." )";
        
-        //$this->log($sql, true);
+        $this->log($sql, true);
         $result = Conn::query($sql);
         if (!$result) {
             return false;
@@ -101,6 +101,7 @@ Class Conc_Model Extends DLOREAN_Model {
             " .escape(isset($this->conc['skEstatus']) ? $this->conc['skEstatus'] : NULL) . ",
             " .escape(isset($this->conc['sCodigo']) ? $this->conc['sCodigo'] : NULL) . ",
             " .escape(isset($this->conc['sNombre']) ? $this->conc['sNombre'] : NULL). ",
+            " .escape(isset($this->conc['iDetalle']) ? $this->conc['iDetalle'] : NULL). ",
             " .escape(isset($this->conc['skClaveSAT']) ? $this->conc['skClaveSAT'] : NULL) . ",
             " .escape(isset($this->conc['skUnidadMedida']) ? $this->conc['skUnidadMedida'] : NULL) . ",
             " .escape(isset($this->conc['iClaveProductoServicio']) ? $this->conc['iClaveProductoServicio'] : NULL) . ",
@@ -118,7 +119,7 @@ Class Conc_Model Extends DLOREAN_Model {
             '" . $_SESSION['usuario']['skUsuario'] . "',
             '" . $this->sysController . "' )";
       
-        //$this->log($sql, true);
+        $this->log($sql, true);
         $result = Conn::query($sql);
         //$codigo = Conn::fetch_assoc($result);
         if (!$result) {
@@ -177,6 +178,8 @@ Class Conc_Model Extends DLOREAN_Model {
                 cc.skEmpresaSocioProveedor,
                 cc.fKwh,
                 cc.skCategoriaProducto,
+                cc.fCantidad,
+                cc.iDetalle,
                 cso.sNombre AS categoriaProducto,
                 cc.fMetros2,
                 ce.sNombre AS estatus,

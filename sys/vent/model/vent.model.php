@@ -183,8 +183,10 @@ Class Vent_Model Extends DLOREAN_Model {
 
             $this->vent['skConcepto'] = $value['skConcepto'];
             $records[$i]['impuestos'] = $this->_getCotizacionConceptos_impuestos();
+            $records[$i]['venta'] = $this->_getCotizacionConceptos_ventas();
             $i++;
         }
+       
         return $records;
     }
      /**
@@ -199,13 +201,40 @@ Class Vent_Model Extends DLOREAN_Model {
     public function _getCotizacionConceptos_impuestos() {
 
         $sql = "SELECT
-							 ras.*,
+							
 							 ras.skTipoImpuesto  AS tipoImpuesto,
 							 ci.sNombre AS impuesto
 							 FROM rel_cotizaciones_conceptosImpuestos ras
 							 INNER JOIN cat_impuestos ci ON ci.skImpuesto = ras.skImpuesto
 							 WHERE ras.skCotizacion = " . escape($this->vent['skCotizacion']) . " AND ras.skCotizacionConcepto = " . escape($this->vent['skCotizacionConcepto']) . "  AND ras.skConcepto= " . escape($this->vent['skConcepto']);
    
+        $result = Conn::query($sql);
+        if (!$result) {
+            return FALSE;
+        }
+        $records = Conn::fetch_assoc_all($result);
+        return $records;
+    }
+    /**
+     * _getCotizacionConceptos_ventas
+     *
+     * Función Para obtener los datos de los almacenes
+     *
+     *
+     * @author Luis Alberto Valdez Alvarez <lvaldez@woodward.com.mx>
+     * @return array | false Retorna array de datos o false en caso de error
+     */
+    public function _getCotizacionConceptos_ventas() {
+
+        $sql = "SELECT
+							  
+                             rci.sNumeroSerie ,
+                             rci.sModelo,
+                             rci.sMarca
+							 FROM rel_cotizaciones_conceptos  ras
+							 INNER JOIN rel_conceptos_inventarios rci ON rci.skCotizacionConcepto = ras.skCotizacionConcepto
+							 WHERE ras.skCotizacion = " . escape($this->vent['skCotizacion']) . " AND ras.skCotizacionConcepto = " . escape($this->vent['skCotizacionConcepto']) . "  AND ras.skConcepto= " . escape($this->vent['skConcepto']);
+     
         $result = Conn::query($sql);
         if (!$result) {
             return FALSE;

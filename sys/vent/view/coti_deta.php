@@ -206,7 +206,22 @@ if (isset($data['datos'])) {
 					<tr>
 					    <td style="text-align:center; text-transform: uppercase;" ><?php echo $i; ?></td>
 					    <td style="text-align:left; text-transform: uppercase;" ><?php echo $conceptos['tipoMedida']; ?></td>
-					    <td style="text-align:left; text-transform: uppercase;" ><?php echo $conceptos['concepto'].(!empty($conceptos['sDescripcion']) ? " (".$conceptos['sDescripcion'].")" : ''); ?></td>
+					    <td style="text-align:left; text-transform: uppercase;" >
+              <?php echo $conceptos['concepto'].(!empty($conceptos['sDescripcion']) ? " (".$conceptos['sDescripcion'].")" : ''); ?>
+              <?php if(!empty($conceptos['venta'])){ ?>
+                  <table class="table table-responsive">
+                  <tbody>
+                  <?php $j=1; foreach ($conceptos['venta'] AS $venta) { ?>
+
+                    <tr>
+                    <td><?php echo $j; ?></td>
+                    <td  style="text-align:left; " > <?php echo $venta['sNumeroSerie']; ?> </td>
+                    </tr>
+                    <?php $j++; } ?>
+                  </tbody>
+                  </table>
+                <?php } ?>
+              </td>
 					    <td style="text-align:right; text-transform: uppercase;" ><?php echo number_format($conceptos['fCantidad'], 4); ?></td>
 					    <td style="text-align:right; text-transform: uppercase;" ><?php echo "$" . number_format($conceptos['fPrecioUnitario'], 2); ?></td>
 					    <td style="text-align:right; text-transform: uppercase;" ><?php echo "$" . number_format($conceptos['fImporte'], 2); ?></td>

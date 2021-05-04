@@ -14,25 +14,57 @@ if (isset($data['datos'])) {
         <div class="panel panel-bordered panel-primary panel-line" style="display: block;">
           <div class="panel-heading">
             <h3 class="panel-title">DATOS GENERALES</h3>
+            <?php
+							if(isset($result['iFolio'])){
+					?>
+					<div class="alert alert-primary alert-dismissible" role="alert">
+							<b class="red-600 font-size-24"><?php echo (isset($result['iFolio'])) ? ($result['iFolio']) : ''; ?></b>
+					</div>
+					<?php }//ENDIF ?>
            
           </div>
 
           <div class="panel-body container-fluid" >
-            <div class="col-md-12 same-heigth">
-                <div class="col-md-4 col-lg-4">
-                  <div class="form-group">
-                    <h4 class="example-title">MONEDA :</h4>
-                    <p><?php echo (!empty($result['skDivisa']) ? $result['skDivisa'] : '');?> </p>
-                  </div>
-              </div>
-            <div class="col-md-4 col-lg-4">
-              <div class="form-group">
-                <h4 class="example-title">CATEGORIA</h4>
-                <p><?php echo (!empty($result['categoria']) ? $result['categoria'] : '');?></p>
-              </div>
-            </div>
-
-          </div>
+          <div class="col-md-12 same-heigth">
+                    <div class="col-md-4 col-lg-4">
+                        <div class="form-group">
+                            <h4 class="example-title">MONEDA :</h4>
+                            <p><?php echo (!empty($result['skDivisa'])) ? $result['skDivisa'] : '';?> </p>
+                        </div>
+                    </div>
+                    <div class="col-md-4 col-lg-4">
+                          <div class="form-group">
+                              <h4 class="example-title">CATEGORIA</h4>
+                              <p><?php echo (!empty($result['categoria'])) ? $result['categoria'] : '';?></p>
+                          </div>
+                      </div>
+						
+                      <div class="col-md-4 col-lg-4">
+                          <div class="form-group">
+                              <h4 class="example-title">VIGENCIA</h4>
+                              <p><?php echo (!empty($result['dFechaVigencia'])) ? date('d/m/Y', strtotime($result['dFechaVigencia'])) : ''; ?></p>
+                          </div>
+                      </div>
+                        
+                        <div class="col-md-4 col-lg-4">
+                            <div class="form-group">
+                                <h4 class="example-title">CLIENTE:</h4>
+                                <p><?php echo (!empty($result['cliente'])) ? $result['cliente'] : '';?> </p>
+                            </div>
+                        </div>
+						            <div class="col-md-4 col-lg-4">
+                            <div class="form-group">
+                                <h4 class="example-title">PROSPECTO:</h4>
+                                <p><?php echo (!empty($result['prospecto'])) ? $result['prospecto'] : '';?> </p>
+                            </div>
+                        </div>
+						            <div class="col-md-4 col-lg-4">
+                            <div class="form-group">
+                                <h4 class="example-title">COSTO RECIBO:</h4>
+                                <p><?php echo (!empty($result['fCostoRecibo'])) ? $result['fCostoRecibo'] : '';?> </p>
+                            </div>
+                        </div>
+                </div>
         </div>
       </div>
 
@@ -50,6 +82,8 @@ if (isset($data['datos'])) {
                 <thead>
                   <tr> 
                     <th class="text-right">Cantidad</th>
+                    <th class="text-right">CODIGO</th>
+                    
                     <th class="text-left" >Concepto</th>   
                   </tr>
                 </thead>
@@ -66,7 +100,10 @@ if (isset($data['datos'])) {
                         <input type="hidden" name="concepto[<?php echo $i;?>][skConcepto]" value="<?php  echo $conceptos['skConcepto']; ?>">
                         <input type="hidden" name="concepto[<?php echo $i;?>][iDetalle]" value="<?php  echo (!empty($conceptos['iDetalle']) ? $conceptos['iDetalle'] : NULL ); ?>">
                         <?php echo number_format($conceptos['fCantidad'], 2); ?>
-                      </td>    
+                    </td> 
+                    <td style="text-align:right; text-transform: uppercase;" >
+                      <?php echo $conceptos['sCodigo']; ?>
+                    </td> 
                     <td style="text-align:left; text-transform: uppercase;" >
                       <?php echo $conceptos['concepto'].(!empty($conceptos['sDescripcion']) ? " (".$conceptos['sDescripcion'].")" : ''); ?>
                     </td>
@@ -75,6 +112,7 @@ if (isset($data['datos'])) {
                       // for sobre la cantidad 
                       for ($j=0; $j < $conceptos['fCantidad']; $j++) {  ?> 
                          <tr>
+                         <td></td>
                          <td></td>
                          <td> <select name="concepto[<?php echo $i;?>][skConceptoInventario][<?php echo $j;?>]"  class="<?php  echo $conceptos['skConcepto']; ?> form-control js-data-example-ajax" data-plugin="select2" data-ajax--cache="true">  </select></td>
                          </tr>

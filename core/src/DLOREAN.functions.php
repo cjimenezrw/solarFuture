@@ -2261,8 +2261,9 @@ trait DLOREAN_Functions {
             return FALSE;
         }
         $record = Conn::fetch_assoc($result);
-        Conn::free_result($result);
-        return $record['sValor'];
+        //Conn::free_result($result);
+         
+        return (!empty($record['sValor']) ? $record['sValor'] : NULL);
     }
 
     /**

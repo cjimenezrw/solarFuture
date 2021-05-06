@@ -21,11 +21,10 @@ vent.coti_inde.dataTableConf = {
         {'title': 'E', 'data': 'estatus', 'dataType': 'string', 'tooltip': 'Estatus', 'filterT': 'Estatus'},
         {'title': 'Folio', 'data': 'iFolio', 'dataType': 'string','tooltip': 'Folio'},
         {'title': 'F. Creacion', 'data': 'dFechaCreacion', 'dataType': 'date'},
+        {'title': 'Cliente', 'data': 'cliente', 'dataType': 'string'},
          {'title': 'Usuario Creacion', 'data': 'usuarioCreacion', 'dataType': 'string'},
-         {'title': 'Total', 'data': 'fImporteTotal', 'dataType': 'string'},
-         {'title': 'Moneda', 'data': 'skDivisa', 'dataType': 'string'},
-        {'title': 'F. Vigencia', 'data': 'dFechaVigencia', 'dataType': 'date'},
-        {'title': 'Cliente', 'data': 'cliente', 'dataType': 'string'}
+         {'title': 'Total', 'data': 'fImporteTotal', 'dataType': 'string'}
+        
     ],
 
     "drawCallback": function () {

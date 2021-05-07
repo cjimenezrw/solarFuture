@@ -17,6 +17,29 @@ Class Conc_Model Extends DLOREAN_Model {
 
     }
 
+    public function _get_conceptos_inventario(){
+        $sql = "SELECT 
+            rci.*
+            ,ce.sNombre AS estatus
+            ,ce.sIcono AS estatusIcono
+            ,ce.sColor AS estatusColor
+            ,CONCAT('SFM',RIGHT(CONCAT('0000',CAST(oc.iFolio AS VARCHAR(4))),4)) AS iFolio
+            FROM rel_conceptos_inventarios rci
+            INNER JOIN core_estatus ce ON ce.skEstatus = rci.skEstatus
+            LEFT JOIN rel_cotizaciones_conceptos rcc ON rcc.skCotizacionConcepto = rci.skCotizacionConcepto
+            LEFT JOIN ope_cotizaciones oc ON oc.skCotizacion = rcc.skCotizacion
+            WHERE rci.skConcepto = ".escape($this->conc['skConcepto'])."
+            ORDER BY ce.skEstatus DESC";
+
+        $result = Conn::query($sql);
+        if (!$result) {
+            return FALSE;
+        }
+        $records = Conn::fetch_assoc_all($result);
+        utf8($records);
+        return $records;
+    }
+
     public function stpCUD_conceptosInventario(){
         $sql = "CALL stpCUD_conceptosInventario (
             " .escape(isset($this->conc['skConcepto']) ? $this->conc['skConcepto'] : NULL) . ",

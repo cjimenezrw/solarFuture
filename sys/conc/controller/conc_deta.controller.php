@@ -21,7 +21,8 @@ Class Conc_deta_Controller Extends Conc_Model {
         $this->conc['skConcepto'] = $_GET['p1'];
         $this->data['datos'] =  parent::_getConcepto();
         $this->data['conceptosImpuestos']  = parent::_getConceptoImpuestos();
-
+        $this->data['inventario'] = parent::_get_conceptos_inventario();
+        
         // OBTENEMOS LAS CATEGORÍAS DE PRECIOS
             //$_get_categorias_precios = parent::_get_categorias_precios();
             $_get_categorias_precios = parent::getCatalogoSistema(['skCatalogoSistema'=>'CATPRE']);

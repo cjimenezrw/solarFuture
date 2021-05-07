@@ -157,9 +157,9 @@ td.text-right {
 </div>
 
 <div class="col-md-12 clearfix" style="font-size:13px;">
-    <div class="col-md-offset-1 col-md-6 pull-right text-right">
-        <small><b>ELABORADO POR:</b></small> <small style="text-transform: uppercase;"><?php echo (!empty($data['datos']['usuarioCreacion']) ? $data['datos']['usuarioCreacion'] : ''); ?></small><br>
-        <small><b>VIGENCIA:</b></small> <small style="text-transform: uppercase;"><?php echo (isset($data['datos']['dFechaVigencia']) && !empty($data['datos']['dFechaVigencia'])) ? $this->obtenerFechaEnLetra($data['datos']['dFechaVigencia']) : 'N/D'; ?></small>
+    <div class="col-md-offset-1 col-md-10 pull-right text-right">
+        <small><b>ELABORADO POR:</b></small> <small style="text-transform: uppercase;"><?php echo (!empty($data['datos']['usuarioCreacion']) ? $data['datos']['usuarioCreacion'] : ''); ?>, EL DÍA <?php echo (isset($data['datos']['dFechaCreacion']) && !empty($data['datos']['dFechaCreacion'])) ? $this->obtenerFechaEnLetra($data['datos']['dFechaCreacion']) : '-'; ?></small><br>
+        <small><b>VIGENCIA:</b></small> <small style="text-transform: uppercase;"><?php echo (isset($data['datos']['dFechaVigencia']) && !empty($data['datos']['dFechaVigencia'])) ? $this->obtenerFechaEnLetra($data['datos']['dFechaVigencia']) : '-'; ?></small>
     </div>
 </div>
 

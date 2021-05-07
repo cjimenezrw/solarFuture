@@ -105,6 +105,7 @@ Class Vent_Model Extends DLOREAN_Model {
         oc.sRPU,
         oc.sTelefono,
         oc.TARIFA,
+        oc.dFechaCreacion,
         cp.sNombreContacto AS prospecto,
         cep.sRFC AS clienteRFC,
         rca.sNombre AS categoria,

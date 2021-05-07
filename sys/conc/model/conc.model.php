@@ -25,8 +25,6 @@ Class Conc_Model Extends DLOREAN_Model {
             " .escape(isset($this->conc['skEstatus']) ? $this->conc['skEstatus'] : NULL) . ",
             " .escape(isset($this->conc['fCantidad']) ? $this->conc['fCantidad'] : NULL). ",
             " .escape(isset($this->conc['sNumeroSerie']) ? $this->conc['sNumeroSerie'] : NULL) . ",
-            " .escape(isset($this->conc['sMarca']) ? $this->conc['sMarca'] : NULL) . ",
-            " .escape(isset($this->conc['sModelo']) ? $this->conc['sModelo'] : NULL) . ",
 
             " .escape(isset($this->conc['axn']) ? $this->conc['axn'] : NULL) . ",
             " .escape($_SESSION['usuario']['skUsuario']). ",

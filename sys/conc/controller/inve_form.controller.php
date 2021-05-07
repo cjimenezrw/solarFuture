@@ -56,13 +56,8 @@ Class Inve_form_Controller Extends Conc_Model {
           $this->conc['skEstatus'] = 'NU';
         
         if(isset($this->conc['sNumeroSerie']) && is_array($this->conc['sNumeroSerie'])){
-           
-            $sMarca = $this->conc['sMarca'];
-            $sModelo = $this->conc['sModelo'];
             $sNumeroSerie = $this->conc['sNumeroSerie'];
             foreach($sNumeroSerie AS $k=>$v){
-                $this->conc['sMarca'] = $sMarca[$k];
-                $this->conc['sModelo'] = $sModelo[$k];
                 $this->conc['sNumeroSerie'] = $v;
                 $this->conc['fCantidad'] = 1;
 

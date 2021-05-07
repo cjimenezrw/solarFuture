@@ -114,7 +114,7 @@ if (isset($data['datos'])) {
                          <tr>
                          <td></td>
                          <td></td>
-                         <td> <select name="concepto[<?php echo $i;?>][skConceptoInventario][<?php echo $j;?>]"  class="<?php  echo $conceptos['skConcepto']; ?> form-control js-data-example-ajax" data-plugin="select2" data-ajax--cache="true">  </select></td>
+                         <td class="text-left"> <select name="concepto[<?php echo $i;?>][skConceptoInventario][<?php echo $j;?>]"  class="<?php  echo $conceptos['skConcepto']; ?> form-control js-data-example-ajax" data-plugin="select2" data-ajax--cache="true">  </select></td>
                          </tr>
 
                         

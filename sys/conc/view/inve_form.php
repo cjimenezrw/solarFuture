@@ -129,20 +129,6 @@
 
                                     <div class="col-md-12">
                                         <div class="form-group">
-                                            <h4 class="example-title"><span style="color:red;">* </span>MARCA</h4>
-                                            <input class="form-control" data-plugin="inputText" inputtext="" id="sMarca" placeholder="MARCA" autocomplete="off" type="text"/> 
-                                        </div>
-                                    </div>
-
-                                    <div class="col-md-12">
-                                        <div class="form-group">
-                                            <h4 class="example-title"><span style="color:red;">* </span>MODELO</h4>
-                                            <input class="form-control" data-plugin="inputText" inputtext="" id="sModelo" placeholder="MODELO" autocomplete="off" type="text"/>
-                                        </div>
-                                    </div>
-
-                                    <div class="col-md-12">
-                                        <div class="form-group">
                                             <h4 class="example-title"><span style="color:red;">* </span>NÚMERO DE SERIE</h4>
                                             <input class="form-control" data-plugin="inputText" inputtext="" id="sNumeroSerie" placeholder="NÚMERO DE SERIE" autocomplete="off" type="text"/> 
                                         </div>
@@ -180,20 +166,6 @@
                 <?php
                     }else{
                 ?>
-
-                    <div class="col-md-12">
-                        <div class="form-group">
-                            <h4 class="example-title">MARCA</h4>
-                            <input class="form-control" name="sMarca" value="" placeholder="MARCA" autocomplete="off" type="text">
-                        </div>
-                    </div>
-
-                    <div class="col-md-12">
-                        <div class="form-group">
-                            <h4 class="example-title">MODELO</h4>
-                            <input class="form-control" name="sModelo" value="" placeholder="MODELO" autocomplete="off" type="text">
-                        </div>
-                    </div>
 
                     <div class="col-md-12">
                         <div class="form-group">
@@ -237,8 +209,6 @@
             
         // AQUÍ VAN LAS CONFIGURACIÓN DE LOS COMPONENTES QUE TIENEN LA TABLA MÚLTIPLE EN SU FORMULARIO EXCEPTO EL ID //
             var params = {
-                "sMarca": {"id": "sMarca", "type": "val"},
-                "sModelo": {"id": "sModelo", "type": "val"},
                 "sNumeroSerie": {"id": "sNumeroSerie", "type": "val"}
             };
 
@@ -255,14 +225,6 @@
                     checkbox: true,
                     align: 'center',
                     valign: 'middle'
-                },  
-                {
-                    field: 'sMarca', // ID DEL COMPONENTE DE HTML
-                    title: 'Marca' // NOMBRE DE LA COLUMNA DE LA TABLA HTML
-                },
-                {
-                    field: 'sModelo', // ID DEL COMPONENTE DE HTML
-                    title: 'Modelo' // NOMBRE DE LA COLUMNA DE LA TABLA HTML
                 },
                 {
                     field: 'sNumeroSerie', // ID DEL COMPONENTE DE HTML

@@ -228,9 +228,7 @@ Class Vent_Model Extends DLOREAN_Model {
 
         $sql = "SELECT
 							  
-                             rci.sNumeroSerie ,
-                             rci.sModelo,
-                             rci.sMarca
+                             rci.sNumeroSerie 
 							 FROM rel_cotizaciones_conceptos  ras
 							 INNER JOIN rel_conceptos_inventarios rci ON rci.skCotizacionConcepto = ras.skCotizacionConcepto
 							 WHERE ras.skCotizacion = " . escape($this->vent['skCotizacion']) . " AND ras.skCotizacionConcepto = " . escape($this->vent['skCotizacionConcepto']) . "  AND ras.skConcepto= " . escape($this->vent['skConcepto']);

@@ -34,7 +34,7 @@ Class Inve_form_Controller Extends Conc_Model {
             }
 
             $this->conc['skConcepto'] = (isset($_GET['p1']) ? $_GET['p1'] : NULL);
-
+exit('<pre>'.print_r($_POST,1).'</pre>');
             // Guardar Concepto Producto
             $guardar_concepto_productos = $this->guardar_concepto_productos();
             if(!$guardar_concepto_productos['success']){
@@ -55,10 +55,12 @@ Class Inve_form_Controller Extends Conc_Model {
           $this->conc['axn'] = 'guardar_concepto_inventario';
           $this->conc['skEstatus'] = 'NU';
         
-        if(isset($this->conc['sNumeroSerie']) && is_array($this->conc['sNumeroSerie'])){
+        if(isset($this->conc['skConceptoInventario']) && is_array($this->conc['skConceptoInventario'])){
+            $skConceptoInventario = $this->conc['skConceptoInventario'];
             $sNumeroSerie = $this->conc['sNumeroSerie'];
-            foreach($sNumeroSerie AS $k=>$v){
-                $this->conc['sNumeroSerie'] = $v;
+            foreach($skConceptoInventario AS $k=>$v){
+                $this->conc['skConceptoInventario'] = $v;
+                $this->conc['sNumeroSerie'] = $sNumeroSerie[$k];
                 $this->conc['fCantidad'] = 1;
 
                 $stpCUD_conceptosInventario = parent::stpCUD_conceptosInventario();
@@ -193,9 +195,28 @@ Class Inve_form_Controller Extends Conc_Model {
     public function getDatos() {
         $this->data = ['success' => TRUE, 'message' => NULL, 'datos' => NULL];
         $this->conc['skConcepto'] = (isset($_GET['p1']) && !empty($_GET['p1'])) ? $_GET['p1'] : NULL;
+        $editar = (isset($_GET['p2']) && !empty($_GET['p2'])) ? $_GET['p2'] : NULL;
 
         if (!empty($this->conc['skConcepto'])) {
             $this->data['datos'] = parent::_getConcepto();
+
+            if (!empty($editar)) {
+                $this->conc['skEstatus'] = 'NU';
+                $inventario = parent::_get_conceptos_inventario();
+                $this->data["inventario"] = [];
+                if ($inventario && is_array($inventario)) {
+                    foreach ($inventario AS $row) {
+                        $input = '<input data-name="'.$row['skConceptoInventario'].'" value="'.$row['skConceptoInventario'].'" name="skConceptoInventario[]" type="text" hidden />';
+                        $input .= '<input data-name="'.$row['sNumeroSerie'].'" value="'.$row['sNumeroSerie'].'" name="sNumeroSerie[]" type="text" hidden />';
+
+                        array_push($this->data["inventario"], [
+                            'id' => $row['skConceptoInventario'],
+                            'sNumeroSerie' => $row['sNumeroSerie'].$input
+                        ]);
+                    }
+                }
+
+            }
         }
         
         return $this->data;

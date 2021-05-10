@@ -213,7 +213,7 @@
             };
 
             // AQUÍ SE AGREGA EL REGISTRO A LA TABLA MÚLTIPLE //
-                core.tableMultipleAddRow($('#tableMultiple'), params,null,index);
+                core.tableMultipleAddRow($('#tableMultiple'), params,'skConceptoInventario',index);
     };
 
     var params = {
@@ -232,7 +232,7 @@
                 },{
                     // ESTE ES EL ID DE LA TABLA MÚLTIPLE SIEMPRE TIENE QUE ESTAR
                     field: 'id',
-                    title: ''
+                    title: 'ID'
                 }
             ],
             // ESTOS SON LOS DATOS GUARDADOS EN LA BASE DE DATOS 

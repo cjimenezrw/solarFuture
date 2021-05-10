@@ -28,8 +28,13 @@ Class Conc_Model Extends DLOREAN_Model {
             INNER JOIN core_estatus ce ON ce.skEstatus = rci.skEstatus
             LEFT JOIN rel_cotizaciones_conceptos rcc ON rcc.skCotizacionConcepto = rci.skCotizacionConcepto
             LEFT JOIN ope_cotizaciones oc ON oc.skCotizacion = rcc.skCotizacion
-            WHERE rci.skConcepto = ".escape($this->conc['skConcepto'])."
-            ORDER BY ce.skEstatus DESC";
+            WHERE rci.skConcepto = ".escape($this->conc['skConcepto']);
+
+        if (isset($this->conc['skEstatus']) && !empty(trim($this->conc['skEstatus']))) {
+            $sql .= " AND rci.skEstatus = ".escape($this->conc['skEstatus']);
+        }
+
+        $sql .= "ORDER BY ce.skEstatus DESC";
 
         $result = Conn::query($sql);
         if (!$result) {

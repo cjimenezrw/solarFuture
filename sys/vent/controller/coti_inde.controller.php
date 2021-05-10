@@ -127,6 +127,7 @@ Class Coti_inde_Controller Extends Vent_Model {
         $this->vent['axn'] = 'cancelarVentaCotizacion';
         $stpCUD_conceptosInventario = parent::stpCUD_conceptosInventario();
         if(!$stpCUD_conceptosInventario || isset($stpCUD_conceptosInventario['success']) && $stpCUD_conceptosInventario['success'] != 1){
+            Conn::rollback($this->idTran);
             $this->data['success'] = FALSE;
             $this->data['message'] = 'HUBO UN ERROR AL GUARDAR LOS DATOS DE LA COTIZACION';
             return $this->data;
@@ -136,9 +137,7 @@ Class Coti_inde_Controller Extends Vent_Model {
         $this->vent['skCotizacion'] = (isset($_POST['skCotizacion']) && !empty($_POST['skCotizacion'])) ? $_POST['skCotizacion'] : NULL;
 
         $this->data['conceptosCotizacion']  = parent::_getCotizacionConceptos();
-        echo "<PRE>";
-        print_r($this->data['conceptosCotizacion']);
-        die();
+      
 
         foreach($this->data['conceptosCotizacion'] AS $keyConceptos => $rowConceptos){
            
@@ -153,6 +152,7 @@ Class Coti_inde_Controller Extends Vent_Model {
                             $this->vent['skConceptoInventario'] = $row['skConceptoInventario'];
                             $stpCUD_conceptosInventario = parent::stpCUD_conceptosInventario();
                             if(!$stpCUD_conceptosInventario || isset($stpCUD_conceptosInventario['success']) && $stpCUD_conceptosInventario['success'] != 1){
+                                Conn::rollback($this->idTran);
                                 $this->data['success'] = FALSE;
                                 $this->data['message'] = 'HUBO UN ERROR AL GUARDAR LOS DATOS DE LA COTIZACION';
                                 return $this->data;
@@ -167,6 +167,7 @@ Class Coti_inde_Controller Extends Vent_Model {
                 $this->vent['fCantidad'] = $rowConceptos['fCantidad'];
                 $stpCUD_conceptosInventario = parent::stpCUD_conceptosInventario();
                 if(!$stpCUD_conceptosInventario || isset($stpCUD_conceptosInventario['success']) && $stpCUD_conceptosInventario['success'] != 1){
+                    Conn::rollback($this->idTran);
                     $this->data['success'] = FALSE;
                     $this->data['message'] = 'HUBO UN ERROR AL GUARDAR LOS DATOS DE LA COTIZACION';
                     return $this->data;
@@ -179,7 +180,9 @@ Class Coti_inde_Controller Extends Vent_Model {
 
          
 
-
+        Conn::commit($this->idTran);
+        $this->data['success'] = TRUE;
+        $this->data['message'] = 'Registro guardado con éxito.';
         return $this->data;
     }
     

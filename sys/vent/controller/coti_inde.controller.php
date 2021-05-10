@@ -123,9 +123,19 @@ Class Coti_inde_Controller Extends Vent_Model {
     }
     public function cancelarVenta(){
         $this->data = ['success' => TRUE, 'message' => NULL, 'datos' => NULL];
+        $this->vent['skCotizacion'] = (isset($_POST['skCotizacion']) && !empty($_POST['skCotizacion'])) ? $_POST['skCotizacion'] : NULL;
+        $this->data['datos'] =  parent::_getCotizacion();
+        if($this->data['datos']['skEstatus'] != 'VE'){
+            $this->data['success'] = FALSE;
+            $this->data['message'] = 'LA VENTA YA SE HA CANCELADO CON ANTERIORIDAD O YA NO SE ENCUENTRA ACTIVA';
+            return $this->data;
+        }
+
+        
+        
         Conn::begin($this->idTran);
         $this->vent['axn'] = 'cancelarVentaCotizacion';
-        $this->vent['skCotizacion'] = (isset($_POST['skCotizacion']) && !empty($_POST['skCotizacion'])) ? $_POST['skCotizacion'] : NULL;
+
 
         $stpCUD_conceptosInventario = parent::stpCUD_conceptosInventario();
         if(!$stpCUD_conceptosInventario || isset($stpCUD_conceptosInventario['success']) && $stpCUD_conceptosInventario['success'] != 1){

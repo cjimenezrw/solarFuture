@@ -84,6 +84,7 @@ Class Vent_Model Extends DLOREAN_Model {
 
         $sql = "SELECT 
         oc.skCotizacion,
+        oc.skEstatus,
         CONCAT('SFM',RIGHT(CONCAT('0000',CAST(oc.iFolio AS VARCHAR(4))),4)) AS iFolio,
         oc.dFechaVigencia,
         oc.skDivisa,

@@ -94,3 +94,50 @@ vent.coti_inde.clonar = function clonar(obj) {
         }
     });
 };
+
+vent.coti_inde.cancelarVenta = function cancelarVenta(obj) {
+    swal({
+        title: "¿Desea cancelar la venta?",
+        text: "Cotizacion  # "+core.rowDataTable.iFolio+" " ,
+        type: "warning",
+        confirmButtonClass: "btn-warning",
+        confirmButtonText: "SI",
+        showCancelButton: true,
+        closeOnConfirm: false,
+        showLoaderOnConfirm: true,
+        animation: "slide-from-top"
+    },
+    function () {
+        $.ajax({
+            url: window.location.href,
+            type: 'POST',
+            data: {
+                axn: 'cancelarVenta',
+                skCotizacion: core.rowDataTable.skCotizacion
+            },
+            cache: false,
+            processData: true,
+            beforeSend: function () {
+                toastr.info('Cancelar la Venta # '+core.rowDataTable.iFolio, 'Notificación');
+            },
+            success: function (response) {
+                toastr.clear();
+
+                if(!response.success){
+                    toastr.error(response.message+ " Folio:" +core.rowDataTable.iFolio, 'Notificación');
+                    swal.close();
+                    core.dataTable.sendFilters(true);
+                    return false;
+                }
+
+                toastr.success('Venta cancelada con exito # '+core.rowDataTable.iFolio, 'Notificación');
+                swal("¡Notificación!", 'Venta cancelada con exito# '+core.rowDataTable.iFolio, "success");
+                obj.url = response.datos.url;
+                core.menuLoadModule(obj);
+                //core.dataTable.sendFilters(true);
+                return true;
+            }
+        });
+    });
+   
+};

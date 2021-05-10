@@ -11,6 +11,7 @@ Class Coti_inde_Controller Extends Vent_Model {
     // PROTECTED VARIABLES //
     // PRIVATE VARIABLES //
     private $data = [];
+    private $idTran = 'cotizacion'; //Mi procedimiento
 
     public function __construct() {
         parent::init();
@@ -120,6 +121,71 @@ Class Coti_inde_Controller Extends Vent_Model {
 
         return $this->data;
     }
+    public function cancelarVenta(){
+        $this->data = ['success' => TRUE, 'message' => NULL, 'datos' => NULL];
+        Conn::begin($this->idTran);
+        $this->vent['axn'] = 'cancelarVentaCotizacion';
+        $stpCUD_conceptosInventario = parent::stpCUD_conceptosInventario();
+        if(!$stpCUD_conceptosInventario || isset($stpCUD_conceptosInventario['success']) && $stpCUD_conceptosInventario['success'] != 1){
+            Conn::rollback($this->idTran);
+            $this->data['success'] = FALSE;
+            $this->data['message'] = 'HUBO UN ERROR AL GUARDAR LOS DATOS DE LA COTIZACION';
+            return $this->data;
+        }
+
+        $this->vent['axn'] = 'cancelarVentaConcepto';
+        $this->vent['skCotizacion'] = (isset($_POST['skCotizacion']) && !empty($_POST['skCotizacion'])) ? $_POST['skCotizacion'] : NULL;
+
+        $this->data['conceptosCotizacion']  = parent::_getCotizacionConceptos();
+      
+
+        foreach($this->data['conceptosCotizacion'] AS $keyConceptos => $rowConceptos){
+           
+            $this->vent['skConcepto'] = $rowConceptos['skConcepto'];
+            $this->vent['skCotizacionConcepto'] = $rowConceptos['skCotizacionConcepto'];
+            $this->vent['skConceptoInventario']  = NULL;
+            if(!empty($rowConceptos['iDetalle'])){
+                    if(!empty($this->vent['venta']) && is_array($this->vent['venta'])){
+                        foreach($this->vent['venta'] AS $row){
+
+                            $this->vent['fCantidad'] = 1;
+                            $this->vent['skConceptoInventario'] = $row['skConceptoInventario'];
+                            $stpCUD_conceptosInventario = parent::stpCUD_conceptosInventario();
+                            if(!$stpCUD_conceptosInventario || isset($stpCUD_conceptosInventario['success']) && $stpCUD_conceptosInventario['success'] != 1){
+                                Conn::rollback($this->idTran);
+                                $this->data['success'] = FALSE;
+                                $this->data['message'] = 'HUBO UN ERROR AL GUARDAR LOS DATOS DE LA COTIZACION';
+                                return $this->data;
+                            }
+
+                        }
+
+                    }
+                
+            }else{
+
+                $this->vent['fCantidad'] = $rowConceptos['fCantidad'];
+                $stpCUD_conceptosInventario = parent::stpCUD_conceptosInventario();
+                if(!$stpCUD_conceptosInventario || isset($stpCUD_conceptosInventario['success']) && $stpCUD_conceptosInventario['success'] != 1){
+                    Conn::rollback($this->idTran);
+                    $this->data['success'] = FALSE;
+                    $this->data['message'] = 'HUBO UN ERROR AL GUARDAR LOS DATOS DE LA COTIZACION';
+                    return $this->data;
+                }
+
+            }
+            
+
+        }
+
+         
+
+        Conn::commit($this->idTran);
+        $this->data['success'] = TRUE;
+        $this->data['message'] = 'Registro guardado con éxito.';
+        return $this->data;
+    }
+    
 
     public function cotizacionPDF(){
         $formatoPDF = $this->sysAPI('vent', 'coti_deta', 'formatoPDF', [

@@ -35,6 +35,11 @@ Class Vent_Controller Extends Vent_Model {
             case 'cotizacionPDF':
                 $coti_inde->cotizacionPDF();
                 break;
+                
+            case 'cancelarVenta':
+                header('Content-Type: application/json');
+                echo json_encode($coti_inde->cancelarVenta(),true,512);
+            break;
             case 'cancelar':
                 header('Content-Type: application/json');
                 echo json_encode($coti_inde->cancelar(),true,512);

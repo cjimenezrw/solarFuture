@@ -687,6 +687,7 @@ Class Vent_Model Extends DLOREAN_Model {
 
         $sql = "CALL stpCUD_conceptosInventario (
             " .escape(isset($this->vent['skConcepto']) ? $this->vent['skConcepto'] : NULL) . ",
+            " .escape(isset($this->vent['skCotizacion']) ? $this->vent['skCotizacion'] : NULL) . ",
             " .escape(isset($this->vent['skCotizacionConcepto']) ? $this->vent['skCotizacionConcepto'] : NULL) . ",
             " .escape(isset($this->vent['skConceptoInventario']) ? $this->vent['skConceptoInventario'] : NULL) . ",
             " .escape(isset($this->vent['skEstatus']) ? $this->vent['skEstatus'] : NULL) . ",

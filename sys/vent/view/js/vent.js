@@ -132,10 +132,8 @@ vent.coti_inde.cancelarVenta = function cancelarVenta(obj) {
 
                 toastr.success('Venta cancelada con exito # '+core.rowDataTable.iFolio, 'Notificación');
                 swal("¡Notificación!", 'Venta cancelada con exito# '+core.rowDataTable.iFolio, "success");
-                obj.url = response.datos.url;
-                core.menuLoadModule(obj);
-                //core.dataTable.sendFilters(true);
-                return true;
+                core.dataTable.sendFilters(true);
+                 return true;
             }
         });
     });

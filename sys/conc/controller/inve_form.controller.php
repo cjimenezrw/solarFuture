@@ -34,7 +34,7 @@ Class Inve_form_Controller Extends Conc_Model {
             }
 
             $this->conc['skConcepto'] = (isset($_GET['p1']) ? $_GET['p1'] : NULL);
-exit('<pre>'.print_r($_POST,1).'</pre>');
+
             // Guardar Concepto Producto
             $guardar_concepto_productos = $this->guardar_concepto_productos();
             if(!$guardar_concepto_productos['success']){
@@ -56,23 +56,35 @@ exit('<pre>'.print_r($_POST,1).'</pre>');
           $this->conc['skEstatus'] = 'NU';
         
         if(isset($this->conc['skConceptoInventario']) && is_array($this->conc['skConceptoInventario'])){
-            $skConceptoInventario = $this->conc['skConceptoInventario'];
-            $sNumeroSerie = $this->conc['sNumeroSerie'];
-            foreach($skConceptoInventario AS $k=>$v){
-                $this->conc['skConceptoInventario'] = $v;
-                $this->conc['sNumeroSerie'] = $sNumeroSerie[$k];
-                $this->conc['fCantidad'] = 1;
-
-                $stpCUD_conceptosInventario = parent::stpCUD_conceptosInventario();
             
-                if(!$stpCUD_conceptosInventario || isset($stpCUD_conceptosInventario['success']) && $stpCUD_conceptosInventario['success'] != 1){
+            // ELIMINAMOS LOS PRODUCTOS DE INVENTARIO QUE NO VIENEN EN EL FORMULARIO
+                $eliminarProductosInventario = parent::eliminarProductosInventario();
+                if(!$eliminarProductosInventario){
                     $this->data['success'] = FALSE;
-                    $this->data['message'] = 'HUBO UN ERROR AL GUARDAR LOS PRODUCTOS DEL CONCEPTO';
+                    $this->data['message'] = 'HUBO UN ERROR AL ELIMINAR LOS PRODUCTOS DEL CONCEPTO';
                     return $this->data;
                 }
-            }
+            
+            // AGREGAMOS LOS PRODUCTOS DE INVENTARIO CON NÚMERO DE SERIE
+                $skConceptoInventario = $this->conc['skConceptoInventario'];
+                $sNumeroSerie = $this->conc['sNumeroSerie'];
+                foreach($skConceptoInventario AS $k=>$v){
+                    $this->conc['skConceptoInventario'] = $v;
+                    $this->conc['sNumeroSerie'] = $sNumeroSerie[$k];
+                    $this->conc['fCantidad'] = 1;
+
+                    $stpCUD_conceptosInventario = parent::stpCUD_conceptosInventario();
+                
+                    if(!$stpCUD_conceptosInventario || isset($stpCUD_conceptosInventario['success']) && $stpCUD_conceptosInventario['success'] != 1){
+                        $this->data['success'] = FALSE;
+                        $this->data['message'] = 'HUBO UN ERROR AL GUARDAR LOS PRODUCTOS DEL CONCEPTO';
+                        return $this->data;
+                    }
+                }
 
         }else{
+
+            // AGREGAMOS LOS PRODUCTOS DE INVENTARIO CON CANTIDAD
                 $stpCUD_conceptosInventario = parent::stpCUD_conceptosInventario();
             
                 if(!$stpCUD_conceptosInventario || isset($stpCUD_conceptosInventario['success']) && $stpCUD_conceptosInventario['success'] != 1){
@@ -195,12 +207,11 @@ exit('<pre>'.print_r($_POST,1).'</pre>');
     public function getDatos() {
         $this->data = ['success' => TRUE, 'message' => NULL, 'datos' => NULL];
         $this->conc['skConcepto'] = (isset($_GET['p1']) && !empty($_GET['p1'])) ? $_GET['p1'] : NULL;
-        $editar = (isset($_GET['p2']) && !empty($_GET['p2'])) ? $_GET['p2'] : NULL;
 
         if (!empty($this->conc['skConcepto'])) {
             $this->data['datos'] = parent::_getConcepto();
 
-            if (!empty($editar)) {
+            if (isset($this->data['datos']['iDetalle']) && $this->data['datos']['iDetalle'] == 1) {
                 $this->conc['skEstatus'] = 'NU';
                 $inventario = parent::_get_conceptos_inventario();
                 $this->data["inventario"] = [];
@@ -215,7 +226,6 @@ exit('<pre>'.print_r($_POST,1).'</pre>');
                         ]);
                     }
                 }
-
             }
         }
         

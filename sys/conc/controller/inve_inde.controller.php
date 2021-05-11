@@ -65,6 +65,7 @@ Class Inve_inde_Controller Extends Conc_Model {
                 //REGLA DEL MENÚ EMERGENTE
                     $regla = [
                         'menuEmergente1'=>SELF::HABILITADO
+                        'menuEmergente2'=>SELF::HABILITADO
                     ];
 
                 $row['fCantidad'] = ($row['fCantidad']) ? number_format($row['fCantidad'],2) : '';

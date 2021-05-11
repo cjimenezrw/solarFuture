@@ -729,6 +729,10 @@ core.guardar = function guardar(conf) {
         CKEDITOR.instances[instance].updateElement();
     }
 
+    if ($('.bootstrap-table').length) {
+        $('table').bootstrapTable('resetSearch');
+    }
+
     var formdata = false;
     if (window.FormData) {
         formdata = new FormData($('#core-guardar')[0]);

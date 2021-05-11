@@ -17,7 +17,7 @@
                 <div class="row row-lg col-md-12">
 
                     
-                        <div class="col-md-6">
+                        <div class="col-md-12">
                             <div class="form-group">
                                 <h4 class="example-title">NOMBRE :</h4>
                                 <p><?php echo (!empty($result['sNombre'])) ? $result['sNombre'] : '';?> </p>
@@ -30,8 +30,6 @@
                                 <p><?php echo (!empty($result['sCodigo'])) ? $result['sCodigo'] : '-'; ?> </p>
                             </div>
                         </div>
-
-                        <div class="col-md-12"></div>
                         
                         <div class="col-md-6">
                             <div class="form-group">
@@ -40,12 +38,22 @@
                             </div>
                         </div>
 
+                        <div class="col-md-12 clearfix"><hr></div>
+
                         <div class="col-md-6">
                             <div class="form-group">
                                 <h4 class="example-title">UNIDAD DE MEDIDA</h4>
                                 <p><?php echo (!empty($result['unidadMedida'])) ? $result['unidadMedida'] : '-'; ?> </p>
                             </div>
                         </div>
+
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <h4 class="example-title">CANTIDAD</h4>
+                                <p><?php echo (!empty($result['fCantidad'])) ? $result['fCantidad'] : '-'; ?> </p>
+                            </div>
+                        </div>
+
                     
                         <div class="col-md-12 clearfix"><hr></div>
                         

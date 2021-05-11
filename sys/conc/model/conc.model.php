@@ -17,6 +17,20 @@ Class Conc_Model Extends DLOREAN_Model {
 
     }
 
+    public function eliminarProductosInventario(){
+        $sql = "UPDATE rel_conceptos_inventarios SET 
+            skEstatus = 'EL',
+            dFechaModificacion = NOW(),
+            skUsuarioModificacion = ".escape($_SESSION['usuario']['skUsuario'])."
+            WHERE skConceptoInventario NOT IN (".mssql_where_in($this->conc['skConceptoInventario']).") AND skEstatus = 'NU'";
+           
+        $result = Conn::query($sql);
+        if (!$result) {
+            return FALSE;
+        }
+        return TRUE;
+    }
+
     public function _get_conceptos_inventario(){
         $sql = "SELECT 
             rci.*
@@ -48,6 +62,7 @@ Class Conc_Model Extends DLOREAN_Model {
     public function stpCUD_conceptosInventario(){
         $sql = "CALL stpCUD_conceptosInventario (
             " .escape(isset($this->conc['skConcepto']) ? $this->conc['skConcepto'] : NULL) . ",
+            " .escape(isset($this->conc['skCotizacion']) ? $this->conc['skCotizacion'] : NULL) . ",
             " .escape(isset($this->conc['skCotizacionConcepto']) ? $this->conc['skCotizacionConcepto'] : NULL) . ",
             " .escape(isset($this->conc['skConceptoInventario']) ? $this->conc['skConceptoInventario'] : NULL) . ",
             " .escape(isset($this->conc['skEstatus']) ? $this->conc['skEstatus'] : NULL) . ",

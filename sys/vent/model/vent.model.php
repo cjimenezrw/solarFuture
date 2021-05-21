@@ -694,6 +694,8 @@ Class Vent_Model Extends DLOREAN_Model {
             " .escape(isset($this->vent['skEstatus']) ? $this->vent['skEstatus'] : NULL) . ",
             " .escape(isset($this->vent['fCantidad']) ? $this->vent['fCantidad'] : NULL) . ",
             " .escape(isset($this->vent['sNumeroSerie']) ? $this->vent['sNumeroSerie'] : NULL) . ",
+            " .escape(isset($this->conc['skUsuarioBaja']) ? $this->conc['skUsuarioBaja'] : NULL) . ",
+            " .escape(isset($this->conc['sDescripcionBaja']) ? $this->conc['sDescripcionBaja'] : NULL) . ",
             " .escape(isset($this->vent['axn']) ? $this->vent['axn'] : NULL) . ",
             '" . $_SESSION['usuario']['skUsuario'] . "',
             '" . $this->sysController . "' )";

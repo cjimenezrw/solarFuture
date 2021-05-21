@@ -37,11 +37,13 @@ Class Conc_Model Extends DLOREAN_Model {
             ,ce.sNombre AS estatus
             ,ce.sIcono AS estatusIcono
             ,ce.sColor AS estatusColor
+            ,cub.sNombre AS usuarioBaja
             ,CONCAT('SFM',RIGHT(CONCAT('0000',CAST(oc.iFolio AS VARCHAR(4))),4)) AS iFolio
             FROM rel_conceptos_inventarios rci
             INNER JOIN core_estatus ce ON ce.skEstatus = rci.skEstatus
             LEFT JOIN rel_cotizaciones_conceptos rcc ON rcc.skCotizacionConcepto = rci.skCotizacionConcepto
             LEFT JOIN ope_cotizaciones oc ON oc.skCotizacion = rcc.skCotizacion
+            LEFT JOIN cat_usuarios cub ON cub.skUsuario = rci.skUsuarioBaja
             WHERE rci.skConcepto = ".escape($this->conc['skConcepto']);
 
         if (isset($this->conc['skEstatus']) && !empty(trim($this->conc['skEstatus']))) {
@@ -68,7 +70,8 @@ Class Conc_Model Extends DLOREAN_Model {
             " .escape(isset($this->conc['skEstatus']) ? $this->conc['skEstatus'] : NULL) . ",
             " .escape(isset($this->conc['fCantidad']) ? $this->conc['fCantidad'] : NULL). ",
             " .escape(isset($this->conc['sNumeroSerie']) ? $this->conc['sNumeroSerie'] : NULL) . ",
-
+            " .escape(isset($this->conc['skUsuarioBaja']) ? $this->conc['skUsuarioBaja'] : NULL) . ",
+            " .escape(isset($this->conc['sDescripcionBaja']) ? $this->conc['sDescripcionBaja'] : NULL) . ",
             " .escape(isset($this->conc['axn']) ? $this->conc['axn'] : NULL) . ",
             " .escape($_SESSION['usuario']['skUsuario']). ",
             " .escape($this->sysController)." )";
@@ -338,6 +341,18 @@ Class Conc_Model Extends DLOREAN_Model {
 
         $sql .= " ORDER BY N1.nombre ASC ";
        
+        $result = Conn::query($sql);
+        if (!$result) {
+            return FALSE;
+        }
+        $records = Conn::fetch_assoc_all($result);
+        utf8($records);
+        return $records;
+    }
+
+    public function _getUsuariosBaja(){
+        $sql = "SELECT  cu.sNombre   ,cu.skUsuario    FROM cat_usuarios cu WHERE 1=1 AND cu.skEstatus = 'AC' ORDER BY cu.sNombre ASC ";
+ 
         $result = Conn::query($sql);
         if (!$result) {
             return FALSE;

@@ -177,6 +177,25 @@ Class Conc_Controller Extends Conc_Model {
         return true;
     }
 
+    public function inve_sali() {
+        $this->load_class("inve_sali", "controller");
+        $inve_sali = new Inve_sali_Controller();
+
+        $axn = (isset($_POST['axn']) ? $_POST['axn'] : (isset($_GET['axn']) ? $_GET['axn'] : NULL));
+
+        switch ($axn) {
+            case 'guardar':
+                header('Content-Type: application/json');
+                echo json_encode($inve_sali->guardar());
+                break;
+            default:
+                $this->data = $inve_sali->getDatos();
+                $this->load_view('inve_sali', $this->data);
+                break;
+        }
+        return true;
+    }
+
 
 
 }

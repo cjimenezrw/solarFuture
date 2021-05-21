@@ -185,8 +185,10 @@ if (isset($data['datos'])) {
                         <tr>
                             <th class="col-md-1">#</th>
                             <th class="col-md-1">Estatus</th>
-                            <th class="col-md-5">Número de Serie</th>
-                            <th class="col-md-5">Folio de Cotización</th>
+                            <th class="col-md-1">Número de Serie</th>
+                            <th class="col-md-1">Folio de Cotización</th>
+                            <th class="col-md-4">Usuario Baja</th>
+                            <th class="col-md-4">Descripcion Baja</th>
                         </tr>
                     </thead>
                     <tbody class="tbody_inventario">
@@ -200,6 +202,8 @@ if (isset($data['datos'])) {
                                 <td><?php echo (!empty($v['estatus'])) ? $v['estatus'] : ''; ?></td>
                                 <td><?php echo (!empty($v['sNumeroSerie'])) ? $v['sNumeroSerie'] : ''; ?></td>
                                 <td><?php echo (!empty($v['iFolio'])) ? $v['iFolio'] : ''; ?></td>
+                                <td><?php echo (!empty($v['usuarioBaja']) ? $v['usuarioBaja'].(!empty($v['fCantidad']) ? " (".$v['fCantidad'].")" : '') : ''); ?></td>
+                                <td><?php echo (!empty($v['sDescripcionBaja'])) ? $v['sDescripcionBaja'] : ''; ?></td>
                             </tr>
                         <?php 
                             $i++;

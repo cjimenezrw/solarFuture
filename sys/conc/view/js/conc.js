@@ -138,7 +138,7 @@ conc.inve_inde.dataTableConf = {
     'columns': [
         {'title': 'E', 'data': 'estatus', 'dataType': 'string', 'tooltip': 'Estatus', 'filterT': 'Estatus'},
         {'title': 'Cantidad', 'data': 'fCantidad', 'dataType': 'int','tooltip': 'Cantidad'},
-        {'title': 'CODIGO', 'data': 'sCodigo', 'dataType': 'string','tooltip': 'CODIGO'},
+        {'title': 'Código', 'data': 'sCodigo', 'dataType': 'string','tooltip': 'CODIGO'},
         {'title': 'Nombre', 'data': 'sNombre', 'dataType': 'string'},
         {'title': 'Usuario Creacion', 'data': 'usuarioCreacion', 'dataType': 'string'},
         {'title': 'F. Creacion', 'data': 'dFechaCreacion', 'dataType': 'date'},
@@ -239,8 +239,8 @@ conc.conc_inde.dataTableConf = {
     'order': [[5, "desc"]],
     'columns': [
         {'title': 'E', 'data': 'estatus', 'dataType': 'string', 'tooltip': 'Estatus', 'filterT': 'Estatus'},
-        {'title': 'Cantidad', 'data': 'fCantidad', 'dataType': 'int','tooltip': 'Cantidad'},
-        {'title': 'CODIGO', 'data': 'sCodigo', 'dataType': 'string','tooltip': 'CODIGO'},
+        {'title': 'Cant', 'data': 'fCantidad', 'dataType': 'int','tooltip': 'Cantidad'},
+        {'title': 'Código', 'data': 'sCodigo', 'dataType': 'string','tooltip': 'CODIGO'},
         {'title': 'Nombre', 'data': 'sNombre', 'dataType': 'string'},
         {'title': 'Usuario Creacion', 'data': 'usuarioCreacion', 'dataType': 'string'},
         {'title': 'F. Creacion', 'data': 'dFechaCreacion', 'dataType': 'date'},
@@ -306,7 +306,7 @@ conc.inve_inde.dataTableConf = {
     'order': [[5, "desc"]],
     'columns': [
         {'title': 'E', 'data': 'estatus', 'dataType': 'string', 'tooltip': 'Estatus', 'filterT': 'Estatus'},
-        {'title': 'Cantidad', 'data': 'fCantidad', 'dataType': 'int','tooltip': 'Cantidad'},
+        {'title': 'Cant', 'data': 'fCantidad', 'dataType': 'int','tooltip': 'Cantidad'},
         {'title': 'CODIGO', 'data': 'sCodigo', 'dataType': 'string','tooltip': 'CODIGO'},
         {'title': 'Nombre', 'data': 'sNombre', 'dataType': 'string'},
         {'title': 'Usuario Creacion', 'data': 'usuarioCreacion', 'dataType': 'string'},

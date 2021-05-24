@@ -28,6 +28,7 @@ Class Inve_inde_Controller Extends Conc_Model {
             cc.sCodigo,
             cc.dFechaCreacion,
             cc.sNombre,
+            #SUBSTRING(cc.sNombre, 1, 50) AS sNombre,
             cc.skEstatus,
             ce.sNombre AS estatus,
             ce.sIcono AS estatusIcono,

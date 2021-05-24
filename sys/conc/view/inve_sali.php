@@ -23,7 +23,7 @@ if (isset($data['datos'])) {
 
               <div class="col-md-4 col-lg-4">
                      <div class="form-group">
-                             <h4 class="example-title">USUARIO BAJA <span class="required text-danger">*</span></h4>
+                             <h4 class="example-title">USUARIO <span class="required text-danger">*</span></h4>
                              <select id="skUsuarioBaja"  name="skUsuarioBaja" class="form-control" data-plugin="select2" select2Simple>
                                  <option value="">Seleccionar</option>
                                  <?php
@@ -42,9 +42,9 @@ if (isset($data['datos'])) {
                    
                    <div class="col-md-12 col-lg-12">
                          <div class="form-group">
-                             <h4 class="example-title"> DESCRIPCION BAJA  
+                             <h4 class="example-title"> DESCRIPCIÓN  
                               </h4>
-                             <textarea class="form-control"  name="sDescripcionBaja" placeholder="DESCRIPCION BAJA"></textarea>
+                             <textarea class="form-control"  name="sDescripcionBaja" placeholder="DESCRIPCIÓN"></textarea>
                          </div>
                      </div>
                      <?php if($result['iDetalle'] == 0){?>
@@ -70,15 +70,18 @@ if (isset($data['datos'])) {
 
             <div class="panel-body container-fluid">
               <div class="col-md-12 page-invoice-table table-responsive font-size-12">
+              <div class="input-group margin-top-20"> <span class="input-group-addon">Filtrar</span>
+                        <input id="filter_inventario" type="text" class="form-control" autocomplete="off" placeholder="Escribe aquí...">
+                    </div>
               <table class="table text-right">
                 <thead>
                   <tr> 
-                    <th class="col-xs-1 col-md-1 text-center" style="text-align:center;">CHECK</th>
-                    <th class="col-xs-10 col-md-10 text-center" style="text-align:left;">NUMERO SERIE</th>
+                    <th class="col-xs-1 col-md-1 text-center" style="text-align:center;">SELECCIONAR</th>
+                    <th class="col-xs-10 col-md-10 text-center" style="text-align:left;">NÚMERO DE SERIE</th>
                     
                    </tr>
                 </thead>
-              <tbody>
+                <tbody class="tbody_inventario">
                 <?php
                 if (isset($data['inventario'])) {
                   $i=0;
@@ -121,8 +124,15 @@ if (isset($data['datos'])) {
   
     $(document).ready(function () {
       $('#core-guardar').formValidation(core.formValidaciones);
-      $("#skUsuarioBaja").select2({placeholder: "USUARIO BAJA", allowClear: true });
-         
+      $("#skUsuarioBaja").select2({placeholder: "USUARIO", allowClear: true });
+      $('#filter_inventario').keyup(function () {
+            var rex = new RegExp($(this).val(), 'i');
+            $('.tbody_inventario tr').hide();
+            $('.tbody_inventario tr').filter(function () {
+                return rex.test($(this).text());
+            }).show();
+        });
+
     });
 
 </script>

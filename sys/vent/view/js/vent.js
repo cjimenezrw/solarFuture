@@ -16,15 +16,14 @@ vent.coti_inde.dataTableConf = {
         }
     },
     'axn': 'consulta',
-    'order': [[2, "desc"]],
+    'order': [[5, "desc"]],
     'columns': [
         {'title': 'E', 'data': 'estatus', 'dataType': 'string', 'tooltip': 'Estatus', 'filterT': 'Estatus'},
         {'title': 'Folio', 'data': 'iFolio', 'dataType': 'string','tooltip': 'Folio'},
-        {'title': 'F. Creacion', 'data': 'dFechaCreacion', 'dataType': 'date'},
         {'title': 'Cliente', 'data': 'cliente', 'dataType': 'string'},
-         {'title': 'Usuario Creacion', 'data': 'usuarioCreacion', 'dataType': 'string'},
-         {'title': 'Total', 'data': 'fImporteTotal', 'dataType': 'string'}
-        
+        {'title': 'Usuario Creacion', 'data': 'usuarioCreacion', 'dataType': 'string'},
+        {'title': 'Total', 'data': 'fImporteTotal', 'dataType': 'string'},
+        {'title': 'F. Creacion', 'data': 'dFechaCreacion', 'dataType': 'date'}
     ],
 
     "drawCallback": function () {
@@ -36,7 +35,7 @@ vent.coti_inde.dataTableConf = {
     "columnDefs": [
         {
             "targets": [0],
-            "width": '20px',
+            "width": '10px',
             "createdCell": function (td, cellData, rowData, row, col) {
                 ((rowData.estatusIcono) ? $(td).html('<i class="' + rowData.estatusIcono + '"></i>') : $(td).html(cellData));
                 $(td).addClass('text-center ' + ((rowData.estatusColor) ? rowData.estatusColor : 'text-primary'));
@@ -46,7 +45,7 @@ vent.coti_inde.dataTableConf = {
         },
         {
             "targets": [1],
-            "width": '30px'
+            "width": '10px'
             
         }
     ]

@@ -52,14 +52,14 @@ if (isset($data['cotizacionTerminosCondiciones'])) {
                     <div class="col-md-4 col-lg-4 cliente_nuevo" <?php echo (isset($result['skEmpresaSocioCliente']) ? 'style="display:none;"': ''); ?>>
                         <div class="form-group">
                             <h4 class="example-title"><b class="text-danger">*</b> RAZÓN SOCIAL / NOMBRE:</h4>
-                            <input class="form-control" name="sRazonSocial" id="sRazonSocial" value="<?php echo (isset($result['sRazonSocial'])) ? $result['sRazonSocial'] : ''; ?>" placeholder="RAZÓN SOCIAL" autocomplete="off" type="text">
+                            <input class="form-control" onkeyup="this.value = this.value.toUpperCase();" name="sRazonSocial" id="sRazonSocial" value="<?php echo (isset($result['sRazonSocial'])) ? $result['sRazonSocial'] : ''; ?>" placeholder="RAZÓN SOCIAL" autocomplete="off" type="text">
                         </div>
                     </div>
 
                     <div class="col-md-4 col-lg-4 cliente_nuevo" <?php echo (isset($result['skEmpresaSocioCliente']) ? 'style="display:none;"': ''); ?>>
                         <div class="form-group">
                             <h4 class="example-title"><b class="text-danger"></b>RFC:</h4>
-                            <input class="form-control" name="sRFC" id="sRFC" value="<?php echo (isset($result['sRFC'])) ? $result['sRFC'] : ''; ?>" placeholder="XAXX010101000" autocomplete="off" type="text">
+                            <input class="form-control" onkeyup="this.value = this.value.toUpperCase();" name="sRFC" id="sRFC" value="<?php echo (isset($result['sRFC'])) ? $result['sRFC'] : ''; ?>" placeholder="XAXX010101000" autocomplete="off" type="text">
                         </div>
                     </div>
 
@@ -83,21 +83,21 @@ if (isset($data['cotizacionTerminosCondiciones'])) {
                     <div class="col-md-4 col-lg-4">
                         <div class="form-group">
                             <h4 class="example-title"><b class="text-danger"></b>DIRECCIÓN:</h4>
-                            <input class="form-control" name="sDireccion" value="<?php echo (isset($result['sDireccion'])) ? $result['sDireccion'] : ''; ?>" placeholder="DIRECCIÓN" autocomplete="off" type="text">
+                            <input class="form-control" onkeyup="this.value = this.value.toUpperCase();" name="sDireccion" value="<?php echo (isset($result['sDireccion'])) ? $result['sDireccion'] : ''; ?>" placeholder="DIRECCIÓN" autocomplete="off" type="text">
                         </div>
                     </div>
 
                     <div class="col-md-4 col-lg-4">
                         <div class="form-group">
                             <h4 class="example-title"><b class="text-danger"></b>RPU:</h4>
-                            <input class="form-control" name="sRPU" value="<?php echo (isset($result['sRPU'])) ? $result['sRPU'] : ''; ?>" placeholder="RPU" autocomplete="off" type="text">
+                            <input class="form-control" onkeyup="this.value = this.value.toUpperCase();" name="sRPU" value="<?php echo (isset($result['sRPU'])) ? $result['sRPU'] : ''; ?>" placeholder="RPU" autocomplete="off" type="text">
                         </div>
                     </div>
 
                     <div class="col-md-4 col-lg-4">
                         <div class="form-group">
                             <h4 class="example-title"><b class="text-danger"></b>TELÉFONO:</h4>
-                            <input class="form-control" name="sTelefono" value="<?php echo (isset($result['sTelefono'])) ? $result['sTelefono'] : ''; ?>" placeholder="TELÉFONO" autocomplete="off" type="text">
+                            <input class="form-control" onkeyup="this.value = this.value.toUpperCase();" name="sTelefono" value="<?php echo (isset($result['sTelefono'])) ? $result['sTelefono'] : ''; ?>" placeholder="TELÉFONO" autocomplete="off" type="text">
                         </div>
                     </div>
 
@@ -169,7 +169,7 @@ if (isset($data['cotizacionTerminosCondiciones'])) {
                              <i class="icon wb-help-circle help-text" aria-hidden="true"
                                     data-content="OBSERVACIONES DE COTIZACIÓN (APARECEN EN LA COTIZACIÓN DEBAJO DE LOS PRODUCTOS)"
                                     data-trigger="hover"></i></h4>
-                             <textarea class="form-control"  name="sCondicion" placeholder="Condicion"><?php echo (isset($result['sCondicion'])) ? ($result['sCondicion']) : ''; ?></textarea>
+                             <textarea class="form-control" onkeyup="this.value = this.value.toUpperCase();" name="sCondicion" placeholder="Condicion"><?php echo (isset($result['sCondicion'])) ? ($result['sCondicion']) : ''; ?></textarea>
                          </div>
                      </div>
                      <div class="col-md-12 col-lg-12">
@@ -178,7 +178,7 @@ if (isset($data['cotizacionTerminosCondiciones'])) {
                              <i class="icon wb-help-circle help-text" aria-hidden="true"
                                     data-content="OBSERVACIONES INTERNAS (NO APARECEN EN LA COTIZACIÓN)"
                                     data-trigger="hover"></i></h4>
-                             <textarea class="form-control"  name="sObservaciones" placeholder="Descripcion de la Cotizacion"><?php echo (isset($result['sObservaciones'])) ? ($result['sObservaciones']) : ''; ?></textarea>
+                             <textarea class="form-control" onkeyup="this.value = this.value.toUpperCase();" name="sObservaciones" placeholder="Descripcion de la Cotizacion"><?php echo (isset($result['sObservaciones'])) ? ($result['sObservaciones']) : ''; ?></textarea>
                          </div>
                      </div>
                  </div>
@@ -205,7 +205,7 @@ if (isset($data['cotizacionTerminosCondiciones'])) {
                                     class="icon wb-help-circle help-text" aria-hidden="true"
                                     data-content="Promedio de Kw gastados por bimestre"
                                     data-trigger="hover"></i></h4>
-                        <input class="form-control" name="fKwGastados" value="<?php echo (isset($result['fKwGastados'])) ? $result['fKwGastados'] : ''; ?>" placeholder="KW Gastados" autocomplete="off" type="text" >
+                        <input class="form-control" onkeyup="this.value = this.value.toUpperCase();" name="fKwGastados" value="<?php echo (isset($result['fKwGastados'])) ? $result['fKwGastados'] : ''; ?>" placeholder="KW Gastados" autocomplete="off" type="text" >
 
                     </div>
                 </div>
@@ -215,7 +215,7 @@ if (isset($data['cotizacionTerminosCondiciones'])) {
                                     class="icon wb-help-circle help-text" aria-hidden="true"
                                     data-content="Capturar el costo promedio del recibo Bimestral"
                                     data-trigger="hover"></i></h4>
-                        <input class="form-control" name="fCostoRecibo" value="<?php echo (isset($result['fCostoRecibo'])) ? $result['fCostoRecibo'] : '0'; ?>" placeholder="COSTO RECIBO" autocomplete="off" type="text" >
+                        <input class="form-control" onkeyup="this.value = this.value.toUpperCase();" name="fCostoRecibo" value="<?php echo (isset($result['fCostoRecibo'])) ? $result['fCostoRecibo'] : '0'; ?>" placeholder="COSTO RECIBO" autocomplete="off" type="text" >
 
                         </div>
                     </div>

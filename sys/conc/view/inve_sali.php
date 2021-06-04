@@ -23,7 +23,7 @@ if (isset($data['datos'])) {
 
               <div class="col-md-4 col-lg-4">
                      <div class="form-group">
-                             <h4 class="example-title">USUARIO <span class="required text-danger">*</span></h4>
+                             <h4 class="example-title"><span class="required text-danger">*</span> RESPONSABLE</h4>
                              <select id="skUsuarioBaja"  name="skUsuarioBaja" class="form-control" data-plugin="select2" select2Simple>
                                  <option value="">Seleccionar</option>
                                  <?php
@@ -42,9 +42,9 @@ if (isset($data['datos'])) {
                    
                    <div class="col-md-12 col-lg-12">
                          <div class="form-group">
-                             <h4 class="example-title"> DESCRIPCIÓN  
+                             <h4 class="example-title"> OBSERVACIONES  
                               </h4>
-                             <textarea class="form-control"  name="sDescripcionBaja" placeholder="DESCRIPCIÓN"></textarea>
+                             <textarea class="form-control"  name="sDescripcionBaja" placeholder="OBSERVACIONES"></textarea>
                          </div>
                      </div>
                      <?php if($result['iDetalle'] == 0){?>
@@ -121,10 +121,10 @@ if (isset($data['datos'])) {
 <script type="text/javascript">
    
 
-  
+   core.formValidaciones.fields = conc.inve_sali.validaciones;
     $(document).ready(function () {
       $('#core-guardar').formValidation(core.formValidaciones);
-      $("#skUsuarioBaja").select2({placeholder: "USUARIO", allowClear: true });
+      $("#skUsuarioBaja").select2({placeholder: "RESPONSABLE", allowClear: true });
       $('#filter_inventario').keyup(function () {
             var rex = new RegExp($(this).val(), 'i');
             $('.tbody_inventario tr').hide();

@@ -71,17 +71,18 @@ conc.conc_inde.dataTableConf = {
     'columns': [
         {'title': 'E', 'data': 'estatus', 'dataType': 'string', 'tooltip': 'Estatus', 'filterT': 'Estatus'},
         {'title': 'Cantidad', 'data': 'fCantidad', 'dataType': 'int','tooltip': 'Cantidad'},
-        {'title': 'CODIGO', 'data': 'sCodigo', 'dataType': 'string','tooltip': 'CODIGO'},
+        {'title': 'Código', 'data': 'sCodigo', 'dataType': 'string','tooltip': 'CODIGO'},
         {'title': 'Nombre', 'data': 'sNombre', 'dataType': 'string'},
         {'title': 'Usuario Creacion', 'data': 'usuarioCreacion', 'dataType': 'string'},
         {'title': 'F. Creacion', 'data': 'dFechaCreacion', 'dataType': 'date'},
         {'title': 'Proveedor', 'data': 'proveedor', 'dataType': 'string'},
+        {'title': 'Tipo Inventario', 'data': 'tipoInventario', 'dataType': 'string'}
     ],
 
     "drawCallback": function () {
         core.dataTable.contextMenuCore(true);
         core.dataTable.changeColumnColor(1, 'success');
-        core.dataTable.fastFilters(1, [], true);
+        core.dataTable.fastFilters(2, [], true);
         $('[data-toggle="tooltip"]').tooltip();
     },
     "columnDefs": [
@@ -120,54 +121,6 @@ conc.conc_form.validaciones = {
     }
 
 };
-
-conc.inve_inde = {};
-conc.inve_inde.dataTableConf = {
-    'serverSide': true,
-    'ajax': {
-        'url': window.location.href,
-        'type': 'POST',
-        'data': function (data) {
-            data.axn = 'consulta';
-            data.filters = core.dataFilterSend;
-            data.generarExcel = core.generarExcel;
-        }
-    },
-    'axn': 'consulta',
-    'order': [[4, "desc"]],
-    'columns': [
-        {'title': 'E', 'data': 'estatus', 'dataType': 'string', 'tooltip': 'Estatus', 'filterT': 'Estatus'},
-        {'title': 'Cantidad', 'data': 'fCantidad', 'dataType': 'int','tooltip': 'Cantidad'},
-        {'title': 'Código', 'data': 'sCodigo', 'dataType': 'string','tooltip': 'CODIGO'},
-        {'title': 'Nombre', 'data': 'sNombre', 'dataType': 'string'},
-        {'title': 'Usuario Creacion', 'data': 'usuarioCreacion', 'dataType': 'string'},
-        {'title': 'F. Creacion', 'data': 'dFechaCreacion', 'dataType': 'date'},
-        {'title': 'Proveedor', 'data': 'proveedor', 'dataType': 'string'},
-    ],
-
-    "drawCallback": function () {
-        core.dataTable.contextMenuCore(true);
-        core.dataTable.changeColumnColor(1, 'success');
-        core.dataTable.fastFilters(1, [], true);
-        $('[data-toggle="tooltip"]').tooltip();
-    },
-    "columnDefs": [
-        {
-            "targets": [0],
-            "width": '20px',
-            "createdCell": function (td, cellData, rowData, row, col) {
-                ((rowData.estatusIcono) ? $(td).html('<i class="' + rowData.estatusIcono + '"></i>') : $(td).html(cellData));
-                $(td).addClass('text-center ' + ((rowData.estatusColor) ? rowData.estatusColor : 'text-primary'));
-                ((rowData.estatusIcono) ? $(td).find('i').attr({"title": cellData, "data-toggle": "tooltip", "data-placement": "rigth"}) : '');
-            }
-        },
-        {
-            "targets": [1,2],
-            "width": '20px'
-        }
-    ]
-}
-var conc = {};
 
 conc.prod_inde = {};
 
@@ -221,56 +174,7 @@ conc.prod_form.validaciones = {
     }
 };
 
-conc.conc_inde = {};
 conc.conc_form = {};
-
-conc.conc_inde.dataTableConf = {
-    'serverSide': true,
-    'ajax': {
-        'url': window.location.href,
-        'type': 'POST',
-        'data': function (data) {
-            data.axn = 'consulta';
-            data.filters = core.dataFilterSend;
-            data.generarExcel = core.generarExcel;
-        }
-    },
-    'axn': 'consulta',
-    'order': [[5, "desc"]],
-    'columns': [
-        {'title': 'E', 'data': 'estatus', 'dataType': 'string', 'tooltip': 'Estatus', 'filterT': 'Estatus'},
-        {'title': 'Cant', 'data': 'fCantidad', 'dataType': 'int','tooltip': 'Cantidad'},
-        {'title': 'Código', 'data': 'sCodigo', 'dataType': 'string','tooltip': 'CODIGO'},
-        {'title': 'Nombre', 'data': 'sNombre', 'dataType': 'string'},
-        {'title': 'Usuario Creacion', 'data': 'usuarioCreacion', 'dataType': 'string'},
-        {'title': 'F. Creacion', 'data': 'dFechaCreacion', 'dataType': 'date'},
-        {'title': 'Proveedor', 'data': 'proveedor', 'dataType': 'string'},
-    ],
-
-    "drawCallback": function () {
-        core.dataTable.contextMenuCore(true);
-        core.dataTable.changeColumnColor(2, 'success');
-        core.dataTable.fastFilters(2, [], true);
-        $('[data-toggle="tooltip"]').tooltip();
-    },
-    "columnDefs": [
-        {
-            "targets": [0],
-            "width": '20px',
-            "createdCell": function (td, cellData, rowData, row, col) {
-                ((rowData.estatusIcono) ? $(td).html('<i class="' + rowData.estatusIcono + '"></i>') : $(td).html(cellData));
-                $(td).addClass('text-center ' + ((rowData.estatusColor) ? rowData.estatusColor : 'text-primary'));
-                ((rowData.estatusIcono) ? $(td).find('i').attr({"title": cellData, "data-toggle": "tooltip", "data-placement": "rigth"}) : '');
-
-            }
-        },
-        {
-            "targets": [1,2],
-            "width": '20px'
-            
-        }
-    ]
-}
 
 conc.conc_form.validaciones = {
     sNombre: {
@@ -312,6 +216,7 @@ conc.inve_inde.dataTableConf = {
         {'title': 'Usuario Creacion', 'data': 'usuarioCreacion', 'dataType': 'string'},
         {'title': 'F. Creacion', 'data': 'dFechaCreacion', 'dataType': 'date'},
         {'title': 'Proveedor', 'data': 'proveedor', 'dataType': 'string'},
+        {'title': 'Tipo Inventario', 'data': 'tipoInventario', 'dataType': 'string'}
     ],
 
     "drawCallback": function () {
@@ -346,4 +251,16 @@ conc.inve_form = {};
 
 conc.inve_form.validaciones = {
     
+};
+
+conc.inve_sali = {};
+
+conc.inve_sali.validaciones = {
+    skUsuarioBaja: {
+        validators: {
+            notEmpty: {
+                message: 'DATO REQUERIDO'
+            }
+        }
+    }
 };

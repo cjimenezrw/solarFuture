@@ -22,8 +22,27 @@ Class Conc_Model Extends DLOREAN_Model {
             skEstatus = 'EL',
             dFechaModificacion = NOW(),
             skUsuarioModificacion = ".escape($_SESSION['usuario']['skUsuario'])."
-            WHERE skConceptoInventario NOT IN (".mssql_where_in($this->conc['skConceptoInventario']).") AND skEstatus = 'NU'";
+            WHERE skEstatus = 'NU' AND skConcepto = ".escape($this->conc['skConcepto']);
+
+            if(isset($this->conc['skConceptoInventario']) && is_array($this->conc['skConceptoInventario'])){
+                $sql .= " AND skConceptoInventario NOT IN (".mssql_where_in($this->conc['skConceptoInventario']).") ";
+            }
            
+        $result = Conn::query($sql);
+        if (!$result) {
+            return FALSE;
+        }
+        return TRUE;
+    }
+
+    public function actualizarCantidadProductosInventario(){
+        $sql = "UPDATE cat_conceptos SET 
+            fCantidad = (SELECT COUNT(skConceptoInventario) AS fCantidad 
+                FROM rel_conceptos_inventarios
+                WHERE skConcepto = ".escape($this->conc['skConcepto'])." AND skEstatus = 'NU'
+            ) 
+        WHERE skConcepto = ".escape($this->conc['skConcepto']);
+        
         $result = Conn::query($sql);
         if (!$result) {
             return FALSE;

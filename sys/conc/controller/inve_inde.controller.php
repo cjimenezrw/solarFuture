@@ -25,6 +25,7 @@ Class Inve_inde_Controller Extends Conc_Model {
             cc.iFolio,
             cc.fCantidad,
             cc.iDetalle,
+            IF(cc.iDetalle = 1, 'CON DETALLE', 'SIN DETALLE') AS tipoInventario,
             cc.sCodigo,
             cc.dFechaCreacion,
             cc.sNombre,

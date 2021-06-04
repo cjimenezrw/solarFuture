@@ -51,11 +51,13 @@ Class Inve_form_Controller Extends Conc_Model {
     }
 
       public function guardar_concepto_productos(){
-          $this->data['success'] = TRUE;
-          $this->conc['axn'] = 'guardar_concepto_inventario';
-          $this->conc['skEstatus'] = 'NU';
-        
-        if(isset($this->conc['skConceptoInventario']) && is_array($this->conc['skConceptoInventario'])){
+        $this->data['success'] = TRUE;
+        $this->conc['axn'] = 'guardar_concepto_inventario';
+        $this->conc['skEstatus'] = 'NU';
+    
+        $_getConcepto = parent::_getConcepto();
+
+        if(isset($_getConcepto['iDetalle']) && $_getConcepto['iDetalle'] == 1){
             
             // ELIMINAMOS LOS PRODUCTOS DE INVENTARIO QUE NO VIENEN EN EL FORMULARIO
                 $eliminarProductosInventario = parent::eliminarProductosInventario();
@@ -66,24 +68,34 @@ Class Inve_form_Controller Extends Conc_Model {
                 }
             
             // AGREGAMOS LOS PRODUCTOS DE INVENTARIO CON NÚMERO DE SERIE
-                $skConceptoInventario = $this->conc['skConceptoInventario'];
-                $sNumeroSerie = $this->conc['sNumeroSerie'];
-                foreach($skConceptoInventario AS $k=>$v){
-                    $this->conc['skConceptoInventario'] = $v;
-                    $this->conc['sNumeroSerie'] = $sNumeroSerie[$k];
-                    $this->conc['fCantidad'] = 1;
+                if(isset($this->conc['skConceptoInventario']) && is_array($this->conc['skConceptoInventario'])){
+                    $skConceptoInventario = $this->conc['skConceptoInventario'];
+                    $sNumeroSerie = $this->conc['sNumeroSerie'];
+                    foreach($skConceptoInventario AS $k=>$v){
+                        $this->conc['skConceptoInventario'] = $v;
+                        $this->conc['sNumeroSerie'] = $sNumeroSerie[$k];
+                        $this->conc['fCantidad'] = 1;
 
-                    $stpCUD_conceptosInventario = parent::stpCUD_conceptosInventario();
-                
-                    if(!$stpCUD_conceptosInventario || isset($stpCUD_conceptosInventario['success']) && $stpCUD_conceptosInventario['success'] != 1){
-                        $this->data['success'] = FALSE;
-                        $this->data['message'] = 'HUBO UN ERROR AL GUARDAR LOS PRODUCTOS DEL CONCEPTO';
-                        return $this->data;
+                        $stpCUD_conceptosInventario = parent::stpCUD_conceptosInventario();
+                    
+                        if(!$stpCUD_conceptosInventario || isset($stpCUD_conceptosInventario['success']) && $stpCUD_conceptosInventario['success'] != 1){
+                            $this->data['success'] = FALSE;
+                            $this->data['message'] = 'HUBO UN ERROR AL GUARDAR LOS PRODUCTOS DEL CONCEPTO';
+                            return $this->data;
+                        }
                     }
                 }
 
-        }else{
+                // ELIMINAMOS LOS PRODUCTOS DE INVENTARIO QUE NO VIENEN EN EL FORMULARIO
+                    $actualizarCantidadProductosInventario = parent::actualizarCantidadProductosInventario();
+                    if(!$actualizarCantidadProductosInventario){
+                        $this->data['success'] = FALSE;
+                        $this->data['message'] = 'HUBO UN ERROR AL AC TUALIZAR LA CANTIDAD DE PRODUCTOS DE INVENTARIO';
+                        return $this->data;
+                    }
 
+        }else{
+            
             // AGREGAMOS LOS PRODUCTOS DE INVENTARIO CON CANTIDAD
                 $stpCUD_conceptosInventario = parent::stpCUD_conceptosInventario();
             
@@ -93,8 +105,6 @@ Class Inve_form_Controller Extends Conc_Model {
                     return $this->data;
                 }
         }
-
-        $this->conc['skConcepto'] = $stpCUD_conceptosInventario['skConcepto'];
 
         $this->data['success'] = TRUE;
         $this->data['message'] = 'DATOS DE LOS PRODUCTOS GUARDADOS';

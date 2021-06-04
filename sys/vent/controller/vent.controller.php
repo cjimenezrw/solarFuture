@@ -35,7 +35,9 @@ Class Vent_Controller Extends Vent_Model {
             case 'cotizacionPDF':
                 $coti_inde->cotizacionPDF();
                 break;
-                
+            case 'ventaPDF':
+                $coti_inde->ventaPDF();
+                break;
             case 'cancelarVenta':
                 header('Content-Type: application/json');
                 echo json_encode($coti_inde->cancelarVenta(),true,512);
@@ -114,8 +116,9 @@ Class Vent_Controller Extends Vent_Model {
             break;
             case 'formatoPDF':
                 echo $coti_deta->formatoPDF();
-                /*header('Content-Type: application/json');
-                echo json_encode($coti_deta->formatoPDF());*/
+            break;
+            case 'formatoVentaPDF':
+                echo $coti_deta->formatoVentaPDF();
             break;
             default:
                 $this->data = $coti_deta->consultar();

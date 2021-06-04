@@ -64,6 +64,19 @@ vent.coti_inde.descargarCotizacionPDF = function descargarCotizacionPDF(obj){
     return true;
 };
 
+vent.coti_inde.visualizarVentaPDF = function visualizarCotizacionPDF(obj){
+    window.open(core.SYS_URL+'sys/vent/coti-deta/detalle-cotizacion/'+obj.id+'/?axn=formatoVentaPDF');
+    return true;
+};
+
+vent.coti_inde.descargarVentaPDF = function descargarCotizacionPDF(obj){
+    core.download(window.location.href,'GET', {
+        axn: 'ventaPDF',
+        id: obj.id
+    });
+    return true;
+};
+
 
 
 vent.coti_form.validaciones = {

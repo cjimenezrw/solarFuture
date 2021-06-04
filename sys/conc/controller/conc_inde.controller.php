@@ -30,6 +30,8 @@ Class Conc_inde_Controller Extends Conc_Model {
         cc.dFechaCreacion,
         cc.sNombre,
         #SUBSTRING(cc.sNombre, 1, 50) AS sNombre,
+        cc.iDetalle,
+        IF(cc.iDetalle = 1, 'CON DETALLE', 'SIN DETALLE') AS tipoInventario,
         cc.skEstatus,
         cc.fCantidad,
         ce.sNombre AS estatus,

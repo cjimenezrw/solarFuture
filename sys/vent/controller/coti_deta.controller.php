@@ -87,4 +87,36 @@ Class Coti_deta_Controller Extends Vent_Model {
         return true;
     }
 
+    public function formatoVentaPDF() {
+        
+        $this->data = $this->consultar();
+        
+        ob_start();
+            $this->load_view('formato_venta', $this->data, NULL, FALSE);
+            $formato_cotizacion = ob_get_contents();
+        ob_end_clean();
+
+        parent::pdf([
+            [
+                'content' => $formato_cotizacion,
+                'defaultWatermark' => false,
+                'header' => '<div></div>',
+                'footer' => '<div></div>',
+                'defaultFooter' => false,
+                'defaultHeader' => false,
+                'pdf' => [
+                    'contentMargins' => [10, 15, 5, 5],
+                    'format' => 'LETTER',
+                    'vertical' => 'L',
+                    'footerMargin' => 5,
+                    'headerMargin' => 5,
+                    'fileName' => 'Venta '.$this->data['datos']['iFolio'].'.pdf',
+                    'directDownloadFile' => (isset($_GET['directDownloadFile']) && $_GET['directDownloadFile'] == true ? true : false)
+                ]
+            ]
+        ]);
+
+        return true;
+    }
+
 }

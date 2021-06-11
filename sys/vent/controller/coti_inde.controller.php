@@ -78,9 +78,10 @@ Class Coti_inde_Controller Extends Vent_Model {
                     'menuEmergente5'=>($row['skEstatus'] == 'NU' ? SELF::HABILITADO : SELF::DESHABILITADO),
                     'menuEmergente6'=>($row['skEstatus'] == 'VE' ? SELF::HABILITADO : SELF::DESHABILITADO),
                     'menuEmergente8'=>($row['skEstatus'] == 'NU' ? SELF::HABILITADO : SELF::DESHABILITADO),
-                    'menuEmergente10'=>SELF::OCULTO,
+                    'menuEmergente9'=>($row['skEstatus'] == 'NU' ? SELF::HABILITADO : SELF::DESHABILITADO),
+                    'menuEmergente10'=>($row['skEstatus'] == 'NU' ? SELF::HABILITADO : SELF::DESHABILITADO),
                     'menuEmergente11'=>($row['skEstatus'] == 'VE' ? SELF::HABILITADO : SELF::DESHABILITADO),
-                    'menuEmergente12'=>($row['skEstatus'] == 'VE' ? SELF::OCULTO : SELF::OCULTO),
+                    'menuEmergente12'=>($row['skEstatus'] == 'VE' ? SELF::HABILITADO : SELF::DESHABILITADO)
                 ];
 
                 $row['dFechaCreacion'] = ($row['dFechaCreacion']) ? date('d/m/Y  H:i:s', strtotime($row['dFechaCreacion'])) : '';

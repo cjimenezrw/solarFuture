@@ -30,7 +30,7 @@
 
                     <div class="grid galler_2_btm_section">
 
-                        <div class="grid-item rresentation branding * pd_2">
+                        <div class="grid-item paneles branding * pd_2">
                             <div class="gallery-list img-effect zoom-slow">
                                 <div class="sp_img_box_overlay"></div>
                                 <div class="over">
@@ -45,7 +45,7 @@
                             </div>
                         </div>
 
-                        <div class="grid-item ux * photoshop pd_2">
+                        <div class="grid-item paneles photoshop pd_2">
                             <div class="gallery-list img-effect zoom-slow">
                                 <div class="sp_img_box_overlay"></div>
                                 <div class="over">
@@ -60,7 +60,7 @@
                             </div>
                         </div>
 
-                        <div class="grid-item ux branding photoshop pd_2">
+                        <div class="grid-item paneles photoshop pd_2">
                             <div class="gallery-list img-effect zoom-slow">
                                 <div class="sp_img_box_overlay"></div>
                                 <div class="over">
@@ -75,7 +75,7 @@
                             </div>
                         </div>
 
-                        <div class="grid-item rresentation paneles branding * pd_2">
+                        <div class="grid-item paneles paneles branding * pd_2">
                             <div class="gallery-list img-effect zoom-slow">
                                 <div class="sp_img_box_overlay"></div>
                                 <div class="over">
@@ -89,7 +89,7 @@
                                 </div>
                             </div>
                         </div>
-							<div class="grid-item rresentation paneles * pd_2">
+							<div class="grid-item paneles paneles * pd_2">
                             <div class="gallery-list img-effect zoom-slow">
                                 <div class="sp_img_box_overlay"></div>
                                 <div class="over">
@@ -103,7 +103,7 @@
                                 </div>
                             </div>
                         </div>
-						<div class="grid-item rresentation paneles branding * pd_2">
+						<div class="grid-item paneles paneles branding * pd_2">
                             <div class="gallery-list img-effect zoom-slow">
                                 <div class="sp_img_box_overlay"></div>
                                 <div class="over">
@@ -117,7 +117,7 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="grid-item rresentation photoshop branding pd_2">
+                        <div class="grid-item paneles photoshop branding pd_2">
                             <div class="gallery-list img-effect zoom-slow">
                                 <div class="sp_img_box_overlay"></div>
                                 <div class="over">
@@ -162,7 +162,7 @@
                             </div>
 
                         </div>
-                        <div class="grid-item paneles photoshop pd_2">
+                        <div class="grid-item calentadores photoshop pd_2">
                             <div class="gallery-list img-effect zoom-slow">
                                 <div class="sp_img_box_overlay"></div>
                                 <div class="over">
@@ -170,8 +170,8 @@
                                     <div class="tab_img_overlay">
                                         <a href="images/10.jpeg" class="venobox info" data-title="PANELES SOLARES" data-gall="gall12">
                                             <i class="fa fa-arrows-alt"></i> </a>
-                                        <h1>Peneles Solares</h1>
-                                        <p>(Paneles Solares)</p>
+                                        <h1>Calentador Solar</h1>
+                                        <p>(Calentadores)</p>
                                     </div>
                                 </div>
                             </div>

@@ -39,7 +39,7 @@
                     <div class="col-lg-4 col-md-4 col-xs-12 col-sm-6">
                         <div class="gb_icon_wrapper">
                             <div class="gb_icon_img">
-                                <img src="images/spec_3.png" alt="title">
+                                <img src="images/ser_img_6.png" alt="title">
                             </div>
                             <div class="gb_icon_content">
                                 <h4><a href="#">¿Cómo  funciona el <br>medidor bidireccional?</a></h4>

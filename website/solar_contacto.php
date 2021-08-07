@@ -12,10 +12,10 @@
                     <div class="sw_left_heading_wraper sw_dark_heading_wraper">
                         <h1 id="section-contacto">CONTÁCTANOS</h1>
                         <img src="images/hd_line_dark.png" alt="title">
-                        <div class="col-md-12"><p>Av. Elias Zamora Verduzco Lote 4 Manzana 244, Salagua, Manzanillo, Colima</p></div>
-                        <div class="col-md-6"><p><i class="fa fa-phone" aria-hidden="true"></i> (314)137-8133</p></div>
-                        <div class="col-md-6"><p><i class="fa fa-mobile-phone" aria-hidden="true"></i> (314)121-3237</p></div>
-                        <div class="col-md-12"><p><i class="fa fa-envelope" aria-hidden="true"></i> ventas@solarfuturemanzanillo.com</p></div>
+                        <div class="col-md-12"><p>Av. Elias Zamora Verduzco #3220 "A", Salagua, Manzanillo, Colima</p></div>
+                        <div class="col-md-6"><p><i class="fa fa-phone" aria-hidden="true"></i> (314) 129 1339</p></div>
+                        <div class="col-md-6"><p><i class="fa fa-mobile-phone" aria-hidden="true"></i> (314) 148 1088</p></div>
+                        <div class="col-md-12"><p><i class="fa fa-envelope" aria-hidden="true"></i> ventas1@sfmzo.com</p></div>
                     </div>
                     <div class="col-md-12 clearfix"><hr><br></div>
                     <div class="row">
@@ -35,6 +35,16 @@
                                 <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
                                     <div class="contect_form1">
                                         <input type="email" name="form-email" id="form-email" placeholder="correo@dominio.com" class="require" data-valid="email" data-error="El correo electrónico debe de ser correcto">
+                                    </div>
+                                </div>
+                                <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+                                    <div class="contect_form1">
+                                        <input type="text" name="form-numero-servicio" id="form-numero-servicio" placeholder="Número de Servicio CFE">
+                                    </div>
+                                </div>
+                                <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+                                    <div class="contect_form1">
+                                    <input type="text" name="form-kw" id="form-kw" placeholder="KW a Generar">
                                     </div>
                                 </div>
                                 <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">

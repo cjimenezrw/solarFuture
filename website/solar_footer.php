@@ -19,8 +19,8 @@
                                 <div class="abotus_content">
                                     <p>Somos profesionales certificados con los mejores estándares de calidad en el diseño, instalación, puesta en marcha, monitoreo y mantenimiento de los sistemas solares.</p>
                                     <ul>
-                                        <li><a href="www.facebook.com/solarfuturemanzanillo"><i class="fa fa-facebook"></i></a></li>
-                                        <li><a href="#"><i class="fa fa-whatsapp"></i></a></li>
+                                        <li><a href="https://www.facebook.com/solarfuturemanzanillo/" target="_blank"><i class="fa fa-facebook"></i></a></li>
+                                        <li><a href="https://wa.me/5213141481088/"><i class="fa fa-whatsapp"></i></a></li>
                                         <!--
                                         <li><a href="#"><i class="fa fa-twitter"></i></a></li>
                                         <li><a href="#"><i class="fa fa-youtube-play"></i></a></li>
@@ -44,7 +44,7 @@
                                     </li>
                                     <li><a class="section-scroll" href="#section-faq"><i class="fa fa-angle-right"></i>Preg. Frecuentes </a>
                                     </li>
-                                    <li><a class="section-scroll" href="#section-galeria"><i class="fa fa-angle-right"></i>Galera</a>
+                                    <li><a class="section-scroll" href="#section-galeria"><i class="fa fa-angle-right"></i>Galería</a>
                                     </li>
                                     <li><a class="section-scroll" href="#section-contacto"><i class="fa fa-angle-right"></i>Contacto</a> </li>
                                 </ul>
@@ -74,15 +74,12 @@
                                 <h4>Contacto</h4>
                                 <img src="images/hd_line_dark.png" alt="title" class="pd_btm_3">
                                 <ul>
-									<li>
-                                     <h1>+(314)137-8133</h1></li>
-									 <li><a href="#"><i class="flaticon-new-email-outline"></i>ventas@solarfuturemanzanillo.com</a>
-                                    </li>
-									 <li><a href="#"><i class="flaticon-internet"></i>solarfuturemanzanillo.com</a>
-                                    </li>
-                                  
-                                    <li><i class="flaticon-placeholder"></i>Av. Elias Zamora Verduzco Lote 4 Manzana 244, Salagua, Manzanillo, Colima
-                                    </li>                                   
+                                    <li><i class="flaticon-placeholder"></i>Av. Elias Zamora Verduzco #3220 "A", Salagua, Manzanillo, Colima</li> 
+                                    <li><a href="#"><i class="fa fa-phone" aria-hidden="true"></i> (314) 129 1339</a></li>
+                                    <li><a href="#"><i class="fa fa-mobile-phone" aria-hidden="true"></i> (314) 148 1088</a></li>
+                                    <li><a href="#"><i class="flaticon-new-email-outline"></i>ventas1@sfmzo.com</a></li>
+                                    <li><a href="#"><i class="flaticon-internet"></i>https://sfmzo.com</a></li>
+                                    <li><a href="#"><i class="flaticon-internet"></i>https://solarfuturemanzanillo.com</a></li>                                  
                                 </ul>
                             </div>
                         </div>
@@ -90,7 +87,7 @@
                 </div>
                 <div class="col-lg-12 col-md-12 col-xs-12 col-sm-12">
                     <div class="section3_copyright">
-                        <p>Copyright 2021 <a href=""> SolarFuture</a>.Todos los derechos Reservados<a href="">SoftLab</a></p>
+                        <p>Copyright <?php echo date('Y'); ?> <a href="#section-inicio"> SolarFuture</a>.Todos los derechos Reservados<a href="https://softlab.mx/" target="_blank">SoftLab</a></p>
                     </div>
                 </div>
             </div>
@@ -143,6 +140,8 @@
                 nombre: $("#form-name").val(),
                 telefono: $("#form-phone").val(),
                 correo: $("#form-email").val(),
+                numeroServicio: $("#form-numero-servicio").val(),
+                kw: $("#form-kw").val(),
                 asunto: $("#form-subject").val(),
                 mensaje: $("#form-message").val()
             },

@@ -34,7 +34,7 @@
                                         <li class="dropdown tc_login_btn">
                                             <a class="dropdown-toggle hvr-float-shadow active waves-effect waves-light" data-toggle="dropdown" href="#"><i class="fa fa-ellipsis-v"></i></a>
                                             <ul class="dropdown-menu tc_menu_fixed_border">
-                                                <li class="dropdown_hover"><a href="#">Iniciar Sesión</a></li>
+                                                <li class="dropdown_hover"><a href="/portal/">Portal Solar Future</a></li>
                                             </ul>
                                         </li>
                                     </ul>

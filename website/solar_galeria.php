@@ -18,17 +18,29 @@
                         <div class="filter filter-demo portfolio-nav galery_2_wraper my_slide_filter">
                             <ul>
                                 <li class="button galery_hover_div is-checked waves-effect waves-light waves-ripple" data-filter="*">TODOS </li>
-                                <li class="button galery_hover_div waves-effect waves-light waves-ripple" data-filter=".calentadores">Calentadores</li>
-
-                                <li class="button galery_hover_div waves-effect waves-light waves-ripple" data-filter=".inversores">Inversores</li>
-                            
-
                                 <li class="button galery_hover_div waves-effect waves-light waves-ripple" data-filter=".paneles">Paneles Soalres</li>
+                                <li class="button galery_hover_div waves-effect waves-light waves-ripple" data-filter=".calentadores">Calentadores</li>
+                                <li class="button galery_hover_div waves-effect waves-light waves-ripple" data-filter=".inversores">Inversores</li>
                             </ul>
                         </div>
                     </div>
 
                     <div class="grid galler_2_btm_section">
+
+                        <div class="grid-item paneles branding * pd_2">
+                            <div class="gallery-list img-effect zoom-slow">
+                                <div class="sp_img_box_overlay"></div>
+                                <div class="over">
+                                    <img src="images/0.jpeg" style="width: 295px; height: 227px;" alt="" class="img-responsive" />
+                                    <div class="tab_img_overlay">
+                                        <a href="images/0.jpeg" class="venobox info" data-title="PANELES SOLARES" data-gall="gall12">
+                                            <i class="fa fa-arrows-alt"></i> </a>
+                                        <h1>Peneles Solares</h1>
+                                        <p>(Paneles Solares)</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
 
                         <div class="grid-item paneles branding * pd_2">
                             <div class="gallery-list img-effect zoom-slow">
@@ -45,7 +57,7 @@
                             </div>
                         </div>
 
-                        <div class="grid-item paneles photoshop pd_2">
+                        <div class="grid-item paneles photoshop * pd_2">
                             <div class="gallery-list img-effect zoom-slow">
                                 <div class="sp_img_box_overlay"></div>
                                 <div class="over">
@@ -60,7 +72,7 @@
                             </div>
                         </div>
 
-                        <div class="grid-item paneles photoshop pd_2">
+                        <div class="grid-item paneles photoshop * pd_2">
                             <div class="gallery-list img-effect zoom-slow">
                                 <div class="sp_img_box_overlay"></div>
                                 <div class="over">
@@ -117,7 +129,7 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="grid-item paneles photoshop branding pd_2">
+                        <div class="grid-item paneles photoshop * branding pd_2">
                             <div class="gallery-list img-effect zoom-slow">
                                 <div class="sp_img_box_overlay"></div>
                                 <div class="over">
@@ -132,7 +144,7 @@
                             </div>
 
                         </div>
-                        <div class="grid-item paneles branding pd_2">
+                        <div class="grid-item paneles * branding pd_2">
                             <div class="gallery-list img-effect zoom-slow">
                                 <div class="sp_img_box_overlay"></div>
                                 <div class="over">
@@ -147,7 +159,7 @@
                             </div>
 
                         </div>
-                        <div class="grid-item paneles rresentation pd_2">
+                        <div class="grid-item paneles * rresentation pd_2">
                             <div class="gallery-list img-effect zoom-slow">
                                 <div class="sp_img_box_overlay"></div>
                                 <div class="over">
@@ -162,13 +174,61 @@
                             </div>
 
                         </div>
-                        <div class="grid-item calentadores photoshop pd_2">
+                        <div class="grid-item calentadores * photoshop pd_2">
                             <div class="gallery-list img-effect zoom-slow">
                                 <div class="sp_img_box_overlay"></div>
                                 <div class="over">
                                     <img src="images/10.jpeg" style="width: 295px; height: 227px;" alt="" class="img-responsive" />
                                     <div class="tab_img_overlay">
                                         <a href="images/10.jpeg" class="venobox info" data-title="PANELES SOLARES" data-gall="gall12">
+                                            <i class="fa fa-arrows-alt"></i> </a>
+                                        <h1>Calentador Solar</h1>
+                                        <p>(Calentadores)</p>
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+
+                        <div class="grid-item calentadores * photoshop pd_2">
+                            <div class="gallery-list img-effect zoom-slow">
+                                <div class="sp_img_box_overlay"></div>
+                                <div class="over">
+                                    <img src="images/11.jpeg" style="width: 295px; height: 227px;" alt="" class="img-responsive" />
+                                    <div class="tab_img_overlay">
+                                        <a href="images/11.jpeg" class="venobox info" data-title="PANELES SOLARES" data-gall="gall12">
+                                            <i class="fa fa-arrows-alt"></i> </a>
+                                        <h1>Calentador Solar</h1>
+                                        <p>(Calentadores)</p>
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+
+                        <div class="grid-item calentadores * photoshop pd_2">
+                            <div class="gallery-list img-effect zoom-slow">
+                                <div class="sp_img_box_overlay"></div>
+                                <div class="over">
+                                    <img src="images/12.jpeg" style="width: 295px; height: 227px;" alt="" class="img-responsive" />
+                                    <div class="tab_img_overlay">
+                                        <a href="images/12.jpeg" class="venobox info" data-title="PANELES SOLARES" data-gall="gall12">
+                                            <i class="fa fa-arrows-alt"></i> </a>
+                                        <h1>Calentador Solar</h1>
+                                        <p>(Calentadores)</p>
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+
+                        <div class="grid-item calentadores * photoshop pd_2">
+                            <div class="gallery-list img-effect zoom-slow">
+                                <div class="sp_img_box_overlay"></div>
+                                <div class="over">
+                                    <img src="images/13.jpeg" style="width: 295px; height: 227px;" alt="" class="img-responsive" />
+                                    <div class="tab_img_overlay">
+                                        <a href="images/13.jpeg" class="venobox info" data-title="PANELES SOLARES" data-gall="gall12">
                                             <i class="fa fa-arrows-alt"></i> </a>
                                         <h1>Calentador Solar</h1>
                                         <p>(Calentadores)</p>

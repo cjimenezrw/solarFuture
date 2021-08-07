@@ -146,6 +146,26 @@ Class Vent_Model Extends DLOREAN_Model {
         return Conn::fetch_assoc($result);
     }
 
+    public function _getCotizacionConceptos_inventario(){
+        $sql = "SELECT 
+        cc.sCodigo,
+        cc.sNombre AS concepto,
+        rcc.sDescripcion,
+        rci.sNumeroSerie
+        FROM rel_cotizaciones_conceptos rcc
+        INNER JOIN cat_conceptos cc ON cc.skConcepto = rcc.skConcepto
+        INNER JOIN rel_conceptos_inventarios rci ON rci.skCotizacionConcepto = rcc.skCotizacionConcepto
+        WHERE rcc.skCotizacion = ".escape($this->vent['skCotizacion'])." AND cc.iDetalle = 1
+        ORDER BY cc.sNombre ASC";
+        $result = Conn::query($sql);
+        if (!$result) {
+            return FALSE;
+        }
+        $records = Conn::fetch_assoc_all($result);
+        utf8($records);
+        return $records;
+    }
+
      /**
      * _getCotizacionConceptos
      *

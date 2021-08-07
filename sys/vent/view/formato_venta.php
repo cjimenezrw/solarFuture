@@ -220,4 +220,40 @@ td.text-right {
     </div>
 </div>
 
-<!-- AQUI VA LA INFORMACIÓN DEL PRODUCTO DE LA HOJA 1 !-->
+<!-- AQUI VA LA INFORMACIÓN DE LOS PRODUCTOS DE INVENTARIO !-->
+<?php
+    if (isset($data['conceptosCotizacionInventario'])) {
+?>
+<div class="col-md-12 clearfix"></div>
+<div class="col-md-offset-3 col-md-10 page-invoice-table table-responsive font-size-12" style="margin-top: 50px;">
+    <table class="table text-right">
+	<thead>
+    <tr>
+    <th class="text-center" colspan="3" style="border-bottom: 1px solid white;">PRODUCTOS ENTREGADOS</th>
+    </tr>
+        <tr>
+		<th class="text-center">CÓDIGO</th>
+ 		<th class="text-left">PRODUCTO</th>
+		<th class="text-center">NÚMERO DE SERIE</th>
+	    </tr>
+	</thead>
+	<tbody>
+	    <?php
+	    if (isset($data['conceptosCotizacionInventario'])) {
+		foreach ($data['conceptosCotizacionInventario'] AS $conceptosInventario) {
+		    ?>
+		    <tr>
+			<td style="text-align:center; font-size: 10px; text-transform: uppercase; word-wrap: break-word;"><?php echo $conceptosInventario['sCodigo']; ?></td>
+ 			<td style="text-align:left; font-size: 10px; text-transform: uppercase; word-wrap: break-word;"><?php echo (!empty($conceptosInventario['sDescripcion']) ? $conceptosInventario['sDescripcion'] : $conceptosInventario['concepto']); ?></td>
+            <td style="text-align:center; font-size: 10px; text-transform: uppercase; word-wrap: break-word;"><?php echo (!empty($conceptosInventario['sNumeroSerie']) ? $conceptosInventario['sNumeroSerie'] : $conceptosInventario['sNumeroSerie']); ?></td>
+		    </tr>
+		    <?php
+		}//FOREACH
+        }//ENDIF
+	    ?>
+	</tbody>
+    </table>
+</div>
+<?php 
+    }//ENDIF
+?>

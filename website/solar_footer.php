@@ -20,7 +20,7 @@
                                     <p>Somos profesionales certificados con los mejores estándares de calidad en el diseño, instalación, puesta en marcha, monitoreo y mantenimiento de los sistemas solares.</p>
                                     <ul>
                                         <li><a href="https://www.facebook.com/solarfuturemanzanillo/" target="_blank"><i class="fa fa-facebook"></i></a></li>
-                                        <li><a href="https://wa.me/5213141481088/"><i class="fa fa-whatsapp"></i></a></li>
+                                        <li><a href="https://wa.me/5213141291339/"><i class="fa fa-whatsapp"></i></a></li>
                                         <!--
                                         <li><a href="#"><i class="fa fa-twitter"></i></a></li>
                                         <li><a href="#"><i class="fa fa-youtube-play"></i></a></li>
@@ -75,11 +75,10 @@
                                 <img src="images/hd_line_dark.png" alt="title" class="pd_btm_3">
                                 <ul>
                                     <li><i class="flaticon-placeholder"></i>Av. Elias Zamora Verduzco #3220 "A", Salagua, Manzanillo, Colima</li> 
-                                    <li><a href="#"><i class="fa fa-phone" aria-hidden="true"></i> (314) 129 1339</a></li>
-                                    <li><a href="#"><i class="fa fa-mobile-phone" aria-hidden="true"></i> (314) 148 1088</a></li>
+                                    <li><a href="#"><i class="fa fa-phone" aria-hidden="true"></i> (314) 137 8133</a></li>
+                                    <li><a href="#"><i class="fa fa-mobile-phone" aria-hidden="true"></i> (314) 129 1339</a></li>
                                     <li><a href="#"><i class="flaticon-new-email-outline"></i>ventas1@sfmzo.com</a></li>
-                                    <li><a href="#"><i class="flaticon-internet"></i>https://sfmzo.com</a></li>
-                                    <li><a href="#"><i class="flaticon-internet"></i>https://solarfuturemanzanillo.com</a></li>                                  
+                                    <li><a href="#"><i class="flaticon-internet"></i>https://sfmzo.com</a></li>                              
                                 </ul>
                             </div>
                         </div>

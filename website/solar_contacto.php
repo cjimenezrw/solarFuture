@@ -13,8 +13,8 @@
                         <h1 id="section-contacto">CONTÁCTANOS</h1>
                         <img src="images/hd_line_dark.png" alt="title">
                         <div class="col-md-12"><p>Av. Elias Zamora Verduzco #3220 "A", Salagua, Manzanillo, Colima</p></div>
-                        <div class="col-md-6"><p><i class="fa fa-phone" aria-hidden="true"></i> (314) 129 1339</p></div>
-                        <div class="col-md-6"><p><i class="fa fa-mobile-phone" aria-hidden="true"></i> (314) 148 1088</p></div>
+                        <div class="col-md-6"><p><i class="fa fa-phone" aria-hidden="true"></i> (314) 137 8133</p></div>
+                        <div class="col-md-6"><p><i class="fa fa-mobile-phone" aria-hidden="true"></i> (314) 129 1339</p></div>
                         <div class="col-md-12"><p><i class="fa fa-envelope" aria-hidden="true"></i> ventas1@sfmzo.com</p></div>
                     </div>
                     <div class="col-md-12 clearfix"><hr><br></div>

@@ -1269,17 +1269,21 @@ Class DLOREAN_Model extends Conn {
 
         $_get  = $_GET;
         $_post = $_POST;
+        $_files = $_FILES;
 
         $_GET = (array_key_exists('GET', $params)) ? $params['GET'] : $_GET;
         $_POST = (array_key_exists('POST', $params)) ? $params['POST'] : $_POST;
+        $_FILES = (array_key_exists('FILES', $params)) ? $params['FILES'] : $_FILES;
 
         unset($params['GET']);
         unset($params['POST']);
+        unset($params['FILES']);
 
         $response = call_user_func_array([$ModuleInstance, $callable], array_values($params));
 
         $_GET  = $_get;
         $_POST = $_post;
+        $_FILES = $_files;
 
         return $response;
 

@@ -108,6 +108,16 @@
             float: left;
             width: 100%;
         }
+
+        @media (min-width:320px)  {
+            p.faq-text {
+                font-size: 12px;
+            }
+
+            a.faq-h4 {
+                font-size: 12px !important;
+            }
+        }
     </style>
 
     <!-- favicon link-->

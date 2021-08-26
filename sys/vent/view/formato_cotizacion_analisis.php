@@ -221,7 +221,7 @@ td.text-right {
         <div class="col-md-6" style="font-size:10px;font-weight:normal;">CON PANEL</div>
     </div>
     <div class="col-md-offset-1 col-md-5" style="text-align:center;height:100px;">
-        <div class="col-md-12" style="font-size:12px;font-weight:bold;">Bimestral</div>
+        <div class="col-md-12" style="font-size:12px;font-weight:bold;"><?php echo (isset($data['datos']['TARIFA']) && $data['datos']['TARIFA'] == 'INDUSTRIAL') ? 'Mensual' : 'Bimestral';?></div>
         <div class="col-md-12 clearfix"></div>
         <div class="col-md-offset-1 col-md-6" style="text-align:center;">
             <div class="col-md-12" style="text-align:center;height:10px;"></div>

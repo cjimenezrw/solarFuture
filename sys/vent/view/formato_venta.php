@@ -222,7 +222,7 @@ td.text-right {
 
 <!-- AQUI VA LA INFORMACIÓN DE LOS PRODUCTOS DE INVENTARIO !-->
 <?php
-    if (isset($data['conceptosCotizacionInventario'])) {
+    if (isset($data['conceptosCotizacionInventario']) && !empty($data['conceptosCotizacionInventario'])) {
 ?>
 <div class="col-md-12 clearfix"></div>
 <div class="col-md-offset-3 col-md-10 page-invoice-table table-responsive font-size-12" style="margin-top: 50px;">

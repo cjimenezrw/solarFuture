@@ -4,7 +4,7 @@
                 <div class="col-lg-6 col-md-12 col-xs-12 col-sm-12 col-lg-offset-3">
                     <div class="sw_left_heading_wraper sw_center_heading_wrapper">
                         <h1 id="section-galeria">Nuestros Proyectos</h1>
-                        <img src="images/heading_line.png" alt="title">
+                        <!--<img src="images/heading_line.png" alt="title">!-->
                         <p>Aquí puedes ver algunos de los trabajos que hemos realizado</p>
                     </div>
                 </div>
@@ -31,7 +31,7 @@
                             <div class="gallery-list img-effect zoom-slow">
                                 <div class="sp_img_box_overlay"></div>
                                 <div class="over">
-                                    <img src="images/0.jpeg" style="width: 295px; height: 227px;" alt="" class="img-responsive" />
+                                    <img src="images/0.jpeg" style="width: 100%; height: 220px;" alt="" class="img-responsive" />
                                     <div class="tab_img_overlay">
                                         <a href="images/0.jpeg" class="venobox info" data-title="PANELES SOLARES" data-gall="gall12">
                                             <i class="fa fa-arrows-alt"></i> </a>
@@ -46,7 +46,7 @@
                             <div class="gallery-list img-effect zoom-slow">
                                 <div class="sp_img_box_overlay"></div>
                                 <div class="over">
-                                    <img src="images/1.jpeg" style="width: 295px; height: 227px;" alt="" class="img-responsive" />
+                                    <img src="images/1.jpeg" style="width: 100%;" alt="" class="img-responsive" />
                                     <div class="tab_img_overlay">
                                         <a href="images/1.jpeg" class="venobox info" data-title="PANELES SOLARES" data-gall="gall12">
                                             <i class="fa fa-arrows-alt"></i> </a>
@@ -61,7 +61,7 @@
                             <div class="gallery-list img-effect zoom-slow">
                                 <div class="sp_img_box_overlay"></div>
                                 <div class="over">
-                                    <img src="images/2.jpeg" style="width: 295px; height: 227px;" alt="" class="img-responsive" />
+                                    <img src="images/2.jpeg" style="width: 100%;" alt="" class="img-responsive" />
                                     <div class="tab_img_overlay">
                                         <a href="images/2.jpeg" class="venobox info" data-title="PANELES SOLARES" data-gall="gall12">
                                             <i class="fa fa-arrows-alt"></i> </a>
@@ -76,7 +76,7 @@
                             <div class="gallery-list img-effect zoom-slow">
                                 <div class="sp_img_box_overlay"></div>
                                 <div class="over">
-                                    <img src="images/3.jpeg" style="width: 295px; height: 227px;" alt="" class="img-responsive" />
+                                    <img src="images/3.jpeg" style="width: 100%;" alt="" class="img-responsive" />
                                     <div class="tab_img_overlay">
                                         <a href="images/3.jpeg" class="venobox info" data-title="PANELES SOLARES" data-gall="gall12">
                                             <i class="fa fa-arrows-alt"></i> </a>
@@ -91,7 +91,7 @@
                             <div class="gallery-list img-effect zoom-slow">
                                 <div class="sp_img_box_overlay"></div>
                                 <div class="over">
-                                    <img src="images/4.jpeg" style="width: 295px; height: 227px;" alt="" class="img-responsive" />
+                                    <img src="images/4.jpeg" style="width: 100%;" alt="" class="img-responsive" />
                                     <div class="tab_img_overlay">
                                         <a href="images/4.jpeg" class="venobox info" data-title="PANELES SOLARES" data-gall="gall12">
                                             <i class="fa fa-arrows-alt"></i> </a>
@@ -105,7 +105,7 @@
                             <div class="gallery-list img-effect zoom-slow">
                                 <div class="sp_img_box_overlay"></div>
                                 <div class="over">
-                                    <img src="images/5.jpeg" style="width: 295px; height: 227px;" alt="" class="img-responsive" />
+                                    <img src="images/5.jpeg" style="width: 100%;" alt="" class="img-responsive" />
                                     <div class="tab_img_overlay">
                                         <a href="images/5.jpeg" class="venobox info" data-title="PANELES SOLARES" data-gall="gall12">
                                             <i class="fa fa-arrows-alt"></i> </a>
@@ -119,7 +119,7 @@
                             <div class="gallery-list img-effect zoom-slow">
                                 <div class="sp_img_box_overlay"></div>
                                 <div class="over">
-                                    <img src="images/6.jpeg" style="width: 295px; height: 227px;" alt="" class="img-responsive" />
+                                    <img src="images/6.jpeg" style="width: 100%;" alt="" class="img-responsive" />
                                     <div class="tab_img_overlay">
                                         <a href="images/6.jpeg" class="venobox info" data-title="PANELES SOLARES" data-gall="gall12">
                                             <i class="fa fa-arrows-alt"></i> </a>
@@ -133,7 +133,7 @@
                             <div class="gallery-list img-effect zoom-slow">
                                 <div class="sp_img_box_overlay"></div>
                                 <div class="over">
-                                    <img src="images/7.jpeg" style="width: 295px; height: 227px;" alt="" class="img-responsive" />
+                                    <img src="images/7.jpeg" style="width: 100%;" alt="" class="img-responsive" />
                                     <div class="tab_img_overlay">
                                         <a href="images/7.jpeg" class="venobox info" data-title="PANELES SOLARES" data-gall="gall12">
                                             <i class="fa fa-arrows-alt"></i> </a>
@@ -148,7 +148,7 @@
                             <div class="gallery-list img-effect zoom-slow">
                                 <div class="sp_img_box_overlay"></div>
                                 <div class="over">
-                                    <img src="images/8.jpeg" style="width: 295px; height: 227px;" alt="" class="img-responsive" />
+                                    <img src="images/8.jpeg" style="width: 100%;" alt="" class="img-responsive" />
                                     <div class="tab_img_overlay">
                                         <a href="images/8.jpeg" class="venobox info" data-title="PANELES SOLARES" data-gall="gall12">
                                             <i class="fa fa-arrows-alt"></i> </a>
@@ -163,7 +163,7 @@
                             <div class="gallery-list img-effect zoom-slow">
                                 <div class="sp_img_box_overlay"></div>
                                 <div class="over">
-                                    <img src="images/9.jpeg" style="width: 295px; height: 227px;" alt="" class="img-responsive" />
+                                    <img src="images/9.jpeg" style="width: 100%;" alt="" class="img-responsive" />
                                     <div class="tab_img_overlay">
                                         <a href="images/9.jpeg" class="venobox info" data-title="PANELES SOLARES" data-gall="gall12">
                                             <i class="fa fa-arrows-alt"></i> </a>
@@ -178,7 +178,7 @@
                             <div class="gallery-list img-effect zoom-slow">
                                 <div class="sp_img_box_overlay"></div>
                                 <div class="over">
-                                    <img src="images/10.jpeg" style="width: 295px; height: 227px;" alt="" class="img-responsive" />
+                                    <img src="images/10.jpeg" style="width: 100%; height: 227px;" alt="" class="img-responsive" />
                                     <div class="tab_img_overlay">
                                         <a href="images/10.jpeg" class="venobox info" data-title="PANELES SOLARES" data-gall="gall12">
                                             <i class="fa fa-arrows-alt"></i> </a>
@@ -194,7 +194,7 @@
                             <div class="gallery-list img-effect zoom-slow">
                                 <div class="sp_img_box_overlay"></div>
                                 <div class="over">
-                                    <img src="images/11.jpeg" style="width: 295px; height: 227px;" alt="" class="img-responsive" />
+                                    <img src="images/11.jpeg" style="width: 100%; height: 227px;" alt="" class="img-responsive" />
                                     <div class="tab_img_overlay">
                                         <a href="images/11.jpeg" class="venobox info" data-title="PANELES SOLARES" data-gall="gall12">
                                             <i class="fa fa-arrows-alt"></i> </a>
@@ -210,7 +210,7 @@
                             <div class="gallery-list img-effect zoom-slow">
                                 <div class="sp_img_box_overlay"></div>
                                 <div class="over">
-                                    <img src="images/12.jpeg" style="width: 295px; height: 227px;" alt="" class="img-responsive" />
+                                    <img src="images/12.jpeg" style="width: 100%; height: 227px;" alt="" class="img-responsive" />
                                     <div class="tab_img_overlay">
                                         <a href="images/12.jpeg" class="venobox info" data-title="PANELES SOLARES" data-gall="gall12">
                                             <i class="fa fa-arrows-alt"></i> </a>
@@ -226,7 +226,7 @@
                             <div class="gallery-list img-effect zoom-slow">
                                 <div class="sp_img_box_overlay"></div>
                                 <div class="over">
-                                    <img src="images/13.jpeg" style="width: 295px; height: 227px;" alt="" class="img-responsive" />
+                                    <img src="images/13.jpeg" style="width: 100%; height: 227px;" alt="" class="img-responsive" />
                                     <div class="tab_img_overlay">
                                         <a href="images/13.jpeg" class="venobox info" data-title="PANELES SOLARES" data-gall="gall12">
                                             <i class="fa fa-arrows-alt"></i> </a>

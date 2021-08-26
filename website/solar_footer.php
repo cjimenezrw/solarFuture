@@ -36,7 +36,7 @@
                         <div class="col-lg-2 col-md-2 col-xs-12 col-sm-4">
                             <div class="wrapper_second_useful">
                                 <h4>Secciones </h4>
-                                <img src="images/hd_line_dark.png" alt="title" class="pd_btm_3">
+                                <!--<img src="images/hd_line_dark.png" alt="title" class="pd_btm_3">!-->
                                 <ul>
                                     <li><a class="section-scroll" href="#section-nosotros"><i class="fa fa-angle-right"></i>Nosotros</a>
                                     </li>
@@ -72,7 +72,7 @@
                         <div class="col-lg-4 col-md-4 col-xs-12 col-sm-12">
                             <div class="wrapper_second_useful wrapper_second_useful_2">
                                 <h4>Contacto</h4>
-                                <img src="images/hd_line_dark.png" alt="title" class="pd_btm_3">
+                                <!--<img src="images/hd_line_dark.png" alt="title" class="pd_btm_3">!-->
                                 <ul>
                                     <li><i class="flaticon-placeholder"></i>Av. Elias Zamora Verduzco #3220 "A", Salagua, Manzanillo, Colima</li> 
                                     <li><a href="#"><i class="fa fa-phone" aria-hidden="true"></i> (314) 137 8133</a></li>

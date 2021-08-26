@@ -88,7 +88,7 @@
             </div>
             <div class="sw_spectrum_wrapper_shape">
                 <div id="section10" class="section1_bottom_scroll">
-                    <div class="circle"><a href="javascript:void(0);"><span></span></a></div>
+                    <!--<div class="circle"><a href="javascript:void(0);"><span></span></a></div>!-->
                 </div>
                 <div class="sw_banner_top_shap_img_wrapper">
                     <img src="images/image.png" alt="shape">

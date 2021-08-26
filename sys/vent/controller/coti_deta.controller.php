@@ -35,7 +35,7 @@ Class Coti_deta_Controller Extends Vent_Model {
     public function formatoPDF() {
         
         $this->data = $this->consultar();
-        
+
         ob_start();
             $this->load_view('formato_cotizacion', $this->data, NULL, FALSE);
             $formato_cotizacion = ob_get_contents();

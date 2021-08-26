@@ -213,7 +213,7 @@ if (isset($data['cotizacionTerminosCondiciones'])) {
                         <div class="form-group">
                         <h4 class="example-title">COSTO RECIBO: <i
                                     class="icon wb-help-circle help-text" aria-hidden="true"
-                                    data-content="Capturar el costo promedio del recibo Bimestral"
+                                    data-content="Capturar el costo promedio del recibo Bimestral (Residencial / Comercial) ó Costo Mensual (Industrial)"
                                     data-trigger="hover"></i></h4>
                         <input class="form-control" onkeyup="this.value = this.value.toUpperCase();" name="fCostoRecibo" value="<?php echo (isset($result['fCostoRecibo'])) ? $result['fCostoRecibo'] : '0'; ?>" placeholder="COSTO RECIBO" autocomplete="off" type="text" >
 

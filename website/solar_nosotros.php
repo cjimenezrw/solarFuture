@@ -5,7 +5,7 @@
 
                         <div class="sw_left_heading_wraper">
                             <h1 id="section-nosotros">NOSOTROS!</h1>
-                            <img src="images/heading_line.png" alt="title">
+                            <!--<img src="images/heading_line.png" alt="title">!-->
                             <p>Somos una empresa innovadora en Manzanillo que busca satisfacer las necesidades de sus clientes residenciales, comerciales e industriales en materia solar por medio de sistemas fotovoltaicos. </p>
                             <p>Somos profesionales certificados con los mejores estándares de calidad en el diseño, instalación, puesta en marcha, monitoreo y mantenimiento de los sistemas solares.</p>
                         </div>

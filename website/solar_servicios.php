@@ -10,7 +10,7 @@
 
                         <div class="sw_left_heading_wraper sw_dark_heading_wraper">
                             <h1 id="section-servicios">Servicios</h1>
-                            <img src="images/hd_line_dark.png" alt="title">
+                            <!--<img src="images/hd_line_dark.png" alt="title">!-->
                             <p>Profesionales certificados con los mejores estándares de calidad en el diseño, instalación, monitoreo y mantenimiento de los sistemas solares.</p>
                         </div>
                         <div class="sw_desc_btm_txt">

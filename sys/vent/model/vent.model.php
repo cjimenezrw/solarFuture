@@ -122,12 +122,12 @@ Class Vent_Model Extends DLOREAN_Model {
         (SELECT  ((SUM(fKwConcepto)*4.5)/1000)*30 FROM rel_cotizaciones_conceptos WHERE skCotizacion = oc.skCotizacion  ) AS produccionMensual,
         (SELECT  ((SUM(fKwConcepto)*4.5)/1000)*60 FROM rel_cotizaciones_conceptos WHERE skCotizacion = oc.skCotizacion  ) AS produccionBimestral,
         (SELECT  ((SUM(fKwConcepto)*4.5)/1000)*365 FROM rel_cotizaciones_conceptos WHERE skCotizacion = oc.skCotizacion  ) AS produccionAnual,
-        (SELECT  ((((SUM(fKwConcepto)*4.5)/1000)*365) /(oc.fKwGastados*6)*100) FROM rel_cotizaciones_conceptos WHERE skCotizacion = oc.skCotizacion  ) AS porcentajeAnualCubierto,
+        (SELECT  ((((SUM(fKwConcepto)*4.5)/1000)*365) /(oc.fKwGastados*(IF(TARIFA = 'INDUSTRIAL',12,6)))*100) FROM rel_cotizaciones_conceptos WHERE skCotizacion = oc.skCotizacion  ) AS porcentajeAnualCubierto,
 
-        ROUND(ROUND(oc.fImporteTotal/oc.fCostoRecibo,1)/6,1) AS recuperacionInversion,
-        (oc.fCostoRecibo * 6) AS gastoAnual,
-        (oc.fKwGastados * 6) AS consumoAnual,
-        (oc.fImporteTotal /(oc.fKwGastados * 6)) AS precioPromedio,
+        ROUND(ROUND(oc.fImporteTotal/oc.fCostoRecibo,1)/(IF(TARIFA = 'INDUSTRIAL',12,6)),1) AS recuperacionInversion,
+        (oc.fCostoRecibo * (IF(TARIFA = 'INDUSTRIAL',12,6))) AS gastoAnual,
+        (oc.fKwGastados * (IF(TARIFA = 'INDUSTRIAL',12,6))) AS consumoAnual,
+        (oc.fImporteTotal /(oc.fKwGastados * (IF(TARIFA = 'INDUSTRIAL',12,6)))) AS precioPromedio,
         IF(cep.sNombre IS NOT NULL,cep.sNombre,IF(cp.sNombreContacto IS NOT NULL,cp.sNombreContacto,NULL)) AS cliente
         FROM ope_cotizaciones oc 
         LEFT JOIN rel_empresasSocios resc ON resc.skEmpresaSocio = oc.skEmpresaSocioCliente
@@ -137,7 +137,6 @@ Class Vent_Model Extends DLOREAN_Model {
         LEFT JOIN rel_catalogosSistemasOpciones rca ON rca.skCatalogoSistemaOpciones = oc.skCategoriaPrecio
  
         WHERE  oc.skCotizacion =  " . escape($this->vent['skCotizacion']);
-
 
         $result = Conn::query($sql);
         if (!$result) {

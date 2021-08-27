@@ -3106,7 +3106,7 @@ $.fn.core_docu_component = function (opt) {
                     <li>\n\
                         <div class="panel">  \n\
                             <figure class="overlay overlay-hover animation-hover">\n\
-                                <img class="caption-figure" style="height: 150px;" src="' + config.docs[0].sUbicacionPublicaThumbnail + '" >\n\
+                                <center><img class="caption-figure" style="'+(config.docs[0].sUbicacionThumbnail != '' ? '' )+'width: 100px; height: 100px;" src="' + config.docs[0].sUbicacionPublicaThumbnail + '" ></center>\n\
                                 <figcaption class="overlay-panel overlay-background overlay-fade text-center vertical-align"> \n\
                                     ' + deleteoIntenso + '\n\
                                     <a href="' + config.docs[0].sUbicacionPublica + '" target="_blank">\n\

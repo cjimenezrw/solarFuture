@@ -127,6 +127,7 @@
         $('#docu_OPERAT_PEDIME').core_docu_component({
             skTipoExpediente: 'OPERAT',
             skTipoDocumento: 'PEDIME',
+            skCodigo: 'MYUUID',
             name: 'docu_file_OPERAT_PEDIME',
             deleteCallBack: function (e) {
                 
@@ -136,6 +137,7 @@
         $('#docu_OPERAT_BILLLA').core_docu_component({
             skTipoExpediente: 'OPERAT',
             skTipoDocumento: 'BILLLA',
+            skCodigo: 'MYUUID',
             name: 'docu_file_OPERAT_BILLLA',
             deleteCallBack: function (e) {
                 
@@ -145,6 +147,7 @@
         $('#docu_OPERAT_FOTOGR').core_docu_component({
             skTipoExpediente: 'OPERAT',
             skTipoDocumento: 'FOTOGR',
+            skCodigo: 'MYUUID',
             name: 'docu_file_OPERAT_FOTOGR',
             deleteCallBack: function (e) {
                 

@@ -18,7 +18,7 @@ Class Docu_Model Extends DLOREAN_Model {
     public function _get_documentos(){
 
         $DOCUME = parent::getVariable('DOCUME');
-        $EXPEDIENTE = DIR_PROJECT.$DOCUME;
+        $DIRECTORY = DIR_PROJECT.$DOCUME;
         
         $sql = "SELECT 
             doc.skDocumento, 
@@ -28,9 +28,10 @@ Class Docu_Model Extends DLOREAN_Model {
             doc.skCodigo, 
             doc.sNombre, 
             doc.sNombreOriginal, 
-            CONCAT(".escape($EXPEDIENTE).",doc.sUbicacion) AS sUbicacion,
+            doc.sUbicacion,
+            doc.sUbicacionThumbnail,
             CONCAT(".escape(SYS_URL.$DOCUME).",doc.sUbicacion) AS sUbicacionPublica,
-            CONCAT(".escape(SYS_URL.$DOCUME).",doc.sUbicacion) AS sUbicacionPublicaThumbnail, 
+            IF(doc.sUbicacionThumbnail IS NOT NULL, CONCAT(".escape(SYS_URL.$DOCUME).",doc.sUbicacionThumbnail), CONCAT(".escape(SYS_URL).",ext.sThumbnail)) AS sUbicacionPublicaThumbnail,
             doc.dFechaCreacion, 
             doc.skUsuarioCreacion, 
             doc.dFechaModificacion, 
@@ -46,6 +47,7 @@ Class Docu_Model Extends DLOREAN_Model {
             INNER JOIN cat_docu_tiposDocumentos td ON td.skTipoDocumento = doc.skTipoDocumento
             INNER JOIN core_estatus est ON est.skEstatus = doc.skEstatus
             INNER JOIN cat_usuarios uC ON uC.skUsuario = doc.skUsuarioCreacion
+            INNER JOIN cat_extensionesDocumentos ext ON ext.sExtension = doc.sExtension
             WHERE 1=1 ";
         
         if(isset($this->docu['skDocumento']) && !empty($this->docu['skDocumento'])){
@@ -286,6 +288,7 @@ Class Docu_Model Extends DLOREAN_Model {
             sNombre VARCHAR(500),
             sNombreOriginal VARCHAR(500),
             sUbicacion VARCHAR(500),
+            sUbicacionThumbnail VARCHAR(500),
             sExtension VARCHAR(200),
 
             axn VARCHAR(300),
@@ -305,6 +308,7 @@ Class Docu_Model Extends DLOREAN_Model {
                 'sNombre',
                 'sNombreOriginal',
                 'sUbicacion',
+                'sUbicacionThumbnail',
                 'sExtension',
 
                 'axn',

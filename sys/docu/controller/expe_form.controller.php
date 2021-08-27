@@ -34,9 +34,11 @@ Class Expe_form_Controller Extends Docu_Model {
                 Conn::rollback($this->idTran);
                 return $this->data;
             }
+
 //exit('<pre>'.print_r($_FILES,1).'</pre>');
 //exit('<pre>'.print_r(json_decode($_POST['docu_file_OPERAT_FOTOGR'], true, 512),1).'</pre>');
-            $guardar_documento = $this->sysAPI('docu', 'docu_serv', 'guardar', [
+
+            /*$guardar_documento = $this->sysAPI('docu', 'docu_serv', 'guardar', [
                 'POST'=>[
                     'skTipoExpediente'=>'OPERAT',
                     'skTipoDocumento'=>'PEDIME',
@@ -47,7 +49,11 @@ Class Expe_form_Controller Extends Docu_Model {
                 ]
             ]);
 
-            $guardar_documento = $this->sysAPI('docu', 'docu_serv', 'guardar', [
+            if(!$guardar_documento || isset($guardar_documento['success']) && $guardar_documento['success'] != 1){
+                return $guardar_documento;
+            }*/
+
+            /*$guardar_documento = $this->sysAPI('docu', 'docu_serv', 'guardar', [
                 'POST'=>[
                     'skTipoExpediente'=>'OPERAT',
                     'skTipoDocumento'=>'BILLLA',
@@ -57,6 +63,10 @@ Class Expe_form_Controller Extends Docu_Model {
                     'docu_file'=>$_FILES['docu_file_OPERAT_BILLLA']
                 ]
             ]);
+
+            if(!$guardar_documento || isset($guardar_documento['success']) && $guardar_documento['success'] != 1){
+                return $guardar_documento;
+            }*/
             
             $guardar_documento = $this->sysAPI('docu', 'docu_serv', 'guardar', [
                 'POST'=>[
@@ -68,6 +78,10 @@ Class Expe_form_Controller Extends Docu_Model {
                     'docu_file'=>$_FILES['docu_file_OPERAT_FOTOGR']
                 ]
             ]);
+
+            if(!$guardar_documento || isset($guardar_documento['success']) && $guardar_documento['success'] != 1){
+                return $guardar_documento;
+            }
 
 exit('<pre>'.print_r($guardar_documento,1).'</pre>');
 

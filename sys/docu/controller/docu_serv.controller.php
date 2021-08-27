@@ -1,6 +1,9 @@
 <?php
+require_once(SYS_PATH.'docu/controller/docu_serv_caracteristicas.controller.php');
 Class Docu_serv_Controller Extends Docu_Model {
-
+    
+    // TRAITS //
+        use Docu_serv_caracteristicas_Controller;
     // CONST //
 
     // PUBLIC VARIABLES //
@@ -34,29 +37,18 @@ Class Docu_serv_Controller Extends Docu_Model {
                 //Conn::rollback($this->idTran);
                 return $this->data;
             }
-
-        $configuracion_tipoExpediente_tipoDocumento = $this->configuracion_tipoExpediente_tipoDocumento();
-        $this->data['configuraciones'] = $configuracion_tipoExpediente_tipoDocumento['data'];
+        // OBTENEMOS LA CONFIGURACIÓN DEL DOCUMENTO
+            $configuracion_tipoExpediente_tipoDocumento = $this->configuracion_tipoExpediente_tipoDocumento();
+            $this->data['data'] = NULL;
+            $this->data['configuraciones'] = $configuracion_tipoExpediente_tipoDocumento['data'];
 
         // VALIDAR CONFIGURACIÓN DE EXPEDIENTE DOCUMENTO
             $validar_expediente_documento = $this->validar_expediente_documento();
+            
             if(!$validar_expediente_documento['success']){
                 //Conn::rollback($this->idTran);
                 return $this->data;
             }
-
-// CARACTERÍSTICAS DE DOCUMENTO
-
-            /*
-            exit('<pre>'.print_r($this->configuracion_tipoExpediente_tipoDocumento(),1).'</pre>');
-
-            $caracteristicas_documento = $this->caracteristicas_documento();
-            if(!$caracteristicas_documento['success']){
-                //Conn::rollback($this->idTran);
-                return $this->data;
-            }
-            exit('<pre>'.print_r('CARACTERÍSTICAS DE DOCUMENTO',1).'</pre>');
-            */
             
         // GUARDAR
             $guardar_documento = $this->guardar_documento();
@@ -73,11 +65,11 @@ Class Docu_serv_Controller Extends Docu_Model {
             }
 
         // CARACTERÍSTICAS DE DOCUMENTO
-            /*$caracteristicas_documento = $this->caracteristicas_documento();
+            $caracteristicas_documento = $this->caracteristicas_documento();
             if(!$caracteristicas_documento['success']){
                 //Conn::rollback($this->idTran);
                 return $this->data;
-            }*/
+            }
 
             $this->data['data'] = [
                 'skDocumento'=>array_column($this->docu['docu_file_array'], 'skDocumento')
@@ -117,21 +109,42 @@ Class Docu_serv_Controller Extends Docu_Model {
                 ]
             ];
         }
-exit('<pre>'.print_r($this->docu['docu_file_array'],1).'</pre>');
-        /*$_get_tiposDocumentos_extensiones = parent::_get_tiposDocumentos_extensiones();
-        $sContentType = array_column($_get_tiposDocumentos_extensiones,'sContentType');
-        $sExtension = array_column($_get_tiposDocumentos_extensiones,'sExtension');*/
 
         foreach($this->docu['docu_file_array'] AS $k=>&$v){
-            //if(!in_array($v['type'],$sContentType)){
-            if(!in_array($v['type'], $this->data['configuraciones']['contentTypes'])){
-                $this->data['success'] = FALSE;
-                //$this->data['message'] = 'SOLO SE ACEPTAN LAS EXTENSIONES: '.implode(', ',$sExtension);
-                $this->data['message'] = 'SOLO SE ACEPTAN LAS EXTENSIONES: '.implode(', ',$this->data['configuraciones']['extensiones']);
-                return $this->data;
-            }
-            //$v['sExtension'] = $_get_tiposDocumentos_extensiones[array_search($v['type'], $sContentType)]['sExtension'];
-            $v['sExtension'] = $this->data['configuraciones']['extensiones'][array_search($v['type'], $this->data['configuraciones']['contentTypes'])];
+
+            // VALIDAMOS LAS EXTENSIONES DE DOCUMENTO //
+                if(!in_array($v['type'], $this->data['configuraciones']['contentTypes'])){
+                    $this->data['success'] = FALSE;
+                    $this->data['message'] = 'SOLO SE ACEPTAN LAS EXTENSIONES: '.implode(', ',$this->data['configuraciones']['extensiones']);
+                    return $this->data;
+                }
+
+                $v['sExtension'] = $this->data['configuraciones']['extensiones'][array_search($v['type'], $this->data['configuraciones']['contentTypes'])];
+
+            // CARACTERÍSTICA PESO DE DOCUMENTO EN MB (SIZEDO) //
+                if(!isset($this->data['configuraciones']['caracteristicas']['SIZEDO'])){
+                    $this->data['success'] = FALSE;
+                    $this->data['message'] = 'FALTA CONFIGURACIÓN DE PESO MÁXIMO PERMITIDO (Expediente: '.$this->data['configuraciones']['tipoExpediente'].', Documento: '.$this->data['configuraciones']['tipoDocumento'].')';
+                    return $this->data;
+                }
+
+                $skCaracteristica = $this->data['configuraciones']['caracteristicas']['SIZEDO']['skCaracteristica'];
+                if(!method_exists($this, $skCaracteristica)){
+                    $this->data['success'] = FALSE;
+                    $this->data['message'] = 'NO SE ENCONTRÓ EL MÉTODO DE LA CARACTERÍSTICA ('.$this->data['configuraciones']['caracteristicas']['SIZEDO']['sNombre'].')';
+                    return $this->data;
+                }
+
+                $caracteristica = $this->$skCaracteristica([
+                    'caracteristica'=>$this->data['configuraciones']['caracteristicas']['SIZEDO'],
+                    'peso_bytes'=>$v['size']
+                ]);
+                
+                if(!$caracteristica || isset($caracteristica['success']) && $caracteristica['success'] != 1){
+                    $this->data['success'] = FALSE;
+                    $this->data['message'] = $caracteristica['message'];
+                    return $this->data;
+                }
         }
 
         $this->data['success'] = TRUE;
@@ -154,7 +167,6 @@ exit('<pre>'.print_r($this->docu['docu_file_array'],1).'</pre>');
 
             $v['skDocumento'] = $stp_docu_documentos['skDocumento'];
             $v['sConsecutivo'] = $stp_docu_documentos['sConsecutivo'];
-            
         }
 
         $this->data['success'] = TRUE;
@@ -168,6 +180,7 @@ exit('<pre>'.print_r($this->docu['docu_file_array'],1).'</pre>');
 
         $DOCUME = parent::getVariable('DOCUME');
         $EXPEDIENTE = DIR_PROJECT.$DOCUME.'expedientes/'.$this->docu['skTipoExpediente'].'/'.$this->docu['skCodigo'].'/';
+        $THUMBNAIL = DIR_PROJECT.$DOCUME.'thumbnails/'.$this->docu['skTipoExpediente'].'/'.$this->docu['skCodigo'].'/';
 
         foreach($this->docu['docu_file_array'] AS $k=>&$v){
             $this->docu['skDocumento'] = $v['skDocumento'];
@@ -176,19 +189,8 @@ exit('<pre>'.print_r($this->docu['docu_file_array'],1).'</pre>');
             $this->docu['sNombre'] = $this->docu['skTipoExpediente'].'_'.$this->docu['skTipoDocumento'].'_'.$v['sConsecutivo'].'.'.$v['sExtension'];
             $this->docu['sNombreOriginal'] = $v['name'];
             $this->docu['sUbicacion'] = 'expedientes/'.$this->docu['skTipoExpediente'].'/'.$this->docu['skCodigo'].'/'.$this->docu['sNombre'];
-
-            if(!isset($this->data['configuraciones']['caracteristicas']['SIZEDO'])){
-                $this->data['success'] = FALSE;
-                $this->data['message'] = 'FALTA CONFIGURACIÓN DE PESO MÁXIMO PERMITIDO (Expediente: '.$this->data['configuraciones']['tipoExpediente'].', Documento: '.$this->data['configuraciones']['tipoDocumento'].')';
-                return $this->data;
-            }
-
-            if((($v['size'] / 1000) / 1000) > $this->data['configuraciones']['caracteristicas']['SIZEDO']['sValor']){
-                $this->data['success'] = FALSE;
-                $this->data['message'] = 'EL DOCUMENTO EXCEDE EL PESO MÁXIMO PERMITIDO ('.$this->data['configuraciones']['caracteristicas']['SIZEDO']['sValor'].'MB)';
-                return $this->data;
-            }
-
+            $this->docu['sUbicacionThumbnail'] = NULL;
+            
             if(!is_dir($EXPEDIENTE)) {
                 if(!mkdir($EXPEDIENTE, 0777, TRUE)) {
                     $this->data['success'] = FALSE;
@@ -205,14 +207,51 @@ exit('<pre>'.print_r($this->docu['docu_file_array'],1).'</pre>');
     
             chmod($EXPEDIENTE.$this->docu['sNombre'], 0777);
 
-            $stp_docu_documentos = parent::stp_docu_documentos();
+            // CARACTERÍSTICA GENERAR THUMBNAIL (THUMBN) //
+                if(isset($this->data['configuraciones']['caracteristicas']['THUMBN'])){
 
-            if(!$stp_docu_documentos || isset($stp_docu_documentos['success']) && $stp_docu_documentos['success'] != 1){
-                $this->data['success'] = FALSE;
-                $this->data['message'] = 'HUBO UN ERROR AL SUBIR EL DOCUMENTO';
-                $this->data['messageSQL'] = (isset($stp_docu_documentos['messageSQL']) ? $stp_docu_documentos['messageSQL'] : NULL);
-                return $this->data;
-            }
+                    if(!is_dir($THUMBNAIL)) {
+                        if(!mkdir($THUMBNAIL, 0777, TRUE)) {
+                            $this->data['success'] = FALSE;
+                            $this->data['message'] = 'NO SE PUDO CREAR EL DIRECTORIO DEL EXPEDIENTE';
+                            return $this->data;
+                        }
+                    }
+
+                    $skCaracteristica = $this->data['configuraciones']['caracteristicas']['THUMBN']['skCaracteristica'];
+                    if(!method_exists($this, $skCaracteristica)){
+                        $this->data['success'] = FALSE;
+                        $this->data['message'] = 'NO SE ENCONTRÓ EL MÉTODO DE LA CARACTERÍSTICA ('.$this->data['configuraciones']['caracteristicas']['THUMBN']['sNombre'].')';
+                        return $this->data;
+                    }
+
+                    $caracteristica = $this->$skCaracteristica([
+                        'caracteristica'=>$this->data['configuraciones']['caracteristicas']['THUMBN'],
+                        'directory'=>$THUMBNAIL,
+                        'source'=>$EXPEDIENTE.$this->docu['sNombre'],
+                        'destination'=>$THUMBNAIL.$this->docu['sNombre'],
+                        'width'=>NULL,
+                        'height'=>NULL
+                    ]);
+                    
+                    if(!$caracteristica || isset($caracteristica['success']) && $caracteristica['success'] != 1){
+                        $this->data['success'] = FALSE;
+                        $this->data['message'] = $caracteristica['message'];
+                        return $this->data;
+                    }
+
+                    $this->docu['sUbicacionThumbnail'] = 'thumbnails/'.$this->docu['skTipoExpediente'].'/'.$this->docu['skCodigo'].'/'.$this->docu['sNombre'];
+                }
+            
+            // ACTUALIZAMOS LA UBICACIÓN DEL DOCUMENTO
+                $stp_docu_documentos = parent::stp_docu_documentos();
+
+                if(!$stp_docu_documentos || isset($stp_docu_documentos['success']) && $stp_docu_documentos['success'] != 1){
+                    $this->data['success'] = FALSE;
+                    $this->data['message'] = 'HUBO UN ERROR AL SUBIR EL DOCUMENTO';
+                    $this->data['messageSQL'] = (isset($stp_docu_documentos['messageSQL']) ? $stp_docu_documentos['messageSQL'] : NULL);
+                    return $this->data;
+                }
 
         }
 
@@ -224,8 +263,6 @@ exit('<pre>'.print_r($this->docu['docu_file_array'],1).'</pre>');
     public function caracteristicas_documento(){
         $this->data['success'] = TRUE;
         $this->docu['axn'] = 'caracteristicas_documento';
-
-        exit('<pre>'.print_r($this->data,1).'</pre>');
 
         $this->data['success'] = TRUE;
         $this->data['message'] = 'CARACTERÍSTICAS DE DOCUMENTO APLICADAS';
@@ -258,9 +295,6 @@ exit('<pre>'.print_r($this->docu['docu_file_array'],1).'</pre>');
                 $this->data['data']['caracteristicas'][$v['skCaracteristica']] = $v;
             }
 
-        //exit('<pre>'.print_r($this->docu,1).'</pre>');
-        //exit('<pre>'.print_r($this->data,1).'</pre>');
-
         return $this->data;
     }
 
@@ -273,6 +307,14 @@ exit('<pre>'.print_r($this->docu['docu_file_array'],1).'</pre>');
                 //Conn::rollback($this->idTran);
                 return $this->data;
             }
+
+        // VALIDAMOS QUE VENGAN LOS FILTROS
+            if(!isset($this->docu['skCodigo']) || empty($this->docu['skCodigo'])){
+                if(empty($this->docu['skDocumento']) || empty($this->docu['caracteristicas'])){
+                    return $this->data;        
+                }
+            }
+
 
         // OBTENEMOS LOS DOCUMENTOS
             $this->docu['skEstatus'] = 'AC';
@@ -317,6 +359,7 @@ exit('<pre>'.print_r($this->docu['docu_file_array'],1).'</pre>');
         $this->docu['skTipoDocumento'] = $_get_documentos[0]['skTipoDocumento'];
         $this->docu['skCodigo'] = $_get_documentos[0]['skCodigo'];
         $this->docu['sNombre'] = $_get_documentos[0]['sNombre'];
+        $this->docu['sUbicacionThumbnail'] = $_get_documentos[0]['sUbicacionThumbnail'];
 
         $this->docu['sUbicacion'] = 'trash_expedientes/'.$this->docu['skTipoExpediente'].'/'.$this->docu['skCodigo'].'/'.$this->docu['sNombre'];
 
@@ -324,31 +367,58 @@ exit('<pre>'.print_r($this->docu['docu_file_array'],1).'</pre>');
         $EXPEDIENTE = DIR_PROJECT.$DOCUME.'expedientes/'.$this->docu['skTipoExpediente'].'/'.$this->docu['skCodigo'].'/';
         $EXPEDIENTE_TRASH = DIR_PROJECT.$DOCUME.'trash_expedientes/'.$this->docu['skTipoExpediente'].'/'.$this->docu['skCodigo'].'/';
 
-        if(!is_dir($EXPEDIENTE_TRASH)) {
-            if(!mkdir($EXPEDIENTE_TRASH, 0777, TRUE)) {
+        $THUMBNAIL = DIR_PROJECT.$DOCUME.'thumbnails/'.$this->docu['skTipoExpediente'].'/'.$this->docu['skCodigo'].'/';
+        $THUMBNAIL_TRASH = DIR_PROJECT.$DOCUME.'trash_thumbnails/'.$this->docu['skTipoExpediente'].'/'.$this->docu['skCodigo'].'/';
+
+        // EXPEDIENTE //
+            if(!is_dir($EXPEDIENTE_TRASH)) {
+                if(!mkdir($EXPEDIENTE_TRASH, 0777, TRUE)) {
+                    $this->data['success'] = FALSE;
+                    $this->data['message'] = 'NO SE PUDO CREAR EL DIRECTORIO TRASH DEL EXPEDIENTE';
+                    return $this->data;
+                }
+            }
+
+            if(!copy($EXPEDIENTE.$this->docu['sNombre'], $EXPEDIENTE_TRASH.$this->docu['sNombre'])){
                 $this->data['success'] = FALSE;
-                $this->data['message'] = 'NO SE PUDO CREAR EL DIRECTORIO TRASH DEL EXPEDIENTE';
+                $this->data['message'] = 'HUBO UN ERROR AL MOVER EL DOCUMENTO';
                 return $this->data;
             }
-        }
 
-        if(!copy($EXPEDIENTE.$this->docu['sNombre'], $EXPEDIENTE_TRASH.$this->docu['sNombre'])){
-            $this->data['success'] = FALSE;
-            $this->data['message'] = 'HUBO UN ERROR AL MOVER EL DOCUMENTO';
-            return $this->data;
-        }
+            chmod($EXPEDIENTE_TRASH.$this->docu['sNombre'], 0777);
 
-        chmod($EXPEDIENTE_TRASH.$this->docu['sNombre'], 0777);
+            unlink($EXPEDIENTE.$this->docu['sNombre']);
 
-        unlink($EXPEDIENTE.$this->docu['sNombre']);
+        // THUMBNAIL //
+            if(!empty($this->docu['sUbicacionThumbnail'])){
+                $this->docu['sUbicacionThumbnail'] = 'trash_thumbnails/'.$this->docu['skTipoExpediente'].'/'.$this->docu['skCodigo'].'/'.$this->docu['sNombre'];
+                if(!is_dir($THUMBNAIL_TRASH)) {
+                    if(!mkdir($THUMBNAIL_TRASH, 0777, TRUE)) {
+                        $this->data['success'] = FALSE;
+                        $this->data['message'] = 'NO SE PUDO CREAR EL DIRECTORIO TRASH DEL THUMBNAIL';
+                        return $this->data;
+                    }
+                }
 
-        $stp_docu_documentos = parent::stp_docu_documentos();
+                if(!copy($THUMBNAIL.$this->docu['sNombre'], $THUMBNAIL_TRASH.$this->docu['sNombre'])){
+                    $this->data['success'] = FALSE;
+                    $this->data['message'] = 'HUBO UN ERROR AL MOVER EL THUMBNAIL DEL DOCUMENTO';
+                    return $this->data;
+                }
 
-        if(!$stp_docu_documentos || isset($stp_docu_documentos['success']) && $stp_docu_documentos['success'] != 1){
-            $this->data['success'] = FALSE;
-            $this->data['message'] = 'HUBO UN ERROR AL ELIMINAR EL DOCUMENTO';
-            return $this->data;
-        }
+                chmod($THUMBNAIL_TRASH.$this->docu['sNombre'], 0777);
+
+                unlink($THUMBNAIL.$this->docu['sNombre']);
+            }
+            
+        // ACTUALIZAMOS LA UBICACIÓN DEL DOCUMENTO
+            $stp_docu_documentos = parent::stp_docu_documentos();
+
+            if(!$stp_docu_documentos || isset($stp_docu_documentos['success']) && $stp_docu_documentos['success'] != 1){
+                $this->data['success'] = FALSE;
+                $this->data['message'] = 'HUBO UN ERROR AL ELIMINAR EL DOCUMENTO';
+                return $this->data;
+            }
 
         $this->data['success'] = TRUE;
         $this->data['message'] = 'DOCUMENTO ELIMINADO';

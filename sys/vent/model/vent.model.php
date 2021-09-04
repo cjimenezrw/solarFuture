@@ -107,6 +107,10 @@ Class Vent_Model Extends DLOREAN_Model {
         oc.sTelefono,
         oc.TARIFA,
         oc.dFechaCreacion,
+        oc.skEstatusActaEntrega,
+        oc.sRecibeEntrega,
+        oc.dFechaEntregaInstalacion,
+        oc.sObservacionesInstalacion,
         cp.sNombreContacto AS prospecto,
         cep.sRFC AS clienteRFC,
         rca.sNombre AS categoria,
@@ -743,6 +747,26 @@ Class Vent_Model Extends DLOREAN_Model {
         }
         $record = Conn::fetch_assoc($result);
         utf8($record);
+        return $record; 
+    }
+
+    public function stp_vent_actaEntrega() {
+
+        $sql = "CALL stp_vent_actaEntrega (
+            " .escape(isset($this->vent['skCotizacion']) ? $this->vent['skCotizacion'] : NULL) . ",
+            " .escape(isset($this->vent['sRecibeEntrega']) ? $this->vent['sRecibeEntrega'] : NULL) . ", 
+            " .escape(isset($this->vent['dFechaEntregaInstalacion']) ? $this->vent['dFechaEntregaInstalacion'] : NULL) . ", 
+            " .escape(isset($this->vent['sObservacionesInstalacion']) ? $this->vent['sObservacionesInstalacion'] : NULL) . ", 
+            " .escape(isset($this->vent['axn']) ? $this->vent['axn'] : NULL) . ",
+            '" . $_SESSION['usuario']['skUsuario'] . "',
+            '" . $this->sysController . "' )";
+ 
+        $result = Conn::query($sql);
+        if (!$result) {
+            return false;
+        }
+        $record = Conn::fetch_assoc($result);
+        utf8($record,FALSE);
         return $record; 
     }
 

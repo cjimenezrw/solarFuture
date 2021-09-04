@@ -38,6 +38,9 @@ Class Vent_Controller Extends Vent_Model {
             case 'ventaPDF':
                 $coti_inde->ventaPDF();
                 break;
+            case 'entregaPDF':
+                $coti_inde->entregaPDF();
+                break;
             case 'cancelarVenta':
                 header('Content-Type: application/json');
                 echo json_encode($coti_inde->cancelarVenta(),true,512);
@@ -120,6 +123,9 @@ Class Vent_Controller Extends Vent_Model {
             case 'formatoVentaPDF':
                 echo $coti_deta->formatoVentaPDF();
             break;
+            case 'formatoEntregaPDF':
+                echo $coti_deta->formatoEntregaPDF();
+            break;
             default:
                 $this->data = $coti_deta->consultar();
                 $this->load_view('coti_deta', $this->data);
@@ -146,6 +152,25 @@ Class Vent_Controller Extends Vent_Model {
             default:
                 $this->data = $vent_coti->getDatos();
                 $this->load_view('vent_coti', $this->data);
+                break;
+        }
+        return true;
+    }
+
+    public function entr_coti() {
+        $this->load_class("entr_coti", "controller");
+        $entr_coti = new Entr_coti_Controller();
+
+        $axn = (isset($_POST['axn']) ? $_POST['axn'] : (isset($_GET['axn']) ? $_GET['axn'] : NULL));
+
+        switch ($axn) {
+            case 'guardar':
+                header('Content-Type: application/json');
+                echo json_encode($entr_coti->guardar());
+                break;
+            default:
+                $this->data = $entr_coti->getDatos();
+                $this->load_view('entr_coti', $this->data);
                 break;
         }
         return true;

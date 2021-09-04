@@ -28,7 +28,17 @@ Class Coti_deta_Controller Extends Vent_Model {
         $this->data['BANCOT'] = parent::getVariable('BANCOT');
         $this->data['PIECOT'] = parent::getVariable('PIECOT');
         $this->data['TARIFA'] = json_decode(parent::getVariable('TARIFA'),true,512);
- 
+
+        $get_documentos = $this->sysAPI('docu', 'docu_serv', 'get_documentos', [
+            'POST'=>[
+                'skTipoExpediente'=>'OPERAT',
+                'skTipoDocumento'=>'FOTOGR',
+                'skCodigo'=>$this->vent['skCotizacion']
+            ]
+        ]);
+
+        $this->data['fotografiasEntrega'] = (isset($get_documentos['data']) && !empty($get_documentos['data']) ? $get_documentos['data'] : []);
+
         return $this->data;
     }
 
@@ -111,6 +121,39 @@ Class Coti_deta_Controller Extends Vent_Model {
                     'vertical' => 'L',
                     'footerMargin' => 5,
                     'headerMargin' => 5,
+                    'fileName' => 'Venta '.$this->data['datos']['iFolio'].'.pdf',
+                    'directDownloadFile' => (isset($_GET['directDownloadFile']) && $_GET['directDownloadFile'] == true ? true : false)
+                ]
+            ]
+        ]);
+
+        return true;
+    }
+    
+
+    public function formatoEntregaPDF() {
+        
+        $this->data = $this->consultar();
+        
+        ob_start();
+            $this->load_view('formato_entrega', $this->data, NULL, FALSE);
+            $formato_cotizacion = ob_get_contents();
+        ob_end_clean();
+
+        parent::pdf([
+            [
+                'content' => $formato_cotizacion,
+                'defaultWatermark' => false,
+                'header' => '<div><img src="' . CORE_PATH . 'assets/custom/img/header_entrega.png" width="100%" height="140"></div>',
+                'footer' => '<div><img src="' . CORE_PATH . 'assets/custom/img/footer_entrega.png" width="100%" height="180"></div>',
+                'defaultFooter' => false,
+                'defaultHeader' => false,
+                'pdf' => [
+                    'contentMargins' => [0, 0, 30, 40], // [LEFT, RIGHT, TOP, BOTTOM]
+                    'format' => 'LETTER',
+                    'vertical' => 'L',
+                    'footerMargin' => 0,
+                    'headerMargin' => 0,
                     'fileName' => 'Venta '.$this->data['datos']['iFolio'].'.pdf',
                     'directDownloadFile' => (isset($_GET['directDownloadFile']) && $_GET['directDownloadFile'] == true ? true : false)
                 ]

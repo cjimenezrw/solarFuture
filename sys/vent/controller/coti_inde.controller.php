@@ -33,6 +33,7 @@ Class Coti_inde_Controller Extends Vent_Model {
         oc.dFechaVigencia,
         oc.sObservaciones,
         oc.skEstatus,
+        oc.skEstatusActaEntrega,
         ce.sNombre AS estatus,
         ce.sIcono AS estatusIcono,
         ce.sColor AS estatusColor, 
@@ -77,11 +78,13 @@ Class Coti_inde_Controller Extends Vent_Model {
                     ],
                     'menuEmergente5'=>($row['skEstatus'] == 'NU' ? SELF::HABILITADO : SELF::DESHABILITADO),
                     'menuEmergente6'=>($row['skEstatus'] == 'VE' ? SELF::HABILITADO : SELF::DESHABILITADO),
-                    'menuEmergente8'=>($row['skEstatus'] == 'NU' ? SELF::HABILITADO : SELF::DESHABILITADO),
                     'menuEmergente9'=>($row['skEstatus'] == 'NU' ? SELF::HABILITADO : SELF::DESHABILITADO),
-                    'menuEmergente10'=>($row['skEstatus'] == 'NU' ? SELF::HABILITADO : SELF::DESHABILITADO),
-                    'menuEmergente11'=>($row['skEstatus'] == 'VE' ? SELF::HABILITADO : SELF::DESHABILITADO),
-                    'menuEmergente12'=>($row['skEstatus'] == 'VE' ? SELF::HABILITADO : SELF::DESHABILITADO)
+                    'menuEmergente10'=>($row['skEstatus'] == 'NU' ? SELF::HABILITADO : SELF::OCULTO),
+                    'menuEmergente11'=>($row['skEstatus'] == 'NU' ? SELF::HABILITADO : SELF::OCULTO),
+                    'menuEmergente12'=>($row['skEstatus'] == 'VE' ? SELF::HABILITADO : SELF::OCULTO),
+                    'menuEmergente13'=>($row['skEstatus'] == 'VE' ? SELF::HABILITADO : SELF::OCULTO),
+                    'menuEmergente14'=>($row['skEstatusActaEntrega'] == 'GE' ? SELF::HABILITADO : SELF::OCULTO),
+                    'menuEmergente15'=>($row['skEstatusActaEntrega'] == 'GE' ? SELF::HABILITADO : SELF::OCULTO)
                 ];
 
                 $row['dFechaCreacion'] = ($row['dFechaCreacion']) ? date('d/m/Y  H:i:s', strtotime($row['dFechaCreacion'])) : '';
@@ -216,6 +219,16 @@ Class Coti_inde_Controller Extends Vent_Model {
 
     public function ventaPDF(){
         $formatoPDF = $this->sysAPI('vent', 'coti_deta', 'formatoVentaPDF', [
+            'GET' => [
+                'p1' => (isset($_GET['id']) ? $_GET['id'] :  NULL),
+                'directDownloadFile' => true
+            ]
+         ]);
+         return true;
+    }  
+
+    public function entregaPDF(){
+        $formatoPDF = $this->sysAPI('vent', 'coti_deta', 'formatoEntregaPDF', [
             'GET' => [
                 'p1' => (isset($_GET['id']) ? $_GET['id'] :  NULL),
                 'directDownloadFile' => true

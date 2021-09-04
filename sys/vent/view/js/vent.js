@@ -3,6 +3,7 @@ var vent = {};
 vent.coti_inde = {};
 vent.coti_form = {};
 vent.vent_coti = {};
+vent.entr_coti = {};
 
 vent.coti_inde.dataTableConf = {
     'serverSide': true,
@@ -72,6 +73,19 @@ vent.coti_inde.visualizarVentaPDF = function visualizarCotizacionPDF(obj){
 vent.coti_inde.descargarVentaPDF = function descargarCotizacionPDF(obj){
     core.download(window.location.href,'GET', {
         axn: 'ventaPDF',
+        id: obj.id
+    });
+    return true;
+};
+
+vent.coti_inde.visualizarEntregaPDF = function visualizarEntregaPDF(obj){
+    window.open(core.SYS_URL+'sys/vent/coti-deta/detalle-cotizacion/'+obj.id+'/?axn=formatoEntregaPDF');
+    return true;
+};
+
+vent.coti_inde.descargarEntregaPDF = function descargarEntregaPDF(obj){
+    core.download(window.location.href,'GET', {
+        axn: 'entregaPDF',
         id: obj.id
     });
     return true;
@@ -151,3 +165,28 @@ vent.coti_inde.cancelarVenta = function cancelarVenta(obj) {
     });
    
 };
+
+
+vent.entr_coti.validaciones = {
+    sRecibeEntrega: {
+        validators: {
+            notEmpty: {
+                message: 'CAMPO REQUERIDO'
+            }
+        }
+    },
+    dFechaEntregaInstalacion: {
+        validators: {
+            notEmpty: {
+                message: 'CAMPO REQUERIDO'
+            }
+        }
+    },
+    sObservacionesInstalacion: {
+        validators: {
+            notEmpty: {
+                message: 'CAMPO REQUERIDO'
+            }
+        }
+    } 
+}; 

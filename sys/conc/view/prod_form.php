@@ -63,6 +63,20 @@
                      </div>
                 </div>
 
+                <div class="row row-lg col-lg-12">
+                      <hr>
+                  </div>
+
+                 <div class="row row-lg col-lg-12">
+                     
+                     <div class="col-md-12 col-lg-12">
+                         <div class="form-group">
+                            <h4 class="example-title"><span class="required text-danger">*</span> Descripción Garantía</h4>
+                            <textarea class="form-control" id="sDescripcionGarantia" name="sDescripcionGarantia" placeholder="DESCRIPCIÓN GARANTÍA"><?php echo (!empty($result['sDescripcionGarantia'])) ? ($result['sDescripcionGarantia']) : ''; ?></textarea>
+                         </div>
+                     </div>
+                </div>
+
             </div>
      
 
@@ -80,6 +94,12 @@
         });
 
         CKEDITOR.replace('sDescripcionHoja2', {
+            width: '100%',
+            height: 600,
+            uploadUrl: window.location.href
+        });
+
+        CKEDITOR.replace('sDescripcionGarantia', {
             width: '100%',
             height: 600,
             uploadUrl: window.location.href

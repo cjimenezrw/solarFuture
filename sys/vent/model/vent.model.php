@@ -626,7 +626,7 @@ Class Vent_Model Extends DLOREAN_Model {
     }
 
     public function _getCotizacionInformacionProducto() {
-        $select = "SELECT cip.skInformacionProductoServicio,sNombre,sDescripcionHoja1,sDescripcionHoja2,sImagen FROM rel_cotizacion_informacionProducto rci
+        $select = "SELECT cip.skInformacionProductoServicio,sNombre,sDescripcionHoja1,sDescripcionHoja2,sDescripcionGarantia,sImagen FROM rel_cotizacion_informacionProducto rci
         LEFT JOIN cat_informacionProductoServicio cip ON cip.skInformacionProductoServicio = rci.skInformacionProductoServicio
          where rci.skCotizacion = " . escape($this->vent['skCotizacion']);
         $result = Conn::query($select);

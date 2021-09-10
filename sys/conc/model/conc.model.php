@@ -111,6 +111,7 @@ Class Conc_Model Extends DLOREAN_Model {
             ,ips.sNombre
             ,ips.sDescripcionHoja1
             ,ips.sDescripcionHoja2
+            ,ips.sDescripcionGarantia
             ,ips.sImagen
             ,ips.skUsuarioCreacion
             ,ips.dFechaCreacion
@@ -139,6 +140,7 @@ Class Conc_Model Extends DLOREAN_Model {
             " .escape(isset($this->conc['sNombre']) ? $this->conc['sNombre'] : NULL) . ",
             " .escape(isset($this->conc['sDescripcionHoja1']) ? $this->conc['sDescripcionHoja1'] : NULL) . ",
             " .escape(isset($this->conc['sDescripcionHoja2']) ? $this->conc['sDescripcionHoja2'] : NULL) . ",
+            " .escape(isset($this->conc['sDescripcionGarantia']) ? $this->conc['sDescripcionGarantia'] : NULL) . ",
             " .escape(isset($this->conc['sImagen']) ? $this->conc['sImagen'] : NULL). ",
             " .escape(isset($this->conc['sObservacionesCancelacion']) ? $this->conc['sObservacionesCancelacion'] : NULL) . ",
 

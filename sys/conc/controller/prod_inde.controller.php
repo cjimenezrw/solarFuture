@@ -31,6 +31,7 @@ Class Prod_inde_Controller Extends Conc_Model {
             ,ips.sNombre
             ,ips.sDescripcionHoja1
             ,ips.sDescripcionHoja2
+            ,ips.sDescripcionGarantia
             ,ips.sImagen
             ,ips.skUsuarioCreacion
             ,ips.dFechaCreacion

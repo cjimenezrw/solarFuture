@@ -271,10 +271,10 @@ DICHO TRABAJO SE ENTREGA FUNCIONANDO Y A SATISFACCIÓN PLENA DEL CLIENTE, HABIÉ
 <?php 
     if(isset($data['cotizacionInformacionProducto'])){ 
         foreach ($data['cotizacionInformacionProducto'] AS $infoProductos){ 
-            if(!empty($infoProductos['sDescripcionHoja1'])){
+            if(!empty($infoProductos['sDescripcionGarantia'])){
 ?>
     <div class="col-md-12 clearfix" style="font-size:9px;">
-        <?php echo (isset($infoProductos['sDescripcionHoja1'])) ? html_entity_decode($infoProductos['sDescripcionHoja1'],ENT_QUOTES) : ''; ?>
+        <?php echo (isset($infoProductos['sDescripcionGarantia'])) ? html_entity_decode($infoProductos['sDescripcionGarantia'],ENT_QUOTES) : ''; ?>
     </div> 
 <?php
             }//ENDIF 

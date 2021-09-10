@@ -143,7 +143,7 @@ td.text-right {
 
 <div class="col-md-12" style="font-size:13px;">
     <div class="col-md-2"><b>CLIENTE:</b></div> 
-    <div class="col-md-9"><?php echo (isset($data['datos']['sRecibeEntrega'])) ? ($data['datos']['sRecibeEntrega']) : '-'; ?></div>
+    <div class="col-md-9"><?php echo (isset($data['datos']['cliente'])) ? ($data['datos']['cliente']) : '-'; ?></div>
 </div>
 <!--
 <div class="col-md-12" style="font-size:13px;color:#000000;">
@@ -294,7 +294,7 @@ DECLARAN LAS PARTES QUE LA ENTREGA DE DICHO SERVICIO, PROYECTO O PRODUCTO ES A E
     <p style="text-align: center;"><strong><span style="font-size: 8.0pt; font-family: 'Calibri',sans-serif;">___________________________________________</span></strong></p>
     <p style="margin-left: 14.2pt; text-align: center;">
         <span style="font-size: 14px; font-family: 'Calibri',sans-serif;">
-            <?php echo (isset($data['datos']['cliente'])) ? ($data['datos']['sRecibeEntrega']) : '-'; ?><br>CLIENTE</br>
+            <?php echo (isset($data['datos']['cliente'])) ? ($data['datos']['cliente']) : '-'; ?><br>CLIENTE</br>
         </span>
     </p>
 </div>

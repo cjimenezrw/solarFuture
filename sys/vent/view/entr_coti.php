@@ -19,7 +19,7 @@
                                         <i class="wb-user" aria-hidden="true"></i>
                                     </span>
                                     <input id="sRecibeEntrega" name="sRecibeEntrega" placeholder="RECIBE ENTREGA" type="text" class="form-control" autocomplete="off"   
-                                    value = "<?php echo isset($data['datos']['sRecibeEntrega']) ? $data['datos']['sRecibeEntrega'] : ''; ?>">
+                                    value = "<?php echo isset($data['datos']['sRecibeEntrega']) ? $data['datos']['sRecibeEntrega'] : $data['datos']['cliente']; ?>">
                                 </div>
                             </div>
                         </div>

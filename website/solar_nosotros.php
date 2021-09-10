@@ -64,12 +64,12 @@
                         </div>
                     </div>
                 </div>
-                <div class="col-lg-4 col-md-4 col-xs-12 hidden-sm hidden-xs">
+                <div class="col-lg-4 col-md-4 col-xs-12">
                     <div class="section2_img_wrapper">
                         <img class="img-responsive" src="images/solar_function.gif" alt="img" style="margin-top: 130px;">
                     </div>
                 </div>
-                <div class="col-lg-4 col-md-4 col-xs-12 col-sm-12 hidden-sm hidden-xs">
+                <div class="col-lg-4 col-md-4 col-xs-12 col-sm-12">
                     <div class="chose_text_wrapper_right">
                         <div class="chose_icon_wrapper_list">
                             <div class="icon_content_right">
@@ -108,7 +108,7 @@
                         </div>
                     </div>
                 </div>
-                <div class="col-lg-4 col-md-4 col-xs-12 col-sm-12 visible-sm visible-xs">
+                <!--<div class="col-lg-4 col-md-4 col-xs-12 col-sm-12 visible-sm visible-xs">
                     <div class="chose_text_wrapper_right">
                         <div class="chose_icon_wrapper_list">
                             <div class="chose_icon_img_list">
@@ -141,10 +141,10 @@
                             </div>
                         </div>
                     </div>
-                </div>
-                <div class="col-xs-12 col-sm-12 visible-sm visible-xs">
+                </div>!-->
+                <div class="col-xs-12 col-sm-12">
                     <div class="section2_img_wrapper">
-                        <img class="img-responsive" src="images/cs_service.png" alt="img">
+                        <img class="img-responsive" src="images/solar_function.gif" alt="img">
                     </div>
                 </div>
             

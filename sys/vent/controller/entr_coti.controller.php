@@ -79,7 +79,6 @@ Class Entr_coti_Controller Extends Vent_Model {
       public function guardar_documentos(){
         $this->data['success'] = TRUE;
         $this->vent['axn'] = 'guardar_documentos';
- 
         if(
             isset($_FILES['docu_file_OPERAT_FOTOGR']['name']) 
             && !empty($_FILES['docu_file_OPERAT_FOTOGR']['name'])

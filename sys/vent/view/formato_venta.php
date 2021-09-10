@@ -130,7 +130,7 @@ td.text-right {
     <div class="col-md-7" style="text-align: right; margin-left: 70px;">
         <div class="" style="color:black;">
             <span class="bold" style="font-size: 14px;text-transform: uppercase;">Venta <?php echo (isset($data['datos']['iFolio'])) ? ($data['datos']['iFolio']) : ''; ?></span><br>
-            <span class="bold" style="font-size: 14px;text-transform: uppercase;">Solar Future Manzanillo S.A.S.</span><br>
+            <span class="bold" style="font-size: 14px;text-transform: uppercase;">SOLAR FUTURE MANZANILLO S.A. DE C.V.</span><br>
             <span class="bold" style="font-size: 10px;">RFC: SFM1905213C3</span><br>
             <span  style="font-size: 10px;">AV. ELIAS ZAMORA VERDUZCO  #3220 "A"</span><br>
             <span  style="font-size: 10px;">COLONIA BARRIO NUEVO, MANZANILLO, COL.</span><br>

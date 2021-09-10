@@ -64,7 +64,7 @@
                         </div>
                     </div>
                 </div>
-                <div class="col-lg-4 col-md-4 col-xs-12">
+                <div class="col-lg-4 col-md-4 col-xs-12 hidden-sm hidden-xs">
                     <div class="section2_img_wrapper">
                         <img class="img-responsive" src="images/solar_function.gif" alt="img" style="margin-top: 130px;">
                     </div>
@@ -108,41 +108,7 @@
                         </div>
                     </div>
                 </div>
-                <!--<div class="col-lg-4 col-md-4 col-xs-12 col-sm-12 visible-sm visible-xs">
-                    <div class="chose_text_wrapper_right">
-                        <div class="chose_icon_wrapper_list">
-                            <div class="chose_icon_img_list">
-                                <img src="images/ser_img_3.png" alt="title">
-                            </div>
-                            <div class="icon_content_right">
-                                <h4><a href="#">Used for Many Purposes</a></h4>
-                                <p>Quisque ut nunc elit. Lorem ipsum dolor Sit amet consectetur.</p>
-                            </div>
-                        </div>
-                        <div class="chose_icon_wrapper_list">
-
-                            <div class="chose_icon_img_list">
-                                <img src="images/ser_img_4.png" alt="title">
-                            </div>
-
-                            <div class="icon_content_right">
-                                <h4><a href="#">Low Installation Costs</a></h4>
-                                <p>Quisque ut nunc elit. Lorem ipsum dolor Sit amet consectetur.</p>
-                            </div>
-                        </div>
-                        <div class="chose_icon_wrapper_list">
-                            <div class="chose_icon_img_list">
-                                <img src="images/ser_img_5.png" alt="title">
-
-                            </div>
-                            <div class="icon_content_right">
-                                <h4><a href="#">Easy Installation</a></h4>
-                                <p>Quisque ut nunc elit. Lorem ipsum dolor Sit amet consectetur.</p>
-                            </div>
-                        </div>
-                    </div>
-                </div>!-->
-                <div class="col-xs-12 col-sm-12">
+                <div class="col-xs-12 col-sm-12 visible-sm visible-xs">
                     <div class="section2_img_wrapper">
                         <img class="img-responsive" src="images/solar_function.gif" alt="img">
                     </div>

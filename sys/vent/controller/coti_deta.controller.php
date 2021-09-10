@@ -134,6 +134,24 @@ Class Coti_deta_Controller Extends Vent_Model {
     public function formatoEntregaPDF() {
         
         $this->data = $this->consultar();
+
+        //exit("<pre>".print_r($this->data['conceptosCotizacionInventario'],1)."</pre>");
+        
+        $conceptosInventario = [];
+        foreach($this->data['conceptosCotizacionInventario'] AS $row){
+            if(!isset($conceptosInventario[$row['sCodigo']])){
+                $conceptosInventario[$row['sCodigo']] = [
+                    'sCodigo'=>$row['sCodigo'],
+                    'concepto'=>$row['concepto'],
+                    'sDescripcion'=>$row['sDescripcion'],
+                    'sNumeroSerie'=>[]
+                ];
+            }
+            array_push($conceptosInventario[$row['sCodigo']]['sNumeroSerie'],$row['sNumeroSerie']);
+        }
+
+        $this->data['conceptosCotizacionInventario'] = $conceptosInventario;
+
         
         ob_start();
             $this->load_view('formato_entrega', $this->data, NULL, FALSE);
@@ -144,8 +162,8 @@ Class Coti_deta_Controller Extends Vent_Model {
             [
                 'content' => $formato_cotizacion,
                 'defaultWatermark' => false,
-                'header' => '<div><img src="' . CORE_PATH . 'assets/custom/img/header_entrega.png" width="100%" height="140"></div>',
-                'footer' => '<div><img src="' . CORE_PATH . 'assets/custom/img/footer_entrega.png" width="100%" height="180"></div>',
+                'header' => '<div><img src="' . CORE_PATH . 'assets/custom/img/header_entrega.jpg" width="100%" height="140"></div>',
+                'footer' => '<div><img src="' . CORE_PATH . 'assets/custom/img/footer_entrega.jpg" width="100%" height="220"></div>',
                 'defaultFooter' => false,
                 'defaultHeader' => false,
                 'pdf' => [

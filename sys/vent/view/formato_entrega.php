@@ -233,7 +233,7 @@ DICHO TRABAJO SE ENTREGA FUNCIONANDO Y A SATISFACCIÓN PLENA DEL CLIENTE, HABIÉ
 		    <tr>
 			<td style="text-align:center; font-size: 10px; text-transform: uppercase; word-wrap: break-word;"><?php echo $conceptosInventario['sCodigo']; ?></td>
  			<td style="text-align:left; font-size: 10px; text-transform: uppercase; word-wrap: break-word;"><?php echo (!empty($conceptosInventario['sDescripcion']) ? $conceptosInventario['sDescripcion'] : $conceptosInventario['concepto']); ?></td>
-            <td style="text-align:center; font-size: 10px; text-transform: uppercase; word-wrap: break-word;"><?php echo (!empty($conceptosInventario['sNumeroSerie']) ? $conceptosInventario['sNumeroSerie'] : $conceptosInventario['sNumeroSerie']); ?></td>
+            <td style="text-align:center; font-size: 10px; text-transform: uppercase; word-wrap: break-word;"><?php echo (!empty($conceptosInventario['sNumeroSerie']) ? implode(', ',$conceptosInventario['sNumeroSerie']) : ''); ?></td>
 		    </tr>
 		    <?php
 		}//FOREACH

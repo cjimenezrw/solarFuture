@@ -34,10 +34,31 @@ if (isset($data['datos'])) {
 
                     <div class="row row-lg col-lg-12">
 
-                        <div class="form-group col-md-12">
-                            <div class="checkbox-custom checkbox-primary">
-                                <input type="checkbox" id="iDetalle" name="iDetalle" value="1" <?php echo (isset($result['iDetalle']) && $result['iDetalle'] == 1) ? 'checked="checked"' : ''; ?>/>
-                                <label for="iDetalle"><b>INVENTARIO DE PRODUCTOS CON NUMEROS DE SERIE</b></label>
+                        <div class="col-md-4 col-lg-4">
+                            <div class="form-group">
+                                <h4 class="example-title">INFORMACIÓN PRODUCTO / SERVICIO</h4>
+                                <select id="skInformacionProductoServicio"  name="skInformacionProductoServicio" class="form-control" data-plugin="select2" select2Simple>
+                                    <option value="">- SELECCIONAR -</option>
+                                    <?php
+                                    if ($data['informacionProductoServicio']) {
+                                    foreach ($data['informacionProductoServicio'] AS $k=>$v) {
+                                        ?>
+                                        <option <?php echo(isset($result['skInformacionProductoServicio']) && $result['skInformacionProductoServicio'] == $v['skInformacionProductoServicio'] ? 'selected="selected"' : '') ?>
+                                            value="<?php echo $v['skInformacionProductoServicio']; ?>"> <?php echo $v['sNombre']; ?> </option>
+                                        <?php
+                                        }//ENDWHILE
+                                    }//ENDIF
+                                    ?>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="col-md-8 col-lg-8">
+                            <div class="form-group">
+                                <div class="checkbox-custom checkbox-primary">
+                                    <input type="checkbox" id="iDetalle" name="iDetalle" value="1" <?php echo (isset($result['iDetalle']) && $result['iDetalle'] == 1) ? 'checked="checked"' : ''; ?>/>
+                                    <label for="iDetalle"><b>INVENTARIO DE PRODUCTOS CON NUMEROS DE SERIE</b></label>
+                                </div>
                             </div>
                         </div>
 
@@ -213,6 +234,7 @@ if (isset($data['datos'])) {
 
         $("#skUnidadMedida").select2({placeholder: "UNIDAD DE MEDIDA", allowClear: true });
         $("#skCategoriaProducto").select2({placeholder: "CATEGORÍA PRODUCTO", allowClear: true });
+        $("#skInformacionProductoServicio").select2({placeholder: "INFORMACIÓN PRODUCTO / SERVICIO", allowClear: true });
           
         core.autocomplete2('#skEmpresaSocioProveedor', 'get_empresas', window.location.href, 'PROVEEDOR',{
             skEmpresaTipo : '["PROV"]'

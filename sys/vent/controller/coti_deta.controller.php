@@ -135,7 +135,7 @@ Class Coti_deta_Controller Extends Vent_Model {
         
         $this->data = $this->consultar();
 
-        //exit("<pre>".print_r($this->data['conceptosCotizacionInventario'],1)."</pre>");
+        //exit("<pre>".print_r($this->data['cotizacionInformacionProducto'],1)."</pre>");
         
         $conceptosInventario = [];
         foreach($this->data['conceptosCotizacionInventario'] AS $row){

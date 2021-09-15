@@ -124,12 +124,21 @@ Class Conc_Model Extends DLOREAN_Model {
         FROM cat_informacionProductoServicio ips
         INNER JOIN core_estatus ce ON ce.skEstatus = ips.skEstatus
         INNER JOIN cat_usuarios cu ON cu.skUsuario = ips.skUsuarioCreacion
-        WHERE ips.skInformacionProductoServicio = ".escape($this->conc['skInformacionProductoServicio']);
+        WHERE 1=1 ";
+
+        if (isset($this->conc['skInformacionProductoServicio']) && !empty(trim($this->conc['skInformacionProductoServicio']))) {
+            $sql .= " AND ips.skInformacionProductoServicio = ".escape($this->conc['skInformacionProductoServicio']);
+        }
+
         $result = Conn::query($sql);
         if (!$result) {
             return FALSE;
         }
-        $records = Conn::fetch_assoc($result);
+        if (isset($this->conc['skInformacionProductoServicio']) && !empty(trim($this->conc['skInformacionProductoServicio']))) {
+            $records = Conn::fetch_assoc($result);    
+        }else{
+            $records = Conn::fetch_assoc_all($result);
+        }
         utf8($records);
         return $records;
     }
@@ -179,6 +188,7 @@ Class Conc_Model Extends DLOREAN_Model {
             " .escape(isset($this->conc['skImpuestoConcepto']) ? $this->conc['skImpuestoConcepto'] : NULL) . ",
             " .escape(isset($this->conc['fKwh']) ? $this->conc['fKwh'] : NULL) . ",
             " .escape(isset($this->conc['skCategoriaProducto']) ? $this->conc['skCategoriaProducto'] : NULL) . ",
+            " .escape(isset($this->conc['skInformacionProductoServicio']) ? $this->conc['skInformacionProductoServicio'] : NULL) . ",
             " .escape(isset($this->conc['fMetros2']) ? $this->conc['fMetros2'] : NULL) . ",
             " .escape(isset($this->conc['axn']) ? $this->conc['axn'] : NULL) . ",
             '" . $_SESSION['usuario']['skUsuario'] . "',
@@ -243,6 +253,7 @@ Class Conc_Model Extends DLOREAN_Model {
                 cc.skEmpresaSocioProveedor,
                 cc.fKwh,
                 cc.skCategoriaProducto,
+                cc.skInformacionProductoServicio,
                 cc.fCantidad,
                 cc.iDetalle,
                 cso.sNombre AS categoriaProducto,
@@ -253,7 +264,8 @@ Class Conc_Model Extends DLOREAN_Model {
                 cum.sNombre AS unidadMedida,
                 cep.sNombre AS proveedor,
                 cep.sRFC AS proveedorRFC,
-                cu.sNombre AS usuarioCreacion       
+                cu.sNombre AS usuarioCreacion,
+                ips.sNombre AS informacionProductoServicio
                 FROM cat_conceptos cc
                 INNER JOIN core_estatus ce ON ce.skEstatus = cc.skEstatus
                 INNER JOIN cat_usuarios cu ON cu.skUsuario = cc.skUsuarioCreacion
@@ -261,6 +273,7 @@ Class Conc_Model Extends DLOREAN_Model {
                 LEFT JOIN cat_empresas cep ON cep.skEmpresa = resp.skEmpresa
                 LEFT JOIN cat_unidadesMedidaSAT cum ON cum.skUnidadMedida = cc.skUnidadMedida
                 LEFT JOIN rel_catalogosSistemasOpciones cso ON cso.skClave = cc.skCategoriaProducto AND cso.skCatalogoSistema = 'CATPRO'
+                LEFT JOIN cat_informacionProductoServicio ips ON ips.skInformacionProductoServicio = cc.skInformacionProductoServicio
                 WHERE cc.skConcepto =  " . escape($this->conc['skConcepto']);
 
         $result = Conn::query($sql);

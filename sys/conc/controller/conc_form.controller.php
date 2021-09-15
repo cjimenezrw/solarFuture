@@ -319,6 +319,9 @@ Class Conc_form_Controller Extends Conc_Model {
                 }
         }
         $this->data['conceptosImpuestos'] = $conImpuestos;
+
+        // OBTENEMOS EL CATÁLOGO DE INFORMACIÓN DE PRODUCTO
+            $this->data['informacionProductoServicio'] = parent::_get_informacionProductoServicio();
         
         return $this->data;
     }

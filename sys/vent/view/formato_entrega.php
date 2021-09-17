@@ -272,6 +272,8 @@ DICHO TRABAJO SE ENTREGA FUNCIONANDO Y A SATISFACCIÓN PLENA DEL CLIENTE, HABIÉ
     if(isset($data['cotizacionInformacionProducto'])){ 
         foreach ($data['cotizacionInformacionProducto'] AS $infoProductos){ 
             if(!empty($infoProductos['sDescripcionGarantia'])){
+                $GENERACION_KW = (($infoProductos['fCantidad'] * $infoProductos['fKwh'] * 4.5 * 60) / 1000);
+                $infoProductos['sDescripcionGarantia'] = str_replace('[GENERACION_KW/H]',($GENERACION_KW),$infoProductos['sDescripcionGarantia']);
 ?>
     <div class="col-md-12 clearfix" style="font-size:9px;">
         <?php echo (isset($infoProductos['sDescripcionGarantia'])) ? html_entity_decode($infoProductos['sDescripcionGarantia'],ENT_QUOTES) : ''; ?>

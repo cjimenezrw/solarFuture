@@ -101,6 +101,21 @@ Class Coti_deta_Controller Extends Vent_Model {
     public function formatoVentaPDF() {
         
         $this->data = $this->consultar();
+
+        $conceptosInventario = [];
+        foreach($this->data['conceptosCotizacionInventario'] AS $row){
+            if(!isset($conceptosInventario[$row['sCodigo']])){
+                $conceptosInventario[$row['sCodigo']] = [
+                    'sCodigo'=>$row['sCodigo'],
+                    'concepto'=>$row['concepto'],
+                    'sDescripcion'=>$row['sDescripcion'],
+                    'sNumeroSerie'=>[]
+                ];
+            }
+            array_push($conceptosInventario[$row['sCodigo']]['sNumeroSerie'],$row['sNumeroSerie']);
+        }
+
+        $this->data['conceptosCotizacionInventario'] = $conceptosInventario;
         
         ob_start();
             $this->load_view('formato_venta', $this->data, NULL, FALSE);
@@ -135,7 +150,7 @@ Class Coti_deta_Controller Extends Vent_Model {
         
         $this->data = $this->consultar();
 
-        //exit("<pre>".print_r($this->data['cotizacionInformacionProducto'],1)."</pre>");
+        //exit("<pre>".print_r($this->data,1)."</pre>");
         
         $conceptosInventario = [];
         foreach($this->data['conceptosCotizacionInventario'] AS $row){

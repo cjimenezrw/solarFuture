@@ -292,11 +292,20 @@ DICHO TRABAJO SE ENTREGA FUNCIONANDO Y A SATISFACCIÓN PLENA DEL CLIENTE, HABIÉ
 DECLARAN LAS PARTES QUE LA ENTREGA DE DICHO SERVICIO, PROYECTO O PRODUCTO ES A ENTERE Y PLENA SATISFACCIÓN SIN DOLO ALGUNO, EN MANZANILLO, COLIMA EL DÍA <?php echo (isset($data['datos']['dFechaCreacion']) && !empty($data['datos']['dFechaCreacion'])) ? $this->obtenerFechaEnLetra($data['datos']['dFechaCreacion']) : '-'; ?>
 </div>
 
-<div class="col-md-12 clearfix" style="font-size:13px;text-transform: uppercase;margin-top:30px;">
+<div class="col-md-5 clearfix" style="font-size:13px;text-transform: uppercase;margin-top:30px;">
     <p style="text-align: center;"><strong><span style="font-size: 8.0pt; font-family: 'Calibri',sans-serif;">___________________________________________</span></strong></p>
     <p style="margin-left: 14.2pt; text-align: center;">
         <span style="font-size: 14px; font-family: 'Calibri',sans-serif;">
-            <?php echo (isset($data['datos']['cliente'])) ? ($data['datos']['cliente']) : '-'; ?><br>CLIENTE</br>
+            <?php echo (isset($data['datos']['cliente'])) ? ($data['datos']['cliente']) : '-'; ?><br>CLIENTE
+        </span>
+    </p>
+</div>
+
+<div class="col-md-5" style="font-size:13px;text-transform: uppercase;">
+    <p style="text-align: center;"><strong><span style="font-size: 8.0pt; font-family: 'Calibri',sans-serif;">___________________________________________</span></strong></p>
+    <p style="margin-left: 14.2pt; text-align: center;">
+        <span style="font-size: 14px; font-family: 'Calibri',sans-serif;">
+            ENTREGA<br>SOLAR FUTURE MANZANILLO S.A. DE C.V</br>
         </span>
     </p>
 </div>

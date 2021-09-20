@@ -631,7 +631,7 @@ Class Vent_Model Extends DLOREAN_Model {
         LEFT JOIN cat_informacionProductoServicio cip ON cip.skInformacionProductoServicio = rci.skInformacionProductoServicio
         LEFT JOIN cat_conceptos c ON c.skInformacionProductoServicio = cip.skInformacionProductoServicio
         LEFT JOIN rel_cotizaciones_conceptos cc ON cc.skConcepto = c.skConcepto AND cc.skCotizacion = rci.skCotizacion
-        WHERE rci.skCotizacion = ".escape($this->vent['skCotizacion']);
+        WHERE rci.skCotizacion = ".escape($this->vent['skCotizacion'])." AND cc.skConcepto IS NOT NULL ";
         
         $result = Conn::query($select);
         if (!$result) {

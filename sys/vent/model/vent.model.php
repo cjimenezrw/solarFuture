@@ -626,13 +626,21 @@ Class Vent_Model Extends DLOREAN_Model {
     }
 
     public function _getCotizacionInformacionProducto() {
-        $select = "SELECT cip.skInformacionProductoServicio,cip.sNombre,cip.sDescripcionHoja1,cip.sDescripcionHoja2,cip.sDescripcionGarantia,cip.sImagen,c.fKwh,cc.fCantidad
-        FROM rel_cotizacion_informacionProducto rci
-        LEFT JOIN cat_informacionProductoServicio cip ON cip.skInformacionProductoServicio = rci.skInformacionProductoServicio
-        LEFT JOIN cat_conceptos c ON c.skInformacionProductoServicio = cip.skInformacionProductoServicio
-        LEFT JOIN rel_cotizaciones_conceptos cc ON cc.skConcepto = c.skConcepto AND cc.skCotizacion = rci.skCotizacion
-        WHERE rci.skCotizacion = ".escape($this->vent['skCotizacion'])." AND cc.skConcepto IS NOT NULL ";
-        
+
+        if(in_array($this->sysController,['coti-deta','coti-form'])){
+            $select = "SELECT cip.skInformacionProductoServicio,cip.sNombre,cip.sDescripcionHoja1,cip.sDescripcionHoja2,cip.sDescripcionGarantia,cip.sImagen
+            FROM rel_cotizacion_informacionProducto rci
+            LEFT JOIN cat_informacionProductoServicio cip ON cip.skInformacionProductoServicio = rci.skInformacionProductoServicio
+            WHERE rci.skCotizacion = ".escape($this->vent['skCotizacion']);
+        }else{
+            $select = "SELECT cip.skInformacionProductoServicio,cip.sNombre,cip.sDescripcionHoja1,cip.sDescripcionHoja2,cip.sDescripcionGarantia,cip.sImagen,c.fKwh,cc.fCantidad
+            FROM rel_cotizacion_informacionProducto rci
+            LEFT JOIN cat_informacionProductoServicio cip ON cip.skInformacionProductoServicio = rci.skInformacionProductoServicio
+            LEFT JOIN cat_conceptos c ON c.skInformacionProductoServicio = cip.skInformacionProductoServicio
+            LEFT JOIN rel_cotizaciones_conceptos cc ON cc.skConcepto = c.skConcepto AND cc.skCotizacion = rci.skCotizacion
+            WHERE rci.skCotizacion = ".escape($this->vent['skCotizacion'])." AND cc.skConcepto IS NOT NULL ";    
+        }
+
         $result = Conn::query($select);
         if (!$result) {
             return FALSE;

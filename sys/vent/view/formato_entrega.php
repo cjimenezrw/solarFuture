@@ -204,14 +204,14 @@ SIENDO EL DÍA <?php echo (isset($data['datos']['dFechaCreacion']) && !empty($da
 DICHO TRABAJO SE ENTREGA FUNCIONANDO Y A SATISFACCIÓN PLENA DEL CLIENTE, HABIÉNDOSE EXPLICADO EL CÓMO OPERAR EL SISTEMA / PRODUCTO Y LAS RECOMENDACIONES O SUGERENCIAS PARA LA ADECUADA FUNCIONALIDAD DEL MISMO.
 </div>
 
+<?php
+    if (isset($data['conceptosCotizacionInventario']) && !empty($data['conceptosCotizacionInventario'])) {
+?>
 <div class="col-md-12 clearfix" style="font-size:14px;text-transform: uppercase;font-weight:bold;">
 1.- LISTADO Y NÚMERO DE SERIE DE LOS EQUIPOS:
 </div>
 
 <!-- AQUI VA LA INFORMACIÓN DE LOS PRODUCTOS DE INVENTARIO !-->
-<?php
-    if (isset($data['conceptosCotizacionInventario']) && !empty($data['conceptosCotizacionInventario'])) {
-?>
 <div class="col-md-12 clearfix"></div>
 <div class="col-md-12 page-invoice-table table-responsive font-size-12" style="margin-top: 0px;">
     <table class="table text-right">
@@ -242,12 +242,11 @@ DICHO TRABAJO SE ENTREGA FUNCIONANDO Y A SATISFACCIÓN PLENA DEL CLIENTE, HABIÉ
 	</tbody>
     </table>
 </div>
+
+<div style="page-break-after:always;"></div>
 <?php 
     }//ENDIF
 ?>
-
-<div style="page-break-after:always;"></div>
-
 <div class="col-md-12 clearfix" style="font-size:14px;text-transform: uppercase;font-weight:bold;">
 2.- RELACIÓN DE EVIDENCIA FOTOGRÁFICA INTEGRADA AL PRESENTE FORMATO DE ENTREGA
 </div>
@@ -291,7 +290,7 @@ DICHO TRABAJO SE ENTREGA FUNCIONANDO Y A SATISFACCIÓN PLENA DEL CLIENTE, HABIÉ
 <div class="col-md-12 clearfix" style="font-size:11px;text-transform: uppercase;">
 DECLARAN LAS PARTES QUE LA ENTREGA DE DICHO SERVICIO, PROYECTO O PRODUCTO ES A ENTERE Y PLENA SATISFACCIÓN SIN DOLO ALGUNO, EN MANZANILLO, COLIMA EL DÍA <?php echo (isset($data['datos']['dFechaCreacion']) && !empty($data['datos']['dFechaCreacion'])) ? $this->obtenerFechaEnLetra($data['datos']['dFechaCreacion']) : '-'; ?>
 </div>
-
+ 
 <div class="col-md-5 clearfix" style="font-size:13px;text-transform: uppercase;margin-top:30px;">
     <p style="text-align: center;"><strong><span style="font-size: 8.0pt; font-family: 'Calibri',sans-serif;">___________________________________________</span></strong></p>
     <p style="margin-left: 14.2pt; text-align: center;">

@@ -180,6 +180,7 @@ class Conn {
                     switch ($dsn) {
                         case 'mysql':
                             Conn::$base = new PDO("mysql:host=$hostStr;dbname=$d[DATABASE_DB];charset=utf8", $d["USER_DB"], $d["PASSWORD_DB"]);
+                            Conn::$base->exec("SET time_zone = 'America/Mexico_City';");
                             break;
                         case 'mssql':
                             Conn::$base = new PDO("$dsn:host=$hostStr;dbname=$d[DATABASE_DB];charset=UTF-8;timeout=0;connect timeout=0", "$d[USER_DB]", "$d[PASSWORD_DB]");

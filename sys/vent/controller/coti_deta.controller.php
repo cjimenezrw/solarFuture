@@ -23,7 +23,7 @@ Class Coti_deta_Controller Extends Vent_Model {
         $this->data['conceptosCotizacion']  = parent::_getCotizacionConceptos();
         $this->data['conceptosCotizacionInventario'] = parent::_getCotizacionConceptos_inventario();
         $this->data['cotizacionCorreos']  = parent::_getCotizacionCorreos();
-        $this->data['cotizacionInformacionProducto'] = parent::_getCotizacionInformacionProducto();
+        $this->data['cotizacionInformacionProducto'] = parent::_getCotizacionInformacionProductoPDF();
         $this->data['cotizacionTerminosCondiciones'] = parent::_getCotizacionTerminosCondiciones();
         $this->data['BANCOT'] = parent::getVariable('BANCOT');
         $this->data['PIECOT'] = parent::getVariable('PIECOT');
@@ -149,8 +149,8 @@ Class Coti_deta_Controller Extends Vent_Model {
     public function formatoEntregaPDF() {
         
         $this->data = $this->consultar();
-
-        //exit("<pre>".print_r($this->data,1)."</pre>");
+ 
+        //exit("<pre>".print_r($this->data['cotizacionInformacionProducto'],1)."</pre>");
         
         $conceptosInventario = [];
         foreach($this->data['conceptosCotizacionInventario'] AS $row){

@@ -29,7 +29,6 @@ Class hica_inde_Controller Extends Conf_Model {
     public function getAccessHistory(){
 
         $configuraciones = array();
-        $configuraciones['log'] = true;
         $configuraciones['query'] = " SELECT  concat(cu.sNombre ,' ', cu.sApellidoPaterno) AS usuario, cau.skEstatus, cm.skModulo, cm.sTitulo as Modulo, cau.sIP,
         cau.dFechaCreacion
         FROM core_accesos_usuarios cau

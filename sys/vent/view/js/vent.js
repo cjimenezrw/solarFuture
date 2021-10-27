@@ -30,7 +30,7 @@ vent.coti_inde.dataTableConf = {
     "drawCallback": function () {
         core.dataTable.contextMenuCore(true);
         core.dataTable.changeColumnColor(1, 'success');
-        core.dataTable.fastFilters(1, [], true);
+        core.dataTable.fastFilters(2, [], true);
         $('[data-toggle="tooltip"]').tooltip();
     },
     "columnDefs": [

@@ -835,7 +835,7 @@ conf.hica_inde.dataTableConf = {
     'columns': [
         {'title': 'E', 'data': 'skEstatus', 'dataType': 'string'},
         {'title': 'Usuario', 'data': 'usuario', 'dataType': 'string'},
-        {'title': 'Fecha Creaci&oacute;n', 'data': 'dFechaCreacion', 'dataType': 'date'},
+        {'title': 'Fecha Creación', 'data': 'dFechaCreacion', 'dataType': 'date'},
         {'title': 'skModulo', 'data': 'skModulo', 'dataType': 'string'},
         {'title': 'Modulo', 'data': 'Modulo', 'dataType': 'string'},
         {'title': 'IP', 'data': 'sIP', 'dataType': 'string'}

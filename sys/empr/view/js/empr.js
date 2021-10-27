@@ -34,6 +34,7 @@ empr.empr_inde.dataTableConf = {
     "drawCallback": function () {
         core.dataTable.contextMenuCore(true);
         core.dataTable.changeColumnColor(2, 'success');
+        core.dataTable.fastFilters(4, [], true);
         $('[data-toggle="tooltip"]').tooltip();
     },
     "columnDefs": [
@@ -104,6 +105,7 @@ empr.emso_inde.dataTableConf = {
     "drawCallback": function () {
         core.dataTable.contextMenuCore(true);
         core.dataTable.changeColumnColor(2, 'success');
+        core.dataTable.fastFilters(4, [], true);
         $('[data-toggle="tooltip"]').tooltip();
     },
     "columnDefs": [

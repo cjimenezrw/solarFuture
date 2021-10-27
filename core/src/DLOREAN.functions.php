@@ -979,7 +979,10 @@ trait DLOREAN_Functions {
                 if ($type != 'date' && $type != 'dateTime') {
                     $filtro = " " . $colum . " " . $rule . " '" . trim($value) . "' ";
                 } else {
-                    $filtro = " datediff(day, " . $colum . ", '" . trim($value) . "') = 0 ";
+                    // MSSQL
+                    //$filtro = " datediff(day, " . $colum . ", '" . trim($value) . "') = 0 ";
+                    // MySQL
+                    $filtro = " datediff(" . $colum . ", '" . trim($value) . "') = 0 ";
                 }
                 return $filtro;
                 break;

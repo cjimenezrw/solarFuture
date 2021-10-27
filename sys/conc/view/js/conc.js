@@ -82,7 +82,7 @@ conc.conc_inde.dataTableConf = {
     "drawCallback": function () {
         core.dataTable.contextMenuCore(true);
         core.dataTable.changeColumnColor(1, 'success');
-        core.dataTable.fastFilters(2, [], true);
+        core.dataTable.fastFilters(3, [], true);
         $('[data-toggle="tooltip"]').tooltip();
     },
     "columnDefs": [
@@ -222,7 +222,7 @@ conc.inve_inde.dataTableConf = {
     "drawCallback": function () {
         core.dataTable.contextMenuCore(true);
         core.dataTable.changeColumnColor(2, 'success');
-        core.dataTable.fastFilters(2, [], true);
+        core.dataTable.fastFilters(3, [], true);
         $('[data-toggle="tooltip"]').tooltip();
     },
     "columnDefs": [

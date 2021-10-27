@@ -55,7 +55,12 @@ Class Inic_Controller Extends Inic_Model {
         }
 
         switch ($axn) {
- 
+            case 'clearLOG':
+                DLOREAN_Model::log('LOG CLEAR', TRUE,TRUE);
+                break;
+            case 'clearERROR':
+                DLOREAN_MODEL::error('ERROR CLEAR', TRUE, TRUE);
+                break;
             case 'obtenerPerfiles':
                 $arr = $this->obtenerPerfiles($_GET['perfilesLike']);
                 header('Content-Type: application/json');

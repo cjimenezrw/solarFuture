@@ -499,7 +499,16 @@ Class Vent_Model Extends DLOREAN_Model {
         $sql = "SELECT skConcepto AS id,sNombre AS nombre  FROM cat_conceptos
 				WHERE skEstatus = 'NU' ";
         if (!empty(trim($_POST['val']))) {
-            $sql .= " AND sNombre   LIKE '%" . escape($_POST['val'], false) . "%' ";
+            if(isset($_POST['filter']) && $_POST['filter'] == 'like'){
+                $arr_str = explode(' ',trim($_POST['val']));
+                foreach($arr_str AS $str){
+                    if(!empty(trim($str))){
+                        $sql .= " AND sNombre LIKE '%".escape($str,false)."%' ";
+                    }
+                }
+            }else{
+                $sql .= " AND sNombre LIKE '%".escape($_POST['val'],false)."%' ";
+            }
         }
 
         $result = Conn::query($sql);

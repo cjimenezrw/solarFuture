@@ -663,7 +663,7 @@ function addCommas(amount) {
                             '</tr>';
                             $("#conceptos-body").append(tr_concepto);
                             core.autocomplete2('.skTipoMedida', 'get_medidas', window.location.href, 'Unidad');
-                            core.autocomplete2('.skConcepto', 'get_conceptos', window.location.href, 'Concepto');
+                            core.autocomplete2('.skConcepto', 'get_conceptos', window.location.href, 'Concepto',{filter:'like'});
                         });
                         core.autocomplete2('#skEmpresaSocioCliente', 'get_empresasProspectos', window.location.href, 'Cliente / Prospecto');
 

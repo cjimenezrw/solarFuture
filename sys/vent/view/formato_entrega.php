@@ -154,11 +154,12 @@ td.text-right {
     <div class="col-md-2"><b>RPU:</b></div> 
     <div class="col-md-9"><?php echo (isset($data['datos']['sRPU'])) ? ($data['datos']['sRPU']) : '-'; ?></div>
 </div>
+!-->
 <div class="col-md-12" style="font-size:13px;color:#000000;">
     <div class="col-md-2"><b>TELÉFONO:</b></div> 
-    <div class="col-md-9"><?php echo (isset($data['datos']['sTelefono'])) ? ($data['datos']['sTelefono']) : '-'; ?></div>
+    <div class="col-md-9"><?php echo (isset($data['datos']['sTelefonoRecepcionEntrega'])) ? ($data['datos']['sTelefonoRecepcionEntrega']) : '-'; ?></div>
 </div>
-!-->
+
 <div class="col-md-12 clearfix" style="font-size:11px;text-transform: uppercase;">
 SIENDO EL DÍA <?php echo (isset($data['datos']['dFechaEntregaInstalacion']) && !empty($data['datos']['dFechaEntregaInstalacion'])) ? $this->obtenerFechaEnLetra($data['datos']['dFechaEntregaInstalacion']) : '-'; ?>, SOLAR FUTURE MANZANILLO HACE ENTREGA DE LA INSTALACIÓN DEL SISTEMA / EQUIPO QUE SE DESCRIBE A CONTINUACIÓN:
 </div>

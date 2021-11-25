@@ -182,6 +182,13 @@ vent.entr_coti.validaciones = {
             }
         }
     },
+    sTelefonoRecepcionEntrega: {
+        validators: {
+            notEmpty: {
+                message: 'CAMPO REQUERIDO'
+            }
+        }
+    },
     sObservacionesInstalacion: {
         validators: {
             notEmpty: {

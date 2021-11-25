@@ -38,6 +38,19 @@
                             </div>
                         </div>
 
+                        <div class="col-lg-4 col-md-4">
+                            <div class="form-group">
+                                <h4 class="example-title"><span style="color:red;">* </span>TELÉFONO:</h4>
+                                <div class="input-group">
+                                    <span class="input-group-addon">
+                                        <i class="fa-phone" aria-hidden="true"></i>
+                                    </span>
+                                    <input id="sTelefonoRecepcionEntrega" name="sTelefonoRecepcionEntrega" placeholder="TELÉFONO" type="text" class="form-control" autocomplete="off"   
+                                    value = "<?php echo isset($data['datos']['sTelefonoRecepcionEntrega']) ? $data['datos']['sTelefonoRecepcionEntrega'] : $data['datos']['sTelefonoRecepcionEntrega']; ?>">
+                                </div>
+                            </div>
+                        </div>
+
                     </div>
 
                     <div class="row row-lg">

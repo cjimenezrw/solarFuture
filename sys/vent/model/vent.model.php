@@ -109,6 +109,7 @@ Class Vent_Model Extends DLOREAN_Model {
         oc.dFechaCreacion,
         oc.skEstatusActaEntrega,
         oc.sRecibeEntrega,
+        oc.sTelefonoRecepcionEntrega,
         oc.dFechaEntregaInstalacion,
         oc.sObservacionesInstalacion,
         cp.sNombreContacto AS prospecto,
@@ -810,6 +811,7 @@ Class Vent_Model Extends DLOREAN_Model {
         $sql = "CALL stp_vent_actaEntrega (
             " .escape(isset($this->vent['skCotizacion']) ? $this->vent['skCotizacion'] : NULL) . ",
             " .escape(isset($this->vent['sRecibeEntrega']) ? $this->vent['sRecibeEntrega'] : NULL) . ", 
+            " .escape(isset($this->vent['sTelefonoRecepcionEntrega']) ? $this->vent['sTelefonoRecepcionEntrega'] : NULL) . ", 
             " .escape(isset($this->vent['dFechaEntregaInstalacion']) ? $this->vent['dFechaEntregaInstalacion'] : NULL) . ", 
             " .escape(isset($this->vent['sObservacionesInstalacion']) ? $this->vent['sObservacionesInstalacion'] : NULL) . ", 
             " .escape(isset($this->vent['axn']) ? $this->vent['axn'] : NULL) . ",

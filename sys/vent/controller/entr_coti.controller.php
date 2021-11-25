@@ -114,8 +114,9 @@ Class Entr_coti_Controller Extends Vent_Model {
 
 
           $validations = [
-              'dFechaEntregaInstalacion'=>['message'=>'Fecha de Instalación','validations'=>['date']],
-              'sObservacionesInstalacion'=>['message'=>'OBSERVACIONES DE LA INSTALACIÓN'],
+            'sTelefonoRecepcionEntrega'=>['message'=>'TELÉFONO'],
+            'dFechaEntregaInstalacion'=>['message'=>'FECHA DE INSTALACIÓN','validations'=>['date']],
+            'sObservacionesInstalacion'=>['message'=>'OBSERVACIONES DE LA INSTALACIÓN'],
           ];
 
           foreach($validations AS $k=>$v){

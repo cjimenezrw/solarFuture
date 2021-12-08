@@ -64,10 +64,12 @@ Class Cotr_form_Controller Extends Admi_Model {
             }
 
         // Guardar Documentos
-        $guardar_documentos = $this->guardar_documentos();
-        if(!$guardar_documentos['success']){
-            Conn::rollback($this->idTran);
-            return $this->data;
+        if(!empty($_FILES['docu_file_ADMINI_COMPRO']['name'])){
+            $guardar_documentos = $this->guardar_documentos();
+            if(!$guardar_documentos['success']){
+                Conn::rollback($this->idTran);
+                return $this->data;
+            }
         }
             
         

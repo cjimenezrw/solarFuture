@@ -34,33 +34,20 @@ Class Orse_inde_Controller Extends Admi_Model {
         oos.fImporteSubtotal,
         oos.fImpuestosRetenidos,
         oos.fImpuestosTrasladados,
-        oos.fDescuento,
-        oos.fSaldoRelacion,
+        oos.fDescuento, 
         oos.skEstatus,
         cer.sNombre AS responsable,
         cec.sNombre AS cliente,
         cef.sNombre AS facturacion,
         ce.sNombre AS estatus,
         ce.sIcono AS estatusIcono,
-        ce.sColor AS estatusColor,
-        cep.sNombre AS estatusRelacion,
-        cep.sIcono AS estatusIconoRelacion,
-        cep.sColor AS estatusColorRelacion,
+        ce.sColor AS estatusColor, 
         cu.sNombre AS usoCFDI,
-        (SELECT  
-        CASE
-            WHEN rosp.skServicioProceso = 'VACI' THEN CONCAT('VAC-', LPAD(osv.iFolio, 5, 0))   
-            WHEN rosp.skServicioProceso = 'LAVA' THEN CONCAT('LAV-', LPAD(osl.iFolio, 5, 0))
-            ELSE NULL END AS folioServicio
-        FROM rel_ordenesServicios_procesos rosp
-        LEFT JOIN ope_solicitudesVacios osv ON osv.skSolicitudVacio = rosp.skCodigo 
-        LEFT JOIN ope_solicitudesLavados osl ON osl.skSolicitudLavado = rosp.skCodigo 
-        WHERE rosp.skOrdenServicio = oos.skOrdenServicio LIMIT 1) AS folioServicio,
+        '' AS folioServicio,
         cuc.sNombre AS usuarioCreacion,
-        (SELECT  occ.iFolio   FROM rel_ordenes_comprobantes rpf  INNER JOIN ope_cfdiComprobantes occ ON occ.skComprobanteCFDI = rpf.skComprobanteCFDI  AND occ.skEstatus !='CA' AND occ.iFolio IS NOT NULL WHERE rpf.skOrdenServicio = oos.skOrdenServicio LIMIT 1 ) AS iFolioFactura
+        (SELECT  occ.iFolio   FROM rel_ordenesServicios_facturas rpf  INNER JOIN ope_facturas occ ON occ.skFactura = rpf.skFactura  AND occ.skEstatus !='CA' AND occ.iFolio IS NOT NULL WHERE rpf.skOrdenServicio = oos.skOrdenServicio LIMIT 1 ) AS iFolioFactura
         FROM ope_ordenesServicios oos
-        LEFT JOIN core_estatus ce ON ce.skEstatus = oos.skEstatus
-        LEFT JOIN core_estatus cep ON cep.skEstatus = oos.skEstatusRelacion
+        LEFT JOIN core_estatus ce ON ce.skEstatus = oos.skEstatus 
         LEFT JOIN rel_empresasSocios resr ON resr.skEmpresaSocio = oos.skEmpresaSocioResponsable
         LEFT JOIN cat_empresas cer ON cer.skEmpresa = resr.skEmpresa
         LEFT JOIN rel_empresasSocios resc ON resc.skEmpresaSocio = oos.skEmpresaSocioCliente
@@ -69,7 +56,7 @@ Class Orse_inde_Controller Extends Admi_Model {
         LEFT JOIN cat_empresas cef ON cef.skEmpresa = resf.skEmpresa
         LEFT JOIN cat_usosCFDI cu ON cu.skUsoCFDI = oos.skUsoCFDI
         LEFT JOIN cat_usuarios cuc ON cuc.skUsuario = oos.skUsuarioCreacion
-        
+        WHERE 1 = 1
          ";
         
         if(!isset($_POST['filters'])){
@@ -97,8 +84,7 @@ Class Orse_inde_Controller Extends Admi_Model {
                     "menuEmergente3" => $this->ME_cancelar($row)
                     
                 ];
-                $row['fImporteTotal'] = ($row['fImporteTotal']) ? '$ '.number_format($row['fImporteTotal'],2) : '$ 0.00';
-                $row['fSaldoRelacion'] = ($row['fSaldoRelacion']) ? '$ '.number_format($row['fSaldoRelacion'],2) : '$ 0.00';
+                $row['fImporteTotal'] = ($row['fImporteTotal']) ? '$ '.number_format($row['fImporteTotal'],2) : '$ 0.00'; 
 
                 $row['dFechaCreacion'] = ($row['dFechaCreacion']) ? date('d/m/Y  H:i:s', strtotime($row['dFechaCreacion'])) : ''; 
                  
@@ -154,6 +140,22 @@ Class Orse_inde_Controller Extends Admi_Model {
         $this->data = ['success' => TRUE, 'message' => NULL, 'datos' => NULL];
 
         $this->admi['axn'] = 'autorizarOrden';
+        $this->admi['skOrdenServicio'] = (isset($_POST['skOrdenServicio']) && !empty($_POST['skOrdenServicio'])) ? $_POST['skOrdenServicio'] : NULL;
+
+        $stpCUD_ordenesServicios = parent::stpCUD_ordenesServicios();  
+        if(!$stpCUD_ordenesServicios || isset($stpCUD_ordenesServicios['success']) && $stpCUD_ordenesServicios['success'] != 1){
+            $this->data['success'] = FALSE;
+            $this->data['message'] = 'HUBO UN ERROR AL AUTORIZAR LA SOLICITUD. ';
+            return $this->data;
+        }
+
+        return $this->data;
+    } 
+
+    public function enviarFacturacion(){
+        $this->data = ['success' => TRUE, 'message' => NULL, 'datos' => NULL];
+
+        $this->admi['axn'] = 'enviarFacturacion';
         $this->admi['skOrdenServicio'] = (isset($_POST['skOrdenServicio']) && !empty($_POST['skOrdenServicio'])) ? $_POST['skOrdenServicio'] : NULL;
 
         $stpCUD_ordenesServicios = parent::stpCUD_ordenesServicios();  

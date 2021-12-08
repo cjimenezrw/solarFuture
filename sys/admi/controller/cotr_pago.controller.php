@@ -108,14 +108,14 @@ Class Cotr_pago_Controller Extends Admi_Model {
         // PREPARAMOS LOS DATOS PARA LA APLICACIÓN DEL IMPORTE
             $sumaImporte = 0;
             foreach($_get_saldo_facturas AS &$row){
-                if(!isset($this->admi['importeAplicado'][$row['skComprobanteCFDI']])){
+                if(!isset($this->admi['importeAplicado'][$row['skFactura']])){
                     $this->data['success'] = FALSE;
                     $this->data['message'] = 'NO SE PUDO OBTENER LA FACTURA';
                     return $this->data;
                 }
 
                 // VERIFICAMOS SI EL IMPORTE ES MAYOR AL SALDO, ENTONCES ASIGNAMOS EL IMPORTE IGUAL AL SALDO
-                    $row['fImporte'] = (($this->admi['importeAplicado'][$row['skComprobanteCFDI']] > $row['fSaldo']) ? $row['fSaldo'] : $this->admi['importeAplicado'][$row['skComprobanteCFDI']]);
+                    $row['fImporte'] = (($this->admi['importeAplicado'][$row['skFactura']] > $row['fSaldo']) ? $row['fSaldo'] : $this->admi['importeAplicado'][$row['skFactura']]);
                     $sumaImporte += $row['fImporte'];
                     
                 // VERIFICAMOS LA FORMA DE PAGO Y MÉTODO DE PAGO DE LA FACTURA
@@ -123,15 +123,15 @@ Class Cotr_pago_Controller Extends Admi_Model {
                     if($row['codigoMetodoPago'] == 'PUE'){
                         // bcdiv(number,'1',2)
  
-                       /* if(bcdiv($this->admi['importeAplicado'][$row['skComprobanteCFDI']],'1',2) != bcdiv($row['fSaldo'],'1',2)){
+                       /* if(bcdiv($this->admi['importeAplicado'][$row['skFactura']],'1',2) != bcdiv($row['fSaldo'],'1',2)){
                             $this->data['success'] = FALSE;
-                            $this->data['message'] = "LA FACTURA #".$row['iFolio']." SOLO SE PUEDE PAGAR EN 1 SOLA EXHIBICIÓN: <b><br>SALDO $".number_format($row['fSaldo'],2)." <br>IMPORTE $".number_format($this->admi['importeAplicado'][$row['skComprobanteCFDI']],2)."</b>";
+                            $this->data['message'] = "LA FACTURA #".$row['iFolio']." SOLO SE PUEDE PAGAR EN 1 SOLA EXHIBICIÓN: <b><br>SALDO $".number_format($row['fSaldo'],2)." <br>IMPORTE $".number_format($this->admi['importeAplicado'][$row['skFactura']],2)."</b>";
                             return $this->data;
                         }
                         */
                         
                         
-                       /* if(bcdiv($this->admi['importeAplicado'][$row['skComprobanteCFDI']],'1',2) != bcdiv($row['fSaldo'],'1',2)){
+                       /* if(bcdiv($this->admi['importeAplicado'][$row['skFactura']],'1',2) != bcdiv($row['fSaldo'],'1',2)){
                             if(date('Ym',strtotime($_get_transaccion['dFechaTransaccion'])) != date('Ym',strtotime($row['dFechaFactura']))){
                             //if(date('Ym',strtotime('15-02-2020')) != date('Ym',strtotime($row['dFechaFactura']))){
                                 $this->data['success'] = FALSE;
@@ -143,9 +143,9 @@ Class Cotr_pago_Controller Extends Admi_Model {
                     
                     
                 // VERIFICAMOS EL PAGO DE FACTURA CON NOTAS DE CRÉDITO (NCRE)
-                    if($_get_transaccion['skTipoTransaccion'] == 'NCRE' && $this->admi['importeAplicado'][$row['skComprobanteCFDI']] != $_get_transaccion['fSaldo']){
+                    if($_get_transaccion['skTipoTransaccion'] == 'NCRE' && $this->admi['importeAplicado'][$row['skFactura']] != $_get_transaccion['fSaldo']){
                         $this->data['success'] = FALSE;
-                        $this->data['message'] = "LA FACTURA #".$row['iFolio']." SE LE DEBE DE APLICAR EL TOTAL DEL SALDO DE LA NOTA DE CRÉDITO: <b><br>SALDO $".number_format($_get_transaccion['fSaldo'],2)." <br>IMPORTE $".number_format($this->admi['importeAplicado'][$row['skComprobanteCFDI']],2)."</b>";
+                        $this->data['message'] = "LA FACTURA #".$row['iFolio']." SE LE DEBE DE APLICAR EL TOTAL DEL SALDO DE LA NOTA DE CRÉDITO: <b><br>SALDO $".number_format($_get_transaccion['fSaldo'],2)." <br>IMPORTE $".number_format($this->admi['importeAplicado'][$row['skFactura']],2)."</b>";
                         return $this->data;
                     }
             }
@@ -159,7 +159,7 @@ Class Cotr_pago_Controller Extends Admi_Model {
       
         // APLICAMOS LOS PAGOS A LAS FACTURAS
             foreach($_get_saldo_facturas AS &$row){
-                $this->admi['skComprobanteCFDI'] = $row['skComprobanteCFDI'];
+                $this->admi['skFactura'] = $row['skFactura'];
                 $this->admi['fImporte'] = $row['fImporte'];
 
                 $stpCUD_transacciones = parent::stpCUD_transacciones();
@@ -198,11 +198,11 @@ Class Cotr_pago_Controller Extends Admi_Model {
             DLOREAN_Model::showError('NO SE ENCONTRÓ LA TRANFERENCIA',404);
         }
 
-        $this->admi['skComprobanteCFDI'] = (!empty($this->data['datos']['skFacturaNotaCredito']) ? $this->data['datos']['skFacturaNotaCredito'] : NULL);
+        $this->admi['skFactura'] = (!empty($this->data['datos']['skFacturaNotaCredito']) ? $this->data['datos']['skFacturaNotaCredito'] : NULL);
         $this->admi['skEmpresaSocioResponsable'] = $this->data['datos']['skEmpresaSocioResponsable'];
         $this->admi['skEmpresaSocioCliente'] = $this->data['datos']['skEmpresaSocioCliente'];
         $this->admi['skDivisa'] = $this->data['datos']['skDivisa'];
-        $this->data['comprobantes'] = parent::_get_facturas_pendientes_pago();
+        $this->data['facturas'] = parent::_get_facturas_pendientes_pago();
         
         return $this->data;
     }
@@ -219,7 +219,7 @@ Class Cotr_pago_Controller Extends Admi_Model {
         $this->data['success'] = TRUE;
         
         $validations = [
-            'comprobantes'=>['message'=>'COMPROBANTES']
+            'facturas'=>['message'=>'FACTURA']
         ];
         
         foreach($validations AS $k=>$v){

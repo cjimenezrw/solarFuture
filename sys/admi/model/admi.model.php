@@ -132,7 +132,8 @@ Class Admi_Model Extends DLOREAN_Model {
        * @return object | false Retorna el objeto de resultados de la consulta o false si algo falla.
        */
       public function consultar_unidadesMedida() {
-        $sql = "SELECT skUnidadMedida, CONCAT('(',sClaveSAT,') ', sNombre)  AS sNombre FROM cat_unidadesMedidaSAT
+        $sql = "SELECT skUnidadMedida, CONCAT('(',sClaveSAT,') ', sNombre)  AS sNombre 
+        FROM cat_unidadesMedidaSAT
         WHERE skEstatus = 'AC' ";
 
 
@@ -184,14 +185,14 @@ Class Admi_Model Extends DLOREAN_Model {
         oos.dFechaCreacion,
         oos.skDivisa,
         oos.fImporteTotal,
-        oos.sReferencia,
-        oos.sBL,
-        oos.sPedimento,
+        oos.sReferencia, 
         oos.fTipoCambio,
         oos.fImporteSubtotal,
         oos.fImpuestosRetenidos,
         oos.fImpuestosTrasladados,
         oos.fDescuento,
+        oos.skMetodoPago,
+        oos.skFormaPago,
         cer.sNombre AS responsable,
         cec.sNombre AS cliente,
         cef.sNombre AS facturacion,
@@ -200,16 +201,10 @@ Class Admi_Model Extends DLOREAN_Model {
         ce.sColor AS colorEstatus,
         cu.sNombre AS usoCFDI,
         cuc.sNombre AS usuarioCreacion,
-        (SELECT  
-        CASE
-            WHEN rosp.skServicioProceso = 'VACI' THEN CONCAT('VAC-', LPAD(osv.iFolio, 5, 0))   
-            ELSE NULL END AS folioServicio
-        FROM rel_ordenesServicios_procesos rosp
-        LEFT JOIN ope_solicitudesVacios osv ON osv.skSolicitudVacio = rosp.skCodigo 
-        WHERE rosp.skOrdenServicio = oos.skOrdenServicio LIMIT 1) AS folioServicio,
+        '' AS folioServicio,
         rosp.skServicioProceso AS proceso,
         rosp.skCodigo AS skCodigoServicio,
-        (SELECT  occ.iFolio   FROM rel_ordenes_comprobantes rpf  INNER JOIN ope_cfdiComprobantes occ ON occ.skComprobanteCFDI = rpf.skComprobanteCFDI  AND occ.skEstatus !='CA' AND occ.iFolio IS NOT NULL WHERE rpf.skOrdenServicio = oos.skOrdenServicio LIMIT 1 ) AS iFolioFactura
+        (SELECT  occ.iFolio   FROM rel_ordenesServicios_facturas rpf  INNER JOIN ope_facturas occ ON occ.skFactura = rpf.skFactura  AND occ.skEstatus !='CA' AND occ.iFolio IS NOT NULL WHERE rpf.skOrdenServicio = oos.skOrdenServicio LIMIT 1 ) AS iFolioFactura
         FROM ope_ordenesServicios oos
         LEFT JOIN core_estatus ce ON ce.skEstatus = oos.skEstatus
         LEFT JOIN rel_empresasSocios resr ON resr.skEmpresaSocio = oos.skEmpresaSocioResponsable
@@ -218,7 +213,7 @@ Class Admi_Model Extends DLOREAN_Model {
         LEFT JOIN cat_empresas cec ON cec.skEmpresa = resc.skEmpresa
         LEFT JOIN rel_empresasSocios resf ON resf.skEmpresaSocio = oos.skEmpresaSocioFacturacion
         LEFT JOIN cat_empresas cef ON cef.skEmpresa = resf.skEmpresa
-        LEFT JOIN cat_usosCFDI cu ON cu.skUsoCFDI = oos.skUsoCFDI
+        LEFT JOIN cat_usosCFDI cu ON cu.sClave = oos.skUsoCFDI
         LEFT JOIN cat_usuarios cuc ON cuc.skUsuario = oos.skUsuarioCreacion
         LEFT JOIN rel_ordenesServicios_procesos rosp ON rosp.skOrdenServicio = oos.skOrdenServicio
         WHERE 1 = 1  AND  oos.skOrdenServicio =  " . escape($this->admi['skOrdenServicio']);
@@ -340,128 +335,7 @@ Class Admi_Model Extends DLOREAN_Model {
     }
 
 
-
-
-    /* COMMPROBANTES DE CFDI - FACTURAS */
-
-    public function stpCUD_comprobanteCFDI() {
-        $sql = "CALL stpCUD_comprobanteCFDI (
-            " .escape(isset($this->admi['skComprobanteCFDI']) ? $this->admi['skComprobanteCFDI'] : NULL) . ",
-            " .escape(isset($this->admi['skComprobanteCFDIServicio']) ? $this->admi['skComprobanteCFDIServicio'] : NULL) . ",
-            " .escape(isset($this->admi['skOrdenServicio']) ? $this->admi['skOrdenServicio'] : NULL) . ",
-            " .escape(isset($this->admi['iFolio']) ? $this->admi['iFolio'] : NULL) . ",
-            " .escape(isset($this->admi['skEstatus']) ? $this->admi['skEstatus'] : NULL) . ",
-            " .escape(isset($this->admi['skEstatusPago']) ? $this->admi['skEstatusPago'] : NULL) . ",
-            " .escape(isset($this->admi['skEstatusSAT']) ? $this->admi['skEstatusSAT'] : NULL) . ",
-            " .escape(isset($this->admi['skEstatusCancelacion']) ? $this->admi['skEstatusCancelacion'] : NULL) . ",
-            " .escape(isset($this->admi['skEstatusRelacionados']) ? $this->admi['skEstatusRelacionados'] : NULL) . ",
-            " .escape(isset($this->admi['sTipoComprobante']) ? $this->admi['sTipoComprobante'] : NULL) . ",
-            " .escape(isset($this->admi['skDivisa']) ? $this->admi['skDivisa'] : NULL) . ",
-            
-            " .escape(isset($this->admi['skFormaPago']) ? $this->admi['skFormaPago'] : NULL) . ",
-            " .escape(isset($this->admi['skMetodoPago']) ? $this->admi['skMetodoPago'] : NULL) . ",
-            " .escape(isset($this->admi['skUsoCFDI']) ? $this->admi['skUsoCFDI'] : NULL) . ",
-           
-            " .escape(isset($this->admi['skEmpresaSocioEmisor']) ? $this->admi['skEmpresaSocioEmisor'] : NULL) . ",
-            " .escape(isset($_SESSION['usuario']['skEmpresaSocioPropietario']) ? $_SESSION['usuario']['skEmpresaSocioPropietario'] : NULL) . ",
-            " .escape(isset($this->admi['skEmpresaSocioResponsable']) ? $this->admi['skEmpresaSocioResponsable'] : NULL) . ",
-            " .escape(isset($this->admi['skEmpresaSocioFacturar']) ? $this->admi['skEmpresaSocioFacturar'] : NULL) . ",
-            " .escape(isset($this->admi['skEmpresaSocioCliente']) ? $this->admi['skEmpresaSocioCliente'] : NULL) . ",
-            " .escape(isset($this->admi['sRFCEmisor']) ? $this->admi['sRFCEmisor'] : NULL) . ",
-            " .escape(isset($this->admi['sRazonSocialEmisor']) ? $this->admi['sRazonSocialEmisor'] : NULL) . ",
-            " .escape(isset($this->admi['sRFCReceptor']) ? $this->admi['sRFCReceptor'] : NULL) . ",
-            " .escape(isset($this->admi['sRazonSocialReceptor']) ? $this->admi['sRazonSocialReceptor'] : NULL) . ",
-            
-            " .escape(isset($this->admi['fImpuestosRetenidos']) ? $this->admi['fImpuestosRetenidos'] : NULL) . ",
-            " .escape(isset($this->admi['fImpuestosTrasladados']) ? $this->admi['fImpuestosTrasladados'] : NULL) . ",
-            " .escape(isset($this->admi['fSubtotal']) ? $this->admi['fSubtotal'] : NULL) . ",
-            " .escape(isset($this->admi['fDescuento']) ? $this->admi['fDescuento'] : NULL) . ",
-            " .escape(isset($this->admi['fTotal']) ? $this->admi['fTotal'] : NULL) . ",
-            " .escape(isset($this->admi['fSaldo']) ? $this->admi['fSaldo'] : NULL) . ",
-            " .escape(isset($this->admi['fTipoCambio']) ? $this->admi['fTipoCambio'] : NULL) . ",
-            " .escape(isset($this->admi['dFechaFactura']) ? $this->admi['dFechaFactura'] : NULL) . ",
-            " .escape(isset($this->admi['dFechaTimbrado']) ? $this->admi['dFechaTimbrado'] : NULL) . ",
-            " .escape(isset($this->admi['sDescripcionCancelacion']) ? $this->admi['sDescripcionCancelacion'] : NULL) . ",
-            " .escape(isset($this->admi['sSerie']) ? $this->admi['sSerie'] : NULL) . ",
-
-
-            " .escape(isset($this->admi['skUUIDSAT']) ? $this->admi['skUUIDSAT'] : NULL) . ",
-            " .escape(isset($this->admi['sSello']) ? $this->admi['sSello'] : NULL) . ",
-            " .escape(isset($this->admi['sCertificado']) ? $this->admi['sCertificado'] : NULL) . ",
-            " .escape(isset($this->admi['sNumeroCertificado']) ? $this->admi['sNumeroCertificado'] : NULL) . ",
-            " .escape(isset($this->admi['sXML']) ? $this->admi['sXML'] : NULL) . ",
-            " .escape(isset($this->admi['sNumeroCertificadoSAT']) ? $this->admi['sNumeroCertificadoSAT'] : NULL) . ",
-            " .escape(isset($this->admi['sCadenaOriginalSAT']) ? $this->admi['sCadenaOriginalSAT'] : NULL) . ",
-            " .escape(isset($this->admi['sSelloSAT']) ? $this->admi['sSelloSAT'] : NULL) . ",
-            " .escape(isset($this->admi['sRFCProveedorCertificado']) ? $this->admi['sRFCProveedorCertificado'] : NULL) . ",
-            " .escape(isset($this->admi['sMetodoPagoDesc']) ? $this->admi['sMetodoPagoDesc'] : NULL) . ",
-            " .escape(isset($this->admi['sRegimenFiscal']) ? $this->admi['sRegimenFiscal'] : NULL) . ",
-            " .escape(isset($this->admi['sVersion']) ? $this->admi['sVersion'] : NULL) . ",
-            " .escape(isset($this->admi['sLugarExpedicion']) ? $this->admi['sLugarExpedicion'] : NULL) . ",
-
-
-            " .escape(isset($this->admi['sPedimento']) ? $this->admi['sPedimento'] : NULL) . ",
-            " .escape(isset($this->admi['sContenedor']) ? $this->admi['sContenedor'] : NULL) . ",
-            " .escape(isset($this->admi['sReferencia']) ? $this->admi['sReferencia'] : NULL) . ",
- 
-
-
-            " .escape(isset($this->admi['skServicio']) ? $this->admi['skServicio'] : NULL) . ",
-            " .escape(isset($this->admi['skUnidadMedida']) ? $this->admi['skUnidadMedida'] : NULL) . ",
-            " .escape(isset($this->admi['sUnidad']) ? $this->admi['sUnidad'] : NULL) . ",
-            " .escape(isset($this->admi['sDescripcion']) ? $this->admi['sDescripcion'] : NULL) . ",
-            " .escape(isset($this->admi['iNumeroIdentificacion']) ? $this->admi['iNumeroIdentificacion'] : NULL) . ",
-            " .escape(isset($this->admi['sNumeroIdentificacion']) ? $this->admi['sNumeroIdentificacion'] : NULL) . ",
-            " .escape(isset($this->admi['fCantidad']) ? $this->admi['fCantidad'] : NULL) . ",
-            " .escape(isset($this->admi['fPrecioUnitario']) ? $this->admi['fPrecioUnitario'] : NULL) . ",
-            " .escape(isset($this->admi['fImporte']) ? $this->admi['fImporte'] : NULL) . ",
-            " .escape(isset($this->admi['skImpuesto']) ? $this->admi['skImpuesto'] : NULL) . ",
-             
-            
-          
-      	  
-            " .escape(isset($this->admi['axn']) ? $this->admi['axn'] : NULL) . ",
-            '" . $_SESSION['usuario']['skUsuario'] . "',
-            '" . $this->sysController . "' )";
-            
-            /*if($this->admi['axn'] == 'guardar_relacion_comprobante_orden'){
-                echo $sql;
-                die();
-            }*/
- 
-         
-        $result = Conn::query($sql);
-        if (!$result) {
-            return FALSE;
-        }
-        $record = Conn::fetch_assoc($result);
-        utf8($record);
-        return $record;
-    }
- 
-     /* DATOS PENDIENTES EN EL PROCEDIMIENTO DE  COMPROBANTE.
-
-     @skComprobanteCFDIPago = ".escape(isset($this->cfdi['skComprobanteCFDIPago']) ? $this->cfdi['skComprobanteCFDIPago'] : NULL).",
-      	    @skMovimientoBancario = ".escape(isset($this->cfdi['skMovimientoBancario']) ? $this->cfdi['skMovimientoBancario'] : NULL).",
-            @skUUIDSatRelacionado = ".escape(isset($this->cfdi['skUUIDSatRelacionado']) ? $this->cfdi['skUUIDSatRelacionado'] : NULL).",
-              
-            @sFolio = ".escape(isset($this->cfdi['sFolio']) ? $this->cfdi['sFolio'] : NULL).",
-            @sNumeroOperacion = ".escape(isset($this->cfdi['sNumeroOperacion']) ? $this->cfdi['sNumeroOperacion'] : NULL).",  
-            @fMontoTotalPago = ".escape(isset($this->cfdi['fMontoTotalPago']) ? $this->cfdi['fMontoTotalPago'] : NULL).",
-            @fImporteSaldoPago = ".escape(isset($this->cfdi['fImporteSaldoPago']) ? $this->cfdi['fImporteSaldoPago'] : NULL).",
-            @fImporteSaldoAnterior = ".escape(isset($this->cfdi['fImporteSaldoAnterior']) ? $this->cfdi['fImporteSaldoAnterior'] : NULL).",
-            @fImporteSaldoInsoluto = ".escape(isset($this->cfdi['fImporteSaldoInsoluto']) ? $this->cfdi['fImporteSaldoInsoluto'] : NULL).",
-            @iNumeroParcialidad = ".escape(isset($this->cfdi['iNumeroParcialidad']) ? $this->cfdi['iNumeroParcialidad'] : NULL).",
-              
-      	    @dFechaPago  = ".escape(isset($this->cfdi['dFechaPago']) ? $this->cfdi['dFechaPago'] : NULL).",
-            @sCodigoError  = ".escape(isset($this->cfdi['sCodigoError']) ? $this->cfdi['sCodigoError'] : NULL).",
-              
-            @skFlete  = ".escape(isset($this->cfdi['skFlete']) ? $this->cfdi['skFlete'] : NULL).",
-              
-            @skPago  = ".escape(isset($this->cfdi['skPago']) ? $this->cfdi['skPago'] : NULL).",
-            @fPrecioUnitarioIngreso  = ".escape(isset($this->cfdi['fPrecioUnitarioIngreso']) ? $this->cfdi['fPrecioUnitarioIngreso'] : NULL).",
-              */
-
+  
 
     /**
      * get_empresas
@@ -778,15 +652,15 @@ Class Admi_Model Extends DLOREAN_Model {
                 ofac.sRFCEmisor AS sRFCEmisorComplemento,
                 ofac.sSerie AS sSerieComplemento,
                 tra.dFechaTransaccion AS fechaTransaccion
-                FROM rel_transacciones_comprobantes tfac
+                FROM rel_transacciones_facturas tfac
                 INNER JOIN ope_transacciones tra ON tra.skTransaccion = tfac.skTransaccion
-                INNER JOIN ope_cfdiComprobantes ofa ON ofa.skComprobanteCFDI = tfac.skComprobanteCFDI
+                INNER JOIN ope_facturas ofa ON ofa.skFactura = tfac.skFactura
                 INNER JOIN cat_metodosPago mp ON mp.sCodigo = ofa.skMetodoPago
                 INNER JOIN cat_formasPago fp ON fp.sCodigo = ofa.skFormaPago
                 INNER JOIN cat_usuarios u ON u.skUsuario = tfac.skUsuarioCreacion
                 INNER JOIN core_estatus ce ON ce.skEstatus = tfac.skEstatus
-                LEFT JOIN rel_transacciones_comprobantes rtc ON rtc.skTransaccionPago = tfac.skTransaccionPago
-                LEFT JOIN ope_cfdiComprobantes ofac ON ofac.skComprobanteCFDI = rtc.skComprobanteCFDI AND ofac.skEstatus = 'FA' AND ofac.iFolio IS NOT NULL
+                LEFT JOIN rel_transacciones_facturas rtc ON rtc.skTransaccionPago = tfac.skTransaccionPago
+                LEFT JOIN ope_facturas ofac ON ofac.skFactura = rtc.skFactura AND ofac.skEstatus = 'FA' AND ofac.iFolio IS NOT NULL
                 LEFT JOIN core_estatus est ON est.skEstatus = tfac.skEstatus
                 WHERE 1=1  ";
     
@@ -794,8 +668,8 @@ Class Admi_Model Extends DLOREAN_Model {
                 $sql .= " AND tfac.skTransaccion = ".escape($this->admi['skTransaccion']);
             }
     
-            if (isset($this->admi['skComprobanteCFDI']) && !empty($this->admi['skComprobanteCFDI'])) {
-                $sql .= " AND tfac.skComprobanteCFDI = ".escape($this->admi['skComprobanteCFDI']);
+            if (isset($this->admi['skFactura']) && !empty($this->admi['skFactura'])) {
+                $sql .= " AND tfac.skFactura = ".escape($this->admi['skFactura']);
             }
     
         if (isset($this->admi['getFacturasSinComprobante']) && !empty($this->admi['getFacturasSinComprobante'])) {
@@ -839,7 +713,7 @@ Class Admi_Model Extends DLOREAN_Model {
         " .escape(isset($this->admi['sObservacionCancelacion']) ? $this->admi['sObservacionCancelacion'] : NULL) . ",
         " .escape(isset($this->admi['sObservacionesValidacionRechazo']) ? $this->admi['sObservacionesValidacionRechazo'] : NULL) . ",
         " .escape(isset($this->admi['skPago']) ? $this->admi['skPago'] : NULL) . ",
-        " .escape(isset($this->admi['skComprobanteCFDI']) ? $this->admi['skComprobanteCFDI'] : NULL) . ",
+        " .escape(isset($this->admi['skFactura']) ? $this->admi['skFactura'] : NULL) . ",
         
 
         " .escape(isset($this->admi['axn']) ? $this->admi['axn'] : NULL) . ",
@@ -857,18 +731,7 @@ Class Admi_Model Extends DLOREAN_Model {
         return $record;
     }
 
-    /* " .escape(isset($this->admi['skFactura']) ? $this->admi['skFactura'] : NULL) . ",
-        " .escape(isset($this->admi['sDescripcion']) ? $this->admi['sDescripcion'] : NULL) . ",
-        " .escape(isset($this->admi['sProceso']) ? $this->admi['sProceso'] : NULL) . ",
-        " .escape(isset($this->admi['dFechaTimbrado']) ? $this->admi['dFechaTimbrado'] : NULL) . ",
-        " .escape(isset($this->admi['skUUIDSAT']) ? $this->admi['skUUIDSAT'] : NULL) . ",
-        " .escape(isset($this->admi['sFolio']) ? $this->admi['sFolio'] : NULL) . ",
-        " .escape(isset($this->admi['skTransaccionComprobante']) ? $this->admi['skTransaccionComprobante'] : NULL) . ",
-        " .escape(isset($this->admi['skTransaccionPago']) ? $this->admi['skTransaccionPago'] : NULL) . ",
-        " .escape(isset($this->admi['skDevolucion']) ? $this->admi['skDevolucion'] : NULL) . ",
-        " .escape(isset($this->admi['skDocumentoComprobante']) ? $this->admi['skDocumentoComprobante'] : NULL) . ",
-        " .escape(isset($this->admi['sNombreSolcitante']) ? $this->admi['sNombreSolcitante'] : NULL) . ",
-*/
+ 
 
 
     //Función para generar excel
@@ -1083,7 +946,7 @@ Class Admi_Model Extends DLOREAN_Model {
 
 
     public function _get_facturas_pendientes_pago(){
-        $sql = "SELECT occ.skComprobanteCFDI,
+        $sql = "SELECT occ.skFactura,
         occ.iFolio, 
         occ.skEmpresaSocioEmisor,
         occ.skEmpresaSocioResponsable,
@@ -1110,7 +973,7 @@ Class Admi_Model Extends DLOREAN_Model {
         cer.sRFC AS empresaResponsableRFC,
         cef.sNombre AS empresaFacturar,
         cef.sRFC AS empresaFacturarRFC
-        FROM ope_cfdiComprobantes occ
+        FROM ope_facturas occ
         INNER JOIN rel_empresasSocios rese ON rese.skEmpresaSocio = occ.skEmpresaSocioEmisor
         INNER JOIN cat_empresas cee ON cee.skEmpresa = rese.skEmpresa
         INNER JOIN rel_empresasSocios resr ON resr.skEmpresaSocio = occ.skEmpresaSocioResponsable
@@ -1134,8 +997,8 @@ Class Admi_Model Extends DLOREAN_Model {
             $sql .= " AND occ.skDivisa = ".escape($this->admi['skDivisa']);
         }
 
-        if (isset($this->admi['skComprobanteCFDI']) && !empty($this->admi['skComprobanteCFDI'])) {
-            $sql .= " AND occ.skComprobanteCFDI = ".escape($this->admi['skComprobanteCFDI']);
+        if (isset($this->admi['skFactura']) && !empty($this->admi['skFactura'])) {
+            $sql .= " AND occ.skFactura = ".escape($this->admi['skFactura']);
         }
 
         $sql .= " ORDER BY occ.dFechaFactura ASC ";
@@ -1153,12 +1016,12 @@ Class Admi_Model Extends DLOREAN_Model {
 
     public function _get_saldo_facturas(){
         $sql = "SELECT
-            RIGHT('000000'+ CAST(occ.iFolio AS VARCHAR(6)),6) AS iFolio, occ.skComprobanteCFDI, occ.fSaldo, occ.dFechaFactura,
+            RIGHT('000000'+ CAST(occ.iFolio AS VARCHAR(6)),6) AS iFolio, occ.skFactura, occ.fSaldo, occ.dFechaFactura,
             mp.sCodigo AS codigoMetodoPago, mp.sNombre AS metodoPago, fp.sCodigo AS codigoFormaPago, fp.sNombre AS formaPago
-            FROM ope_cfdiComprobantes occ
+            FROM ope_facturas occ
             INNER JOIN cat_metodosPago mp ON mp.sCodigo = occ.skMetodoPago
             INNER JOIN cat_formasPago fp ON fp.sCodigo = occ.skFormaPago
-            WHERE occ.skComprobanteCFDI IN (". mssql_where_in($this->admi['comprobantes']).")";
+            WHERE occ.skFactura IN (". mssql_where_in($this->admi['comprobantes']).")";
         $result = Conn::query($sql);
         if (!$result) {
             return FALSE;
@@ -1170,16 +1033,16 @@ Class Admi_Model Extends DLOREAN_Model {
 
 
      /**
-     * consultar_comprobante
+     * consultar_factura
      *
      * Obtener Datos de factura para editar y detalles
      *
      * @author Luis Alberto Valdez Alvarez <lvaldez>
      * @return Array Datos | False
      */
-    public function consultar_comprobante() {
+    public function consultar_factura() {
 
-        $sql = "SELECT occ.skComprobanteCFDI,
+        $sql = "SELECT occ.skFactura,
         ce.sNombre AS estatus,
          occ.iFolio AS iFolio,
         occ.iFolio AS iFolioOriginal,
@@ -1227,7 +1090,7 @@ Class Admi_Model Extends DLOREAN_Model {
         cuf.sNombre AS usoCFDI, 
 
          CONCAT(cu.sNombre,' ',cu.sApellidoPaterno,' ',cu.sApellidoMaterno) AS usuarioCreacion
-                        FROM  ope_cfdiComprobantes occ
+        FROM  ope_facturas occ
         LEFT JOIN cat_usuarios cu ON cu.skUsuario = occ.skUsuarioCreacion
          LEFT JOIN core_estatus ce ON ce.skEstatus = occ.skEstatus
         LEFT JOIN rel_empresasSocios rese ON rese.skEmpresaSocio = occ.skEmpresaSocioEmisor
@@ -1241,7 +1104,7 @@ Class Admi_Model Extends DLOREAN_Model {
          LEFT JOIN cat_formasPago cfp ON cfp.sCodigo = occ.skFormaPago
         LEFT JOIN cat_metodosPago cmp ON cmp.sCodigo = occ.skMetodoPago
         LEFT JOIN cat_usosCFDI cuf ON cuf.skUsoCFDI = occ.skUsoCFDI 
-            WHERE  occ.skComprobanteCFDI = " . escape($this->admi['skComprobanteCFDI'])." AND occ.skEmpresaSocioPropietario = ".escape($_SESSION['usuario']['skEmpresaSocioPropietario']);
+            WHERE  occ.skFactura = " . escape($this->admi['skFactura'])." AND occ.skEmpresaSocioPropietario = ".escape($_SESSION['usuario']['skEmpresaSocioPropietario']);
 
 
         $result = Conn::query($sql);
@@ -1252,16 +1115,16 @@ Class Admi_Model Extends DLOREAN_Model {
     }
 
     /**
-     * consultar_comprobantes_servicios
+     * consultar_facturas_servicios
      *
      * Obtener Datos de factura para editar y detalles
      *
      * @author Luis Alberto Valdez Alvarez <lvaldez>
      * @return Array Datos | False
      */
-    public function consultar_comprobantes_servicios() {
+    public function consultar_facturas_servicios() {
 
-        $sql = "SELECT rfa.skComprobanteCFDIServicio,
+        $sql = "SELECT rfa.skFacturaServicio,
         rfa.skServicio,
         IF(cse.sNombre IS NULL, rfa.sDescripcion,cse.sNombre) AS servicio,
         (cse.sNombre + IF(rfa.sDescripcion IS NOT NULL, ' '+rfa.sDescripcion,'') ) AS servicioFact,
@@ -1278,15 +1141,15 @@ Class Admi_Model Extends DLOREAN_Model {
         cus.sNombre AS unidadMedida,
         rsir.sValor AS RETIVA,
         rsit.sValor AS TRAIVA, 
-        (SELECT fImporte FROM rel_cfdiComprobantes_serviciosImpuestos rps where rps.skComprobanteCFDI = rfa.skComprobanteCFDI  AND rps.skImpuesto = 'RETIVA' AND rps.skComprobanteCFDIServicio = rfa.skComprobanteCFDIServicio )AS fImpuestosRetenidos,
-        (SELECT fImporte FROM rel_cfdiComprobantes_serviciosImpuestos rps where rps.skComprobanteCFDI = rfa.skComprobanteCFDI  AND rps.skImpuesto = 'TRAIVA' AND rps.skComprobanteCFDIServicio = rfa.skComprobanteCFDIServicio )AS fImpuestosTrasladados
-        FROM  rel_cfdiComprobantes_servicios rfa
-        INNER JOIN ope_cfdiComprobantes occ ON occ.skComprobanteCFDI = rfa.skComprobanteCFDI
+        (SELECT fImporte FROM rel_facturas_serviciosImpuestos rps where rps.skFactura = rfa.skFactura  AND rps.skImpuesto = 'RETIVA' AND rps.skFacturaServicio = rfa.skFacturaServicio )AS fImpuestosRetenidos,
+        (SELECT fImporte FROM rel_facturas_serviciosImpuestos rps where rps.skFactura = rfa.skFactura  AND rps.skImpuesto = 'TRAIVA' AND rps.skFacturaServicio = rfa.skFacturaServicio )AS fImpuestosTrasladados
+        FROM  rel_facturas_servicios rfa
+        INNER JOIN ope_facturas occ ON occ.skFactura = rfa.skFactura
          LEFT JOIN cat_servicios cse ON cse.skServicio = rfa.skServicio
         LEFT JOIN cat_unidadesMedidaSAT cus ON cus.skUnidadMedida = rfa.skUnidadMedida
         LEFT JOIN rel_servicios_impuestos rsir ON rsir.skServicio = rfa.skServicio AND rsir.skImpuesto = 'RETIVA'
         LEFT JOIN rel_servicios_impuestos rsit ON rsit.skServicio = rfa.skServicio AND rsit.skImpuesto = 'TRAIVA'
-        WHERE  rfa.skComprobanteCFDI = " . escape($this->admi['skComprobanteCFDI']);
+        WHERE  rfa.skFactura = " . escape($this->admi['skFactura']);
 
 
         $result = Conn::query($sql);
@@ -1426,6 +1289,179 @@ Class Admi_Model Extends DLOREAN_Model {
         utf8($records);
         return $records;
     }
+
+    public function consultar_formasPago() {
+        $sql = "SELECT CONCAT('(',cf.sCodigo,') ',cf.sNombre)  AS sNombre,cf.sCodigo FROM cat_formasPago cf  WHERE cf.skEstatus = 'AC'  ORDER BY cf.sNombre ASC   ";
+
+        $result = Conn::query($sql);
+        if (!$result) {
+            return FALSE;
+        }
+        return Conn::fetch_assoc_all($result);
+    }
+    public function consultar_metodosPago() {
+        $sql = "SELECT  CONCAT('(',cm.sCodigo,') ',cm.sNombre) AS sNombre,cm.sCodigo FROM cat_metodosPago cm WHERE cm.skEstatus = 'AC'  ORDER BY cm.sNombre ASC   ";
+
+        $result = Conn::query($sql);
+        if (!$result) {
+            return FALSE;
+        }
+        return Conn::fetch_assoc_all($result);
+    }
+
+    public function consultar_usosCFDI() {
+
+        $sql = "SELECT CONCAT('(',cu.sClave,') ',cu.sNombre) AS sNombre,cu.sClave AS sCodigo FROM cat_usosCFDI cu where cu.skEstatus = 'AC' ORDER BY cu.sNombre ASC  ";
+
+        $result = Conn::query($sql);
+        if (!$result) {
+            return FALSE;
+        }
+        return Conn::fetch_assoc_all($result);
+    }
+
+
+  
+
+    /**
+     * consultar_tiposMedidas
+     *
+     * Obtiene los tipos de medidas activas
+     *
+     * @author Luis Alberto Valdez Alvarez <lvaldez@woodward.com.mx>
+     * @return object | false Retorna el objeto de resultados de la consulta o false si algo falla.
+     */
+    public function consultar_tiposMedidas() {
+        $sql = "SELECT skUnidadMedida AS id,CONCAT('(',sClaveSAT,') ', sNombre) AS nombre  FROM cat_unidadesMedidaSAT
+				WHERE skEstatus = 'AC' ";
+        if (!empty(trim($_POST['val']))) {
+            $sql .= " AND sNombre  COLLATE Latin1_General_CI_AI LIKE '%" . escape($_POST['val'], false) . "%' ";
+        }
+
+        $result = Conn::query($sql);
+        if (!$result) {
+            return FALSE;
+        }
+        $records = Conn::fetch_assoc_all($result);
+        utf8($records);
+        return $records;
+    }
+
+    /**
+     * consultar_servicios
+     *
+     * Obtiene los servicios
+     *
+     * @author Luis Alberto Valdez Alvarez <lvaldez@woodward.com.mx>
+     * @return object | false Retorna el objeto de resultados de la consulta o false si algo falla.
+     */
+    public function consultar_servicios() {
+        $sql = "SELECT skServicio AS id,sNombre AS nombre  FROM cat_servicios
+				WHERE 1 = 1 ";
+        if (!empty(trim($_POST['val']))) {
+            $sql .= " AND sNombre  COLLATE Latin1_General_CI_AI LIKE '%" . escape($_POST['val'], false) . "%' ";
+        }
+
+        $result = Conn::query($sql);
+        if (!$result) {
+            return FALSE;
+        }
+        $records = Conn::fetch_assoc_all($result);
+        utf8($records);
+        return $records;
+    }
+
+    /**
+     * consultar_servicio_impuestos
+     *
+     * Función Para obtener la configuracion de Responsable - Cliente
+     *
+     *
+     * @author Luis Alberto Valdez Alvarez <lvaldez@woodward.com.mx>
+     * @return array | false Retorna array de datos o false en caso de error
+     */
+    public function consultar_servicio_impuestos() {
+
+        $sql = "SELECT DISTINCT
+		                cse.skServicio,
+                        resi.skImpuesto,
+                        resi.skTipoImpuesto,
+                        resi.sValor
+
+		                FROM cat_servicios cse
+		                INNER JOIN rel_servicios_impuestos resi ON resi.skServicio = cse.skServicio
+
+		                WHERE cse.skServicio = " . escape($this->admi['skServicio']);
+
+        $result = Conn::query($sql);
+        if (!$result) {
+            return FALSE;
+        }
+        return Conn::fetch_assoc_all($result);
+    }
+
+
+
+
+    public function stpCUD_ordenServicio() {
+
+        $sql = "CALL stpCUD_ordenServicio (
+            " .escape(isset($this->admi['skOrdenServicio']) ? $this->admi['skOrdenServicio'] : NULL) . ",
+            " .escape(isset($this->admi['skOrdenServicioServicio']) ? $this->admi['skOrdenServicioServicio'] : NULL) . ",
+            " .escape(isset($this->admi['skServicio']) ? $this->admi['skServicio'] : NULL) . ",
+
+            " .escape(isset($this->admi['skEstatus']) ? $this->admi['skEstatus'] : NULL) . ",
+
+            " .escape(isset($this->admi['skEmpresaSocioPropietario']) ? $this->admi['skEmpresaSocioPropietario'] : NULL) . ",
+            " .escape(isset($this->admi['skEmpresaSocioResponsable']) ? $this->admi['skEmpresaSocioResponsable'] : NULL). ",
+            " .escape(isset($this->admi['skEmpresaSocioCliente']) ? $this->admi['skEmpresaSocioCliente'] : NULL) . ",
+            " .escape(isset($this->admi['skEmpresaSocioFacturacion']) ? $this->admi['skEmpresaSocioFacturacion'] : NULL) . ",
+            " .escape(isset($this->admi['skDivisa']) ? $this->admi['skDivisa'] : NULL) . ",
+            " .escape(isset($this->admi['sReferencia']) ? $this->admi['sReferencia'] : NULL) . ",
+            " .escape(isset($this->admi['sDescripcion']) ? $this->admi['sDescripcion'] : NULL) . ",
+
+
+            " .escape(isset($this->admi['fImporteTotal']) ? $this->admi['fImporteTotal'] : NULL) . ",
+            " .escape(isset($this->admi['fImporteSubtotal']) ? $this->admi['fImporteSubtotal'] : NULL) . ",
+            " .escape(isset($this->admi['fImpuestosRetenidos']) ? $this->admi['fImpuestosRetenidos'] : NULL) . ",
+            " .escape(isset($this->admi['fImpuestosTrasladados']) ? $this->admi['fImpuestosTrasladados'] : NULL) . ",
+            " .escape(isset($this->admi['fDescuento']) ? $this->admi['fDescuento'] : NULL) . ",
+            " .escape(isset($this->admi['fTipoCambio']) ? $this->admi['fTipoCambio'] : NULL) . ",
+            " .escape(isset($this->admi['skUsoCFDI']) ? $this->admi['skUsoCFDI'] : NULL) . ",
+            " .escape(isset($this->admi['skMetodoPago']) ? $this->admi['skMetodoPago'] : NULL) . ",
+            " .escape(isset($this->admi['skFormaPago']) ? $this->admi['skFormaPago'] : NULL) . ",
+
+
+            " .escape(isset($this->admi['skUnidadMedida']) ? $this->admi['skUnidadMedida'] : NULL) . ",
+            " .escape(isset($this->admi['fCantidad']) ? $this->admi['fCantidad'] : NULL) . ",
+            " .escape(isset($this->admi['fPrecioUnitario']) ? $this->admi['fPrecioUnitario'] : NULL) . ",
+
+            " .escape(isset($this->admi['skImpuesto']) ? $this->admi['skImpuesto'] : NULL) . ",
+            " .escape(isset($this->admi['skTipoImpuesto']) ? $this->admi['skTipoImpuesto'] : NULL) . ",
+            " .escape(isset($this->admi['fTasa']) ? $this->admi['fTasa'] : NULL) . ",
+            " .escape(isset($this->admi['fImporte']) ? $this->admi['fImporte'] : NULL) . ",
+
+ 
+            " .escape(isset($this->admi['axn']) ? $this->admi['axn'] : NULL) . ",
+            '" . $_SESSION['usuario']['skUsuario'] . "',
+            '" . $this->sysController . "' )";
+      
+        $this->log($sql, true);
+        $result = Conn::query($sql);
+        //$codigo = Conn::fetch_assoc($result);
+        if (!$result) {
+            return false;
+        }
+        $record = Conn::fetch_assoc($result);
+        utf8($record);
+        return $record; 
+    }
+
+
+
+     
+
+    
 
 
 

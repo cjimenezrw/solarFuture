@@ -1,7 +1,7 @@
 <?php
 if (isset($data['datos'])) {
     $result = $data['datos'];
-	$comprobantes = (isset($data['comprobantes'])) ? $data['comprobantes'] : '';
+	$facturas = (isset($data['facturas'])) ? $data['facturas'] : '';
   
 
     /*    echo '<pre>';
@@ -102,13 +102,13 @@ if (isset($data['datos'])) {
 			<div class="col-md-6 col-lg-4">
 			    <div class="form-group">
 				<h4 class="example-title">Forma de Pago:</h4>
-				<p><?php echo (isset($result['formaPago'])) ? $result['formaPago'] : 'N/D'; ?> </p>
+				<p><?php echo (isset($result['skFormaPago'])) ? $result['skFormaPago'] : 'N/D'; ?> </p>
 			    </div>
 			</div>
 			<div class="col-md-6 col-lg-4">
 			    <div class="form-group">
 				<h4 class="example-title">Método de Pago:</h4>
-				<p><?php echo (isset($result['metodoPago'])) ? $result['metodoPago'] : 'N/D'; ?> </p>
+				<p><?php echo (isset($result['skMetodoPago'])) ? $result['skMetodoPago'] : 'N/D'; ?> </p>
 			    </div>
 			</div>
 			<div class="col-md-6 col-lg-4">
@@ -136,29 +136,7 @@ if (isset($data['datos'])) {
 			</div>
 
 		    </div> 
-		    <div class="col-md-12 same-heigth">
-			<div class="col-md-4 col-lg-4">
-			    <div class="form-group">
-				<h4 class="example-title">BL:</h4>
-				<p><?php echo (isset($result['sBL'])) ? $result['sBL'] : 'N/D'; ?> </p>
-			    </div>
-			</div> 
-			<div class="col-md-4 col-lg-4">
-			    <div class="form-group">
-				<h4 class="example-title">Pedimento:</h4>
-				<p><?php echo (isset($result['sPedimento'])) ? $result['sPedimento'] : 'N/D'; ?> </p>
-			    </div>
-			</div>
-
-		    </div>
-		    <div class="col-md-12 same-heigth">
-			<div class="col-md-4 col-lg-4">
-			    <div class="form-group">
-				<h4 class="example-title">Contenedor:</h4>
-				<p><?php echo (!empty($result['sContenedor']) ? $result['sContenedor'] : 'N/D'); ?> </p>
-			    </div>
-			</div>
-		    </div>
+		 
 		    <div class="col-md-12 same-heigth">
 			<div class="col-md-6 col-lg-4">
 			    <div class="form-group">
@@ -353,12 +331,12 @@ if (isset($data['datos'])) {
 	    </div>
 	</div>
 
-	<?php if (!empty($comprobantes)) { ?>
+	<?php if (!empty($facturas)) { ?>
     	<div class="col-md-6 animated slideInRight">
     	    <!-- Widget -->
     	    <div class="panel panel-bordered panel-primary panel-line">
     		<div class="panel-heading">
-    		    <h3 class="panel-title text-center">COMPROBANTES</h3>
+    		    <h3 class="panel-title text-center">FACTURAS</h3>
     		</div>
     		<div class="widget ">
     		    <div class="widget-content padding-35 bg-white clearfix" id="divTabla">
@@ -371,7 +349,7 @@ if (isset($data['datos'])) {
     			    </thead>
     			    <tbody id="tabla" >
 
-				    <?php foreach ($comprobantes AS $comp) { ?>
+				    <?php foreach ($facturas AS $comp) { ?>
 
 					<tr class="text-center">
 					    <th class="text-center" style="font-size: 14px;"><?php echo $comp['folioFactura']; ?></th>

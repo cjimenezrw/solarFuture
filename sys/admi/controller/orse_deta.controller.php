@@ -22,15 +22,15 @@ Class Orse_deta_Controller Extends Admi_Model {
         $this->data['datos'] =  parent::_getOrdenServicio(); 
 
         $this->data['serviciosOrdenes'] =  parent::_getOrdenServicioServicios(); 
-        $this->admi['datos'] = $this->data['datos']['proceso'];
-        $this->admi['skCodigoServicio'] = $this->data['datos']['skCodigoServicio'];
-        if(!empty($this->admi['skCodigoServicio'])){
+       // $this->admi['datos'] = $this->data['datos']['proceso'];
+        //$this->admi['skCodigoServicio'] = $this->data['datos']['skCodigoServicio'];
+        /*if(!empty($this->admi['skCodigoServicio'])){
             $this->data['domicilioReceptor'] = parent::getDatosReceptor();
-        }
+        }*/
 
-        $comprobantes = $this->get_ordenes_comprobanates();
-	if (!empty($comprobantes)) {
-	    $this->data['comprobantes'] = $comprobantes;
+        $facturas = $this->get_ordenes_facturas();
+	if (!empty($facturas)) {
+	    $this->data['facturas'] = $facturas;
 	}
        
 
@@ -81,7 +81,7 @@ Class Orse_deta_Controller Extends Admi_Model {
         }
 
 
-        public function get_ordenes_comprobanates() {
+        public function get_ordenes_facturas() {
             $UBIFAC = TMP_HARDPATH;
             $i = 0;
             $sql = "SELECT rpf.skOrdenServicio
@@ -90,10 +90,10 @@ Class Orse_deta_Controller Extends Admi_Model {
                 ,opeF.skUUIDSAT
                 ,opeF.sRFCEmisor
                 ,opeF.sSerie
-                ,opeF.skComprobanteCFDI
+                ,opeF.skFactura
                 ,opeF.skEmpresaSocioResponsable
-                from rel_ordenes_comprobantes rpf
-                INNER JOIN ope_cfdiComprobantes opeF ON opeF.skComprobanteCFDI = rpf.skComprobanteCFDI 
+                from rel_ordenes_facturas rpf
+                INNER JOIN ope_facturas opeF ON opeF.skFactura = rpf.skFactura 
                 where skOrdenServicio = " . escape($_GET['p1']);
             $result = Conn::query($sql);
             if (!$result) {
@@ -101,7 +101,7 @@ Class Orse_deta_Controller Extends Admi_Model {
             }
             $record = Conn::fetch_assoc_all($result);
 
-            $carpeta="comprobantes";
+            $carpeta="facturas";
             
             $anio = date('Y');
             $VARCFD =  TMP_HARDPATH;
@@ -109,19 +109,19 @@ Class Orse_deta_Controller Extends Admi_Model {
 
            
         
-            foreach ($record AS $comprobantes) {
+            foreach ($record AS $factura) {
 
                 $record[$i]['facturaPDF'] = "";
                 $record[$i]['facturaXML'] = "";
-                $rutaCompleta= $VARCFD.$comprobantes['sRFCEmisor']."/";
+                $rutaCompleta= $VARCFD.$factura['sRFCEmisor']."/";
 
-                $fileNameXML = $comprobantes['iFolio'].'.xml';
-                $fileNamePDF = $comprobantes['iFolio'].'.pdf';
+                $fileNameXML = $factura['iFolio'].'.xml';
+                $fileNamePDF = $factura['iFolio'].'.pdf';
                 
         
-                if (!empty($comprobantes['skUUIDSAT'])) {
-                    $filePDF = $rutaCompleta.$comprobantes['iFolio'].".pdf";
-                    $fileXML = $rutaCompleta.$comprobantes['iFolio'].".xml";
+                if (!empty($factura['skUUIDSAT'])) {
+                    $filePDF = $rutaCompleta.$factura['iFolio'].".pdf";
+                    $fileXML = $rutaCompleta.$factura['iFolio'].".xml";
 
                 
                     if (file_exists($filePDF)) {

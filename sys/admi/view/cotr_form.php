@@ -24,7 +24,7 @@
                 <div class="col-md-6 col-lg-6">
                     <div class="form-group">
                         <h4 class="example-title"><span style="color:red;">* </span> RESPONSABLE:</h4>
-                        <select name="skEmpresaSocioResponsable" id="skEmpresaSocioResponsable" class="form-control" data-plugin="select2" data-ajax--cache="true" onchange="admi.cotr_form.changeResponsable(this);">
+                        <select name="skEmpresaSocioResponsable" id="skEmpresaSocioResponsable" class="form-control" data-plugin="select2" data-ajax--cache="true"  >
                             <?php
                             if (!empty($result['skEmpresaSocioResponsable'])) {
                                 ?>
@@ -36,20 +36,7 @@
                     </div>
                 </div>
                 
-                <div class="col-md-6 col-lg-6 skEmpresaSocioCliente" <?php echo (isset($result['skEmpresaSocioResponsable'])) ? 'style="display:block;"' : 'style="display:none;"'; ?>>
-                    <div class="form-group">
-                        <h4 class="example-title">IMPORTADOR / EXPORTADOR:</h4>
-                        <select name="skEmpresaSocioCliente" id="skEmpresaSocioCliente" class="form-control" data-plugin="select2" data-ajax--cache="true">
-                            <?php
-                            if (!empty($result['skEmpresaSocioCliente'])) {
-                                ?>
-                                <option value="<?php echo $result['skEmpresaSocioCliente']; ?>" selected="selected"><?php echo $result['empresaCliente'] . ' (' . $result['empresaClienteRFC'] . ')'; ?></option>
-                                <?php
-                            }//ENDIF
-                            ?>
-                        </select>
-                    </div>
-                </div>
+ 
                 
                 <div class="col-md-12 clearfix"><hr></div>
                 
@@ -260,13 +247,10 @@
         
         // Obtener Empresas //
             core.autocomplete2('#skEmpresaSocioResponsable', 'getEmpresas', window.location.href, 'EMPRESA RESPONSABLE',{
-                skEmpresaTipo : '[ "AGAD" ]'
+                skEmpresaTipo : '[ "CLIE" ]'
             });
             
-            core.autocomplete2('#skEmpresaSocioCliente', 'getEmpresas', window.location.href, 'IMPORTADOR / EXPORTADOR',{
-                skEmpresaTipo : '["CLIE","AGAD" ]',
-                skEmpresaSocioResponsable : $("#skEmpresaSocioResponsable")
-            });
+            
             
         $("#skFormaPago").select2({
             placeholder: "FORMA DE PAGO",

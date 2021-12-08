@@ -31,6 +31,48 @@ Class Admi_Controller Extends Admi_Model {
         }
         return TRUE;
     }
+    public function orse_form() {
+        $this->load_class("orse_form", "controller");
+        $orse_form = new Orse_form_Controller();
+        $axn = (isset($_POST['axn']) ? $_POST['axn'] : (isset($_GET['axn']) ? $_GET['axn'] : NULL));
+
+        switch ($axn) {
+            case 'getEmpresas':
+              header('Content-Type: application/json');
+              echo json_encode($orse_form->getEmpresas());
+            break;
+            case 'get_servicios':
+              header('Content-Type: application/json');
+              echo json_encode($orse_form->get_servicios());
+            break; 
+            case 'get_medidas':
+              header('Content-Type: application/json');
+              echo json_encode($orse_form->get_medidas());
+            break; 
+            case 'get_servicio_impuestos':
+              header('Content-Type: application/json');
+              echo json_encode($orse_form->get_servicio_impuestos());
+            break; 
+
+            case 'getDomicilios':
+              header('Content-Type: application/json');
+              echo json_encode($orse_form->getDomicilios());
+            break; 
+
+
+
+            case 'guardar':
+                header('Content-Type: application/json');
+                echo json_encode($orse_form->guardar());
+            break;
+            default:
+                $this->data = $orse_form->consultarOrdenServicio();
+                $this->load_view('orse_form', $this->data);
+            break;
+        }
+
+        return TRUE;
+    }
 
     public function orse_inde() {
         $this->load_class("orse_inde", "controller");
@@ -52,7 +94,6 @@ Class Admi_Controller Extends Admi_Model {
                 header('Content-Type: application/json');
                 echo json_encode($data);
             break; 
-                
             case 'generarOrden':
                 $data = $orse_inde->generarOrden();
                 header('Content-Type: application/json');
@@ -63,6 +104,13 @@ Class Admi_Controller Extends Admi_Model {
                     header('Content-Type: application/json');
                     echo json_encode($data);
             break; 
+            case 'enviarFacturacion':
+                $data = $orse_inde->enviarFacturacion();
+                header('Content-Type: application/json');
+                echo json_encode($data);
+            break; 
+
+            
                 
             case 'generarExcel':
                 $orse_inde->generarExcel();
@@ -186,53 +234,7 @@ Class Admi_Controller Extends Admi_Model {
     
 
 
-    public function coco_inde() {
-        $this->load_class("coco_inde", "controller");
-        $coco_inde = new Coco_inde_Controller();
-        $axn = (isset($_POST['axn']) ? $_POST['axn'] : (isset($_GET['axn']) ? $_GET['axn'] : NULL));
-        switch ($axn) {
-            case 'consulta':
-                $data = $coco_inde->consulta();
-                header('Content-Type: application/json');
-                echo json_encode($data);
-            break;
-            case 'generarExcel':
-                $coco_inde->generarExcel();
-            break;
-            case 'pdf':
-                $coco_inde->generarPDF();
-            break;
-            default:
-                $this->load_view('coco_inde');
-            break;
-        }
-        return TRUE;
-    }
-
-    public function coco_form()
-    {
-        $this->load_class("coco_form", "controller");
-        $coco_form = new Coco_form_Controller();
-        $axn = (isset($_POST['axn']) ? $_POST['axn'] : (isset($_GET['axn']) ? $_GET['axn'] : NULL));
-        switch ($axn) {
-            case 'guardar':
-                header('Content-Type: application/json');
-                echo json_encode($coco_form->guardar());
-            break;
-            case 'getEmpresas':
-                header('Content-Type: application/json');
-                echo json_encode($coco_form->getEmpresas());
-            break;
-            case 'obtenerDatos':
-                header('Content-Type: application/json');
-                echo json_encode($coco_form->obtenerDatosXML());
-            break; 
-            default:
-                $this->load_view('coco_form', $this->data);
-            break;
-        }
-        return true;
-    }
+     
 
     public function appa_inde() {
         $this->load_class("appa_inde", "controller");
@@ -369,56 +371,7 @@ Class Admi_Controller Extends Admi_Model {
         return true;
     }
 
-    /**
-     * coco_deta
-     *
-     * Módulo para visualizar toda la informacion de un control de cobro(coco_deta)
-     *
-     * @author  <lvaldez>
-     */
 
-    public function coco_deta() {
-        $this->load_class("coco_deta", "controller");
-        $coco_deta = new Coco_deta_Controller();
-        $axn = (isset($_POST['axn']) ? $_POST['axn'] : (isset($_GET['axn']) ? $_GET['axn'] : NULL));
-        switch ($axn) {
-            case 'generarFormatoFA':
-                $coco_deta->generarFormatoFA();
-            break;
-            case 'mostrarDocumento':
-                     $coco_deta->mostrarDocumento();
-             break;
-            default:
-                $this->data = $coco_deta->consultar();
-                $this->load_view('coco_deta', $this->data);
-            break;
-        }
-        return TRUE;
-    }
-
-     /**
-     * coco_rela
-     *
-     * Módulo Formulario de Aplicar Pago de Transacciones
-     *
-     * @author   <lvaldez>
-     * @return mixed Array
-     */
-    public function coco_rela(){
-        $this->load_class("coco_rela", "controller");
-        $coco_rela = new Coco_rela_Controller();
-        $axn = (isset($_POST['axn']) ? $_POST['axn'] : (isset($_GET['axn']) ? $_GET['axn'] : NULL));
-        switch ($axn) {
-            case 'guardar':
-                header('Content-Type: application/json');
-                echo json_encode($coco_rela->guardar());
-                break;
-            default:
-                $this->load_view('coco_rela', $coco_rela->consultar());
-                break;
-        }
-        return true;
-    }
-
+     
 
 }

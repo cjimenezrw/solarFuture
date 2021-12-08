@@ -184,19 +184,19 @@
                                 </thead>
                                 <tbody class="searchable" id="table-body-facturas">
                                     <?php
-                                        if(isset($data['comprobantes']) && is_array($data['comprobantes']) && count($data['comprobantes']) > 0){
-                                            foreach($data['comprobantes'] AS $row){
+                                        if(isset($data['facturas']) && is_array($data['facturas']) && count($data['facturas']) > 0){
+                                            foreach($data['facturas'] AS $row){
                                     ?>
                                     <tr>
                                         <td>
                                             <div class="checkbox-custom checkbox-primary">
-                                                <input value="<?php echo $row['skComprobanteCFDI']; ?>" name="comprobantes[]" class="check_factura" id="check_factura_<?php echo $row['iFolio']; ?>" type="checkbox" onchange="admi.cotr_pago.check_factura(this);">
+                                                <input value="<?php echo $row['skFactura']; ?>" name="facturas[]" class="check_factura" id="check_factura_<?php echo $row['iFolio']; ?>" type="checkbox" onchange="admi.cotr_pago.check_factura(this);">
                                                 <label for="check_factura_<?php echo $row['iFolio']; ?>"></label>
                                             </div>
                                         </td>
                                         <td class="text-right"><?php echo $row['iFolio']; ?></td>
                                         <td class="text-right">
-                                            <input class="form-control text-right importeAplicado" onchange="admi.cotr_pago.changeImporte(this);" id="importeAplicado_<?php echo $row['skComprobanteCFDI']; ?>" name="importeAplicado[<?php echo $row['skComprobanteCFDI']; ?>]" value="" placeholder="0.00" autocomplete="off" type="text" disabled>
+                                            <input class="form-control text-right importeAplicado" onchange="admi.cotr_pago.changeImporte(this);" id="importeAplicado_<?php echo $row['skFactura']; ?>" name="importeAplicado[<?php echo $row['skFactura']; ?>]" value="" placeholder="0.00" autocomplete="off" type="text" disabled>
                                         </td>
                                         <td class="text-right"><?php echo ($row['fSaldo']) ? '$'.number_format(bcdiv($row['fSaldo'],'1',2),2) : '$0.00'; ?></td>
                                         <td class="text-right"><?php echo ($row['fTotal']) ? '$'.number_format(bcdiv($row['fTotal'],'1',2),2) : '$0.00'; ?></td>

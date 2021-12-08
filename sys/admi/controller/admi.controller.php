@@ -371,6 +371,44 @@ Class Admi_Controller Extends Admi_Model {
         return true;
     }
 
+    public function cofa_form(){
+        $this->load_class("cofa_form", "controller");
+        $cofa_form = new Cofa_form_Controller();
+        $axn = (isset($_POST['axn']) ? $_POST['axn'] : (isset($_GET['axn']) ? $_GET['axn'] : NULL));
+        switch ($axn) {
+            case 'guardar':
+                $cofa_form->guardar();
+                break;
+            default:
+                break;
+        }
+        return true;
+    }
+
+    public function cofa_inde() {
+        $this->load_class("cofa_inde", "controller");
+        $cofa_inde = new Cofa_inde_Controller();
+        $axn = (isset($_POST['axn']) ? $_POST['axn'] : (isset($_GET['axn']) ? $_GET['axn'] : NULL));
+        switch ($axn) {
+            case 'consulta':
+                $data = $cofa_inde->consulta();
+                header('Content-Type: application/json');
+                echo json_encode($data);
+                break;
+            case 'generarExcel':
+                $cofa_inde->generarExcel();
+                break;
+            case 'pdf':
+                $cofa_inde->generarPDF();
+                break;
+           
+            default:
+                $this->load_view('cofa_inde');
+                break;
+        }
+        return TRUE;
+    }
+
 
      
 

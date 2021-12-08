@@ -207,7 +207,7 @@ Class Orse_form_Controller Extends Admi_Model {
     }
 
 
-                /**
+        /**
              * ordenes
              *
              * Guardar ordenes
@@ -217,7 +217,7 @@ Class Orse_form_Controller Extends Admi_Model {
              */
             private function ordenes(){
                  $this->admi['skEmpresaSocioCliente'] = $this->admi['skEmpresaSocioResponsable'];
-                $this->admi['skEmpresaSocioFacturar'] = $this->admi['skEmpresaSocioResponsable'];
+                $this->admi['skEmpresaSocioFacturacion'] = $this->admi['skEmpresaSocioResponsable'];
                 $this->admi['skDivisa'] ='MXN';
                 $this->admi['fTipoCambio'] =1;
                 $this->admi['skEstatus'] = 'PE';
@@ -427,159 +427,7 @@ Class Orse_form_Controller Extends Admi_Model {
       return parent::consultar_servicio_impuestos();
 
   }
-
-
-  public function getDomicilios() {
-      $this->admi['sNombre'] = (isset($_POST['val']) ? $_POST['val'] : NULL);
-      $this->admi['skEmpresaSocioResponsable'] = (isset($_POST['skEmpresaSocioResponsable']) ? $_POST['skEmpresaSocioResponsable'] : NULL);
-      $this->admi['skEmpresaSocioCliente'] = (isset($_POST['skEmpresaSocioCliente']) ? $_POST['skEmpresaSocioCliente'] : NULL);
-      $this->admi['skSocioComercial'] = (isset($_POST['skSocioComercial']) ? $_POST['skSocioComercial'] : NULL);
-      $this->admi['skEmpresaSocioFacturacion'] = (isset($_POST['skEmpresaSocioFacturacion']) ? $_POST['skEmpresaSocioFacturacion'] : NULL);
-
-        if( $this->admi['skEmpresaSocioFacturacion'] == $this->admi['skEmpresaSocioResponsable']){
-          $this->admi['tipoFactura'] = 'Agencia';
-        }else{
-            if($this->admi['skEmpresaSocioFacturacion'] == $this->admi['skEmpresaSocioCliente']){
-                $this->admi['tipoFactura'] = 'Cliente';
-            }else{
-            $this->admi['tipoFactura'] = 'General';
-            }
-        }
-
-      $data = parent::consultarDomicilios();
-
-      if (!$data) {
-          return FALSE;
-      }
-
-      return $data;
-    }
-
-  public function get_datos_proceso(){
-
-      $this->admi['skCodigo'] = (isset($_POST['skCodigo']) ? $_POST['skCodigo'] : NULL);
-      $this->admi['skServicioProceso'] = (isset($_POST['skServicioProceso']) ? $_POST['skServicioProceso'] : NULL);
-      
-            if($this->admi['skServicioProceso'] == 'MLCL' || $this->admi['skServicioProceso'] == 'PLCL' ){
-                        $this->impo['p1'] = $this->admi['skCodigo'];
-                        $datosManiobra= $this->sysAPI('impo', 'mani_deta', 'consultarManiobras', [
-                         'GET' => $this->impo
-                        ]);
-                        $this->data['skEmpresaSocioResponsable'] = $datosManiobra['datos']['skEmpresaSocioResponsable'];
-                        $this->data['empresaResponsable'] = $datosManiobra['datos']['nombreAgencia']. "(".$datosManiobra['datos']['rfcAgenciaAduanal'].")"." - Agencia Aduanal";
-
-                        $this->data['skEmpresaSocioCliente'] = $datosManiobra['datos']['skCliente'];
-                        $this->data['empresaCliente'] = $datosManiobra['datos']['nombreCliente']. "(".$datosManiobra['datos']['rfcClienteManiobra'].")"." - Cliente";
-                        $this->data['skEmpresaSocioDomicilio'] =  NULL;
-                        $this->data['empresaSocioDomicilio']  =  NULL;
-                        if(!empty($datosManiobra['domicilioReceptor'])){
-                            $this->data['skEmpresaSocioDomicilio'] = $datosManiobra['domicilioReceptor']['skEmpresaSocioDomicilio'];
-                            $this->data['empresaSocioDomicilio'] = $datosManiobra['domicilioReceptor']['calleReceptor'].",".$datosManiobra['domicilioReceptor']['numeroExteriorReceptor'].",".$datosManiobra['domicilioReceptor']['coloniaReceptor'].",".$datosManiobra['domicilioReceptor']['municipioReceptor'].",".$datosManiobra['domicilioReceptor']['estadoReceptor'].",".$datosManiobra['domicilioReceptor']['paisReceptor'];
-
-                        }
-                        $this->data['skEmpresaSocioFacturacion'] = $datosManiobra['datos']['skFacturar'];
-                        $this->data['empresaFacturacion'] = $datosManiobra['datos']['nombreEmpresaFacturacion']. "(".$datosManiobra['datos']['nombreEmpresaFacturacionRFC'].")";
-                        $this->data['skUsoCFDI'] = $datosManiobra['datos']['skUsoCFDIManiobras'];
-                        $this->data['skCentroCosto'] = $datosManiobra['datos']['skCentroCosto'];
-                        $this->data['skDivisa'] = $datosManiobra['datos']['skDivisa'];
-                        $this->data['sPedimento'] = NULL;
-                        $this->data['sReferencia'] = $datosManiobra['datos']['sReferencia'];
-                        $this->data['sBl'] = $datosManiobra['datos']['sBLMaster'];
-                        $this->data['sBlHouse'] = $datosManiobra['datos']['sBLHouse'];
-                        $this->data['sContenedor'] = $datosManiobra['datos']['sContenedor'];
-                        $this->data['iCredito'] = (!empty($datosManiobra['datos']['iCredito']) ? $datosManiobra['datos']['iCredito'] : NULL );
-                        $this->data['dFechaProgramacionNueva'] = (!empty($datosManiobra['datos']['dFechaProgramacionNueva']) ? date('d/m/Y', strtotime($datosManiobra['datos']['dFechaProgramacionNueva'])) : '');
-                        $this->admi['datos'] = $this->data;
-
-
-                        return $this->admi;
-
-
-            }
-            if($this->admi['skServicioProceso'] == 'RLCL' ){
-                        $this->impo['p1'] = $this->admi['skCodigo'];
-                        $datosRevalidacion= $this->sysAPI('impo', 'reva_deta', 'consultarRevalidaciones', [
-                         'GET' => $this->impo
-                        ]);
-                        $this->data['skEmpresaSocioResponsable'] = $datosRevalidacion['datos']['skEmpresaSocioResponsable'];
-                        $this->data['empresaResponsable'] = $datosRevalidacion['datos']['empresaResponsable']. "(".$datosRevalidacion['datos']['empresaResponsableRFC'].")"." - Agencia Aduanal";
-
-                        $this->data['skEmpresaSocioCliente'] = $datosRevalidacion['datos']['skEmpresaSocioCliente'];
-                        $this->data['empresaCliente'] = $datosRevalidacion['datos']['empresaCliente']. "(".$datosRevalidacion['datos']['empresaClienteRFC'].")"." - Cliente";
-                        $this->data['skEmpresaSocioDomicilio'] =  NULL;
-                        $this->data['empresaSocioDomicilio']  =  NULL;
-                        if(!empty($datosRevalidacion['domicilioReceptor'])){
-                            $this->data['skEmpresaSocioDomicilio'] = $datosRevalidacion['domicilioReceptor']['skEmpresaSocioDomicilio'];
-                            $this->data['empresaSocioDomicilio'] = $datosRevalidacion['domicilioReceptor']['calleReceptor'].",".$datosRevalidacion['domicilioReceptor']['numeroExteriorReceptor'].",".$datosRevalidacion['domicilioReceptor']['coloniaReceptor'].",".$datosRevalidacion['domicilioReceptor']['municipioReceptor'].",".$datosRevalidacion['domicilioReceptor']['estadoReceptor'].",".$datosRevalidacion['domicilioReceptor']['paisReceptor'];
-
-                        }
-                        $this->data['skEmpresaSocioFacturacion'] = $datosRevalidacion['datos']['skEmpresaSocioFacturar'];
-                        $this->data['empresaFacturacion'] = $datosRevalidacion['datos']['empresaFacturar']. "(".$datosRevalidacion['datos']['empresaFacturarRFC'].")";
-                        $this->data['skUsoCFDI'] = $datosRevalidacion['datos']['CFDI'];
-                        $this->data['skCentroCosto'] = $datosRevalidacion['datos']['skCentroCosto'];
-                        $this->data['skDivisa'] = $datosRevalidacion['datos']['skDivisa'];
-                        $this->data['sPedimento'] = NULL;
-                        $this->data['sReferencia'] = $datosRevalidacion['datos']['sReferencia'];
-                        $this->data['sBl'] = $datosRevalidacion['datos']['sBLMaster'];
-                        $this->data['sBlHouse'] = $datosRevalidacion['datos']['sBLHouse'];
-                        $this->data['sContenedor'] = $datosRevalidacion['datos']['sContenedor'];
-                        $this->data['iCredito'] = (!empty($datosRevalidacion['datos']['iCredito']) ? $datosRevalidacion['datos']['iCredito'] : NULL );
-                        $this->data['dFechaProgramacionNueva'] = (!empty($datosRevalidacion['datos']['dFechaRevalidacion']) ? date('d/m/Y', strtotime($datosRevalidacion['datos']['dFechaRevalidacion'])) : '');
-                        $this->admi['datos'] = $this->data;
-
-
-                        return $this->admi;
-
-
-            }
-            
-             if($this->admi['skServicioProceso'] == 'FLET' ){
-                        $this->impo['p1'] = $this->admi['skCodigo'];
-                        $datosFlete= $this->sysAPI('tran', 'cfll_form', 'getData', [
-                         'GET' => $this->impo
-                        ]);
-                        $datosFleteContenedores= $this->sysAPI('tran', 'cfll_form', 'getContenedoresGuardados', [
-                         'GET' => $this->impo
-                        ]);
-                        
-                        if(empty($datosFleteContenedores)){
-                            $datosFleteContenedores['jsonContenedores'] = '';
-                        }
-                        $this->data['skEmpresaSocioResponsable'] = $datosFlete['skEmpresaSocioResponsable'];
-                        $this->data['empresaResponsable'] = $datosFlete['empresaResponsable'];
-
-                        $this->data['skEmpresaSocioCliente'] = $datosFlete['skEmpresaSocioCliente'];
-                        $this->data['empresaCliente'] = $datosFlete['sEmpresaSocioCliente'];
-                        $this->data['skEmpresaSocioDomicilio'] =  NULL;
-                        $this->data['empresaSocioDomicilio']  =  NULL;
-                        
-                        if(!empty($datosFlete['domicilioReceptor'])){
-                            $this->data['skEmpresaSocioDomicilio'] = NULL;
-                            $this->data['empresaSocioDomicilio'] = NULL;
-                        }
-                        
-                        $this->data['skEmpresaSocioFacturacion'] = NULL;
-                        $this->data['empresaFacturacion'] = NULL;
-                        $this->data['skUsoCFDI'] = NULL;
-                        $this->data['skCentroCosto'] = NULL;
-                        $this->data['skDivisa'] = 'MXN';
-                        $this->data['sPedimento'] = $datosFlete['sPedimento'];
-                        $this->data['sReferencia'] = $datosFlete['sReferencia'];
-                        $this->data['sBl'] = NULL;
-                        $this->data['sBlHouse'] = NULL;
-                        $this->data['sContenedor'] = $datosFleteContenedores['jsonContenedores'];
-                        $this->data['iCredito'] = NULL;
-                        $this->data['Observaciones'] = $datosFlete['sObservaciones'];
-                        $this->data['dFechaProgramacionNueva'] =$datosFlete['dFechaSolicitud'];
-                        $this->admi['datos'] = $this->data;
-                        
-                        return $this->admi;
-
-
-            }
-            
-            return true;
-
-  }
+ 
+ 
   
 }

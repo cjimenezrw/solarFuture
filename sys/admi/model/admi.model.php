@@ -183,6 +183,7 @@ Class Admi_Model Extends DLOREAN_Model {
         $sql= "SELECT oos.skOrdenServicio, 
         CONCAT('ORD-', LPAD(oos.iFolio, 5, 0)) AS iFolio,
         oos.dFechaCreacion,
+        oos.skEstatus,
         oos.skDivisa,
         oos.fImporteTotal,
         oos.sReferencia, 
@@ -193,16 +194,26 @@ Class Admi_Model Extends DLOREAN_Model {
         oos.fDescuento,
         oos.skMetodoPago,
         oos.skFormaPago,
+        oos.skUsoCFDI,
+        oos.skEmpresaSocioResponsable,
+        oos.skEmpresaSocioCliente,
+        oos.skEmpresaSocioFacturacion,
+        oos.skEmpresaSocioPropietario,
         cer.sNombre AS responsable,
         cec.sNombre AS cliente,
         cef.sNombre AS facturacion,
+        cef.sRFC AS sRFCReceptor,
+        cep.sRFC AS sRFCEmisor,
         ce.sNombre AS estatus,
         ce.sIcono AS iconoEstatus,
         ce.sColor AS colorEstatus,
         cu.sNombre AS usoCFDI,
         cuc.sNombre AS usuarioCreacion,
+        cc.sSerie,
+        cc.skComprobante,
         '' AS folioServicio,
         rosp.skServicioProceso AS proceso,
+        
         rosp.skCodigo AS skCodigoServicio,
         (SELECT  occ.iFolio   FROM rel_ordenesServicios_facturas rpf  INNER JOIN ope_facturas occ ON occ.skFactura = rpf.skFactura  AND occ.skEstatus !='CA' AND occ.iFolio IS NOT NULL WHERE rpf.skOrdenServicio = oos.skOrdenServicio LIMIT 1 ) AS iFolioFactura
         FROM ope_ordenesServicios oos
@@ -213,9 +224,12 @@ Class Admi_Model Extends DLOREAN_Model {
         LEFT JOIN cat_empresas cec ON cec.skEmpresa = resc.skEmpresa
         LEFT JOIN rel_empresasSocios resf ON resf.skEmpresaSocio = oos.skEmpresaSocioFacturacion
         LEFT JOIN cat_empresas cef ON cef.skEmpresa = resf.skEmpresa
+        LEFT JOIN rel_empresasSocios resp ON resp.skEmpresaSocio = oos.skEmpresaSocioPropietario
+        LEFT JOIN cat_empresas cep ON cep.skEmpresa = resp.skEmpresa
         LEFT JOIN cat_usosCFDI cu ON cu.sClave = oos.skUsoCFDI
         LEFT JOIN cat_usuarios cuc ON cuc.skUsuario = oos.skUsuarioCreacion
         LEFT JOIN rel_ordenesServicios_procesos rosp ON rosp.skOrdenServicio = oos.skOrdenServicio
+        LEFT JOIN cat_comprobantes cc ON cc.skEmpresa = resp.skEmpresa AND cc.sClave = 'FA'
         WHERE 1 = 1  AND  oos.skOrdenServicio =  " . escape($this->admi['skOrdenServicio']);
         
         
@@ -1159,14 +1173,14 @@ Class Admi_Model Extends DLOREAN_Model {
         return Conn::fetch_assoc_all($result);
     }
 
-    public function stpCUD_ordenesServicios() {
+    /*public function stpCUD_ordenesServicios() {
 
         $sql = "CALL stpCUD_ordenesServicios (
             " .escape(isset($this->admi['skOrdenServicio']) ? $this->admi['skOrdenServicio'] : NULL) . ",
             " .escape(isset($this->admi['skOrdenServicioServicio']) ? $this->admi['skOrdenServicioServicio'] : NULL) . ",
             " .escape(isset($this->admi['skServicio']) ? $this->admi['skServicio'] : NULL) . ",
             " .escape(isset($this->admi['skEstatus']) ? $this->admi['skEstatus'] : NULL) . ",
-            " .escape(isset($this->admi['skEmpresaSocioPropietario']) ? $this->admi['skEmpresaSocioPropietario'] : NULL). ",
+            " .escape($_SESSION['usuario']['skEmpresaSocioPropietario']) . ",
             " .escape(isset($this->admi['skEmpresaSocioResponsable']) ? $this->admi['skEmpresaSocioResponsable'] : NULL) . ",
             " .escape(isset($this->admi['skEmpresaSocioCliente']) ? $this->admi['skEmpresaSocioCliente'] : NULL) . ",
             " .escape(isset($this->admi['skEmpresaSocioFacturacion']) ? $this->admi['skEmpresaSocioFacturacion'] : NULL) . ",
@@ -1208,7 +1222,7 @@ Class Admi_Model Extends DLOREAN_Model {
         $record = Conn::fetch_assoc($result);
         utf8($record);
         return $record; 
-    }
+    }*/
 
     public function _get_saldo_ordenes(){
         $sql = "SELECT
@@ -1412,7 +1426,7 @@ Class Admi_Model Extends DLOREAN_Model {
 
             " .escape(isset($this->admi['skEstatus']) ? $this->admi['skEstatus'] : NULL) . ",
 
-            " .escape(isset($this->admi['skEmpresaSocioPropietario']) ? $this->admi['skEmpresaSocioPropietario'] : NULL) . ",
+            " .escape($_SESSION['usuario']['skEmpresaSocioPropietario']) . ",
             " .escape(isset($this->admi['skEmpresaSocioResponsable']) ? $this->admi['skEmpresaSocioResponsable'] : NULL). ",
             " .escape(isset($this->admi['skEmpresaSocioCliente']) ? $this->admi['skEmpresaSocioCliente'] : NULL) . ",
             " .escape(isset($this->admi['skEmpresaSocioFacturacion']) ? $this->admi['skEmpresaSocioFacturacion'] : NULL) . ",
@@ -1447,6 +1461,64 @@ Class Admi_Model Extends DLOREAN_Model {
             '" . $this->sysController . "' )";
       
         $this->log($sql, true);
+        $result = Conn::query($sql);
+        //$codigo = Conn::fetch_assoc($result);
+        if (!$result) {
+            return false;
+        }
+        $record = Conn::fetch_assoc($result);
+        utf8($record);
+        return $record; 
+    }
+
+
+    public function stpCUD_facturas() {
+
+        $sql = "CALL stpCUD_facturas (
+            " .escape(isset($this->admi['skFactura']) ? $this->admi['skFactura'] : NULL) . ",
+            " .escape(isset($this->admi['skFacturaServicio']) ? $this->admi['skFacturaServicio'] : NULL) . ",
+            " .escape(isset($this->admi['skOrdenServicio']) ? $this->admi['skOrdenServicio'] : NULL) . ",
+            " .escape(isset($this->admi['skServicio']) ? $this->admi['skServicio'] : NULL) . ",
+            " .escape(isset($this->admi['skEstatus']) ? $this->admi['skEstatus'] : NULL) . ",
+            " .escape(isset($this->admi['skComprobante']) ? $this->admi['skComprobante'] : NULL). ",
+            " .escape($_SESSION['usuario']['skEmpresaSocioPropietario']) . ",
+            " .escape(isset($this->admi['skEmpresaSocioEmisor']) ? $this->admi['skEmpresaSocioEmisor'] : NULL). ",
+            " .escape(isset($this->admi['skEmpresaSocioResponsable']) ? $this->admi['skEmpresaSocioResponsable'] : NULL) . ",
+            " .escape(isset($this->admi['skEmpresaSocioCliente']) ? $this->admi['skEmpresaSocioCliente'] : NULL) . ",
+            " .escape(isset($this->admi['skEmpresaSocioFacturacion']) ? $this->admi['skEmpresaSocioFacturacion'] : NULL) . ",
+            " .escape(isset($this->admi['skDivisa']) ? $this->admi['skDivisa'] : NULL) . ",
+            " .escape(isset($this->admi['sReferencia']) ? $this->admi['sReferencia'] : NULL) . ",
+            " .escape(isset($this->admi['sDescripcion']) ? $this->admi['sDescripcion'] : NULL) . ",
+            " .escape(isset($this->admi['fTotal']) ? $this->admi['fTotal'] : NULL) . ",
+            " .escape(isset($this->admi['fSaldo']) ? $this->admi['fSaldo'] : NULL) . ", 
+            " .escape(isset($this->admi['fSubtotal']) ? $this->admi['fSubtotal'] : NULL) . ", 
+            " .escape(isset($this->admi['fImpuestosRetenidos']) ? $this->admi['fImpuestosRetenidos'] : NULL) . ",
+            " .escape(isset($this->admi['fImpuestosTrasladados']) ? $this->admi['fImpuestosTrasladados'] : NULL) . ",
+            " .escape(isset($this->admi['fDescuento']) ? $this->admi['fDescuento'] : NULL) . ",
+            " .escape(isset($this->admi['fTipoCambio']) ? $this->admi['fTipoCambio'] : NULL) . ", 
+            " .escape(isset($this->admi['skUsoCFDI']) ? $this->admi['skUsoCFDI'] : NULL) . ",
+            " .escape(isset($this->admi['skMetodoPago']) ? $this->admi['skMetodoPago'] : NULL) . ",
+            " .escape(isset($this->admi['skFormaPago']) ? $this->admi['skFormaPago'] : NULL) . ",
+            " .escape(isset($this->admi['sSerie']) ? $this->admi['sSerie'] : NULL) . ",
+            " .escape(isset($this->admi['sRFCEmisor']) ? $this->admi['sRFCEmisor'] : NULL) . ",
+            " .escape(isset($this->admi['sRFCReceptor']) ? $this->admi['sRFCReceptor'] : NULL) . ",
+
+
+            " .escape(isset($this->admi['skTipoMedida']) ? $this->admi['skTipoMedida'] : NULL) . ",
+            " .escape(isset($this->admi['fCantidad']) ? $this->admi['fCantidad'] : NULL) . ",
+            " .escape(isset($this->admi['fPrecioUnitario']) ? $this->admi['fPrecioUnitario'] : NULL) . ",
+
+            " .escape(isset($this->admi['skImpuesto']) ? $this->admi['skImpuesto'] : NULL) . ",
+            " .escape(isset($this->admi['skTipoImpuesto']) ? $this->admi['skTipoImpuesto'] : NULL) . ",
+            " .escape(isset($this->admi['fTasa']) ? $this->admi['fTasa'] : NULL) . ",
+            " .escape(isset($this->admi['fImporte']) ? $this->admi['fImporte'] : NULL) . ",
+            
+           
+            " .escape(isset($this->admi['axn']) ? $this->admi['axn'] : NULL) . ",
+            '" . $_SESSION['usuario']['skUsuario'] . "',
+            '" . $this->sysController . "' )";
+          
+       
         $result = Conn::query($sql);
         //$codigo = Conn::fetch_assoc($result);
         if (!$result) {

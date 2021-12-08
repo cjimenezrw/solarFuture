@@ -588,7 +588,7 @@ admi.orse_inde.autorizarOrden = function autorizarOrden(obj) {
    
 };
 
-admi.orse_inde.envioFacturar = function envioFacturar(){
+admi.orse_inde.enviarFacturacion = function enviarFacturacion(){
 
     swal({
         title: "Enviar Orden de Servicio a Facturar?",

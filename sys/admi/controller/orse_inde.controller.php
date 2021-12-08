@@ -158,12 +158,92 @@ Class Orse_inde_Controller Extends Admi_Model {
         $this->admi['axn'] = 'enviarFacturacion';
         $this->admi['skOrdenServicio'] = (isset($_POST['skOrdenServicio']) && !empty($_POST['skOrdenServicio'])) ? $_POST['skOrdenServicio'] : NULL;
 
-        $stpCUD_ordenesServicios = parent::stpCUD_ordenesServicios();  
+        $consultarOrdenServicio = parent::_getOrdenServicio();
+
+        if($consultarOrdenServicio['skEstatus'] == 'EN'){
+            $this->data['success'] = false;
+            $this->data['message'] = 'LA ORDEN YA SE HA ENVIADO ANTERIORMENTE.';
+            return $this->data;
+        }
+        $servicios = parent::_getOrdenServicioServicios();
+        //$impuestos = parent::consultar_pagos_impuestos();
+
+
+            $inputData = [
+                'skOrdenServicio'=>isset($consultarOrdenServicio['skOrdenServicio']) ? $consultarOrdenServicio['skOrdenServicio'] : NULL,
+                'skFactura'=>isset($consultarOrdenServicio['skFactura']) ? $consultarOrdenServicio['skFactura'] : NULL,
+                'skEmpresaSocioFacturacion'=>isset($consultarOrdenServicio['skEmpresaSocioFacturacion']) ? $consultarOrdenServicio['skEmpresaSocioFacturacion'] : NULL,
+                'skEmpresaSocioResponsable'=>isset($consultarOrdenServicio['skEmpresaSocioResponsable']) ? $consultarOrdenServicio['skEmpresaSocioResponsable'] : NULL,
+                'skEmpresaSocioPropietario'=>isset($consultarOrdenServicio['skEmpresaSocioPropietario']) ? $consultarOrdenServicio['skEmpresaSocioPropietario'] : NULL,
+                'skEmpresaSocioEmisor'=>isset($consultarOrdenServicio['skEmpresaSocioPropietario']) ? $consultarOrdenServicio['skEmpresaSocioPropietario'] : NULL,
+                'skEmpresaSocioCliente'=>isset($consultarOrdenServicio['skEmpresaSocioCliente']) ? $consultarOrdenServicio['skEmpresaSocioCliente'] : NULL,
+                //'skEmpresaSocioDomicilio'=>isset($consultarPago['skEmpresaSocioDomicilio']) ? $consultarPago['skEmpresaSocioDomicilio'] : NULL,
+                'skComprobante'=>isset($consultarOrdenServicio['skComprobante']) ? $consultarOrdenServicio['skComprobante'] : NULL,
+                'sSerie'=>isset($consultarOrdenServicio['sSerie']) ? $consultarOrdenServicio['sSerie'] : NULL,
+                'skDivisa'=>isset($consultarOrdenServicio['skDivisa']) ? $consultarOrdenServicio['skDivisa'] : NULL,
+                'skFormaPago'=>isset($consultarOrdenServicio['skFormaPago']) ? $consultarOrdenServicio['skFormaPago'] : NULL,
+                'skMetodoPago'=>isset($consultarOrdenServicio['skMetodoPago']) ? $consultarOrdenServicio['skMetodoPago'] : NULL,
+                'skUsoCFDI'=>isset($consultarOrdenServicio['skUsoCFDI']) ? $consultarOrdenServicio['skUsoCFDI'] : NULL,
+ 
+                    'sRFCEmisor'=>isset($consultarOrdenServicio['sRFCEmisor']) ? $consultarOrdenServicio['sRFCEmisor'] : NULL,
+                    'sRFCReceptor'=>isset($consultarOrdenServicio['sRFCReceptor']) ? $consultarOrdenServicio['sRFCReceptor'] : NULL,
+
+                'sReferencia'=>isset($consultarOrdenServicio['sReferencia']) ? $consultarOrdenServicio['sReferencia'] : NULL,
+                'sDescripcion'=>isset($consultarOrdenServicio['sDescripcion']) ? $consultarOrdenServicio['sDescripcion'] : NULL,
+                'fTipoCambio'=>isset($consultarOrdenServicio['fTipoCambio']) ? $consultarOrdenServicio['fTipoCambio'] : NULL,
+                'fImpuestosRetenidos'=>isset($consultarOrdenServicio['fImpuestosRetenidos']) ? $consultarOrdenServicio['fImpuestosRetenidos'] : NULL,
+                'fImpuestosTrasladados'=>isset($consultarOrdenServicio['fImpuestosTrasladados']) ? $consultarOrdenServicio['fImpuestosTrasladados'] : NULL,
+                'fDescuento'=>isset($consultarOrdenServicio['fDescuento']) ? $consultarOrdenServicio['fDescuento'] : NULL,
+                'fSubtotal'=>isset($consultarOrdenServicio['fImporteSubtotal']) ? $consultarOrdenServicio['fImporteSubtotal'] : NULL,
+ 
+                'fTotal'=>isset($consultarOrdenServicio['fImporteTotal']) ? $consultarOrdenServicio['fImporteTotal'] : NULL,
+                'conceptos'=>[]
+
+            ];
+
+            foreach($servicios AS $v_serv){
+                $dataConceptos = [
+                    'skServicio'=>isset($v_serv['skServicio']) ? $v_serv['skServicio']: NULL,
+                    'skTipoMedida'=>isset($v_serv['skTipoMedida']) ? $v_serv['skTipoMedida']: NULL,
+                    'sDescripcion'=>isset($v_serv['sDescripcion']) ? $v_serv['sDescripcion'] : NULL,
+                    'fCantidad'=>isset($v_serv['fCantidad']) ? trim($v_serv['fCantidad']) : NULL,
+                    'fPrecioUnitario'=>(isset($v_serv['fPrecioUnitario']) ? $v_serv['fPrecioUnitario'] : NULL),
+                    'fImpuestosRetenidos'=>(isset($v_serv['fImpuestosRetenidos']) ? $v_serv['fImpuestosRetenidos'] : NULL),
+                    'fImpuestosTrasladados'=>(isset($v_serv['fImpuestosTrasladados']) ? $v_serv['fImpuestosTrasladados'] : NULL),
+                    'fDescuento'=>(isset($v_serv['fDescuento']) ? $v_serv['fDescuento'] : NULL),
+                    'fImporte'=>isset($v_serv['fImporteTotal']) ? $v_serv['fImporteTotal'] : NULL
+                ];
+                array_push($inputData['conceptos'], $dataConceptos);
+            }
+
+          
+       
+        $guardarFactura = $this->sysAPI('admi', 'cofa_form', 'guardar', [
+            'POST' => $inputData
+         ]);
+
+         if(!$guardarFactura || isset($guardarFactura['success']) && $guardarFactura['success'] != 1){
+            $this->data['success'] = FALSE;
+            $this->data['message'] = 'HUBO UN ERROR AL GUARDAR LOS GENERALES DE FACTURAS.';
+            return $this->data;
+        }
+
+     
+
+         return $guardarFactura;
+
+
+
+
+
+
+
+      /*  $stpCUD_ordenesServicios = parent::stpCUD_ordenesServicios();  
         if(!$stpCUD_ordenesServicios || isset($stpCUD_ordenesServicios['success']) && $stpCUD_ordenesServicios['success'] != 1){
             $this->data['success'] = FALSE;
             $this->data['message'] = 'HUBO UN ERROR AL AUTORIZAR LA SOLICITUD. ';
             return $this->data;
-        }
+        }*/
 
         return $this->data;
     } 

@@ -976,7 +976,8 @@ Class Admi_Model Extends DLOREAN_Model {
         occ.fTotal,
         occ.fDescuento,
         occ.fSaldo,
-        occ.dFechaFactura,
+        occ.dFechaCreacion,
+        occ.dFechaCreacion AS dFechaFactura,
         fp.sCodigo AS codigoFormaPago,
         fp.sNombre AS formaPago,
         mp.sCodigo AS codigoMetodoPago,
@@ -1015,7 +1016,7 @@ Class Admi_Model Extends DLOREAN_Model {
             $sql .= " AND occ.skFactura = ".escape($this->admi['skFactura']);
         }
 
-        $sql .= " ORDER BY occ.dFechaFactura ASC ";
+        $sql .= " ORDER BY occ.dFechaCreacion ASC ";
  
 
         $result = Conn::query($sql);
@@ -1030,12 +1031,12 @@ Class Admi_Model Extends DLOREAN_Model {
 
     public function _get_saldo_facturas(){
         $sql = "SELECT
-            RIGHT('000000'+ CAST(occ.iFolio AS VARCHAR(6)),6) AS iFolio, occ.skFactura, occ.fSaldo, occ.dFechaFactura,
+            RIGHT('000000'+ CAST(occ.iFolio AS VARCHAR(6)),6) AS iFolio, occ.skFactura, occ.fSaldo, occ.dFechaCreacion,
             mp.sCodigo AS codigoMetodoPago, mp.sNombre AS metodoPago, fp.sCodigo AS codigoFormaPago, fp.sNombre AS formaPago
             FROM ope_facturas occ
             INNER JOIN cat_metodosPago mp ON mp.sCodigo = occ.skMetodoPago
             INNER JOIN cat_formasPago fp ON fp.sCodigo = occ.skFormaPago
-            WHERE occ.skFactura IN (". mssql_where_in($this->admi['comprobantes']).")";
+            WHERE occ.skFactura IN (". mssql_where_in($this->admi['facturas']).")";
         $result = Conn::query($sql);
         if (!$result) {
             return FALSE;

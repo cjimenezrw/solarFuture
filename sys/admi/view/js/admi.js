@@ -6,6 +6,7 @@ admi.appa_inde = {};
 admi.uscf_inde = {}; 
 admi.cotr_form = {};
 admi.orse_form = {};
+admi.cofa_inde = {};
 
 admi.uscf_inde.dataTableConf = {
     'serverSide': true,
@@ -163,9 +164,27 @@ admi.cotr_inde.dataTableConf = {
                 ((rowData.estatusIcono) ? $(td).find('i').attr({"title": cellData, "data-toggle": "tooltip", "data-placement": "rigth"}) : '');
 
             }
+        },{
+            "targets": [1],
+            "width": '1px',
+            "createdCell": function (td, cellData, rowData, row, col) {
+                switch (rowData.skTipoTransaccion) {
+                    case "TRAN": // Transferencia
+                        $(td).html('<i class="fa fa-money"></i>');
+                        $(td).addClass('text-default text-center');
+                        $(td).find('i').attr({
+                            "title": cellData,
+                            "data-toggle": "tooltip",
+                            "data-placement": "rigth"
+                        });
+                        break;
+                   
+                    default:
+                }
+            }
         },
         {
-            "targets": [1],
+            "targets": [2],
             "width": '30px'
             
         }
@@ -675,6 +694,73 @@ admi.orse_form.validaciones = {
  
 
 };
+
+admi.cofa_inde.dataTableConf = {
+    'serverSide': true,
+    'ajax': {
+        'url': window.location.href,
+        'type': 'POST',
+        'data': function (data) {
+            data.axn = 'consulta';
+            data.filters = core.dataFilterSend;
+            data.generarExcel = core.generarExcel;
+        }
+    },
+    'axn': 'consulta',
+    'order': [[3, "desc"]],
+    'columns': [
+        {'title': 'E', 'data': 'estatus', 'dataType': 'string', 'tooltip': 'Estatus', 'filterT': 'Estatus'},
+        {'title': 'E.P', 'data': 'estatusPago', 'dataType': 'string', 'tooltip': 'Estatus Pago', 'filterT': 'Estatus Pago'},
+         {'title': 'Folio ', 'filterT': 'Folio ','tooltip': 'Folio ','data': 'iFolio', 'dataType': 'string'},
+         {'title': 'F. Creacion', 'data': 'dFechaCreacion', 'dataType': 'date'},
+        {'title': 'Usuario Creacion', 'data': 'usuarioCreacion', 'dataType': 'string'},
+
+        {'title': 'SubTotal', 'data': 'fSubtotal', 'dataType': 'int'},
+        {'title': 'Total', 'data': 'fTotal', 'dataType': 'int'},
+         {'title': 'Moneda', 'data': 'skDivisa', 'dataType': 'string'},
+        {'title': 'Facturar A', 'data': 'facturacion', 'dataType': 'string'}
+ 
+        
+    ],
+
+    "drawCallback": function () {
+        core.dataTable.contextMenuCore(true);
+        core.dataTable.changeColumnColor(2, 'success');
+        core.dataTable.fastFilters(2, [], true);
+        $('[data-toggle="tooltip"]').tooltip();
+    },
+    "columnDefs": [
+        {
+            "targets": [0],
+            "width": '20px',
+            "createdCell": function (td, cellData, rowData, row, col) {
+                ((rowData.estatusIcono) ? $(td).html('<i class="' + rowData.estatusIcono + '"></i>') : $(td).html(cellData));
+                $(td).addClass('text-center ' + ((rowData.estatusColor) ? rowData.estatusColor : 'text-primary'));
+                ((rowData.estatusIcono) ? $(td).find('i').attr({"title": cellData, "data-toggle": "tooltip", "data-placement": "rigth"}) : '');
+
+            }
+        },{
+            "targets": [1],
+            "width": '20px',
+            "createdCell": function (td, cellData, rowData, row, col) {
+                ((rowData.estatusIconoPago) ? $(td).html('<i class="' + rowData.estatusIconoPago + '"></i>') : $(td).html(cellData));
+                $(td).addClass('text-center ' + ((rowData.estatusColorPago) ? rowData.estatusColorPago : 'text-primary'));
+                ((rowData.estatusIconoPago) ? $(td).find('i').attr({"title": cellData, "data-toggle": "tooltip", "data-placement": "rigth"}) : '');
+
+            }
+        },
+        {
+            "targets": [2],
+            "width": '30px'
+            
+        },
+        {
+            "targets": [3],
+            "width": '30px'
+            
+        }
+    ]
+}; 
 
 
   

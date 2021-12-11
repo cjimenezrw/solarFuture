@@ -763,4 +763,55 @@ admi.cofa_inde.dataTableConf = {
 }; 
 
 
-  
+admi.escu_inde = {};
+
+admi.escu_inde.dataTableConf = {
+    'serverSide': true,
+    'ajax': {
+        'url': window.location.href,
+        'type': 'POST',
+        'data': function (data) {
+            data.axn = 'consulta';
+            data.filters = core.dataFilterSend;
+        }
+    },
+    'order': [[1, "asc"]],
+    'rowId': 'skEmpresaSocio',
+    'columns': [
+         {'title': 'E', 'data': 'estatus', 'filterT': 'Estatus','tooltip': 'Estatus', 'dataType': 'string'}, 
+        {'title': 'RFC', 'data': 'sRFC', 'dataType': 'string'},
+        {'title': 'Razón Social', 'data': 'empresa', 'dataType': 'string'}, 
+        {'title': 'Deuda 1 Dias ', 'data': 'fDeuda1Dias', 'dataType': 'string'},
+        {'title': 'Deuda 2-15 Dias ', 'data': 'fDeuda2_15Dias', 'dataType': 'string'},
+        {'title': 'Deuda 16-30 Dias ', 'data': 'fDeuda16_30Dias', 'dataType': 'string'},
+        {'title': 'Deuda 31-45 Dias ', 'data': 'fDeuda31_45Dias', 'dataType': 'string'},
+        {'title': 'Deuda +45 Dias ', 'data': 'fDeuda46Dias', 'dataType': 'string'},
+        {'title': 'Deuda Total ', 'data': 'fDeudaTotal', 'dataType': 'string'}
+    ],
+    'axn': 'consulta',
+    "drawCallback": function () {
+        core.dataTable.contextMenuCore(true);
+        core.dataTable.changeColumnColor(2, 'success');
+        $('[data-toggle="tooltip"]').tooltip();
+        core.dataTable.fastFilters(3, [], true);
+    },
+    "columnDefs": [
+      {
+        "targets": [0],
+        "width": '20px',
+        "createdCell": function (td, cellData, rowData, row, col) {
+
+          ((rowData.estatusIcono) ? $(td).html('<i class="'+rowData.estatusIcono+'"></i>') : $(td).html(cellData));
+          $(td).addClass('text-center '+((rowData.estatusColor) ? rowData.estatusColor : 'text-primary'));
+          ((rowData.estatusIcono) ? $(td).find('i').attr({"title": cellData,"data-toggle": "tooltip","data-placement": "rigth"}) : '');
+        }
+    },
+    {
+        "targets": [1],
+        "width": '25px' 
+    },{
+        "targets": [2],
+        "width": '25px' 
+    }
+    ]
+};

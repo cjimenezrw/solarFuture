@@ -47,10 +47,10 @@ Class Appa_inde_Controller Extends Admi_Model {
        ,cfp.sCodigo AS codigoFormaPago
        ,cmp.sNombre AS metodoPago
        ,cmp.sCodigo AS codigoMetodoPago 
-       FROM rel_transacciones_comprobantes rtfc
+       FROM rel_transacciones_facturas rtfc
        INNER JOIN core_estatus ce on ce.skEstatus = rtfc.skEstatus
        LEFT JOIN cat_usuarios uc ON uc.skUsuario =  rtfc.skUsuarioCreacion
-       LEFT JOIN ope_cfdiComprobantes occ ON occ.skComprobanteCFDI = rtfc.skComprobanteCFDI
+       LEFT JOIN ope_facturas occ ON occ.skFactura = rtfc.skFactura
        LEFT JOIN cat_metodosPago cmp ON cmp.sCodigo = occ.skMetodoPago
        LEFT JOIN cat_formasPago cfp ON cfp.sCodigo = occ.skFormaPago
        INNER JOIN ope_transacciones opt ON opt.skTransaccion = rtfc.skTransaccion
@@ -104,6 +104,43 @@ Class Appa_inde_Controller Extends Admi_Model {
            $_POST['headers'], 
            $this->consulta()
         );
+    }
+
+    /**
+     * ME_Cancelar_AP
+     *
+     * Condición de Menú Emergente Cancelar_AP
+     * Solo puede Cancelar_AP SI el skEstatus != EL
+     *
+     * @author Cristhian Eduardo Ureña Fletes <cris_9600_13@hotmail.com>
+     * @param type $row
+     * @return array
+     */
+    public function ME_Cancelar_AP(&$row, $function = FALSE){
+        if(!$function){
+            if(in_array($row['skEstatus'], ['CA']) || !empty($row['complemento'])){
+                return SELF::DESHABILITADO;
+            }else{
+                return SELF::HABILITADO;
+            }
+            return SELF::OCULTO;
+        }else{
+            $this->data = ['success'=>TRUE,'message'=>NULL,'datos'=>NULL];
+
+            $this->admi['axn'] = 'cancelar_transaccion_aplicacion_pago';
+            $this->admi['skTransaccionPago'] = (isset($_POST['id']) ? $_POST['id'] : NULL);
+            $this->admi['sObservacionCancelacion'] = (isset($_POST['sObservaciones']) ? $_POST['sObservaciones'] : NULL);
+    
+            if($this->admi['skTransaccionPago']){
+
+                $cancelar_transaccion_aplicacion_pago = parent::stpCUD_transacciones();
+                if(!$cancelar_transaccion_aplicacion_pago || isset($cancelar_transaccion_aplicacion_pago['success']) && $cancelar_transaccion_aplicacion_pago['success'] != 1){
+                    $this->data = ['success'=>FALSE,'message'=>'NO SE PUDO CANCELAR EL REGISTRO','datos'=>NULL];
+                    return $this->data;
+                }
+            }
+            return $this->data;
+        }
     }
 
      

@@ -252,6 +252,10 @@ Class Admi_Controller Extends Admi_Model {
             case 'pdf':
                 $appa_inde->generarPDF();
             break;
+            case 'cancelar':
+                header('Content-Type: application/json');
+                echo json_encode($appa_inde->ME_Cancelar_AP($_POST, TRUE));
+            break;
             default:
                 $this->load_view('appa_inde');
             break;
@@ -407,6 +411,52 @@ Class Admi_Controller Extends Admi_Model {
                 break;
         }
         return TRUE;
+    }
+
+    /**
+     * Módulo de consulta de empresas socios (prov-inde)
+     *
+     * Módulo para consultar el caracteristicas de clientes
+     *
+     * @author Luis alberto Valdez Alvarez <lvaldez@woodward.com.mx>
+     * @return html     Retorna la vista del módulo de consulta de empresas socios y/o funcionalidades.
+     */
+    public function escu_inde() {
+        $this->load_class("escu_inde", "controller");
+        $escu_inde = new Escu_inde_Controller();
+        $axn = (isset($_POST['axn']) ? $_POST['axn'] : (isset($_GET['axn']) ? $_GET['axn'] : NULL));
+        switch ($axn) {
+        case 'consulta':
+                $data = $escu_inde->consulta();
+                header('Content-Type: application/json');
+                echo json_encode($data);
+                return TRUE;
+        break;  
+        case 'generarExcel':
+                $escu_inde->generarExcel();
+        break;
+        case 'pdf':
+                $escu_inde->generarPDF();
+        break;
+        default:
+                $this->load_view('escu_inde', $this->data);
+        break;
+        }
+        return true;
+    }
+
+    public function escu_deta() {
+        $this->load_class("escu_deta", "controller");
+        $escu_deta = new Escu_deta_Controller();
+        $axn = (isset($_POST['axn']) ? $_POST['axn'] : (isset($_GET['axn']) ? $_GET['axn'] : NULL));
+            switch ($axn) {
+                default:
+                    $this->data = $escu_deta->consultar();
+
+                    $this->load_view('escu_deta', $this->data);
+                break;
+            }
+        return true;
     }
 
 

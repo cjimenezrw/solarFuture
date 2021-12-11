@@ -705,6 +705,7 @@ Class Admi_Model Extends DLOREAN_Model {
     public function stpCUD_transacciones() {
         $sql = "CALL stpCUD_transacciones (
         " .escape(isset($this->admi['skTransaccion']) ? $this->admi['skTransaccion'] : NULL) . ",
+        " .escape(isset($this->admi['skTransaccionPago']) ? $this->admi['skTransaccionPago'] : NULL) . ",
         " .escape(isset($this->admi['skEstatus']) ? $this->admi['skEstatus'] : NULL) . ",
         " .escape(isset($this->admi['skTipoTransaccion']) ? $this->admi['skTipoTransaccion'] : NULL) . ",
         " .escape($_SESSION['usuario']['skEmpresaSocioPropietario']) . ",
@@ -733,7 +734,6 @@ Class Admi_Model Extends DLOREAN_Model {
         " .escape(isset($this->admi['axn']) ? $this->admi['axn'] : NULL) . ",
         '" . $_SESSION['usuario']['skUsuario'] . "',
         '" . $this->sysController . "' )";
-         
 
 
         $result = Conn::query($sql);
@@ -1529,6 +1529,77 @@ Class Admi_Model Extends DLOREAN_Model {
         utf8($record);
         return $record; 
     }
+
+    
+        /**
+    * getEmpresasSocios
+    *
+    * Funcion para consultar todos los Datos de la empresa socio
+    *
+    * Modulo utilizado por los ejecutivos y Comercial
+    *
+    * @author Cristian Alexis Mendoza Gonzalez <cmendoza@woodward.com.mx>
+    * @return todos los corresponsales existentes  || si es error retorna FALSE.
+    *
+    */
+    public function getEmpresasSocios() {
+
+        $sql = "select relEmp.skEmpresaSocio, catEmp.sNombre , catEmp.sNombreCorto, catEmp.sRFC, catEmp.skEstatus, catEmpTi.sNombre AS nombreTipo, relEmp.dFechaCreacion from rel_empresasSocios AS relEmp
+        LEFT JOIN cat_empresas AS catEmp ON catEmp.skEmpresa = relEmp.skEmpresa
+        LEFT JOIN cat_empresasTipos AS catEmpTi ON catEmpTi.skEmpresaTipo = relEmp.skEmpresaTipo
+        where skEmpresaSocio = ". escape($this->cfdi['skEmpresaSocio']);
+        $result = Conn::query($sql);
+  
+        if (!$result) {
+            return FALSE;
+        }
+  
+        return Conn::fetch_assoc($result);
+      }
+  
+      public function getFacturasEmpresaSocio($estatus=''){
+          $sql = "SELECT  occ.skEstatus,occ.skEstatusPago,
+          ep.sNombre AS estatusPago,ep.sIcono AS estatusPagoIcono,ep.sColor AS estatusPagoColor,
+          e.sNombre AS estatus,e.sColor AS estatusColor,e.sIcono AS estatusIcono,
+          occ.iFolio,occ.skFormaPago,occ.skMetodoPago,occ.skUsoCFDI,
+         occ.dFechaCreacion AS dFechaFacturacion,occ.fTotal,occ.fSaldo,cee.sNombre AS Facturacion,cer.sNombre AS responsable,
+          occ.dFechaCreacion,
+          cfp.sCodigo AS formaPago,cfp.sNombre AS nombreFormaPago,
+          cmp.sCodigo AS metodoPago,cmp.sNombre AS nombreMetodoPago,
+          cuc.sClave AS usoCFDI,cuc.sNombre AS nombreCFDI
+          FROM ope_facturas occ
+          LEFT JOIN cat_metodosPago cmp ON cmp.sCodigo = occ.skMetodoPago
+          LEFT JOIN cat_formasPago cfp ON cfp.sCodigo = occ.skFormaPago
+          LEFT JOIN cat_usosCFDI cuc ON cuc.sClave = occ.skUsoCFDI
+          LEFT JOIN rel_empresasSocios ree ON ree.skEmpresaSocio = occ.skEmpresaSocioFacturacion
+          LEFT JOIN cat_empresas cee ON cee.skEmpresa = ree.skEmpresa
+          LEFT JOIN rel_empresasSocios rer ON rer.skEmpresaSocio = occ.skEmpresaSocioResponsable
+          LEFT JOIN cat_empresas cer ON cer.skEmpresa = rer.skEmpresa
+          LEFT JOIN core_estatus ep ON  ep.skEstatus = occ.skEstatusPago
+          LEFT JOIN core_estatus e ON  e.skEstatus = occ.skEstatus
+      WHERE 1 = 1   AND  occ.skEmpresaSocioFacturacion = ".escape(isset($this->cfdi['skEmpresaSocio']) ? $this->cfdi['skEmpresaSocio'] : NULL);
+  
+                  if(isset($estatus) && !empty(trim($estatus))){
+                      if($estatus == 'PA'){
+                          $sql.=" AND occ.skEstatusPago = 'PA' AND occ.skEstatus != 'CA'";
+                      }
+  
+                      if($estatus == 'PE'){
+                           $sql.=" AND ( occ.skEstatusPago = 'PE' OR occ.skEstatusPago IS NULL) AND occ.skEstatus != 'CA' ";
+                      }
+  
+                      if($estatus == 'CA'){
+                          $sql.=" AND occ.skEstatus = 'CA'";
+                      }
+                  }
+              
+          $result = Conn::query($sql);
+          if (!$result) {
+              return FALSE;
+          }
+          $record = Conn::fetch_assoc_all($result);
+          return $record;
+      }
 
 
 

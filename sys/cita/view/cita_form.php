@@ -17,7 +17,7 @@
                                 <select id="skCategoriaCita"  name="skCategoriaCita" class="form-control" data-plugin="select2" select2Simple>
                                     <option value="">- SELECCIONAR -</option>
                                     <?php
-                                        if ($data['cat_citas_categorias']) {
+                                        if (!empty($data['cat_citas_categorias'])) {
                                             foreach ($data['cat_citas_categorias'] as $row) {
                                     ?>
                                         <option <?php echo(isset($data['datos']['skCategoriaCita']) && $data['datos']['skCategoriaCita'] == $row['skCategoriaCita'] ? 'selected="selected"' : ''); ?>
@@ -60,6 +60,8 @@
                             </div>
                         </div>
 
+                        <div class="col-lg-12 col-md-12 clearfix"></div>
+
                         <div class="col-lg-4 col-md-4">
                             <div class="form-group">
                                 <h4 class="example-title"><span style="color:red;">* </span>NOMBRE:</h4>
@@ -99,13 +101,15 @@
                             </div>
                         </div>
 
+                        <div class="col-lg-12 col-md-12 clearfix"></div>
+
                         <div class="col-lg-4 col-md-4">
                             <div class="form-group">
                                 <h4 class="example-title"><span style="color:red;">* </span>ESTADO:</h4>
                                 <select id="skEstadoMX"  name="skEstadoMX" class="form-control" data-plugin="select2" select2Simple>
                                     <option value="">- SELECCIONAR -</option>
                                     <?php
-                                        if ($data['cat_estadosMX']) {
+                                        if (!empty($data['cat_estadosMX'])) {
                                             foreach (  $data['cat_estadosMX'] as $row) {
                                     ?>
                                         <option <?php echo(isset($data['datos']['skEstadoMX']) && $data['datos']['skEstadoMX'] == $row['skEstadoMX'] ? 'selected="selected"' : ''); ?>
@@ -124,7 +128,7 @@
                                 <select id="skMunicipioMX"  name="skMunicipioMX" class="form-control" data-plugin="select2" select2Simple>
                                     <option value="">- SELECCIONAR -</option>
                                     <?php
-                                        if ($data['cat_municipiosMX']) {
+                                        if (!empty($data['cat_municipiosMX'])) {
                                             foreach (  $data['cat_municipiosMX'] as $row) {
                                     ?>
                                         <option <?php echo(isset($data['datos']['skMunicipioMX']) && $data['datos']['skMunicipioMX'] == $row['skMunicipioMX'] ? 'selected="selected"' : ''); ?>
@@ -150,17 +154,15 @@
                             </div>
                         </div>
 
+                        <div class="col-lg-12 col-md-12 clearfix"></div>
 
-
-                    </div>
-
-                    <div class="row row-lg">
                         <div class="col-lg-12 col-md-12">
                             <div class="form-group">
                                 <h4 class="example-title"><span style="color:red;">* </span>OBSERVACIONES:</h4>
                                 <textarea id="sObservaciones" name="sObservaciones" placeholder="OBSERVACIONES" class="form-control" rows="3"><?php echo isset($data['datos']['sObservaciones']) ? $data['datos']['sObservaciones'] : ''; ?></textarea>
                             </div>
                         </div>
+                    
                     </div>
 
                 </div>

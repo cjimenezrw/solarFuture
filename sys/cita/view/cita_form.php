@@ -18,9 +18,9 @@
                                     <option value="">- SELECCIONAR -</option>
                                     <?php
                                         if ($data['cat_citas_categorias']) {
-                                            foreach (  $data['cat_citas_categorias'] as $row) {
+                                            foreach ($data['cat_citas_categorias'] as $row) {
                                     ?>
-                                        <option <?php echo(isset($result['skCategoriaCita']) && $result['skCategoriaCita'] == $row['skCategoriaCita'] ? 'selected="selected"' : ''); ?>
+                                        <option <?php echo(isset($data['datos']['skCategoriaCita']) && $data['datos']['skCategoriaCita'] == $row['skCategoriaCita'] ? 'selected="selected"' : ''); ?>
                                         value="<?php echo $row['skCategoriaCita']; ?>"> <?php echo $row['sNombreCategoria']; ?> </option>
                                     <?php
                                             }//ENDWHILE
@@ -50,13 +50,10 @@
                                 <select id="tHoraInicio"  name="tHoraInicio" class="form-control" data-plugin="select2" select2Simple>
                                     <option value="">- SELECCIONAR -</option>
                                     <?php
-                                        if ($data['citas_disponibles']) {
-                                            foreach (  $data['citas_disponibles'] as $row) {
+                                        if (isset($data['datos']['tHoraInicio']) && !empty($data['datos']['tHoraInicio'])) {
                                     ?>
-                                        <option <?php echo(isset($result['skCategoriaCita']) && $result['skCategoriaCita'] == $row['skCategoriaCita'] ? 'selected="selected"' : ''); ?>
-                                        value="<?php echo $row['skCategoriaCita']; ?>"> <?php echo $row['sNombreCategoria']; ?> </option>
+                                        <option selected="selected" value="<?php echo $data['datos']['tHoraInicio']; ?>"><?php echo $data['datos']['tHoraInicio']; ?></option>
                                     <?php
-                                            }//ENDWHILE
                                         }//ENDIF
                                     ?>
                                 </select>
@@ -111,7 +108,7 @@
                                         if ($data['cat_estadosMX']) {
                                             foreach (  $data['cat_estadosMX'] as $row) {
                                     ?>
-                                        <option <?php echo(isset($result['skEstadoMX']) && $result['skEstadoMX'] == $row['skEstadoMX'] ? 'selected="selected"' : ''); ?>
+                                        <option <?php echo(isset($data['datos']['skEstadoMX']) && $data['datos']['skEstadoMX'] == $row['skEstadoMX'] ? 'selected="selected"' : ''); ?>
                                         value="<?php echo $row['skEstadoMX']; ?>"> <?php echo $row['sNombre']; ?> </option>
                                     <?php
                                             }//ENDWHILE
@@ -130,7 +127,7 @@
                                         if ($data['cat_municipiosMX']) {
                                             foreach (  $data['cat_municipiosMX'] as $row) {
                                     ?>
-                                        <option <?php echo(isset($result['skMunicipioMX']) && $result['skMunicipioMX'] == $row['skMunicipioMX'] ? 'selected="selected"' : ''); ?>
+                                        <option <?php echo(isset($data['datos']['skMunicipioMX']) && $data['datos']['skMunicipioMX'] == $row['skMunicipioMX'] ? 'selected="selected"' : ''); ?>
                                         value="<?php echo $row['skMunicipioMX']; ?>"> <?php echo $row['sNombre']; ?> </option>
                                     <?php
                                             }//ENDWHILE

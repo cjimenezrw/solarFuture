@@ -176,6 +176,61 @@ Class Cita_Model Extends DLOREAN_Model {
         return $records;
     }
 
+    public function _get_citas($params = []){
+        $sql = "SELECT 
+            cit.*,
+            cate.sNombreCategoria,
+            est.sNombre AS estatus,
+            est.sIcono AS estatusIcono,
+            est.sColor AS estatusColor,
+            esMX.sNombre AS estado,
+            muMX.sNombre AS municipio,
+            CONCAT(uCre.sNombre,' ',uCre.sApellidoPaterno,' ',uCre.sApellidoMaterno) AS usuarioCreacion,
+            CONCAT(uMod.sNombre,' ',uMod.sApellidoPaterno,' ',uMod.sApellidoMaterno) AS usuarioModificacion,
+            CONCAT(uConf.sNombre,' ',uConf.sApellidoPaterno,' ',uConf.sApellidoMaterno) AS usuarioConfirmacion,
+            e.sNombre AS empresaCliente,
+            e.sRFC AS empresaRFC
+            FROM ope_citas cit
+            LEFT JOIN cat_citas_categorias cate ON cate.skCategoriaCita = cit.skCategoriaCita
+            INNER JOIN core_estatus est ON est.skEstatus = cit.skEstatus
+            INNER JOIN cat_estadosMX esMX ON esMX.skEstadoMX = cit.skEstadoMX
+            INNER JOIN cat_municipiosMX muMX ON muMX.skMunicipioMX = cit.skMunicipioMX
+            INNER JOIN cat_usuarios uCre ON uCre.skUsuario = cit.skUsuarioCreacion
+            LEFT JOIN cat_usuarios uMod ON uMod.skUsuario = cit.skUsuarioModificacion
+            LEFT JOIN cat_usuarios uConf ON uConf.skUsuario = cit.skUsuarioConfirmacion
+            LEFT JOIN rel_empresasSocios es ON es.skEmpresaSocio = cit.skEmpresaSocioCliente
+            LEFT JOIN cat_empresas e ON e.skEmpresa = es.skEmpresa
+            WHERE 1=1 ";
+
+        if(isset($params['skEstatus']) && !empty($params['skEstatus'])){
+            if(is_array($params['skEstatus'])){
+                $sql .= " AND cit.skEstatus IN (" . mssql_where_in($params['skEstatus']) . ") ";
+            }else{
+                $sql .= " AND cit.skEstatus = " . escape($params['skEstatus']);
+            }
+        }
+
+        if(isset($params['skCita']) && !empty($params['skCita'])){
+            $sql .= " AND cit.skCita = " . escape($params['skCita']);
+        }
+
+        $sql .= " ORDER BY cit.dFechaCreacion DESC; ";
+
+        $result = Conn::query($sql);
+        if(is_array($result) && isset($result['success']) && $result['success'] != 1){
+            return $result;
+        }
+
+        if(isset($params['skCita']) && !empty($params['skCita'])){
+            $records = Conn::fetch_assoc($result);
+        }else{
+            $records = Conn::fetch_assoc_all($result);
+        }
+
+        utf8($records, FALSE);
+        return $records;
+    }
+
     public function stp_cita_agendar(){
         $sql = "CALL stp_cita_agendar (
             ".escape(isset($this->cita['skCita']) ? $this->cita['skCita'] : NULL).",

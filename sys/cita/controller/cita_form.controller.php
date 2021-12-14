@@ -37,14 +37,18 @@ Class Cita_form_Controller Extends Cita_Model {
 
             $this->cita['skCita'] = (isset($_GET['p1']) ? $_GET['p1'] : NULL);  
 
-            //exit('<pre>'.print_r($this->cita,1).'</pre>');
-            
         // guardar_actaEntrega 
             $guardar_cita = $this->guardar_agendarCita();
             if(!$guardar_cita['success']){
                 Conn::rollback($this->idTran);
                 return $this->data;
             }
+
+        Conn::commit($this->idTran);
+        $this->data['datos'] = $this->cita;
+        $this->data['success'] = TRUE;
+        $this->data['message'] = 'REGISTRO GUARDADO CON ÉXITO.';
+        return $this->data;
     }
 
     private function getInputData(){
@@ -198,15 +202,8 @@ Class Cita_form_Controller Extends Cita_Model {
 
     public function getDatos() {
         $this->data = ['success' => TRUE, 'message' => NULL, 'datos' => NULL];
-        $this->cita['skCotizacion'] = (isset($_GET['p1']) && !empty($_GET['p1'])) ? $_GET['p1'] : NULL;
+        $this->cita['skCita'] = (isset($_GET['p1']) && !empty($_GET['p1'])) ? $_GET['p1'] : NULL;
         
-        if (!empty($this->cita['skCotizacion'])) {
-            
-            $this->data['datos'] = parent::_getCotizacion();
-            $cotizacionConceptos = parent::_getCotizacionConceptos();
-            $this->data['conceptosCotizacion'] = $cotizacionConceptos;
-        }
-
         $this->data['cat_citas_categorias'] = parent::_get_cat_citas_categorias([
             'skEstatus'=>'AC'
         ]);
@@ -215,7 +212,38 @@ Class Cita_form_Controller Extends Cita_Model {
             'skEstatus'=>'AC'
         ]);
 
- //exit('<pre>'.print_r($this->data,1).'</pre>');
+        if(!empty($this->cita['skCita'])){
+            
+            $this->data['datos'] = parent::_get_citas([
+                'skCita'=>$this->cita['skCita']
+            ]);
+
+            $this->data['cat_municipiosMX'] = parent::_get_cat_municipiosMX([
+                'skEstadoMX'=>$this->data['datos']['skEstadoMX'],
+                'skEstatus'=>'AC'
+            ]);
+            
+            $this->cita['dFechaCita'] = (isset($this->data['datos']['dFechaCita']) && !empty($this->data['datos']['dFechaCita'])) ? date('Ymd', strtotime(str_replace('/', '-', $this->data['datos']['dFechaCita']))) : NULL;
+
+            $this->data['horarios_disponibles'] = parent::_get_horarios_disponibles([
+                'dFechaCita'=>$this->cita['dFechaCita']
+            ]);
+
+            $this->data['horarios_descansos'] = parent::_get_horarios_descansos([
+                'dFechaCita'=>$this->cita['dFechaCita']
+            ]);
+
+            $this->data['horarios_disponibles_excepciones'] = parent::_get_horarios_disponibles_excepciones([
+                'dFechaCita'=>$this->cita['dFechaCita']
+            ]);
+
+            $this->data['horarios_descansos_excepciones'] = parent::_get_horarios_descansos_excepciones([
+                'dFechaCita'=>$this->cita['dFechaCita']
+            ]);
+
+        }
+
+        //exit('<pre>'.print_r($this->data,1).'</pre>');
         return $this->data;
     }
 

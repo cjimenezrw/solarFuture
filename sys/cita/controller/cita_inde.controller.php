@@ -92,11 +92,19 @@ Class Cita_inde_Controller Extends Cita_Model {
                 $row['dFechaCreacion'] = ($row['dFechaCreacion']) ? date('d/m/Y H:i:s', strtotime($row['dFechaCreacion'])) : NULL;
                 $row['dFechaModificacion'] = ($row['dFechaModificacion']) ? date('d/m/Y H:i:s', strtotime($row['dFechaModificacion'])) : NULL;
                 $row['dFechaConfirmacion'] = ($row['dFechaConfirmacion']) ? date('d/m/Y H:i:s', strtotime($row['dFechaConfirmacion'])) : NULL;
-                $row['menuEmergente'] = parent::menuEmergente($regla, $row['skCotizacion']);
+                $row['menuEmergente'] = parent::menuEmergente($regla, $row['skCita']);
             
             array_push($data['data'],$row);
         }
         return $data;
+    }
+
+    public function generarExcel(){
+        parent::generar_excel(html_entity_decode($_POST['title']), $_POST['headers'], $this->consultar());
+    }
+
+    public function generarPDF(){
+        parent::generar_pdf(html_entity_decode($_POST['title']), $_POST['headers'], $this->consultar());
     }
 
 }

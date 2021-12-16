@@ -104,4 +104,16 @@ Class Cita_Controller Extends Cita_Model {
         }
         return true;
     }
+
+    public function cita_cale() {
+        $this->load_class("cita_cale", "controller");
+        $cita_cale = new Cita_cale_Controller();
+        $axn = (isset($_POST['axn']) ? $_POST['axn'] : (isset($_GET['axn']) ? $_GET['axn'] : NULL));
+        switch ($axn) {
+            default:
+                $this->load_view('cita_cale', $cita_cale->getDatos());
+                break;
+        }
+        return true;
+    }
 }

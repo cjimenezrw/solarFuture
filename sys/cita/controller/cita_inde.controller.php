@@ -99,7 +99,8 @@ Class Cita_inde_Controller Extends Cita_Model {
                 $regla = [
                     'menuEmergente1'=>($row['skEstatus'] == 'PE' ? SELF::HABILITADO : SELF::DESHABILITADO),
                     'menuEmergente2'=>($row['skEstatus'] != 'CA' ? SELF::HABILITADO : SELF::DESHABILITADO),
-                    'menuEmergente3'=>($row['skEstatus'] == 'CF' ? SELF::HABILITADO : SELF::DESHABILITADO),
+                    //'menuEmergente3'=>($row['skEstatus'] == 'CF' ? SELF::HABILITADO : SELF::DESHABILITADO),
+                    'menuEmergente3'=>SELF::OCULTO,
                     'menuEmergente4'=>($row['skEstatus'] != 'CA' ? SELF::HABILITADO : SELF::DESHABILITADO),
                     'menuEmergente5'=>SELF::HABILITADO
                 ];

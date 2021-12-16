@@ -2,7 +2,21 @@
 //exit('<pre>'.print_r($data,1).'</pre>');
 ?>
 <form class="form-horizontal" id="core-guardar" method="post"  enctype="multipart/form-data">
-    <div class="row">
+        <div class="row">
+            <div class="col-md-12" <?php echo (!empty($data['datos']['skEstatus']) && $data['datos']['skEstatus'] == 'CA') ? '' : 'hidden'; ?>>
+            <div role="alert" class="alert dark alert-danger alert-icon alert-dismissible animated slideInDown">
+                <p class="font-size-20"><b><i class="icon wb-bell" aria-hidden="true"></i> CITA CANCELADA</b></p>
+                <p><b><?php echo (!empty($data['datos']['usuarioCancelacion']) ? $data['datos']['usuarioCancelacion'] : ''); ?></b> canceló la cita por la siguiente razón: <b><?php echo (!empty($data['datos']['sObservacionesCancelacion']) ? $data['datos']['sObservacionesCancelacion'] : '-'); ?></b></p>
+                <p class="font-size-18"><i class="icon wb-calendar" aria-hidden="true"></i> Fecha de Cancelación: <b><?php echo (!empty($data['datos']['dFechaCancelacion'])) ? $this->obtenerFechaEnLetra($data['datos']['dFechaCancelacion']) : ''; ?></b>, Hora: <b><?php echo (!empty($data['datos']['dFechaCancelacion']) ? date('H:i:s', strtotime($data['datos']['dFechaCancelacion'])) : ''); ?></b></p>
+            </div>
+        </div>
+        <div class="col-md-12" <?php echo (!empty($data['datos']['skEstatus']) && $data['datos']['skEstatus'] == 'CF') ? '' : 'hidden'; ?>>
+            <div role="alert" class="alert dark alert-success alert-icon alert-dismissible animated slideInDown">
+                <p class="font-size-20"><b><i class="icon wb-bell" aria-hidden="true"></i> CITA CONFIRMADA</b></p>
+                <p><b><?php echo (!empty($data['datos']['usuarioConfirmacion']) ? $data['datos']['usuarioConfirmacion'] : ''); ?></b> confirmó la cita programada.</p>
+                <p class="font-size-18"><i class="icon wb-calendar" aria-hidden="true"></i> Fecha de Cita: <b><?php echo (!empty($data['datos']['dFechaCita'])) ? $this->obtenerFechaEnLetra($data['datos']['dFechaCita']) : ''; ?></b>, Hora: <b><?php echo (!empty($data['datos']['tHoraInicio']) ? date('H:i:s', strtotime($data['datos']['tHoraInicio'])) : ''); ?></b></p>
+            </div>
+        </div>
         <div class="col-md-12">
             <div class="panel panel-bordered panel-primary panel-line">
                 <div class="panel-heading">

@@ -3,6 +3,7 @@ var cita = {};
 // DEFINICIÓN DE VARIABLES DE MÓDULO //
 cita.cita_inde = {};
 cita.cita_form = {};
+cita.cita_conf = {};
 
 // CÓDIGO //
 
@@ -64,6 +65,72 @@ cita.cita_inde.dataTableConf = {
 };
 
 cita.cita_form.validaciones = {
+    skCategoriaCita: {
+        validators: {
+            notEmpty: {
+                message: 'CAMPO REQUERIDO'
+            }
+        }
+    },
+    dFechaCita: {
+        validators: {
+            notEmpty: {
+                message: 'CAMPO REQUERIDO'
+            }
+        }
+    },
+    tHoraInicio: {
+        validators: {
+            notEmpty: {
+                message: 'CAMPO REQUERIDO'
+            }
+        }
+    },
+    sNombre: {
+        validators: {
+            notEmpty: {
+                message: 'CAMPO REQUERIDO'
+            }
+        }
+    },
+    sTelefono: {
+        validators: {
+            notEmpty: {
+                message: 'CAMPO REQUERIDO'
+            }
+        }
+    },
+    sCorreo: {
+        validators: {
+            notEmpty: {
+                message: 'CAMPO REQUERIDO'
+            }
+        }
+    },
+    skEstadoMX: {
+        validators: {
+            notEmpty: {
+                message: 'CAMPO REQUERIDO'
+            }
+        }
+    },
+    skMunicipioMX: {
+        validators: {
+            notEmpty: {
+                message: 'CAMPO REQUERIDO'
+            }
+        }
+    },
+    sDomicilio: {
+        validators: {
+            notEmpty: {
+                message: 'CAMPO REQUERIDO'
+            }
+        }
+    }
+};
+
+cita.cita_conf.validaciones = {
     skCategoriaCita: {
         validators: {
             notEmpty: {

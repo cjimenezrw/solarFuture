@@ -60,8 +60,46 @@ Class Cita_Controller Extends Cita_Model {
                 echo json_encode($cita_form->get_cat_municipiosMX());
                 break;
             default:
-                $this->data = $cita_form->getDatos();
-                $this->load_view('cita_form', $this->data);
+                $this->load_view('cita_form', $cita_form->getDatos());
+                break;
+        }
+        return true;
+    }
+
+    public function cita_conf() {
+        $this->load_class("cita_conf", "controller");
+        $cita_conf = new Cita_conf_Controller();
+        $axn = (isset($_POST['axn']) ? $_POST['axn'] : (isset($_GET['axn']) ? $_GET['axn'] : NULL));
+        switch ($axn) {
+            case 'guardar':
+                header('Content-Type: application/json');
+                echo json_encode($cita_conf->guardar());
+                break;
+            case 'get_horarios_disponibles':
+                header('Content-Type: application/json');
+                echo json_encode($cita_conf->get_horarios_disponibles());
+                break;
+            case 'get_cat_municipiosMX':
+                header('Content-Type: application/json');
+                echo json_encode($cita_conf->get_cat_municipiosMX());
+                break;
+            default:
+                $this->load_view('cita_conf', $cita_conf->getDatos());
+                break;
+        }
+        return true;
+    }
+
+    public function cita_deta() {
+        $this->load_class("cita_deta", "controller");
+        $cita_deta = new Cita_deta_Controller();
+        $axn = (isset($_POST['axn']) ? $_POST['axn'] : (isset($_GET['axn']) ? $_GET['axn'] : NULL));
+        switch ($axn) {
+            case 'citaFormatoPDF':
+                $cita_deta->citaFormatoPDF();
+                break;
+            default:
+                $this->load_view('cita_deta', $cita_deta->getDatos());
                 break;
         }
         return true;

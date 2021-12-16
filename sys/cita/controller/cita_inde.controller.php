@@ -86,6 +86,13 @@ Class Cita_inde_Controller Extends Cita_Model {
 
                 
             // REGLAS DEL MENÚ EMERGENTE //
+                /*
+                    Editar
+                    Confirmar / Reprogramar
+                    Generar Formato
+                    Cancelar
+                    Detalles
+                */
                 $regla = [];
             
             // FORMATEO DE DATOS //
@@ -105,6 +112,24 @@ Class Cita_inde_Controller Extends Cita_Model {
 
     public function generarPDF(){
         parent::generar_pdf(html_entity_decode($_POST['title']), $_POST['headers'], $this->consultar());
+    }
+
+    public function cancelar(){
+        $this->data = ['success' => TRUE, 'message' => NULL, 'datos' => NULL];
+
+        $this->cita['axn'] = 'cancelar_cita';
+        $this->cita['skCita'] = (isset($_POST['id']) && !empty($_POST['id'])) ? $_POST['id'] : NULL;
+        $this->cita['sObservaciones'] = (isset($_POST['sObservaciones']) && !empty($_POST['sObservaciones'])) ? $_POST['sObservaciones'] : NULL;
+        $this->cita['skEstatus'] = 'CA';
+
+        $stp_cita_agendar = parent::stp_cita_agendar();  
+        if(!$stp_cita_agendar || isset($stp_cita_agendar['success']) && $stp_cita_agendar['success'] != 1){
+            $this->data['success'] = FALSE;
+            $this->data['message'] = 'HUBO UN ERROR AL CANCELAR EL REGISTRO';
+            return $this->data;
+        }
+
+        return $this->data;
     }
 
 }

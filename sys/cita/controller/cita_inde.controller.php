@@ -2,6 +2,9 @@
 Class Cita_inde_Controller Extends Cita_Model {
 
     // CONST //
+        const HABILITADO = 0;
+        const DESHABILITADO = 1;
+        const OCULTO = 2;
 
     // PUBLIC VARIABLES //
 
@@ -87,13 +90,19 @@ Class Cita_inde_Controller Extends Cita_Model {
                 
             // REGLAS DEL MENÚ EMERGENTE //
                 /*
-                    Editar
-                    Confirmar / Reprogramar
-                    Generar Formato
-                    Cancelar
-                    Detalles
+                    1.- Editar
+                    2.- Confirmar / Reprogramar
+                    3.- Generar Formato
+                    4.- Cancelar
+                    5.- Detalles
                 */
-                $regla = [];
+                $regla = [
+                    'menuEmergente1'=>($row['skEstatus'] == 'PE' ? SELF::HABILITADO : SELF::DESHABILITADO),
+                    'menuEmergente2'=>($row['skEstatus'] != 'CA' ? SELF::HABILITADO : SELF::DESHABILITADO),
+                    'menuEmergente3'=>($row['skEstatus'] == 'CF' ? SELF::HABILITADO : SELF::DESHABILITADO),
+                    'menuEmergente4'=>($row['skEstatus'] != 'CA' ? SELF::HABILITADO : SELF::DESHABILITADO),
+                    'menuEmergente5'=>SELF::HABILITADO
+                ];
             
             // FORMATEO DE DATOS //
                 $row['dFechaCreacion'] = ($row['dFechaCreacion']) ? date('d/m/Y H:i:s', strtotime($row['dFechaCreacion'])) : NULL;

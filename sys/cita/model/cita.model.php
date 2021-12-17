@@ -290,7 +290,7 @@ Class Cita_Model Extends DLOREAN_Model {
             per.skUsuarioPersonal,
             CONCAT(u.sNombre,' ',u.sApellidoPaterno,' ',u.sApellidoMaterno) AS nombre
         FROM rel_citas_personal per
-        INNER JOIN cat_usuarios u ON u.skUsuario = per.skUsuario
+        INNER JOIN cat_usuarios u ON u.skUsuario = per.skUsuarioPersonal
         WHERE per.skEstatus = 'AC' ";
 
         if(isset($params['skCita']) && !empty($params['skCita'])){

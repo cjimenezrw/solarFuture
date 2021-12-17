@@ -128,7 +128,7 @@ Class Cita_cale_Controller Extends Cita_Model {
     public function get_iFolioCita(){
         $this->cita['iFolioCita'] = (isset($_POST['val']) && !empty($_POST['val'])) ? $_POST['val'] : NULL;
 
-        $sql = "SELECT TOP 10 N1.sNombre AS id, N1.iFolioCita AS nombre FROM (
+        $sql = "SELECT N1.sNombre AS id, N1.iFolioCita AS nombre FROM (
             SELECT 
                 cit.skCita,
                 CONCAT('CIT',RIGHT(CONCAT('0000',CAST(cit.iFolioCita AS VARCHAR(4))),4)) AS iFolioCita,
@@ -181,13 +181,15 @@ Class Cita_cale_Controller Extends Cita_Model {
                 LEFT JOIN cat_usuarios uCan ON uCan.skUsuario = cit.skUsuarioCancelacion
                 LEFT JOIN rel_empresasSocios es ON es.skEmpresaSocio = cit.skEmpresaSocioCliente
                 LEFT JOIN cat_empresas e ON e.skEmpresa = es.skEmpresa
-                WHERE cit.skEstatus = 'CF'
+                WHERE cit.skEstatus = 'CF' AND cit.iFolioCita IS NOT NULL
             ) AS N1 
             WHERE 1=1 ";
 
         if(isset($this->cita['iFolioCita']) && !empty(trim($this->cita['iFolioCita']))){
             $sql .= " AND N1.iFolioCita LIKE '%".escape($this->cita['iFolioCita'],FALSE)."%' ";
         }
+
+        $sql .= " LIMIT 10 ";
 
         $result = Conn::query($sql);
         if(is_array($result) && isset($result['success']) && $result['success'] != 1){
@@ -202,7 +204,7 @@ Class Cita_cale_Controller Extends Cita_Model {
     public function get_sNombre(){
         $this->cita['sNombre'] = (isset($_POST['val']) && !empty($_POST['val'])) ? $_POST['val'] : NULL;
 
-        $sql = "SELECT TOP 10 N1.sNombre AS id, N1.sNombre AS nombre FROM (
+        $sql = "SELECT N1.sNombre AS id, N1.sNombre AS nombre FROM (
             SELECT 
                 cit.skCita,
                 CONCAT('CIT',RIGHT(CONCAT('0000',CAST(cit.iFolioCita AS VARCHAR(4))),4)) AS iFolioCita,
@@ -255,13 +257,15 @@ Class Cita_cale_Controller Extends Cita_Model {
                 LEFT JOIN cat_usuarios uCan ON uCan.skUsuario = cit.skUsuarioCancelacion
                 LEFT JOIN rel_empresasSocios es ON es.skEmpresaSocio = cit.skEmpresaSocioCliente
                 LEFT JOIN cat_empresas e ON e.skEmpresa = es.skEmpresa
-                WHERE cit.skEstatus = 'CF'
+                WHERE cit.skEstatus = 'CF' AND cit.sNombre IS NOT NULL
             ) AS N1 
             WHERE 1=1 ";
 
         if(isset($this->cita['sNombre']) && !empty(trim($this->cita['sNombre']))){
             $sql .= " AND N1.sNombre LIKE '%".escape($this->cita['sNombre'],FALSE)."%' ";
         }
+
+        $sql .= " LIMIT 10 ";
 
         $result = Conn::query($sql);
         if(is_array($result) && isset($result['success']) && $result['success'] != 1){
@@ -276,7 +280,7 @@ Class Cita_cale_Controller Extends Cita_Model {
     public function get_cliente(){
         $this->cita['empresaCliente'] = (isset($_POST['val']) && !empty($_POST['val'])) ? $_POST['val'] : NULL;
 
-        $sql = "SELECT TOP 10 N1.sNombre AS id, N1.empresaCliente AS nombre FROM (
+        $sql = "SELECT N1.sNombre AS id, N1.empresaCliente AS nombre FROM (
             SELECT 
                 cit.skCita,
                 CONCAT('CIT',RIGHT(CONCAT('0000',CAST(cit.iFolioCita AS VARCHAR(4))),4)) AS iFolioCita,
@@ -329,13 +333,15 @@ Class Cita_cale_Controller Extends Cita_Model {
                 LEFT JOIN cat_usuarios uCan ON uCan.skUsuario = cit.skUsuarioCancelacion
                 LEFT JOIN rel_empresasSocios es ON es.skEmpresaSocio = cit.skEmpresaSocioCliente
                 LEFT JOIN cat_empresas e ON e.skEmpresa = es.skEmpresa
-                WHERE cit.skEstatus = 'CF'
+                WHERE cit.skEstatus = 'CF' AND cit.skEmpresaSocioCliente IS NOT NULL
             ) AS N1 
             WHERE 1=1 ";
 
         if(isset($this->cita['empresaCliente']) && !empty(trim($this->cita['empresaCliente']))){
             $sql .= " AND N1.empresaCliente LIKE '%".escape($this->cita['empresaCliente'],FALSE)."%' ";
         }
+
+        $sql .= " LIMIT 10 ";
 
         $result = Conn::query($sql);
         if(is_array($result) && isset($result['success']) && $result['success'] != 1){

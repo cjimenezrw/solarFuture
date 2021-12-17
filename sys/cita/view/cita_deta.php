@@ -65,7 +65,7 @@
                         <div class="col-lg-4 col-md-4">
                             <div class="form-group">
                                 <h4 class="example-title">HORA:</h4>
-                                <span><?php echo (!empty($data['datos']['tHoraInicio']) ? $data['datos']['tHoraInicio'] : '-'); ?></span>
+                                <span><?php echo (!empty($data['datos']['tHoraInicio']) ? $data['datos']['tHoraInicio'].' - '.$data['datos']['tHoraFin'] : '-'); ?></span>
                             </div>
                         </div>
 

@@ -61,7 +61,7 @@ Class Cita_cale_Controller Extends Cita_Model {
                 ];
             }
 
-            $index = array_search('INSTAL',array_column($this->data['cat_citas_categorias'],'sClaveCategoriaCita'));
+            $index = array_search($row['sClaveCategoriaCita'],array_column($this->data['cat_citas_categorias'],'sClaveCategoriaCita'));
             if($index !== false){
                 if(!isset($this->data['cat_citas_categorias'][$index]['iCantidadCitas'])){
                     $this->data['cat_citas_categorias'][$index]['iCantidadCitas'] = 1;

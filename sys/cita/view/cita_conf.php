@@ -174,7 +174,7 @@
                                             if (!empty($data['citas_personal'])) {
                                                 foreach ($data['citas_personal'] as $row) {
                                         ?>
-                                            <option selected="selected" value="<?php echo $row['skUsuarioPersonal']; ?>"><?php echo $row['sNombrePersonal']; ?></option>
+                                            <option selected="selected" value="<?php echo $row['skUsuarioPersonal']; ?>"><?php echo $row['nombre']; ?></option>
                                         <?php
                                                 }//ENDWHILE
                                             }//ENDIF

@@ -302,12 +302,7 @@ Class Cita_Model Extends DLOREAN_Model {
             return $result;
         }
 
-        if(isset($params['skCita']) && !empty($params['skCita'])){
-            $records = Conn::fetch_assoc($result);
-        }else{
-            $records = Conn::fetch_assoc_all($result);
-        }
-
+        $records = Conn::fetch_assoc_all($result);
         utf8($records, FALSE);
         return $records;
 

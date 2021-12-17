@@ -187,7 +187,7 @@ Class Cita_conf_Controller Extends Cita_Model {
         // GUARDAMOS EL PERSONAL DE LA CITA //
             $this->cita['axn'] = 'confirmar_cita_personal';
             $this->cita['skEstatus'] = 'AC';
-            foreach($this->cita['citas_personal'] AS $k=>$v){
+            foreach($this->cita['skCitaPersonal_array'] AS $k=>$v){
                 $this->cita['skUsuarioPersonal'] = $v;
                 
                 $stp_cita_agendar = parent::stp_cita_agendar();

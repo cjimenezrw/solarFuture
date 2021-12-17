@@ -1422,25 +1422,40 @@ trait DLOREAN_Functions {
         if (isset($mConf['fechaProgramacion']) && is_a($mConf['fechaProgramacion'], 'DateTime')) {
             $dFechaProgramacion = $mConf['fechaProgramacion']->format('Y-m-d H:i:s');
         } else {
-            $dFechaProgramacion = 'NULL';
+            $dFechaProgramacion = NULL;
         }
 
         $createLog = ( isset($mConf['NoLog']) ? false : @!$mConf['NoLog']);
 
         if ($createLog) {
-            $query = Conn::query("EXEC sp_emailLog
-            @skMensaje  = NULL,
-            @sEmisor  = '" . $cf['user'] . "',
-            @sAsunto  = " . escape($mConf['subject']) . ",
-            @sCopia   = '" . json_encode($mConf['cc']) . "',
-            @sCopiaOculta = '" . json_encode($mConf['bcc']) . "',
-            @sDestinatario  = '" . json_encode($mConf['to']) . "',
-            @dFechaProgramacion = $dFechaProgramacion,
-            @sContenido = " . escape($mConf['msg']) . ",
-            @sFiles = '" . json_encode($mConf['files']) . "',
-            @iPrioridad = " . escape($mConf['msgPriority']) . ",
-            @send1by1 = " . escape(($mConf['send1by1']) ? 1 : 0));
-            $uid = ($query) ? Conn::fetch_array($query)[0] : false;
+
+            $sql = "CALL stpC_emailLog (
+                /*@skMensaje     =*/ NULL,
+                /*@skEstatus     =*/ NULL,
+                /*@sEmisor     =*/ ". escape($cf['user']) .",
+                /*@sAsunto     =*/ ".escape($mConf['subject']).",
+                /*@sCopia     =*/ ".escape(json_encode($mConf['cc'])).",
+                /*@sCopiaOculta     =*/ ".escape(json_encode($mConf['bcc'])).",
+                /*@sDestinatario     =*/ ".escape(json_encode($mConf['to'])).",
+                /*@dFechaProgramacion     =*/ " .escape(!empty($dFechaProgramacion) ? $dFechaProgramacion : NULL) . "  ,
+                /*@sContenido     =*/ ".escape($mConf['msg']).",
+                /*@sFiles     =*/ ".escape(json_encode($mConf['files'])).",
+                /*@send1by1     =*/ ".escape(($mConf['send1by1']) ? 1 : 0).", 
+            
+                /*@axn                           =*/ 'guardar_correo',
+                /*@skUsuario                     =*/ ".escape($_SESSION['usuario']['skUsuario']).",
+                /*@skModulo                      =*/ ".escape($this->sysController).")";
+              
+
+                $result = Conn::query($sql);
+                if(is_array($result) && isset($result['success']) && $result['success'] == false){
+                    return $result;
+                }
+                
+                $record = Conn::fetch_assoc($result);
+                Conn::free_result($result);
+                $uid = $record['skMensaje'];
+ 
         }
 
         if (empty($mConf['envioInstantaneo'])) {
@@ -1494,15 +1509,16 @@ trait DLOREAN_Functions {
             }
             if ($createLog) {
                 if ($uid) {
-                    $result = Conn::query("EXEC sp_emailLog @skMensaje = '$uid'");
-                    if (!$result) {
-                        return FALSE;
-                    }
-                    $record = Conn::fetch_array($result);
-                    if (!$record) {
-                        return FALSE;
-                    }
-                    $upd = $record[0];
+                    
+                    $sql = "UPDATE core_mensajesCorreos SET skEstatus = 'EN', dFechaEnvio = NOW() WHERE skMensaje = " .escape($uid). "";
+
+                    $result = Conn::query($sql);
+                    
+
+                     
+                     
+                   
+ 
                 }
             }
             if (isset($mConf['files']) && !empty($mConf['files']) && is_array($mConf['files'])) {
@@ -1795,14 +1811,15 @@ trait DLOREAN_Functions {
      * @param mixed $usuarios Usuarios que recibirán el mensaje.
      * @param mixed $gruposPublicaciones Grupos de Publicaciones que recibirán el mensaje.
      * @param mixed $excluirUsuarios Usuarios a excluir que NO recibirán el mensaje.
+     * @param mixed $correosAdicionales Correos adicionales que recibirán el mensaje.
      * @return boolena  retorna true en caso de éxito, false en caso de haber algún error.
      */
     public function notify($sClaveNotificacion, $conf = [], $usuarios = [], $gruposPublicaciones = [], $excluirUsuarios = [], $correosAdicionales = []) {
 
-        // Prioridad de Notificación
-        $prioridad = 'AL';
+   
 
         $sql = "SELECT * FROM cat_notificacionesMensajes WHERE skEstatus = 'AC' AND sClaveNotificacion = '" . $sClaveNotificacion . "'";
+        
         $result = Conn::query($sql);
 
         if (!$result) {
@@ -1841,7 +1858,6 @@ trait DLOREAN_Functions {
                     $notificacion['sUrl'] = str_replace('[' . $k . ']', $v, $notificacion['sUrl']);
                     $notificacion['sIcono'] = str_replace('[' . $k . ']', $v, $notificacion['sIcono']);
                     $notificacion['sColor'] = str_replace('[' . $k . ']', $v, $notificacion['sColor']);
-                    $notificacion['sImagen'] = str_replace('[' . $k . ']', $v, $notificacion['sImagen']);
                 }
             }
         //}
@@ -1851,41 +1867,43 @@ trait DLOREAN_Functions {
 
         $notificacion['sValores'] = json_encode($sValores);
 
-        // @skEstatus = '".($notificacion['iEnviarInstantaneo'] ? 'EN' : 'NU')."',
-        // excluirUsuarios
-        array_push($excluirUsuarios, $_SESSION['usuario']['skUsuario']);
+         // excluirUsuarios
+       /* array_push($excluirUsuarios, $_SESSION['usuario']['skUsuario']);
         $excluirUsuarios = array_unique($excluirUsuarios);
         foreach ($excluirUsuarios AS $k => $v) {
             $array_excluirUsuarios[$v] = $v;
         }
-        $notificacion['excluirUsuarios'] = $array_excluirUsuarios;
+        $notificacion['excluirUsuarios'] = $array_excluirUsuarios;*/
+
+        $sql = "CALL stpCU_notificacion (
+            /*@skNotificacion    =*/ NULL,
+            /*@skNotificacionMensaje     =*/ " . escape($notificacion['skNotificacionMensaje']) . ",
+            /*@skEmpresaSocioPropietario     =*/ " . escape($_SESSION['usuario']['skEmpresaSocioPropietario']) . ",
+            /*@skComportamientoModulo     =*/  " . escape($notificacion['skComportamiento']) . ",
+            /*@skEstatus     =*/ 'EN',
+            /*@skModuloNotificacion     =*/ " . escape($this->sysController) . ",
+            /*@iNotificacionGeneral     =*/ " . escape($notificacion['iNotificacionGeneral']) . ",
+            /*@sNombre     =*/ " . escape($notificacion['sNombre']) . ",
+            /*@sMensaje     =*/ " . escape($notificacion['sMensaje']) . ",
+            /*@sMensajeCorreo     =*/ " . escape($notificacion['sMensajeCorreo']) . ",
+            /*@sUrl     =*/ " . escape($notificacion['sUrl']) . ",
+            /*@sIcono     =*/ " . escape($notificacion['sIcono']) . ",
+            /*@sColor     =*/ " . escape($notificacion['sColor']) . ",
+             /*@sAsunto     =*/ " . escape($notificacion['sAsunto']) . ",
+             /*@sValores     =*/ " . escape($notificacion['sValores']) . ",
+        
+            /*@axn                           =*/ 'guardar_notificacion',
+            /*@skUsuario                     =*/ ".escape($_SESSION['usuario']['skUsuario']).",
+            /*@skModulo                      =*/ ".escape($this->sysController).")";
+           
 
 
-        $sql = "EXECUTE stpCU_notificacion
-        @skNotificacionMensaje = " . escape($notificacion['skNotificacionMensaje']) . ",
-        @skEmpresaSocioPropietario = " . escape($_SESSION['usuario']['skEmpresaSocioPropietario']) . ",
-        @skComportamientoModulo = " . escape($notificacion['skComportamientoModulo']) . ",
-        @skEstatus = 'EN',
-        @skPrioridad = " . escape($prioridad) . ",
-        @skModulo = " . escape($this->sysController) . ",
-        @iNotificacionGeneral = " . escape($notificacion['iNotificacionGeneral']) . ",
-        @iNoAlmacenado = " . escape($notificacion['iNoAlmacenado']) . ",
-        @sNombre = " . escape($notificacion['sNombre']) . ",
-        @sMensaje = " . escape($notificacion['sMensaje']) . ",
-        @sMensajeCorreo = " . escape($notificacion['sMensajeCorreo']) . ",
-        @sUrl = " . escape($notificacion['sUrl']) . ",
-        @sIcono = " . escape($notificacion['sIcono']) . ",
-        @sColor = " . escape($notificacion['sColor']) . ",
-        @sImagen = " . escape($notificacion['sImagen']) . ",
-        @sAsunto = " . escape($notificacion['sAsunto']) . ",
-        @sValores = " . escape($notificacion['sValores']) . ",
-        @skUsuarioCreacion = " . escape($_SESSION['usuario']['skUsuario']) . ",
-        @sExcluirUsuarios = " . escape(mssql_where_in($excluirUsuarios, FALSE));
+        
 
+ 
         $result = Conn::query($sql);
-
-        if (!$result) {
-            return FALSE;
+        if(is_array($result) && isset($result['success']) && $result['success'] == false){
+            return $result;
         }
 
         $skNotificacion = Conn::fetch_assoc($result);
@@ -1895,20 +1913,17 @@ trait DLOREAN_Functions {
         }
 
         $notificacion['skNotificacion'] = $skNotificacion['skNotificacion'];
-
+        
         if ($usuarios) {
             foreach ($usuarios AS $k => $v) {
 
-                if(in_array($v, $excluirUsuarios)){
-                    continue;
-                }
+               
+                $sql = "CALL stpCU_notificacionUsuario (
+                    /*@skNotificacion    =*/ " . escape($skNotificacion['skNotificacion']) . ",
+                     /*@skUsuario                     =*/ " . escape($v['skUsuario']) . ", 
+                    /*@skModulo                      =*/ ".escape($this->sysController).")";
 
-                $sql = "EXECUTE stpC_notificaciones_usuarios
-                @skNotificacion = " . escape($skNotificacion['skNotificacion']) . ",
-                @skUsuario = " . escape($v) . ",
-                @skGrupoPublicacion = NULL,
-                @sExcluirUsuarios = " . escape(mssql_where_in($excluirUsuarios, FALSE));
-
+        
                 $result = Conn::query($sql);
 
                 if (!$result) {
@@ -1918,33 +1933,13 @@ trait DLOREAN_Functions {
         }
 
         $sql = "SELECT DISTINCT N1.channel FROM (
-            SELECT
-            cn.skNotificacion, gnm.skGrupoNotificacion AS channel, cn.dFechaCreacion, u.skUsuario
-            FROM core_notificaciones cn
-            INNER JOIN cat_notificacionesMensajes nm ON nm.skNotificacionMensaje = cn.skNotificacionMensaje
-            INNER JOIN rel_gruposNotificaciones_mensajes gnm ON gnm.skNotificacionMensaje = cn.skNotificacionMensaje
-            INNER JOIN rel_gruposNotificaciones_usuarios gnu ON gnu.skGrupoNotificacion = gnm.skGrupoNotificacion
-            INNER JOIN cat_gruposNotificaciones g ON g.skGrupoNotificacion = gnm.skGrupoNotificacion AND g.skEmpresaSocioPropietario = " . escape($_SESSION['usuario']['skEmpresaSocioPropietario']) . "
-            INNER JOIN cat_usuarios u ON u.skUsuario = gnu.skUsuario AND u.skEstatus = 'AC'
-            WHERE cn.skNotificacion = '" . $skNotificacion['skNotificacion'] . "'
-            UNION
-            SELECT
+              SELECT
             cn.skNotificacion, u.skUsuario AS channel, cn.dFechaCreacion, u.skUsuario
             FROM core_notificaciones cn
             INNER JOIN cat_notificacionesMensajes nm ON nm.skNotificacionMensaje = cn.skNotificacionMensaje
             INNER JOIN rel_notificaciones_usuarios nu ON nu.skNotificacion = cn.skNotificacion
             INNER JOIN cat_usuarios u ON u.skUsuario = nu.skUsuario AND u.skEstatus = 'AC'
-            LEFT JOIN rel_notificacionesMensajes_usuariosAjustes ua ON ua.skUsuario = u.skUsuario AND ua.skTipoNotificacion = nm.skTipoNotificacion
-            WHERE cn.skNotificacion = '" . $skNotificacion['skNotificacion'] . "' AND ua.skUsuario IS NULL AND nu.skUsuario NOT IN (
-                SELECT gnu.skUsuario
-                FROM core_notificaciones cn
-                INNER JOIN cat_notificacionesMensajes nm ON nm.skNotificacionMensaje = cn.skNotificacionMensaje
-                INNER JOIN rel_gruposNotificaciones_mensajes gnm ON gnm.skNotificacionMensaje = cn.skNotificacionMensaje
-                INNER JOIN rel_gruposNotificaciones_usuarios gnu ON gnu.skGrupoNotificacion = gnm.skGrupoNotificacion
-                INNER JOIN cat_gruposNotificaciones g ON g.skGrupoNotificacion = gnm.skGrupoNotificacion AND g.skEmpresaSocioPropietario = " . escape($_SESSION['usuario']['skEmpresaSocioPropietario']) . "
-                INNER JOIN cat_usuarios u ON u.skUsuario = gnu.skUsuario AND u.skEstatus = 'AC'
-                WHERE cn.skNotificacion = '" . $skNotificacion['skNotificacion'] . "'
-            )
+            WHERE cn.skNotificacion = '" . $skNotificacion['skNotificacion'] . "'   
             ) AS N1
         WHERE N1.skNotificacion = '" . $skNotificacion['skNotificacion'] . "'";
 
@@ -1956,49 +1951,18 @@ trait DLOREAN_Functions {
 
         $channels = Conn::fetch_assoc_all($result);
 
-        // Grupos de Publicaciones //
-        if (is_array($gruposPublicaciones) && count($gruposPublicaciones) > 0) {
-            foreach ($gruposPublicaciones AS $k => $v) {
-                $sql = "stpC_notificaciones_usuarios
-                @skNotificacion = " . escape($skNotificacion['skNotificacion']) . ",
-                @skUsuario = NULL,
-                @skGrupoPublicacion = " . escape($v) . ",
-                @sExcluirUsuarios = " . escape(mssql_where_in($excluirUsuarios, FALSE));
-
-                $result = Conn::query($sql);
-
-                if (!$result) {
-                    return FALSE;
-                }
-
-                // Agregamos el canal del Grupo de Publicaciones
-                array_push($channels, array('channel' => $v));
-            }
-        }
-
         $arrayUsuario = array();
+        /*echo "<PRE>";
+        print_r($channels);
+        die();*/
+
         foreach ($channels as $row) {
-            $sql = " SELECT dt.sIdPlayer, dt.skAplicacion FROM rel_dispositivo_token dt "
-                    . " INNER JOIN rel_notificacionesMensajes_aplicaciones na ON na.skAplicacion = dt.skAplicacion AND na.skNotificacionMensaje = '" . $notificacion['skNotificacionMensaje'] . "' "
-                    . " WHERE dt.skUsuario = '" . $row['channel'] . "' ";
-
-            if (isset($conf['skAplicacion'])) {
-                $sql .= " AND dt.skAplicacion IN (" . mssql_where_in($conf['skAplicacion']) . ") ";
-            }
-            $resultUsuario = Conn::query($sql);
-
-            if ($resultUsuario) {
-                while ($rowUsuario = Conn::fetch_assoc($resultUsuario)) {
-                    array_push($arrayUsuario, $rowUsuario['sIdPlayer']);
-                    $notificacion['skAplicacion'] = $rowUsuario['skAplicacion'];
-                }
-            }
 
             utf8($row, FALSE);
             $notificacion['dFechaCreacion'] = date('d/m/Y H:i:s');
-
+        
             $wmsg_response = $this->d_notify($notificacion,$row['channel'],'notify');
-
+          
             if ($wmsg_response == true) {
 
                 // SE CAMBIA EL ESTATUS COMO NOTIFICACIÓN ENVIADA PARA UN USUARIO (INDIVIDUAL) //
@@ -2009,43 +1973,13 @@ trait DLOREAN_Functions {
                     $this->data['message'] = 'Hubo un error actualizar el estatus de la notificación web del usuario a enviada';
                 }
 
-                // SE CAMBIA EL ESTATUS COMO NOTIFICACIÓN ENVIADA PARA LOS USUARIOS DE UN GRUPO (SISTEMA) //
-                $sql = "UPDATE rel_notificaciones_usuarios SET skEstatus = 'EN' WHERE skNotificacion = " . escape($notificacion['skNotificacion']) . " AND skUsuario IN
-                    (SELECT skUsuario FROM rel_gruposNotificaciones_usuarios WHERE skGrupoNotificacion = " . escape($row['channel']) . ")";
-                $result = Conn::query($sql);
-                if (!$result) {
-                    $this->data['success'] = FALSE;
-                    $this->data['message'] = 'Hubo un error actualizar el estatus de la notificación web del usuario a enviada';
-                }
-
-                // SE CAMBIA EL ESTATUS COMO NOTIFICACIÓN ENVIADA PARA LOS USUARIOS DE UN GRUPO DE PUBLICACIONES (PUBLICACIONES) //
-                $sql = "UPDATE rel_notificaciones_usuarios SET skEstatus = 'EN' WHERE skNotificacion = " . escape($notificacion['skNotificacion']) . " AND skUsuario IN
-                    (SELECT skUsuario FROM rel_publicaciones_grupos_usuarios WHERE skGrupoPublicacion = " . escape($row['channel']) . ")";
-                $result = Conn::query($sql);
-                if (!$result) {
-                    $this->data['success'] = FALSE;
-                    $this->data['message'] = 'Hubo un error actualizar el estatus de la notificación web del usuario a enviada';
-                }
-
+             
+                 
             }
         }
 
-        // Ponemos en estatus de enviada a la notificación de los usuarios que no quieren ser molestados con notificaciones
-        $sql = "UPDATE rel_notificaciones_usuarios SET skEstatus = 'EN' WHERE skUsuario IN (
-		SELECT ua.skUsuario
-                FROM core_notificaciones cn
-                INNER JOIN cat_notificacionesMensajes nm ON nm.skNotificacionMensaje = cn.skNotificacionMensaje
-                INNER JOIN rel_notificaciones_usuarios nu ON nu.skNotificacion = cn.skNotificacion
-                INNER JOIN rel_notificacionesMensajes_usuariosAjustes ua ON ua.skUsuario = nu.skUsuario AND ua.skTipoNotificacion = nm.skTipoNotificacion
-                WHERE cn.skNotificacion = " . escape($notificacion['skNotificacion']) . ") AND skNotificacion = " . escape($notificacion['skNotificacion']);
-        $result = Conn::query($sql);
-        if (!$result) {
-            $this->data['success'] = FALSE;
-            $this->data['message'] = 'Hubo un error actualizar el estatus de la notificación web del usuario a enviada';
-        }
-
+         
         // Enviamos la notificación al celular
-        $this->sendPushMessage($notificacion, $arrayUsuario);
 
         if ($notificacion['iEnviarCorreo'] == 1) {
             $this->notifyMail($skNotificacion, $notificacion, $correosAdicionales);
@@ -2131,34 +2065,16 @@ trait DLOREAN_Functions {
     protected function notifyMail($skNotificacion, $notificacion, $correosAdicionales) {
 
         $sql = "SELECT DISTINCT N1.* FROM (
-            SELECT
-            cn.skNotificacion, u.skUsuario, CONCAT(u.sNombre,' ',u.sApellidoPaterno,' ',u.sApellidoMaterno) AS nombreCompleto, u.sNombre, u.sApellidoPaterno, u.sApellidoMaterno, u.sCorreo
-            FROM core_notificaciones cn
-            INNER JOIN cat_notificacionesMensajes nm ON nm.skNotificacionMensaje = cn.skNotificacionMensaje
-            INNER JOIN rel_gruposNotificaciones_mensajes gnm ON gnm.skNotificacionMensaje = cn.skNotificacionMensaje
-            INNER JOIN rel_gruposNotificaciones_usuarios gnu ON gnu.skGrupoNotificacion = gnm.skGrupoNotificacion
-            INNER JOIN cat_gruposNotificaciones g ON g.skGrupoNotificacion = gnm.skGrupoNotificacion AND g.skEmpresaSocioPropietario = " . escape($_SESSION['usuario']['skEmpresaSocioPropietario']) . "
-            INNER JOIN cat_usuarios u ON u.skUsuario = gnu.skUsuario
-            WHERE cn.skNotificacion = '" . $skNotificacion['skNotificacion'] . "'
-            UNION
+             
             SELECT
             cn.skNotificacion, u.skUsuario, CONCAT(u.sNombre,' ',u.sApellidoPaterno,' ',u.sApellidoMaterno) AS nombreCompleto, u.sNombre, u.sApellidoPaterno, u.sApellidoMaterno, u.sCorreo
             FROM core_notificaciones cn
             INNER JOIN rel_notificaciones_usuarios nu ON nu.skNotificacion = cn.skNotificacion
             INNER JOIN cat_usuarios u ON u.skUsuario = nu.skUsuario
-            WHERE cn.skNotificacion = '" . $skNotificacion['skNotificacion'] . "' AND nu.skUsuario NOT IN (
-                SELECT gnu.skUsuario
-                FROM core_notificaciones cn
-                INNER JOIN cat_notificacionesMensajes nm ON nm.skNotificacionMensaje = cn.skNotificacionMensaje
-                INNER JOIN rel_gruposNotificaciones_mensajes gnm ON gnm.skNotificacionMensaje = cn.skNotificacionMensaje
-                INNER JOIN rel_gruposNotificaciones_usuarios gnu ON gnu.skGrupoNotificacion = gnm.skGrupoNotificacion
-                INNER JOIN cat_gruposNotificaciones g ON g.skGrupoNotificacion = gnm.skGrupoNotificacion AND g.skEmpresaSocioPropietario = " . escape($_SESSION['usuario']['skEmpresaSocioPropietario']) . "
-                INNER JOIN cat_usuarios u ON u.skUsuario = gnu.skUsuario
-                WHERE cn.skNotificacion = '" . $skNotificacion['skNotificacion'] . "'
-            )
+            WHERE cn.skNotificacion = '" . $skNotificacion['skNotificacion'] . "'  
             ) AS N1
         WHERE N1.skNotificacion = '" . $skNotificacion['skNotificacion'] . "'";
-
+        
         $result = Conn::query($sql);
 
         if (!$result) {
@@ -2179,12 +2095,15 @@ trait DLOREAN_Functions {
 
         // Correos Adicionales
         if ($correosAdicionales) {
+           
             foreach ($correosAdicionales AS $k => $v) {
+              
                 if (!empty(trim($v))) {
                     $list[trim($v)] = $v;
                 }
             }
         }
+        
 
         if (count($list) == 0) {
             return TRUE;
@@ -2202,6 +2121,7 @@ trait DLOREAN_Functions {
             'envioInstantaneo' => $notificacion['iEnviarInstantaneo'],
             'senderConf' => []
         ));
+        return true;
     }
 
     /**

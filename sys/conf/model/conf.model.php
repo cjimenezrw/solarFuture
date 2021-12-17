@@ -752,6 +752,8 @@ Class Conf_Model Extends DLOREAN_Model {
         return $record;
     }
 
+    
+
     public function _validar_modulo(){
         $sql = "SELECT cm.*
             FROM  core_modulos cm
@@ -1054,5 +1056,97 @@ Class Conf_Model Extends DLOREAN_Model {
         utf8($record);
         return $record;
     }
+    public function consultar_comportamientos()
+    {
+        $select = "SELECT skComportamientoModulo,sNombre FROM core_comportamientos_modulos WHERE skEstatus ='AC'";
+
+        $result = Conn::query($select);
+        if (!$result) {
+            return FALSE;
+        }
+        //$record = Conn::fetch_assoc($result);
+        return Conn::fetch_assoc_all($result);
+    }
+
+     /**
+     * consultarNotificacionesMensaje
+     *
+     * Consulta un grupo de usuario.
+     *
+     * @author luisalberto1192
+     * @return object | false Retorna el objeto de resultados de la consulta o false si algo falla
+     */
+    public function consultarNotificacionesMensaje()
+    {
+        $sql = "SELECT gu.*,ce.sNombre AS estatus
+                FROM cat_notificacionesMensajes gu
+                INNER JOIN core_estatus ce ON ce.skEstatus = gu.skEstatus
+              WHERE skNotificacionMensaje = '" . $this->conf['skNotificacionMensaje'] . "'";
+        $result = Conn::query($sql);
+        if (!$result) {
+            return FALSE;
+        }
+        $record = Conn::fetch_assoc($result);
+        Conn::free_result($result);
+        return $record;
+    }
+    /**
+     * Valida codigo de Notificacione Mensaje
+     *
+     * Consulta si un nuevo codigo de notificacion Mensaje esta disponible
+     *
+     * @author Luis Alverto Valdez Alvarez <lvaldez@woodward.com.mx>
+     * @param string $skSucursal Nuevo sClaveNotificacion a consultar
+     * @return true | false Retorna true si el codigo esta disponible o false si algo falla o no esta disponible
+     */
+    public function validar_codigoNotificacionMensaje($sClaveNotificacion, $skNotificacionMensaje)
+    {
+        $select = "SELECT sClaveNotificacion FROM cat_notificacionesMensajes
+                  WHERE sClaveNotificacion = '" . $sClaveNotificacion . "' ";
+        if ($skNotificacionMensaje) {
+            $select .= " AND  skNotificacionMensaje != '" . $skNotificacionMensaje . "'";
+        }
+
+        $result = Conn::query($select);
+        if (!$result) {
+            return false;
+        }
+        if (count($result->fetchall()) > 0) {
+            return false;
+        }
+        return true;
+    }
+
+    public function stpCUD_notificacionesMensajes(){
+        $sql = "CALL stpCUD_notificacionesMensajes (
+            /*@skNotificacionMensaje     =*/ ".escape(isset($this->conf['skNotificacionMensaje']) ? $this->conf['skNotificacionMensaje'] : NULL).",
+            /*@sClaveNotificacion     =*/ ".escape(isset($this->conf['sClaveNotificacion']) ? $this->conf['sClaveNotificacion'] : NULL).",
+            /*@skComportamiento     =*/ ".escape(isset($this->conf['skComportamiento']) ? $this->conf['skComportamiento'] : NULL).",
+            /*@skEstatus     =*/ ".escape(isset($this->conf['skEstatus']) ? $this->conf['skEstatus'] : NULL).",
+            /*@sNombre     =*/ ".escape(isset($this->conf['sNombre']) ? $this->conf['sNombre'] : NULL).",
+            /*@sMensaje     =*/ ".escape(isset($this->conf['sMensaje']) ? $this->conf['sMensaje'] : NULL).",
+            /*@sMensajeCorreo     =*/ ".escape(isset($this->conf['sMensajeCorreo']) ? $this->conf['sMensajeCorreo'] : NULL).",
+            /*@sUrl     =*/ ".escape(isset($this->conf['sUrl']) ? $this->conf['sUrl'] : NULL).",
+            /*@sIcono     =*/ ".escape(isset($this->conf['sIcono']) ? $this->conf['sIcono'] : NULL).",
+            /*@sColor     =*/ ".escape(isset($this->conf['sColor']) ? $this->conf['sColor'] : NULL).",
+            /*@iNotificacionGeneral     =*/ ".escape(isset($this->conf['iNotificacionGeneral']) ? $this->conf['iNotificacionGeneral'] : NULL).",
+            /*@iEnviarCorreo     =*/ ".escape(isset($this->conf['iEnviarCorreo']) ? $this->conf['iEnviarCorreo'] : NULL).",
+            /*@iEnviarInstantaneo     =*/ ".escape(isset($this->conf['iEnviarInstantaneo']) ? $this->conf['iEnviarInstantaneo'] : NULL).",
+            /*@sAsunto     =*/ ".escape(isset($this->conf['sAsunto']) ? $this->conf['sAsunto'] : NULL).",
+        
+            /*@axn                           =*/ ".escape(isset($this->conf['axn']) ? $this->conf['axn'] : NULL).",
+            /*@skUsuario                     =*/ ".escape($_SESSION['usuario']['skUsuario']).",
+            /*@skModulo                      =*/ ".escape($this->sysController).")";
+         
+
+      
+        $result = Conn::query($sql);
+        if(is_array($result) && isset($result['success']) && $result['success'] == false){
+            return $result;
+        }
+        $record = Conn::fetch_assoc($result);
+        return $record;
+    }
+
 
 }

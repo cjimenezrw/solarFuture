@@ -128,7 +128,7 @@ Class Cita_cale_Controller Extends Cita_Model {
     public function get_iFolioCita(){
         $this->cita['iFolioCita'] = (isset($_POST['val']) && !empty($_POST['val'])) ? $_POST['val'] : NULL;
 
-        $sql = "SELECT N1.sNombre AS id, N1.iFolioCita AS sNombre FROM (
+        $sql = "SELECT TOP 10 N1.sNombre AS id, N1.iFolioCita AS nombre FROM (
             SELECT 
                 cit.skCita,
                 CONCAT('CIT',RIGHT(CONCAT('0000',CAST(cit.iFolioCita AS VARCHAR(4))),4)) AS iFolioCita,
@@ -185,7 +185,7 @@ Class Cita_cale_Controller Extends Cita_Model {
             ) AS N1 
             WHERE 1=1 ";
 
-        if(isset($this->cita['iFolioCita']) && !empty($this->cita['iFolioCita'])){
+        if(isset($this->cita['iFolioCita']) && !empty(trim($this->cita['iFolioCita']))){
             $sql .= " AND N1.iFolioCita LIKE '%".escape($this->cita['iFolioCita'],FALSE)."%' ";
         }
 
@@ -193,6 +193,8 @@ Class Cita_cale_Controller Extends Cita_Model {
         if(is_array($result) && isset($result['success']) && $result['success'] != 1){
             return $result;
         }
+
+        $records = Conn::fetch_assoc_all($result);
         utf8($records, FALSE);
         return $records;
     }
@@ -200,7 +202,7 @@ Class Cita_cale_Controller Extends Cita_Model {
     public function get_sNombre(){
         $this->cita['sNombre'] = (isset($_POST['val']) && !empty($_POST['val'])) ? $_POST['val'] : NULL;
 
-        $sql = "SELECT N1.sNombre AS id, N1.sNombre AS sNombre FROM (
+        $sql = "SELECT TOP 10 N1.sNombre AS id, N1.sNombre AS nombre FROM (
             SELECT 
                 cit.skCita,
                 CONCAT('CIT',RIGHT(CONCAT('0000',CAST(cit.iFolioCita AS VARCHAR(4))),4)) AS iFolioCita,
@@ -257,7 +259,7 @@ Class Cita_cale_Controller Extends Cita_Model {
             ) AS N1 
             WHERE 1=1 ";
 
-        if(isset($this->cita['sNombre']) && !empty($this->cita['sNombre'])){
+        if(isset($this->cita['sNombre']) && !empty(trim($this->cita['sNombre']))){
             $sql .= " AND N1.sNombre LIKE '%".escape($this->cita['sNombre'],FALSE)."%' ";
         }
 
@@ -265,6 +267,8 @@ Class Cita_cale_Controller Extends Cita_Model {
         if(is_array($result) && isset($result['success']) && $result['success'] != 1){
             return $result;
         }
+
+        $records = Conn::fetch_assoc_all($result);
         utf8($records, FALSE);
         return $records;
     }
@@ -272,7 +276,7 @@ Class Cita_cale_Controller Extends Cita_Model {
     public function get_cliente(){
         $this->cita['empresaCliente'] = (isset($_POST['val']) && !empty($_POST['val'])) ? $_POST['val'] : NULL;
 
-        $sql = "SELECT N1.sNombre AS id, N1.empresaCliente AS sNombre FROM (
+        $sql = "SELECT TOP 10 N1.sNombre AS id, N1.empresaCliente AS nombre FROM (
             SELECT 
                 cit.skCita,
                 CONCAT('CIT',RIGHT(CONCAT('0000',CAST(cit.iFolioCita AS VARCHAR(4))),4)) AS iFolioCita,
@@ -329,7 +333,7 @@ Class Cita_cale_Controller Extends Cita_Model {
             ) AS N1 
             WHERE 1=1 ";
 
-        if(isset($this->cita['empresaCliente']) && !empty($this->cita['empresaCliente'])){
+        if(isset($this->cita['empresaCliente']) && !empty(trim($this->cita['empresaCliente']))){
             $sql .= " AND N1.empresaCliente LIKE '%".escape($this->cita['empresaCliente'],FALSE)."%' ";
         }
 
@@ -337,6 +341,8 @@ Class Cita_cale_Controller Extends Cita_Model {
         if(is_array($result) && isset($result['success']) && $result['success'] != 1){
             return $result;
         }
+
+        $records = Conn::fetch_assoc_all($result);
         utf8($records, FALSE);
         return $records;
     }

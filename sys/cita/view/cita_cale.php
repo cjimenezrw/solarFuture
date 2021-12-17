@@ -39,7 +39,7 @@
                         <div class="col-lg-4 col-md-4">
                             <div class="form-group">
                                 <h4 class="example-title">CLIENTE:</h4>
-                                <select name="sNombre" id="sNombre" class="form-control" data-plugin="select2" data-ajax--cache="true" >
+                                <select name="skEmpresaSocioCliente" id="skEmpresaSocioCliente" class="form-control" data-plugin="select2" data-ajax--cache="true" >
                                 </select>
                             </div>
                         </div>
@@ -48,7 +48,7 @@
 
                         <div class="col-lg-4 col-md-4">
                             <div class="form-group">
-                                <h4 class="example-title"><span style="color:red;">* </span>ESTADO:</h4>
+                                <h4 class="example-title">ESTADO:</h4>
                                 <select id="skEstadoMX"  name="skEstadoMX" class="form-control" data-plugin="select2" select2Simple>
                                     <option value="">- SELECCIONAR -</option>
                                     <?php
@@ -67,7 +67,7 @@
 
                         <div class="col-lg-4 col-md-4">
                             <div class="form-group">
-                                <h4 class="example-title"><span style="color:red;">* </span>MUNICIPIO:</h4>
+                                <h4 class="example-title">MUNICIPIO:</h4>
                                 <select id="skMunicipioMX"  name="skMunicipioMX" class="form-control" data-plugin="select2" select2Simple>
                                     <option value="">- SELECCIONAR -</option>
                                     <?php
@@ -85,9 +85,9 @@
                         </div>
 
                         <div class="col-lg-4 col-md-4">
-                            <h4 class="example-title">Histórico</h4>
+                            <h4 class="example-title">HISTÓRICO</h4>
                             <div class="form-group">    
-                                <input type="checkbox" class="js-switch-large" data-plugin="switchery"  data-color="#4d94ff" name="historico" id="historico" value="1"/>
+                                <input type="checkbox" class="js-switch-large" id="iFiltroHistorico" name="iFiltroHistorico" value="1" data-plugin="switchery"  data-color="#4d94ff" />
                             </div>
                         </div>   
 

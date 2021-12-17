@@ -185,6 +185,7 @@ Class Cita_Model Extends DLOREAN_Model {
             cit.dFechaCita,
             cit.tHoraInicio,
             cit.tHoraFin,
+            cit.skTipoPeriodo,
             cit.skEmpresaSocioCliente,
             cit.sNombre,
             cit.sTelefono,
@@ -204,7 +205,9 @@ Class Cita_Model Extends DLOREAN_Model {
             cit.skUsuarioModificacion,
             cit.dFechaModificacion,
             cate.sNombreCategoria,
+            cate.sClaveCategoriaCita,
             cate.iMinutosDuracion,
+            cate.sColorCategoria,
             est.sNombre AS estatus,
             est.sIcono AS estatusIcono,
             est.sColor AS estatusColor,
@@ -241,8 +244,32 @@ Class Cita_Model Extends DLOREAN_Model {
             $sql .= " AND cit.skCita = " . escape($params['skCita']);
         }
 
-        $sql .= " ORDER BY cit.dFechaCreacion DESC; ";
+        if(isset($params['skCategoriaCita']) && !empty($params['skCategoriaCita'])){
+            $sql .= " AND cit.skCategoriaCita = " . escape($params['skCategoriaCita']);
+        }
 
+        if(isset($params['sClaveCategoriaCita']) && !empty($params['sClaveCategoriaCita'])){
+            $sql .= " AND cate.sClaveCategoriaCita = " . escape($params['sClaveCategoriaCita']);
+        }
+
+        if(isset($params['skEstadoMX']) && !empty($params['skEstadoMX'])){
+            $sql .= " AND cit.skEstadoMX = " . escape($params['skEstadoMX']);
+        }
+
+        if(isset($params['skMunicipioMX']) && !empty($params['skMunicipioMX'])){
+            $sql .= " AND cit.skMunicipioMX = " . escape($params['skMunicipioMX']);
+        }
+
+        if(isset($params['skEmpresaSocioCliente']) && !empty($params['skEmpresaSocioCliente'])){
+            $sql .= " AND cit.skEmpresaSocioCliente = " . escape($params['skEmpresaSocioCliente']);
+        }
+
+        if(isset($params['sNombre']) && !empty($params['sNombre'])){
+            $sql .= " AND cit.sNombre LIKE '%".escape($params['sNombre'],FALSE)."%' ";
+        }
+
+        $sql .= " ORDER BY cit.dFechaCreacion DESC; ";
+//exit('<pre>'.print_r($sql,1).'</pre>');
         $result = Conn::query($sql);
         if(is_array($result) && isset($result['success']) && $result['success'] != 1){
             return $result;

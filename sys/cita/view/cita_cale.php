@@ -95,22 +95,17 @@
             nSolicitudes = '';
             linea = '';
             switch(v.skTipoProceso){
-                case 'VACACIONES':
+                case 'MANTEN':
                     color = '#05A85C';
                     nSolicitudes = <?php echo ($data['datos']['nSolicitudes']['vacaciones']['nVacaciones']) ? json_encode($data['datos']['nSolicitudes']['vacaciones']['nVacaciones']) : json_encode([0]); ?>;
                     linea = '';
                 break;
-                case 'INCAPACIDADES':
-                    color = '#FE6E2F';
-                    nSolicitudes = <?php echo ($data['datos']['nSolicitudes']['incapacidades']['nIncapacidades']) ? json_encode($data['datos']['nSolicitudes']['incapacidades']['nIncapacidades']) : json_encode([0]); ?>;
-                    linea = '';
-                break;
-                case 'AUSENCIA':
+                case 'REVISI':
                     color = '#3e8ef7';
                     nSolicitudes = <?php echo ($data['datos']['nSolicitudes']['permisoAusencia']['nAusencia']) ? json_encode($data['datos']['nSolicitudes']['permisoAusencia']['nAusencia']) : json_encode([0]); ?>;
                     linea = '';
                 break;
-                case 'CAPACITACIONES':
+                case 'INSTAL':
                     color = '#ff4c52';
                     nSolicitudes = <?php echo ($data['datos']['nSolicitudes']['capacitaciones']['nCapacitaciones']) ? json_encode($data['datos']['nSolicitudes']['capacitaciones']['nCapacitaciones']) : json_encode([0]); ?>;
                     linea = '';

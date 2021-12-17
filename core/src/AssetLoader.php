@@ -208,6 +208,9 @@ class AssetLoader
 
                     ASSETS_PATH . ASSETS_VERSION . '/custom/tour/anno.js',
 
+                    ASSETS_PATH . ASSETS_VERSION . '/tpl/global/vendor/fullcalendar/fullcalendar.min.js',
+                    ASSETS_PATH . ASSETS_VERSION . '/tpl/global/vendor/fullcalendar/lang/es.js',
+
                     ASSETS_PATH . ASSETS_VERSION . '/custom/js/pusher.min.js',
                     ASSETS_PATH_CDN . ASSETS_VERSION . '/tpl/global/vendor/owl-carousel/owl.carousel.js'
 
@@ -437,6 +440,8 @@ class AssetLoader
                     ASSETS_PATH_CDN . ASSETS_VERSION . '/tpl/examples/css/advanced/masonry.css',
 
                     ASSETS_PATH_CDN . ASSETS_VERSION . '/tpl/global/vendor/owl-carousel/owl.carousel.css',
+
+                    ASSETS_PATH_CDN . ASSETS_VERSION . '/tpl/global/vendor/fullcalendar/fullcalendar.min.css',
 
                     ASSETS_PATH . ASSETS_VERSION . '/custom/liveVideo/video.css',
                     ASSETS_PATH . ASSETS_VERSION . '/custom/tour/anno.css'

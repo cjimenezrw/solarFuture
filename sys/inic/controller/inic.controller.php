@@ -88,6 +88,23 @@ Class Inic_Controller Extends Inic_Model {
                 echo $data;
                 return true;
             break;
+            case 'count':
+                $data = $inic_dash->countNotifications();
+                if ($data){
+                    header('Content-Type: application/json');
+                    echo json_encode($data);
+                }
+                break;
+            case 'list':
+                $data = $inic_dash->listNotifications();
+                header('Content-Type: application/json');
+                echo json_encode($data);
+                break;
+            case 'readNotification':
+                $data = $inic_dash->readNotification();
+                header('Content-Type: application/json');
+                echo json_encode($data);
+                break;
             case 'removeFilters':
                         $data = $inic_dash->removeFilters();
                         header('Content-Type: application/json');

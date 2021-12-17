@@ -1428,3 +1428,106 @@ $(document).ready(function () {
         return event.keyCode != 13;
     });
 });
+/*
+ * Módulo meno-inde (notificaciones Mensajes)
+ */
+conf.meno_inde = {}; 
+
+conf.meno_inde.dataTableConf = {
+    'serverSide': true,
+    'ajax': {
+        'url': window.location.href,
+        'type': 'POST',
+        'data': function (data) {
+            data.axn = 'consulta';
+            data.filters = core.dataFilterSend;
+            data.generarExcel = core.generarExcel;
+        }
+    },
+    'order': [[4, "desc"]],
+    'columns': [
+        {'title': 'E', 'tooltip': 'Estatus', 'data': 'estatus', 'dataType': 'string'},
+        {'title': 'Clave', 'data': 'sClaveNotificacion', 'dataType': 'string'},
+        {'title': 'Nombre', 'data': 'sNombre', 'dataType': 'string'},
+        {'title': 'Mensaje', 'data': 'sMensaje', 'dataType': 'string'},
+        {'title': 'Fecha de Creaci&oacute;n', 'data': 'dFechaCreacion', 'dataType': 'date'}
+
+    ],
+    'axn': 'consulta',
+    "drawCallback": function () {
+        core.dataTable.contextMenuCore(true);
+        core.dataTable.changeColumnColor(1, 'success');
+        $('[data-toggle="tooltip"]').tooltip();
+        core.dataTable.fastFilters(1, [0, 3], true);
+    },
+    "columnDefs": [
+        {
+            "targets": [0],
+            "width": '20px',
+            "createdCell": function (td, cellData, rowData, row, col) {
+                ((rowData.estatusIcono) ? $(td).html('<i class="' + rowData.estatusIcono + '"></i>') : $(td).html(cellData));
+                $(td).addClass('text-center ' + ((rowData.estatusColor) ? rowData.estatusColor : 'text-primary'));
+                ((rowData.estatusIcono) ? $(td).find('i').attr({"title": cellData, "data-toggle": "tooltip", "data-placement": "rigth"}) : '');
+
+            }
+        }
+    ]
+};
+
+
+conf.meno_form = {};
+
+conf.meno_form.validaciones = {
+    sClaveNotificacion: {
+        threshold: 6,
+        validators: {
+            notEmpty: {
+                message: 'El codigo es requerido'
+            },
+            remote: {
+                url: window.location.href,
+                data: {
+                    axn: 'validarCodigo'
+                },
+                message: 'El codigo ya existe',
+                type: 'POST'
+            },
+            stringCase: {
+                message: 'Solo letras mayusculas',
+                'case': 'upper'
+            },
+            stringLength: {
+                max: 6,
+                message: 'La clave debe tener 6 digitos.',
+            },
+        }
+    },
+    sNombre: {
+        validators: {
+            notEmpty: {
+                message: 'El nombre es requerido.'
+            }
+        }
+    },
+    sUrl: {
+        validators: {
+            notEmpty: {
+                message: 'La url es requerida.'
+            }
+        }
+    },
+    sMensaje: {
+        validators: {
+            notEmpty: {
+                message: 'El Mensaje es requerido.'
+            }
+        }
+    },
+    skEstatus: {
+        validators: {
+            notEmpty: {
+                message: 'El estatus es requerido.'
+            }
+        }
+    }
+};

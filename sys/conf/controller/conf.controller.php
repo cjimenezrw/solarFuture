@@ -637,4 +637,71 @@ Class Conf_Controller Extends Conf_Model {
         return true;
     }
 
+
+    public function meno_inde()
+    {
+        $this->load_class("meno_inde", "controller");
+        $meno_inde = new Meno_inde_Controller();
+        $axn = (isset($_POST['axn']) ? $_POST['axn'] : (isset($_GET['axn']) ? $_GET['axn'] : NULL));
+        switch ($axn) {
+            case 'consulta':
+                $data = $meno_inde->consulta();
+                header('Content-Type: application/json');
+                echo json_encode($data);
+                return true;
+                break;
+            case 'generarExcel':
+                $meno_inde->generarExcel();
+                break;
+            case 'pruebaNotificacion':
+                $meno_inde->pruebaNotificacion();
+            break;
+            case 'pruebaArchivo':
+                $meno_inde->pruebaArchivo();
+            break;
+                
+            case 'pdf':
+                $meno_inde->generarPDF();
+                break;
+            default:
+                $this->load_view('meno_inde', $this->data);
+                break;
+        }
+        return TRUE;
+    }
+
+    public function meno_form()
+    {
+        $this->load_class("meno_form", "controller");
+        $meno_form = new Meno_form_Controller();
+        $axn = (isset($_POST['axn']) ? $_POST['axn'] : (isset($_GET['axn']) ? $_GET['axn'] : NULL));
+        switch ($axn) {
+            case 'validarCodigo':
+                $respuesta = $meno_form->validarCodigo();
+                if ($respuesta) {
+                    $isAvailable = true;
+                } else {
+                    $isAvailable = false;
+                }
+                $data = array('valid' => $isAvailable);
+                header('Content-Type: application/json');
+                echo json_encode($data);
+                return true;
+                break; 
+            case 'guardar':
+                $data = $meno_form->guardar();
+                header('Content-Type: application/json');
+                echo json_encode($data);
+                return TRUE;
+                break;
+            default:
+                $this->data = $meno_form->getDatos();
+                $this->load_view('meno_form', $this->data);
+                break;
+        }
+        return true;
+    }
+
+
+
 }

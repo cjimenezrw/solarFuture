@@ -126,7 +126,7 @@ Class Cita_cale_Controller Extends Cita_Model {
     }
 
     public function get_iFolioCita(){
-        $this->cita['iFolioCita'] = (isset($_POST['iFolioCita']) && !empty($_POST['iFolioCita'])) ? $_POST['iFolioCita'] : NULL;
+        $this->cita['iFolioCita'] = (isset($_POST['val']) && !empty($_POST['val'])) ? $_POST['val'] : NULL;
 
         $sql = "SELECT N1.sNombre AS id, N1.iFolioCita AS sNombre FROM (
             SELECT 
@@ -181,8 +181,9 @@ Class Cita_cale_Controller Extends Cita_Model {
                 LEFT JOIN cat_usuarios uCan ON uCan.skUsuario = cit.skUsuarioCancelacion
                 LEFT JOIN rel_empresasSocios es ON es.skEmpresaSocio = cit.skEmpresaSocioCliente
                 LEFT JOIN cat_empresas e ON e.skEmpresa = es.skEmpresa
+                WHERE cit.skEstatus = 'CF'
             ) AS N1 
-            WHERE N1.skEstatus = 'CF' ";
+            WHERE 1=1 ";
 
         if(isset($this->cita['iFolioCita']) && !empty($this->cita['iFolioCita'])){
             $sql .= " AND N1.iFolioCita LIKE '%".escape($this->cita['iFolioCita'],FALSE)."%' ";
@@ -197,7 +198,7 @@ Class Cita_cale_Controller Extends Cita_Model {
     }
 
     public function get_sNombre(){
-        $this->cita['sNombre'] = (isset($_POST['sNombre']) && !empty($_POST['sNombre'])) ? $_POST['sNombre'] : NULL;
+        $this->cita['sNombre'] = (isset($_POST['val']) && !empty($_POST['val'])) ? $_POST['val'] : NULL;
 
         $sql = "SELECT N1.sNombre AS id, N1.sNombre AS sNombre FROM (
             SELECT 
@@ -252,8 +253,9 @@ Class Cita_cale_Controller Extends Cita_Model {
                 LEFT JOIN cat_usuarios uCan ON uCan.skUsuario = cit.skUsuarioCancelacion
                 LEFT JOIN rel_empresasSocios es ON es.skEmpresaSocio = cit.skEmpresaSocioCliente
                 LEFT JOIN cat_empresas e ON e.skEmpresa = es.skEmpresa
+                WHERE cit.skEstatus = 'CF'
             ) AS N1 
-            WHERE N1.skEstatus = 'CF' ";
+            WHERE 1=1 ";
 
         if(isset($this->cita['sNombre']) && !empty($this->cita['sNombre'])){
             $sql .= " AND N1.sNombre LIKE '%".escape($this->cita['sNombre'],FALSE)."%' ";
@@ -268,7 +270,7 @@ Class Cita_cale_Controller Extends Cita_Model {
     }
 
     public function get_cliente(){
-        $this->cita['empresaCliente'] = (isset($_POST['empresaCliente']) && !empty($_POST['empresaCliente'])) ? $_POST['empresaCliente'] : NULL;
+        $this->cita['empresaCliente'] = (isset($_POST['val']) && !empty($_POST['val'])) ? $_POST['val'] : NULL;
 
         $sql = "SELECT N1.sNombre AS id, N1.empresaCliente AS sNombre FROM (
             SELECT 
@@ -323,8 +325,9 @@ Class Cita_cale_Controller Extends Cita_Model {
                 LEFT JOIN cat_usuarios uCan ON uCan.skUsuario = cit.skUsuarioCancelacion
                 LEFT JOIN rel_empresasSocios es ON es.skEmpresaSocio = cit.skEmpresaSocioCliente
                 LEFT JOIN cat_empresas e ON e.skEmpresa = es.skEmpresa
+                WHERE cit.skEstatus = 'CF'
             ) AS N1 
-            WHERE N1.skEstatus = 'CF' ";
+            WHERE 1=1 ";
 
         if(isset($this->cita['empresaCliente']) && !empty($this->cita['empresaCliente'])){
             $sql .= " AND N1.empresaCliente LIKE '%".escape($this->cita['empresaCliente'],FALSE)."%' ";

@@ -49,7 +49,7 @@ Class Cita_cale_Controller Extends Cita_Model {
         $this->data['calendario'] = [];
 
         foreach($this->data['citas'] AS $row){
-            if(!isset($this->cita['calendario'][$row['skCita']])){
+            /*if(!isset($this->cita['calendario'][$row['skCita']])){
                 $this->data['calendario'][$row['skCita']] = [
                     'id'=>$row['skCita'],
                     'title'=>$row['estatus']." - ".$row['sNombre']."\n\r".date('H:i:s', strtotime($row['tHoraInicio']))." - ".date('H:i:s', strtotime($row['tHoraFin'])),
@@ -60,7 +60,18 @@ Class Cita_cale_Controller Extends Cita_Model {
                     'skModulo'=>'cita-deta',
                     'sURL'=>'/'.DIR_PATH.'sys/cita/cita-deta/detalles-cita/'.$row['skCita'].'/'
                 ];
-            }
+            }*/
+
+            array_push($this->data['calendario'],[
+                'id'=>$row['skCita'],
+                'title'=>$row['sNombre']."\n\r".date('H:i:s', strtotime($row['tHoraInicio']))." - ".date('H:i:s', strtotime($row['tHoraFin'])),
+                'display'=>'background',
+                'start'=>$row['dFechaCita'],
+                'end'=>$row['dFechaCita'],
+                'color'=>$row['sColorCategoria'],
+                'skModulo'=>'cita-deta',
+                'sURL'=>'/'.DIR_PATH.'sys/cita/cita-deta/detalles-cita/'.$row['skCita'].'/'
+            ]);
 
             $index = array_search($row['sClaveCategoriaCita'],array_column($this->data['cat_citas_categorias'],'sClaveCategoriaCita'));
             if($index !== false){
@@ -73,7 +84,7 @@ Class Cita_cale_Controller Extends Cita_Model {
 
         }
 
-        exit('<pre>'.print_r($this->data,1).'</pre>');
+        //exit('<pre>'.print_r($this->data,1).'</pre>');
         return $this->data;
     }
 
@@ -112,6 +123,219 @@ Class Cita_cale_Controller Extends Cita_Model {
         ]);
 
         return $this->data;
+    }
+
+    public function get_iFolioCita(){
+        $this->cita['iFolioCita'] = (isset($_POST['iFolioCita']) && !empty($_POST['iFolioCita'])) ? $_POST['iFolioCita'] : NULL;
+
+        $sql = "SELECT N1.sNombre AS id, N1.iFolioCita AS sNombre FROM (
+            SELECT 
+                cit.skCita,
+                CONCAT('CIT',RIGHT(CONCAT('0000',CAST(cit.iFolioCita AS VARCHAR(4))),4)) AS iFolioCita,
+                cit.skCategoriaCita,
+                cit.skEstatus,
+                cit.dFechaCita,
+                cit.tHoraInicio,
+                cit.tHoraFin,
+                cit.skTipoPeriodo,
+                cit.skEmpresaSocioCliente,
+                cit.sNombre,
+                cit.sTelefono,
+                cit.sCorreo,
+                cit.skEstadoMX,
+                cit.skMunicipioMX,
+                cit.sDomicilio,
+                cit.sObservaciones,
+                cit.sInstruccionesServicio,
+                cit.skUsuarioConfirmacion,
+                cit.dFechaConfirmacion,
+                cit.sObservacionesCancelacion,
+                cit.skUsuarioCancelacion,
+                cit.dFechaCancelacion,
+                cit.skUsuarioCreacion,
+                cit.dFechaCreacion,
+                cit.skUsuarioModificacion,
+                cit.dFechaModificacion,
+                cate.sNombreCategoria,
+                cate.iMinutosDuracion,
+                cate.sColorCategoria,
+                est.sNombre AS estatus,
+                est.sIcono AS estatusIcono,
+                est.sColor AS estatusColor,
+                esMX.sNombre AS estado,
+                muMX.sNombre AS municipio,
+                CONCAT(uCre.sNombre,' ',uCre.sApellidoPaterno,' ',uCre.sApellidoMaterno) AS usuarioCreacion,
+                CONCAT(uMod.sNombre,' ',uMod.sApellidoPaterno,' ',uMod.sApellidoMaterno) AS usuarioModificacion,
+                CONCAT(uConf.sNombre,' ',uConf.sApellidoPaterno,' ',uConf.sApellidoMaterno) AS usuarioConfirmacion,
+                CONCAT(uCan.sNombre,' ',uCan.sApellidoPaterno,' ',uCan.sApellidoMaterno) AS usuarioCancelacion,
+                e.sNombre AS empresaCliente,
+                e.sRFC AS empresaRFC
+            FROM ope_citas cit
+                LEFT JOIN cat_citas_categorias cate ON cate.skCategoriaCita = cit.skCategoriaCita
+                INNER JOIN core_estatus est ON est.skEstatus = cit.skEstatus
+                INNER JOIN cat_estadosMX esMX ON esMX.skEstadoMX = cit.skEstadoMX
+                INNER JOIN cat_municipiosMX muMX ON muMX.skMunicipioMX = cit.skMunicipioMX
+                INNER JOIN cat_usuarios uCre ON uCre.skUsuario = cit.skUsuarioCreacion
+                LEFT JOIN cat_usuarios uMod ON uMod.skUsuario = cit.skUsuarioModificacion
+                LEFT JOIN cat_usuarios uConf ON uConf.skUsuario = cit.skUsuarioConfirmacion
+                LEFT JOIN cat_usuarios uCan ON uCan.skUsuario = cit.skUsuarioCancelacion
+                LEFT JOIN rel_empresasSocios es ON es.skEmpresaSocio = cit.skEmpresaSocioCliente
+                LEFT JOIN cat_empresas e ON e.skEmpresa = es.skEmpresa
+            ) AS N1 
+            WHERE N1.skEstatus = 'CF' ";
+
+        if(isset($this->cita['iFolioCita']) && !empty($this->cita['iFolioCita'])){
+            $sql .= " AND N1.iFolioCita LIKE '%".escape($this->cita['iFolioCita'],FALSE)."%' ";
+        }
+
+        $result = Conn::query($sql);
+        if(is_array($result) && isset($result['success']) && $result['success'] != 1){
+            return $result;
+        }
+        utf8($records, FALSE);
+        return $records;
+    }
+
+    public function get_sNombre(){
+        $this->cita['sNombre'] = (isset($_POST['sNombre']) && !empty($_POST['sNombre'])) ? $_POST['sNombre'] : NULL;
+
+        $sql = "SELECT N1.sNombre AS id, N1.sNombre AS sNombre FROM (
+            SELECT 
+                cit.skCita,
+                CONCAT('CIT',RIGHT(CONCAT('0000',CAST(cit.iFolioCita AS VARCHAR(4))),4)) AS iFolioCita,
+                cit.skCategoriaCita,
+                cit.skEstatus,
+                cit.dFechaCita,
+                cit.tHoraInicio,
+                cit.tHoraFin,
+                cit.skTipoPeriodo,
+                cit.skEmpresaSocioCliente,
+                cit.sNombre,
+                cit.sTelefono,
+                cit.sCorreo,
+                cit.skEstadoMX,
+                cit.skMunicipioMX,
+                cit.sDomicilio,
+                cit.sObservaciones,
+                cit.sInstruccionesServicio,
+                cit.skUsuarioConfirmacion,
+                cit.dFechaConfirmacion,
+                cit.sObservacionesCancelacion,
+                cit.skUsuarioCancelacion,
+                cit.dFechaCancelacion,
+                cit.skUsuarioCreacion,
+                cit.dFechaCreacion,
+                cit.skUsuarioModificacion,
+                cit.dFechaModificacion,
+                cate.sNombreCategoria,
+                cate.iMinutosDuracion,
+                cate.sColorCategoria,
+                est.sNombre AS estatus,
+                est.sIcono AS estatusIcono,
+                est.sColor AS estatusColor,
+                esMX.sNombre AS estado,
+                muMX.sNombre AS municipio,
+                CONCAT(uCre.sNombre,' ',uCre.sApellidoPaterno,' ',uCre.sApellidoMaterno) AS usuarioCreacion,
+                CONCAT(uMod.sNombre,' ',uMod.sApellidoPaterno,' ',uMod.sApellidoMaterno) AS usuarioModificacion,
+                CONCAT(uConf.sNombre,' ',uConf.sApellidoPaterno,' ',uConf.sApellidoMaterno) AS usuarioConfirmacion,
+                CONCAT(uCan.sNombre,' ',uCan.sApellidoPaterno,' ',uCan.sApellidoMaterno) AS usuarioCancelacion,
+                e.sNombre AS empresaCliente,
+                e.sRFC AS empresaRFC
+            FROM ope_citas cit
+                LEFT JOIN cat_citas_categorias cate ON cate.skCategoriaCita = cit.skCategoriaCita
+                INNER JOIN core_estatus est ON est.skEstatus = cit.skEstatus
+                INNER JOIN cat_estadosMX esMX ON esMX.skEstadoMX = cit.skEstadoMX
+                INNER JOIN cat_municipiosMX muMX ON muMX.skMunicipioMX = cit.skMunicipioMX
+                INNER JOIN cat_usuarios uCre ON uCre.skUsuario = cit.skUsuarioCreacion
+                LEFT JOIN cat_usuarios uMod ON uMod.skUsuario = cit.skUsuarioModificacion
+                LEFT JOIN cat_usuarios uConf ON uConf.skUsuario = cit.skUsuarioConfirmacion
+                LEFT JOIN cat_usuarios uCan ON uCan.skUsuario = cit.skUsuarioCancelacion
+                LEFT JOIN rel_empresasSocios es ON es.skEmpresaSocio = cit.skEmpresaSocioCliente
+                LEFT JOIN cat_empresas e ON e.skEmpresa = es.skEmpresa
+            ) AS N1 
+            WHERE N1.skEstatus = 'CF' ";
+
+        if(isset($this->cita['sNombre']) && !empty($this->cita['sNombre'])){
+            $sql .= " AND N1.sNombre LIKE '%".escape($this->cita['sNombre'],FALSE)."%' ";
+        }
+
+        $result = Conn::query($sql);
+        if(is_array($result) && isset($result['success']) && $result['success'] != 1){
+            return $result;
+        }
+        utf8($records, FALSE);
+        return $records;
+    }
+
+    public function get_cliente(){
+        $this->cita['empresaCliente'] = (isset($_POST['empresaCliente']) && !empty($_POST['empresaCliente'])) ? $_POST['empresaCliente'] : NULL;
+
+        $sql = "SELECT N1.sNombre AS id, N1.empresaCliente AS sNombre FROM (
+            SELECT 
+                cit.skCita,
+                CONCAT('CIT',RIGHT(CONCAT('0000',CAST(cit.iFolioCita AS VARCHAR(4))),4)) AS iFolioCita,
+                cit.skCategoriaCita,
+                cit.skEstatus,
+                cit.dFechaCita,
+                cit.tHoraInicio,
+                cit.tHoraFin,
+                cit.skTipoPeriodo,
+                cit.skEmpresaSocioCliente,
+                cit.sNombre,
+                cit.sTelefono,
+                cit.sCorreo,
+                cit.skEstadoMX,
+                cit.skMunicipioMX,
+                cit.sDomicilio,
+                cit.sObservaciones,
+                cit.sInstruccionesServicio,
+                cit.skUsuarioConfirmacion,
+                cit.dFechaConfirmacion,
+                cit.sObservacionesCancelacion,
+                cit.skUsuarioCancelacion,
+                cit.dFechaCancelacion,
+                cit.skUsuarioCreacion,
+                cit.dFechaCreacion,
+                cit.skUsuarioModificacion,
+                cit.dFechaModificacion,
+                cate.sNombreCategoria,
+                cate.iMinutosDuracion,
+                cate.sColorCategoria,
+                est.sNombre AS estatus,
+                est.sIcono AS estatusIcono,
+                est.sColor AS estatusColor,
+                esMX.sNombre AS estado,
+                muMX.sNombre AS municipio,
+                CONCAT(uCre.sNombre,' ',uCre.sApellidoPaterno,' ',uCre.sApellidoMaterno) AS usuarioCreacion,
+                CONCAT(uMod.sNombre,' ',uMod.sApellidoPaterno,' ',uMod.sApellidoMaterno) AS usuarioModificacion,
+                CONCAT(uConf.sNombre,' ',uConf.sApellidoPaterno,' ',uConf.sApellidoMaterno) AS usuarioConfirmacion,
+                CONCAT(uCan.sNombre,' ',uCan.sApellidoPaterno,' ',uCan.sApellidoMaterno) AS usuarioCancelacion,
+                e.sNombre AS empresaCliente,
+                e.sRFC AS empresaRFC
+            FROM ope_citas cit
+                LEFT JOIN cat_citas_categorias cate ON cate.skCategoriaCita = cit.skCategoriaCita
+                INNER JOIN core_estatus est ON est.skEstatus = cit.skEstatus
+                INNER JOIN cat_estadosMX esMX ON esMX.skEstadoMX = cit.skEstadoMX
+                INNER JOIN cat_municipiosMX muMX ON muMX.skMunicipioMX = cit.skMunicipioMX
+                INNER JOIN cat_usuarios uCre ON uCre.skUsuario = cit.skUsuarioCreacion
+                LEFT JOIN cat_usuarios uMod ON uMod.skUsuario = cit.skUsuarioModificacion
+                LEFT JOIN cat_usuarios uConf ON uConf.skUsuario = cit.skUsuarioConfirmacion
+                LEFT JOIN cat_usuarios uCan ON uCan.skUsuario = cit.skUsuarioCancelacion
+                LEFT JOIN rel_empresasSocios es ON es.skEmpresaSocio = cit.skEmpresaSocioCliente
+                LEFT JOIN cat_empresas e ON e.skEmpresa = es.skEmpresa
+            ) AS N1 
+            WHERE N1.skEstatus = 'CF' ";
+
+        if(isset($this->cita['empresaCliente']) && !empty($this->cita['empresaCliente'])){
+            $sql .= " AND N1.empresaCliente LIKE '%".escape($this->cita['empresaCliente'],FALSE)."%' ";
+        }
+
+        $result = Conn::query($sql);
+        if(is_array($result) && isset($result['success']) && $result['success'] != 1){
+            return $result;
+        }
+        utf8($records, FALSE);
+        return $records;
     }
 
 }

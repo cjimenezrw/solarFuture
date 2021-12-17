@@ -1,8 +1,3 @@
-
-<?php
-    //exit('<pre>'.print_r($data['cat_citas_categorias'],1).'</pre>');
-?>
-
 <div class="row">
         <input type="hidden" name="sClaveCategoriaCita"  id="sClaveCategoriaCita" value="DEFAULT">
 
@@ -17,43 +12,87 @@
                         btn-success btn-sm"><i class="fas fa-search"></i> Filtrar</button>
                     </li>    
                     <li>
-                        <button type="button" href="javascript:void(0);" onclick="limpiarFiltro(this)" class="btn btn-squared btn-outline ajax-popup-link 
+                        <button type="button" href="javascript:void(0);" onclick="limpiarFiltro();" class="btn btn-squared btn-outline ajax-popup-link 
                         btn-info btn-sm"><i class="fas fa-eraser"></i> Limpiar</button>
                     </li> 
                 </ul>
                 </div>
                 <div class="panel-body container-fluid" id="filter">
+                    <div class="row row-lg">
 
-                    <div class="col-md-4">
-                        <div class="navbar-form input-search">
-                            <select name="eEmpleado" id="eEmpleado">
-                            </select>
+                        <div class="col-lg-4 col-md-4">
+                            <div class="form-group">
+                                <h4 class="example-title">FOLIO CITA:</h4>
+                                <select name="iFolioCita" id="iFolioCita" class="form-control" data-plugin="select2" data-ajax--cache="true" >
+                                </select>
+                            </div>
                         </div>
-                    </div>
 
-                    <div class="col-md-4">
-                        <div class="navbar-form input-search">
-                            <select name="eJefeInmediato" id="eJefeInmediato">
-                            </select>
+                        <div class="col-lg-4 col-md-4">
+                            <div class="form-group">
+                                <h4 class="example-title">NOMBRE:</h4>
+                                <select name="sNombre" id="sNombre" class="form-control" data-plugin="select2" data-ajax--cache="true" >
+                                </select>
+                            </div>
                         </div>
-                    </div>
-                    <div class="col-md-4">
-                        <div class="navbar-form input-search">
-                            <select name="eArea" id="eArea">
-                            </select>
+
+                        <div class="col-lg-4 col-md-4">
+                            <div class="form-group">
+                                <h4 class="example-title">CLIENTE:</h4>
+                                <select name="sNombre" id="sNombre" class="form-control" data-plugin="select2" data-ajax--cache="true" >
+                                </select>
+                            </div>
                         </div>
-                    </div>
-                    <div class="col-md-4">
-                        <div class="navbar-form input-search">
-                            <select name="eDepartamentos" id="eDepartamentos">
-                            </select>
+
+                        <div class="col-lg-12 col-md-12 clearfix"></div>
+
+                        <div class="col-lg-4 col-md-4">
+                            <div class="form-group">
+                                <h4 class="example-title"><span style="color:red;">* </span>ESTADO:</h4>
+                                <select id="skEstadoMX"  name="skEstadoMX" class="form-control" data-plugin="select2" select2Simple>
+                                    <option value="">- SELECCIONAR -</option>
+                                    <?php
+                                        if (!empty($data['cat_estadosMX'])) {
+                                            foreach (  $data['cat_estadosMX'] as $row) {
+                                    ?>
+                                        <option <?php echo(isset($data['datos']['skEstadoMX']) && $data['datos']['skEstadoMX'] == $row['skEstadoMX'] ? 'selected="selected"' : ''); ?>
+                                        value="<?php echo $row['skEstadoMX']; ?>"> <?php echo $row['sNombre']; ?> </option>
+                                    <?php
+                                            }//ENDWHILE
+                                        }//ENDIF
+                                    ?>
+                                </select>
+                            </div>
                         </div>
-                    </div>
-                     <div class="col-md-4 col-lg-4"><h4 class="example-title">Histórico</h4>
-                          <div class="form-group">    
-                            <input type="checkbox" class="js-switch-large" data-plugin="switchery"  data-color="#4d94ff" name="historico" id="historico" value="1"/>
-                          </div>
+
+                        <div class="col-lg-4 col-md-4">
+                            <div class="form-group">
+                                <h4 class="example-title"><span style="color:red;">* </span>MUNICIPIO:</h4>
+                                <select id="skMunicipioMX"  name="skMunicipioMX" class="form-control" data-plugin="select2" select2Simple>
+                                    <option value="">- SELECCIONAR -</option>
+                                    <?php
+                                        if (!empty($data['cat_municipiosMX'])) {
+                                            foreach (  $data['cat_municipiosMX'] as $row) {
+                                    ?>
+                                        <option <?php echo(isset($data['datos']['skMunicipioMX']) && $data['datos']['skMunicipioMX'] == $row['skMunicipioMX'] ? 'selected="selected"' : ''); ?>
+                                        value="<?php echo $row['skMunicipioMX']; ?>"> <?php echo $row['sNombre']; ?> </option>
+                                    <?php
+                                            }//ENDWHILE
+                                        }//ENDIF
+                                    ?>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="col-lg-4 col-md-4">
+                            <h4 class="example-title">Histórico</h4>
+                            <div class="form-group">    
+                                <input type="checkbox" class="js-switch-large" data-plugin="switchery"  data-color="#4d94ff" name="historico" id="historico" value="1"/>
+                            </div>
                         </div>   
+
+                    </div>
+
                 </div>
             </div>
         </div>
@@ -122,13 +161,15 @@
     }
 
     $(document).ready(function(){
-        //core.autocomplete2('#eDepartamentos', 'getDepartamentos', window.location.href, 'Departamentos');
-        //core.autocomplete2('#eArea', 'getAreas', window.location.href, 'Área');
-        //core.autocomplete2('#eEmpleado', 'getEmpleados', window.location.href, 'Empleado');
-        //core.autocomplete2('#eJefeInmediato', 'getJefeInmediato', window.location.href, 'Jefe Inmediato');
+        core.autocomplete2('#iFolioCita', 'get_iFolioCita', window.location.href, 'FOLIO CITA');
+        core.autocomplete2('#sNombre', 'get_sNombre', window.location.href, 'NOMBRE');
+        core.autocomplete2('#skEmpresaSocioCliente', 'get_cliente', window.location.href, 'CLIENTE');
+        $("#skEstadoMX").select2({placeholder: "ESTADO", allowClear: true });
+        $("#skMunicipioMX").select2({placeholder: "MUNICIPIO", allowClear: true });
         
         events = <?php echo (!empty($data['calendario']) ? json_encode($data['calendario']) : json_encode([])); ?>;
-
+        console.log(events);
+        
         $('#calendar').fullCalendar({
             height : 700,
             width  : 650,
@@ -162,6 +203,40 @@
             new Switchery(this, {
                 color: $(this).data('color'),
                 size: $(this).data('size')
+            });
+        });
+
+        $("#skEstadoMX").change(function(e){
+            var skEstadoMX = $("#skEstadoMX").val();
+            $.ajax({
+                url: window.location.href,
+                type: 'POST',
+                data: {
+                    axn: 'get_cat_municipiosMX',
+                    skEstadoMX: skEstadoMX
+                },
+                cache: false,
+                async: false,
+                beforeSend: function () {
+                    toastr.info('CARGANDO MUNICIPIOS <i class="fa fa-spinner faa-spin animated"></i>', 'NOTIFICACIÓN', {timeOut: false});
+                },
+                success: function (response) {
+                    toastr.clear();
+                    if(response.success){
+                        toastr.success(response.message, 'NOTIFICACIÓN');
+                        
+                        // RECORREMOS LOS MUNICIPIOS //
+                            let option = '<option value="">- SELECCIONAR -</option>';
+                            $.each(response.cat_municipiosMX,function(k,v){
+                                option += '<option value="'+v.skMunicipioMX+'">'+v.sNombre+'</option>';
+                            });
+
+                            $("#skMunicipioMX").html(option);
+                            $("#skMunicipioMX").select2({placeholder: "MUNICIPIO", allowClear: true });
+                    }else{
+                        toastr.error(response.message, 'NOTIFICACIÓN');
+                    }
+                }
             });
         });
 
@@ -227,12 +302,12 @@
     return true; 
     }
     
-    function limpiarFiltro(conf){
-        //$('#eDepartamentos').empty();
-        //$('#eArea').empty();
-        //$('#eEmpleado').empty();
-        //$('#eJefeInmediato').empty();
-
+    function limpiarFiltro(){
+        $('#iFolioCita').empty();
+        $('#sNombre').empty();
+        $('#skEmpresaSocioCliente').empty();
+        $('#skEstadoMX').empty();
+        $('#skMunicipioMX').empty();
         filtrarCalendario($('#DEFAULT'));
     }
 

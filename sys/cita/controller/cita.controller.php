@@ -110,6 +110,22 @@ Class Cita_Controller Extends Cita_Model {
         $cita_cale = new Cita_cale_Controller();
         $axn = (isset($_POST['axn']) ? $_POST['axn'] : (isset($_GET['axn']) ? $_GET['axn'] : NULL));
         switch ($axn) {
+            case 'get_cat_municipiosMX':
+                header('Content-Type: application/json');
+                echo json_encode($cita_cale->get_cat_municipiosMX());
+                break;
+            case 'get_iFolioCita':
+                header('Content-Type: application/json');
+                echo json_encode($cita_cale->get_iFolioCita());
+                break;
+            case 'get_sNombre':
+                header('Content-Type: application/json');
+                echo json_encode($cita_cale->get_sNombre());
+                break;
+            case 'get_cliente':
+                header('Content-Type: application/json');
+                echo json_encode($cita_cale->get_cliente());
+                break;
             default:
                 $this->load_view('cita_cale', $cita_cale->getDatos());
                 break;

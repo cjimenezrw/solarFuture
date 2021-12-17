@@ -128,7 +128,7 @@ Class Cita_cale_Controller Extends Cita_Model {
     public function get_iFolioCita(){
         $this->cita['iFolioCita'] = (isset($_POST['val']) && !empty($_POST['val'])) ? $_POST['val'] : NULL;
 
-        $sql = "SELECT N1.sNombre AS id, N1.iFolioCita AS nombre FROM (
+        $sql = "SELECT N1.skCita AS id, N1.iFolioCita AS nombre FROM (
             SELECT 
                 cit.skCita,
                 CONCAT('CIT',RIGHT(CONCAT('0000',CAST(cit.iFolioCita AS VARCHAR(4))),4)) AS iFolioCita,
@@ -280,7 +280,7 @@ Class Cita_cale_Controller Extends Cita_Model {
     public function get_cliente(){
         $this->cita['empresaCliente'] = (isset($_POST['val']) && !empty($_POST['val'])) ? $_POST['val'] : NULL;
 
-        $sql = "SELECT N1.sNombre AS id, N1.empresaCliente AS nombre FROM (
+        $sql = "SELECT N1.skEmpresaSocioCliente AS id, N1.empresaCliente AS nombre FROM (
             SELECT 
                 cit.skCita,
                 CONCAT('CIT',RIGHT(CONCAT('0000',CAST(cit.iFolioCita AS VARCHAR(4))),4)) AS iFolioCita,

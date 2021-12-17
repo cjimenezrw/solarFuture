@@ -9,11 +9,11 @@
                     <ul class="panel-actions panel-actions-keep">
                     <li>
                         <button type="button" href="javascript:void(0);" onclick="filtrarCalendario($('#DEFAULT'))" class="btn btn-squared btn-outline ajax-popup-link 
-                        btn-success btn-sm"><i class="fas fa-search"></i> Filtrar</button>
+                        btn-success btn-sm"><i class="fas fa-search"></i> FILTRAR</button>
                     </li>    
                     <li>
                         <button type="button" href="javascript:void(0);" onclick="limpiarFiltro();" class="btn btn-squared btn-outline ajax-popup-link 
-                        btn-info btn-sm"><i class="fas fa-eraser"></i> Limpiar</button>
+                        btn-info btn-sm"><i class="fas fa-eraser"></i> LIMPIAR</button>
                     </li> 
                 </ul>
                 </div>
@@ -122,8 +122,7 @@
 <script type="text/javascript">
     
     cita.cita_cale.procesos = <?php echo (!empty($data['cat_citas_categorias']) ? json_encode($data['cat_citas_categorias']) : json_encode([])); ?>;
-    console.log(cita.cita_cale.procesos);
-
+    
     function listarProcesos(){
         var procesos = '<section class="page-aside-section"><div class="list-group menuProcesoItems"><h4 class="page-aside-title"><i class="fas fa-calendar"></i> Eventos</h4><hr>';
         
@@ -168,7 +167,6 @@
         $("#skMunicipioMX").select2({placeholder: "MUNICIPIO", allowClear: true });
         
         events = <?php echo (!empty($data['calendario']) ? json_encode($data['calendario']) : json_encode([])); ?>;
-        console.log(events);
         
         $('#calendar').fullCalendar({
             height : 700,
@@ -189,7 +187,7 @@
         
         listarProcesos();
 
-        $("body").delegate( "a.procesoItem", "click", function() {
+        $("body").delegate("a.procesoItem", "click", function() {
             $("a.procesoItem").removeClass('active');
             $(this).addClass('active');
             var proceso = this.getAttribute("data-proceso");
@@ -244,29 +242,29 @@
   
     function filtrarCalendario(conf){
         var sClaveCategoriaCita = conf.id; 
-        historico = 0;
-        if($('#historico').prop('checked')){
-            historico = 1;
+        iFiltroHistorico = 0;
+        if($('#iFiltroHistorico').prop('checked')){
+            iFiltroHistorico = 1;
         }
         $.ajax({
             url: window.location.href,
             type: 'POST',
             data: {
-                axn: 'filtrar',
+                axn: 'getDatos',
                 sClaveCategoriaCita: sClaveCategoriaCita,
-                eArea : $("#eArea").val(),
-                eDepartamentos : $("#eDepartamentos").val(),
-                eEmpleado : $("#eEmpleado").val(),
-                eJefeInmediato : $("#eJefeInmediato").val(),
-                historico : historico
+                iFolioCita : $("#iFolioCita").val(),
+                sNombre : $("#sNombre").val(),
+                skEmpresaSocioCliente : $("#skEmpresaSocioCliente").val(),
+                skEstadoMX : $("#skEstadoMX").val(),
+                skMunicipioMX : $("#skMunicipioMX").val(),
+                iFiltroHistorico : iFiltroHistorico
             },
             cache: false,
             processData: true,
             beforeSend: function () {},
-
             success: function (response) {
                 if (response.success == true) {
-                    events = response.datos;
+                    events = response.calendario;
 
                     swal.close();
                     toastr.success("Filtro Realizado Correctamente", 'Enviado');
@@ -287,11 +285,11 @@
                                     }
                                  }
                         });
-                        $("#AUSENCIA2").html(response.nSolicitudes.permisoAusencia.nAusencia);
-                        $("#VACACIONES2").html(response.nSolicitudes.vacaciones.nVacaciones);
-                        $("#CAPACITACIONES2").html(response.nSolicitudes.capacitaciones.nCapacitaciones);
-                        $("#INCAPACIDADES2").html(response.nSolicitudes.incapacidades.nIncapacidades);
-                        $("#DEFAULT2").html(response.nSolicitudes.permisoAusencia.nAusencia + response.nSolicitudes.vacaciones.nVacaciones + response.nSolicitudes.incapacidades.nIncapacidades + response.nSolicitudes.capacitaciones.nCapacitaciones);
+                        //$("#AUSENCIA2").html(response.nSolicitudes.permisoAusencia.nAusencia);
+                        //$("#VACACIONES2").html(response.nSolicitudes.vacaciones.nVacaciones);
+                        //$("#CAPACITACIONES2").html(response.nSolicitudes.capacitaciones.nCapacitaciones);
+                        //$("#INCAPACIDADES2").html(response.nSolicitudes.incapacidades.nIncapacidades);
+                        //$("#DEFAULT2").html(response.nSolicitudes.permisoAusencia.nAusencia + response.nSolicitudes.vacaciones.nVacaciones + response.nSolicitudes.incapacidades.nIncapacidades + response.nSolicitudes.capacitaciones.nCapacitaciones);
                     return true;
                 } else {
                     toastr.clear();

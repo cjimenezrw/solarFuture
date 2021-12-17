@@ -130,6 +130,10 @@ Class Cita_Controller Extends Cita_Model {
                 header('Content-Type: application/json');
                 echo json_encode($cita_cale->get_cliente());
                 break;
+            case 'getDatos':
+                header('Content-Type: application/json');
+                echo json_encode($cita_cale->getDatos());
+                break;
             default:
                 $this->load_view('cita_cale', $cita_cale->getDatos());
                 break;

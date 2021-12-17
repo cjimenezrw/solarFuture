@@ -148,9 +148,39 @@
                                 <span><?php echo (!empty($data['datos']['sInstruccionesServicio']) ? $data['datos']['sInstruccionesServicio'] : '-'); ?></span>
                             </div>
                         </div>
-                    
-                    </div>
 
+                        <div class="col-lg-12 col-md-12 clearfix"><hr></div>
+
+
+                        <div class="col-lg-4 col-md-4">
+                            <div class="input-group margin-top-20"> <span class="input-group-addon">FILTRAR</span>
+                                <input type="text" id="inputFilter" onkeyup="searchFilter();" class="form-control" autocomplete="off" placeholder="ESCRIBE AQUÍ...">
+                            </div>
+                            <table class="table table-bordered searchable">
+                                <thead>
+                                    <th class="" style="text-align:center;">#</th>
+                                    <th class="" style="text-align:center;">NOMBRE</th>
+                                </thead>
+                                <tbody >
+                                    <?php
+                                        if (!empty($data['citas_personal'])){
+                                            $i = 1;
+                                            foreach ($data['citas_personal'] AS $row) {
+                                    ?>
+                                            <tr>
+                                                <td style="text-align:center;"><?php echo $i; ?></td>
+                                                <td style="text-align:center;"><?php echo $row['nombre']; ?></td>
+                                            </tr>
+                                    <?php
+                                        $i++;
+                                            }//ENDFOREACH
+                                        }//ENDIF
+                                    ?>	
+                                </tbody>
+                            </table>
+                        </div>
+
+                    </div>
                 </div>
             </div>
         </div>
@@ -163,4 +193,12 @@
     $(document).ready(function () {
         $('#mowi').iziModal('setBackground', '#f1f4f5');
     });
+
+    function searchFilter() {
+        var rex = new RegExp($("#inputFilter").val(), 'i');
+        $('.searchable tr').hide();
+        $('.searchable tr').filter(function () {
+            return rex.test($(this).text());
+        }).show();
+    }
 </script>

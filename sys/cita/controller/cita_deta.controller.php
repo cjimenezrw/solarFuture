@@ -35,6 +35,10 @@ Class Cita_deta_Controller Extends Cita_Model {
                 'skCita'=>$this->cita['skCita']
             ]);
 
+            $this->data['citas_personal'] = parent::_get_citas_personal([
+                'skCita'=>$this->cita['skCita']
+            ]);
+
             $this->data['cat_municipiosMX'] = parent::_get_cat_municipiosMX([
                 'skEstadoMX'=>$this->data['datos']['skEstadoMX'],
                 'skEstatus'=>'AC'

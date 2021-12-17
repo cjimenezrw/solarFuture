@@ -285,6 +285,34 @@ Class Cita_Model Extends DLOREAN_Model {
         return $records;
     }
 
+    public function _get_citas_personal($params = []){
+        $sql = "SELECT 
+            per.skUsuarioPersonal,
+            CONCAT(u.sNombre,' ',u.sApellidoPaterno,' ',u.sApellidoMaterno) AS nombre
+        FROM rel_citas_personal per
+        INNER JOIN cat_usuarios u ON u.skUsuario = per.skUsuario
+        WHERE per.skEstatus = 'AC' ";
+
+        if(isset($params['skCita']) && !empty($params['skCita'])){
+            $sql .= " AND per.skCita = ".escape($params['skCita']);
+        }
+
+        $result = Conn::query($sql);
+        if(is_array($result) && isset($result['success']) && $result['success'] != 1){
+            return $result;
+        }
+
+        if(isset($params['skCita']) && !empty($params['skCita'])){
+            $records = Conn::fetch_assoc($result);
+        }else{
+            $records = Conn::fetch_assoc_all($result);
+        }
+
+        utf8($records, FALSE);
+        return $records;
+
+    }
+
     public function stp_cita_agendar(){
         $sql = "CALL stp_cita_agendar (
             ".escape(isset($this->cita['skCita']) ? $this->cita['skCita'] : NULL).",
@@ -300,6 +328,7 @@ Class Cita_Model Extends DLOREAN_Model {
             ".escape(isset($this->cita['skMunicipioMX']) ? $this->cita['skMunicipioMX'] : NULL).",
             ".escape(isset($this->cita['sDomicilio']) ? $this->cita['sDomicilio'] : NULL).",
             ".escape(isset($this->cita['sObservaciones']) ? $this->cita['sObservaciones'] : NULL).",
+            ".escape(isset($this->cita['skUsuarioPersonal']) ? $this->cita['skUsuarioPersonal'] : NULL).",
             ".escape(isset($this->cita['sInstruccionesServicio']) ? $this->cita['sInstruccionesServicio'] : NULL).",
             ".escape(isset($this->cita['skUsuarioConfirmacion']) ? $this->cita['skUsuarioConfirmacion'] : NULL).",
 

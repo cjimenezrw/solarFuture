@@ -37,9 +37,16 @@ Class Cita_conf_Controller Extends Cita_Model {
 
             $this->cita['skCita'] = (isset($_GET['p1']) ? $_GET['p1'] : NULL);  
 
-        // guardar_actaEntrega 
+        // guardar_agendarCita 
             $guardar_cita = $this->guardar_agendarCita();
             if(!$guardar_cita['success']){
+                Conn::rollback($this->idTran);
+                return $this->data;
+            }
+
+        // confirmar_cita_personal 
+            $confirmar_cita_personal = $this->confirmar_cita_personal();
+            if(!$confirmar_cita_personal['success']){
                 Conn::rollback($this->idTran);
                 return $this->data;
             }
@@ -165,6 +172,38 @@ Class Cita_conf_Controller Extends Cita_Model {
         return $this->data;
     }
 
+    public function confirmar_cita_personal(){
+        $this->data['success'] = TRUE;
+
+        // BORRAMOS EL PERSONAL ACTUAL DE LA CITA //
+            $this->cita['axn'] = 'delete_cita_personal';
+            $stp_cita_agendar = parent::stp_cita_agendar();
+            if(!$stp_cita_agendar || isset($stp_cita_agendar['success']) && $stp_cita_agendar['success'] != 1){
+                $this->data['success'] = FALSE;
+                $this->data['message'] = 'HUBO UN ERROR AL GUARDAR LA CITA';
+                return $this->data;
+            }
+
+        // GUARDAMOS EL PERSONAL DE LA CITA //
+            $this->cita['axn'] = 'confirmar_cita_personal';
+            $this->cita['skEstatus'] = 'AC';
+            foreach($this->cita['citas_personal'] AS $k=>$v){
+                $this->cita['skUsuarioPersonal'] = $v;
+                
+                $stp_cita_agendar = parent::stp_cita_agendar();
+                if(!$stp_cita_agendar || isset($stp_cita_agendar['success']) && $stp_cita_agendar['success'] != 1){
+                    $this->data['success'] = FALSE;
+                    $this->data['message'] = 'HUBO UN ERROR AL GUARDAR LA CITA';
+                    return $this->data;
+                }
+
+            }
+
+        $this->data['success'] = TRUE;
+        $this->data['message'] = 'DATOS DE CITA GUARDADOS';
+        return $this->data;
+    }
+
     public function get_horarios_disponibles(){
         $this->data = ['success' => TRUE, 'message' => 'HORARIOS DISPONIBLES CARGADOS', 'datos' => NULL];
 
@@ -202,6 +241,33 @@ Class Cita_conf_Controller Extends Cita_Model {
         return $this->data;
     }
 
+    public function get_personal(){
+        $this->cita['nombre'] = (isset($_POST['val']) && !empty($_POST['val'])) ? $_POST['val'] : NULL;
+
+        $sql = "SELECT N1.* FROM (
+            SELECT
+                u.skUsuario AS id,CONCAT(u.sNombre,' ',u.sApellidoPaterno,' ',u.sApellidoMaterno) AS nombre
+            FROM cat_usuarios u 
+                WHERE u.skEstatus = 'AC'
+            ) AS N1 ";
+
+        if(isset($this->cita['nombre']) && !empty(trim($this->cita['nombre']))){
+            $sql .= " AND N1.nombre LIKE '%".escape($this->cita['nombre'],FALSE)."%' ";
+        }
+
+        $sql .= " LIMIT 10 ";
+
+        $result = Conn::query($sql);
+        if(is_array($result) && isset($result['success']) && $result['success'] != 1){
+            return $result;
+        }
+
+        $records = Conn::fetch_assoc_all($result);
+        utf8($records, FALSE);
+        return $records;
+
+    }
+
     public function getDatos() {
         $this->data = ['success' => TRUE, 'message' => NULL, 'datos' => NULL];
         $this->cita['skCita'] = (isset($_GET['p1']) && !empty($_GET['p1'])) ? $_GET['p1'] : NULL;
@@ -217,6 +283,10 @@ Class Cita_conf_Controller Extends Cita_Model {
         if(!empty($this->cita['skCita'])){
             
             $this->data['datos'] = parent::_get_citas([
+                'skCita'=>$this->cita['skCita']
+            ]);
+            
+            $this->data['citas_personal'] = parent::_get_citas_personal([
                 'skCita'=>$this->cita['skCita']
             ]);
 

@@ -164,6 +164,27 @@
                         </div>
 
                         <div class="col-lg-12 col-md-12 clearfix"></div>
+                        
+                        <div class="col-lg-4 col-md-4">
+                            <div class="form-group">
+                                <h4 class="example-title"><span style="color:red;">* </span>PERSONAL ASIGNADO:</h4>
+                                <div class="select2-primary">
+                                    <select name="citas_personal[]" id="citas_personal" class="form-control select2" multiple="multiple" data-plugin="select2" data-ajax--cache="true">
+                                        <?php
+                                            if (!empty($data['citas_personal'])) {
+                                                foreach ($data['citas_personal'] as $row) {
+                                        ?>
+                                            <option selected="selected" value="<?php echo $row['skUsuarioPersonal']; ?>"><?php echo $row['sNombrePersonal']; ?></option>
+                                        <?php
+                                                }//ENDWHILE
+                                            }//ENDIF
+                                        ?>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="col-lg-12 col-md-12 clearfix"></div>
 
                         <div class="col-lg-12 col-md-12">
                             <div class="form-group">
@@ -190,6 +211,12 @@
         $("#skCategoriaCita").select2({placeholder: "CATEGORIA", allowClear: true });
         $("#skEstadoMX").select2({placeholder: "ESTADO", allowClear: true });
         $("#skMunicipioMX").select2({placeholder: "MUNICIPIO", allowClear: true });
+        core.autocomplete2('#skCitaPersonal', 'get_personal', window.location.href, 'PERSONAL ASIGNADO', {
+            skCategoriaCita: $('#skCategoriaCita'),
+            skEstadoMX: $('#skEstadoMX'),
+            skMunicipioMX: $('#skMunicipioMX'),
+            dFechaCita: $('#dFechaCita')
+        });
 
         $(".input-datepicker").datepicker({
             format: "dd/mm/yyyy"

@@ -1,13 +1,10 @@
 
 <?php
-    if (isset($data['datos'])) {
-        $result = $data['datos'];
-        
-    }
+    //exit('<pre>'.print_r($data['cat_citas_categorias'],1).'</pre>');
 ?>
 
 <div class="row">
-        <input type="hidden" name="skTipoProceso"  id="skTipoProceso" value="DEFAULT">
+        <input type="hidden" name="sClaveCategoriaCita"  id="sClaveCategoriaCita" value="DEFAULT">
 
         <!--CONSIDERACIONES-->
         <div class="panel-bordered panel-primary panel-line col-lg-12 col-md-12 col-sm-12 col-xs-12 fast-filter" hidden>
@@ -85,78 +82,80 @@
 
 <script type="text/javascript">
     
-    rehu.cale_inde.procesos = <?php echo ($data['datos']['procesos']) ? json_encode($data['datos']['procesos']) : json_encode([]); ?>;
-    
-     function listarProcesos(){
+    cita.cita_cale.procesos = <?php echo (!empty($data['cat_citas_categorias']) ? json_encode($data['cat_citas_categorias']) : json_encode([])); ?>;
+    console.log(cita.cita_cale.procesos);
+
+    function listarProcesos(){
         var procesos = '<section class="page-aside-section"><div class="list-group menuProcesoItems"><h4 class="page-aside-title"><i class="fas fa-calendar"></i> Eventos</h4><hr>';
         
-        $.each(rehu.cale_inde.procesos, function(k,v){
+        $.each(cita.cita_cale.procesos, function(k,v){
             color = '';
-            nSolicitudes = '';
+            iCantidadCitas = '';
             linea = '';
-            switch(v.skTipoProceso){
+            switch(v.sClaveCategoriaCita){
                 case 'MANTEN':
-                    color = '#05A85C';
-                    nSolicitudes = <?php echo ($data['datos']['nSolicitudes']['vacaciones']['nVacaciones']) ? json_encode($data['datos']['nSolicitudes']['vacaciones']['nVacaciones']) : json_encode([0]); ?>;
+                    color = v.sColorCategoria;
+                    iCantidadCitas = v.iCantidadCitas;
                     linea = '';
                 break;
                 case 'REVISI':
-                    color = '#3e8ef7';
-                    nSolicitudes = <?php echo ($data['datos']['nSolicitudes']['permisoAusencia']['nAusencia']) ? json_encode($data['datos']['nSolicitudes']['permisoAusencia']['nAusencia']) : json_encode([0]); ?>;
+                    color = v.sColorCategoria;
+                    iCantidadCitas = v.iCantidadCitas;
                     linea = '';
                 break;
                 case 'INSTAL':
-                    color = '#ff4c52';
-                    nSolicitudes = <?php echo ($data['datos']['nSolicitudes']['capacitaciones']['nCapacitaciones']) ? json_encode($data['datos']['nSolicitudes']['capacitaciones']['nCapacitaciones']) : json_encode([0]); ?>;
+                    color = v.sColorCategoria;
+                    iCantidadCitas = v.iCantidadCitas;
                     linea = '';
                 break;
                 default:
                     color = 'black';
-                    nSolicitudes = <?php echo ($data['datos']['nSolicitudes']) ? json_encode($data['datos']['nSolicitudes']['capacitaciones']['nCapacitaciones']+$data['datos']['nSolicitudes']['permisoAusencia']['nAusencia']+$data['datos']['nSolicitudes']['incapacidades']['nIncapacidades']+$data['datos']['nSolicitudes']['vacaciones']['nVacaciones']) : json_encode([0]); ?>;
+                    iCantidadCitas = 0;
                     linea = '<br>';
                 break;
             }
 
-           procesos += '<a id="'+v.skTipoProceso+'" class="list-group-item procesoItem" onclick="filtrarCalendario(this)"  href="javascript:void(0)" data-skTipoProceso="' + v.skTipoProceso + '" data-proceso="' + v.sNombre + '" ><i class="icon fa fa-circle" style="color:'+color+'" aria-hidden="true"></i> ' + v.sNombre+' (<span id="'+v.skTipoProceso+'2">'+nSolicitudes+'</span>)' + '</a>'+linea;
+           procesos += '<a id="'+v.sClaveCategoriaCita+'" class="list-group-item procesoItem" onclick="filtrarCalendario(this)"  href="javascript:void(0)" data-sClaveCategoriaCita="' + v.sClaveCategoriaCita + '" data-proceso="' + v.sNombreCategoria + '" ><i class="icon fa fa-circle" style="color:'+color+'" aria-hidden="true"></i> ' + v.sNombreCategoria+' (<span id="'+v.sClaveCategoriaCita+'2">'+iCantidadCitas+'</span>)' + '</a>'+linea;
         });
         procesos += '</div></section>';
         core.page_aside_content(procesos);
     }
 
     $(document).ready(function(){
-        core.autocomplete2('#eDepartamentos', 'getDepartamentos', window.location.href, 'Departamentos');
-        core.autocomplete2('#eArea', 'getAreas', window.location.href, 'Área');
-        core.autocomplete2('#eEmpleado', 'getEmpleados', window.location.href, 'Empleado');
-        core.autocomplete2('#eJefeInmediato', 'getJefeInmediato', window.location.href, 'Jefe Inmediato');
-        datosDefault = <?php echo ($data['datos']['datos']) ? json_encode($data['datos']['datos']) : json_encode([]); ?>;
+        //core.autocomplete2('#eDepartamentos', 'getDepartamentos', window.location.href, 'Departamentos');
+        //core.autocomplete2('#eArea', 'getAreas', window.location.href, 'Área');
+        //core.autocomplete2('#eEmpleado', 'getEmpleados', window.location.href, 'Empleado');
+        //core.autocomplete2('#eJefeInmediato', 'getJefeInmediato', window.location.href, 'Jefe Inmediato');
+        
+        events = <?php echo (!empty($data['calendario']) ? json_encode($data['calendario']) : json_encode([])); ?>;
 
-        events = datosDefault;
-
-	$('#calendar').fullCalendar({
+        $('#calendar').fullCalendar({
             height : 700,
             width  : 650,
             locale: 'es',
-		header:{
-		     left: null,
-             center: 'prev,title,next',
-		     right: 'month,agendaWeek,agendaDay'
-		},
-        events,
-        eventClick: function(info) {
-            if(typeof info.sURL !== 'undefined'){
-               core.menuLoadModule({skModulo: info.skModulo, url: info.sURL, skComportamiento: 'MOWI', id: info.id });
+            header:{
+                left: null,
+                center: 'prev,title,next',
+                right: 'month,agendaWeek,agendaDay'
+            },
+            events,
+            eventClick: function(info) {
+                if(typeof info.sURL !== 'undefined'){
+                    core.menuLoadModule({skModulo: info.skModulo, url: info.sURL, skComportamiento: 'MOWI', id: info.id });
+                }
             }
-        }
-	});
+        });
+        
         listarProcesos();
+
         $("body").delegate( "a.procesoItem", "click", function() {
             $("a.procesoItem").removeClass('active');
             $(this).addClass('active');
             var proceso = this.getAttribute("data-proceso");
-            var skTipoProceso = this.getAttribute("data-skTipoProceso");
-            $("#skTipoProceso").val(skTipoProceso);
+            var sClaveCategoriaCita = this.getAttribute("data-sClaveCategoriaCita");
+            $("#sClaveCategoriaCita").val(sClaveCategoriaCita);
             $("#procesoName").html(proceso);
-            $("#"+skTipoProceso).css("display","block");
+            $("#"+sClaveCategoriaCita).css("display","block");
         });
 
         $('[data-plugin="switchery"]').each(function () {
@@ -165,10 +164,11 @@
                 size: $(this).data('size')
             });
         });
+
     });
   
     function filtrarCalendario(conf){
-        var skTipoProceso = conf.id; 
+        var sClaveCategoriaCita = conf.id; 
         historico = 0;
         if($('#historico').prop('checked')){
             historico = 1;
@@ -178,7 +178,7 @@
             type: 'POST',
             data: {
                 axn: 'filtrar',
-                skTipoProceso: skTipoProceso,
+                sClaveCategoriaCita: sClaveCategoriaCita,
                 eArea : $("#eArea").val(),
                 eDepartamentos : $("#eDepartamentos").val(),
                 eEmpleado : $("#eEmpleado").val(),
@@ -228,10 +228,10 @@
     }
     
     function limpiarFiltro(conf){
-        $('#eDepartamentos').empty();
-        $('#eArea').empty();
-        $('#eEmpleado').empty();
-        $('#eJefeInmediato').empty();
+        //$('#eDepartamentos').empty();
+        //$('#eArea').empty();
+        //$('#eEmpleado').empty();
+        //$('#eJefeInmediato').empty();
 
         filtrarCalendario($('#DEFAULT'));
     }

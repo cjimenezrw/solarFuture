@@ -4,6 +4,7 @@ var cita = {};
 cita.cita_inde = {};
 cita.cita_form = {};
 cita.cita_conf = {};
+cita.cita_cale = {};
 
 // CÓDIGO //
 

@@ -208,6 +208,7 @@ class AssetLoader
 
                     ASSETS_PATH . ASSETS_VERSION . '/custom/tour/anno.js',
 
+                    ASSETS_PATH . ASSETS_VERSION . '/tpl/global/vendor/moment/moment.min.js',
                     ASSETS_PATH . ASSETS_VERSION . '/tpl/global/vendor/fullcalendar/fullcalendar.min.js',
                     ASSETS_PATH . ASSETS_VERSION . '/tpl/global/vendor/fullcalendar/lang/es.js',
 

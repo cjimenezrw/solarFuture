@@ -197,6 +197,9 @@ Class Cita_Model Extends DLOREAN_Model {
             cit.sInstruccionesServicio,
             cit.skUsuarioConfirmacion,
             cit.dFechaConfirmacion,
+            cit.sObservacionesFinalizacion,
+            cit.skUsuarioFinalizacion,
+            cit.dFechaFinalizacion,
             cit.sObservacionesCancelacion,
             cit.skUsuarioCancelacion,
             cit.dFechaCancelacion,
@@ -216,6 +219,7 @@ Class Cita_Model Extends DLOREAN_Model {
             CONCAT(uCre.sNombre,' ',uCre.sApellidoPaterno,' ',uCre.sApellidoMaterno) AS usuarioCreacion,
             CONCAT(uMod.sNombre,' ',uMod.sApellidoPaterno,' ',uMod.sApellidoMaterno) AS usuarioModificacion,
             CONCAT(uConf.sNombre,' ',uConf.sApellidoPaterno,' ',uConf.sApellidoMaterno) AS usuarioConfirmacion,
+            CONCAT(uFin.sNombre,' ',uFin.sApellidoPaterno,' ',uFin.sApellidoMaterno) AS usuarioFinalizacion,
             CONCAT(uCan.sNombre,' ',uCan.sApellidoPaterno,' ',uCan.sApellidoMaterno) AS usuarioCancelacion,
             e.sNombre AS empresaCliente,
             e.sRFC AS empresaRFC
@@ -227,6 +231,7 @@ Class Cita_Model Extends DLOREAN_Model {
             INNER JOIN cat_usuarios uCre ON uCre.skUsuario = cit.skUsuarioCreacion
             LEFT JOIN cat_usuarios uMod ON uMod.skUsuario = cit.skUsuarioModificacion
             LEFT JOIN cat_usuarios uConf ON uConf.skUsuario = cit.skUsuarioConfirmacion
+            LEFT JOIN cat_usuarios uFin ON uFin.skUsuario = cit.skUsuarioFinalizacion
             LEFT JOIN cat_usuarios uCan ON uCan.skUsuario = cit.skUsuarioCancelacion
             LEFT JOIN rel_empresasSocios es ON es.skEmpresaSocio = cit.skEmpresaSocioCliente
             LEFT JOIN cat_empresas e ON e.skEmpresa = es.skEmpresa

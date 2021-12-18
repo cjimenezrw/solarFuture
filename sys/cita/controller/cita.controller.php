@@ -35,6 +35,10 @@ Class Cita_Controller Extends Cita_Model {
                 header('Content-Type: application/json');
                 echo json_encode($cita_inde->cancelar(),true,512);
                 break;
+            case 'finalizar':
+                header('Content-Type: application/json');
+                echo json_encode($cita_inde->finalizar(),true,512);
+                break;
             default:
                 $this->load_view('cita_inde');
                 break;

@@ -151,8 +151,32 @@
 
                         <div class="col-lg-12 col-md-12 clearfix"><hr></div>
 
+                        <div class="col-lg-4 col-md-4">
+                            <div class="form-group">
+                                <h4 class="example-title">OBSERVACIONES FINALIZACIÓN:</h4>
+                                <span><?php echo (!empty($data['datos']['sObservacionesFinalizacion']) ? $data['datos']['sObservacionesFinalizacion'] : '-'); ?></span>
+                            </div>
+                        </div>
 
                         <div class="col-lg-4 col-md-4">
+                            <div class="form-group">
+                                <h4 class="example-title">USUARIO FINALIZACIÓN:</h4>
+                                <span><?php echo (!empty($data['datos']['usuarioFinalizacion']) ? $data['datos']['usuarioFinalizacion'] : '-'); ?></span>
+                            </div>
+                        </div>
+
+                        <div class="col-lg-4 col-md-4">
+                            <div class="form-group">
+                                <h4 class="example-title">FECHA FINALIZACIÓN:</h4>
+                                <span><?php echo (!empty($data['datos']['dFechaFinalizacion']) ? date('d/m/Y H:i:s', strtotime($data['datos']['dFechaFinalizacion'])) : '-'); ?></span>
+                            </div>
+                        </div>
+
+                        <div class="col-lg-12 col-md-12 clearfix"><hr></div>
+
+
+                        <div class="col-lg-4 col-md-4">
+                            <h4 class="example-title">PERSONAL ASIGNADO:</h4>
                             <div class="input-group margin-top-20"> <span class="input-group-addon">FILTRAR</span>
                                 <input type="text" id="inputFilter" onkeyup="searchFilter();" class="form-control" autocomplete="off" placeholder="ESCRIBE AQUÍ...">
                             </div>
@@ -174,6 +198,12 @@
                                     <?php
                                         $i++;
                                             }//ENDFOREACH
+                                        }else{
+                                    ?>	
+                                        <tr>
+                                            <td style="text-align:center;" colspan="2">- PERSONAL SIN ASIGNAR -</td>
+                                        </tr>
+                                    <?php
                                         }//ENDIF
                                     ?>	
                                 </tbody>

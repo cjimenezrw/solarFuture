@@ -65,6 +65,42 @@ cita.cita_inde.dataTableConf = {
     ]
 };
 
+cita.cita_inde.finalizar = function finalizar(obj) {
+    swal({
+        title: "¡Advertencia!",
+        text: "¿Está¡ seguro que desea finalizar el registro?",
+        type: "input",
+        showCancelButton: true,
+        confirmButtonColor: "#DD6B55",
+        confirmButtonText: "Si, Finalizar",
+        closeOnConfirm: false,
+        inputPlaceholder: "Observaciones"
+    },
+    function (inputValue) {
+        if (inputValue === false) return false;
+        $.ajax({
+            url: window.location.href,
+            type: 'POST',
+            global: false,
+            data: {
+                axn: 'finalizar',
+                id: obj.id,
+                sObservaciones: inputValue
+            },
+            cache: false,
+            processData: true,
+            success: function (response) {
+                if (response.success) {
+                    swal("¡Listo!", "El registro ha sido finalizado con éxito", "success");
+                    core.dataTable.sendFilters(true);
+                    return true;
+                }
+                swal("¡Error!", response.message, "error");
+            }
+        });
+    });
+};
+
 cita.cita_form.validaciones = {
     skCategoriaCita: {
         validators: {

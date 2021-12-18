@@ -57,6 +57,8 @@ Class Cita_inde_Controller Extends Cita_Model {
             CONCAT(uCre.sNombre,' ',uCre.sApellidoPaterno,' ',uCre.sApellidoMaterno) AS usuarioCreacion,
             CONCAT(uMod.sNombre,' ',uMod.sApellidoPaterno,' ',uMod.sApellidoMaterno) AS usuarioModificacion,
             CONCAT(uConf.sNombre,' ',uConf.sApellidoPaterno,' ',uConf.sApellidoMaterno) AS usuarioConfirmacion,
+            CONCAT(uFin.sNombre,' ',uFin.sApellidoPaterno,' ',uFin.sApellidoMaterno) AS usuarioFinalizacion,
+            CONCAT(uCan.sNombre,' ',uCan.sApellidoPaterno,' ',uCan.sApellidoMaterno) AS usuarioCancelacion,
             e.sNombre AS empresaCliente,
             e.sRFC AS empresaRFC
             FROM ope_citas cit
@@ -67,6 +69,8 @@ Class Cita_inde_Controller Extends Cita_Model {
             INNER JOIN cat_usuarios uCre ON uCre.skUsuario = cit.skUsuarioCreacion
             LEFT JOIN cat_usuarios uMod ON uMod.skUsuario = cit.skUsuarioModificacion
             LEFT JOIN cat_usuarios uConf ON uConf.skUsuario = cit.skUsuarioConfirmacion
+            LEFT JOIN cat_usuarios uFin ON uFin.skUsuario = cit.skUsuarioFinalizacion
+            LEFT JOIN cat_usuarios uCan ON uCan.skUsuario = cit.skUsuarioCancelacion
             LEFT JOIN rel_empresasSocios es ON es.skEmpresaSocio = cit.skEmpresaSocioCliente
             LEFT JOIN cat_empresas e ON e.skEmpresa = es.skEmpresa
             WHERE 1=1 ";
@@ -100,11 +104,12 @@ Class Cita_inde_Controller Extends Cita_Model {
                 */
                 $regla = [
                     'menuEmergente1'=>($row['skEstatus'] == 'PE' ? SELF::HABILITADO : SELF::DESHABILITADO),
-                    'menuEmergente2'=>($row['skEstatus'] != 'CA' ? SELF::HABILITADO : SELF::DESHABILITADO),
+                    'menuEmergente2'=>(!in_array($row['skEstatus'], ['CA','FI']) ? SELF::HABILITADO : SELF::DESHABILITADO),
                     //'menuEmergente3'=>($row['skEstatus'] == 'CF' ? SELF::HABILITADO : SELF::DESHABILITADO),
                     'menuEmergente3'=>SELF::OCULTO,
-                    'menuEmergente4'=>($row['skEstatus'] != 'CA' ? SELF::HABILITADO : SELF::DESHABILITADO),
-                    'menuEmergente5'=>SELF::HABILITADO
+                    'menuEmergente4'=>(!in_array($row['skEstatus'], ['CA','FI']) ? SELF::HABILITADO : SELF::DESHABILITADO),
+                    'menuEmergente5'=>(in_array($row['skEstatus'], ['CF']) ? SELF::HABILITADO : SELF::DESHABILITADO),
+                    'menuEmergente6'=>SELF::HABILITADO
                 ];
             
             // FORMATEO DE DATOS //
@@ -138,6 +143,24 @@ Class Cita_inde_Controller Extends Cita_Model {
         if(!$stp_cita_agendar || isset($stp_cita_agendar['success']) && $stp_cita_agendar['success'] != 1){
             $this->data['success'] = FALSE;
             $this->data['message'] = 'HUBO UN ERROR AL CANCELAR EL REGISTRO';
+            return $this->data;
+        }
+
+        return $this->data;
+    }
+
+    public function finalizar(){
+        $this->data = ['success' => TRUE, 'message' => NULL, 'datos' => NULL];
+
+        $this->cita['axn'] = 'finalizar_cita';
+        $this->cita['skCita'] = (isset($_POST['id']) && !empty($_POST['id'])) ? $_POST['id'] : NULL;
+        $this->cita['sObservaciones'] = (isset($_POST['sObservaciones']) && !empty($_POST['sObservaciones'])) ? $_POST['sObservaciones'] : NULL;
+        $this->cita['skEstatus'] = 'FI';
+
+        $stp_cita_agendar = parent::stp_cita_agendar();  
+        if(!$stp_cita_agendar || isset($stp_cita_agendar['success']) && $stp_cita_agendar['success'] != 1){
+            $this->data['success'] = FALSE;
+            $this->data['message'] = 'HUBO UN ERROR AL FINALIZAR EL REGISTRO';
             return $this->data;
         }
 

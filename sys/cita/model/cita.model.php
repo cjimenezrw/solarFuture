@@ -268,6 +268,10 @@ Class Cita_Model Extends DLOREAN_Model {
             $sql .= " AND cit.sNombre LIKE '%".escape($params['sNombre'],FALSE)."%' ";
         }
 
+        if(!isset($params['iFiltroHistorico']) || empty($params['iFiltroHistorico'])){
+            //$sql .= " AND cit.dFechaCreacion >= NOW() ";
+        }
+
         $sql .= " ORDER BY cit.dFechaCreacion DESC; ";
 //exit('<pre>'.print_r($sql,1).'</pre>');
         $result = Conn::query($sql);

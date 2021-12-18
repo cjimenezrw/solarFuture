@@ -5,7 +5,7 @@
         <div class="panel-bordered panel-primary panel-line col-lg-12 col-md-12 col-sm-12 col-xs-12 fast-filter" hidden>
             <div class="widget widget-shadow">
                 <div class="panel-heading col-md-12">
-                    <div class="col-md-12">  <h3 class="panel-title">Filtros</h3> </div>
+                    <div class="col-md-12">  <h3 class="panel-title">FILTROS</h3> </div>
                     <ul class="panel-actions panel-actions-keep">
                     <li>
                         <button type="button" href="javascript:void(0);" onclick="filtrarCalendario($('#DEFAULT'))" class="btn btn-squared btn-outline ajax-popup-link 
@@ -15,12 +15,12 @@
                         <button type="button" href="javascript:void(0);" onclick="limpiarFiltro();" class="btn btn-squared btn-outline ajax-popup-link 
                         btn-info btn-sm"><i class="fas fa-eraser"></i> LIMPIAR</button>
                     </li> 
-                    <li>
+                    <!--<li>
                         <div class="form-group">    
                             <input type="checkbox" class="js-switch-large" id="iFiltroHistorico" name="iFiltroHistorico" value="1" data-plugin="switchery"  data-color="#4d94ff" />
                             <label for="iFiltroHistorico" class="text-dark"><b>HISTÓRICO</b></label>
                         </div>
-                    </li> 
+                    </li>!--> 
                 </ul>
                 </div>
                 <div class="panel-body container-fluid" id="filter">

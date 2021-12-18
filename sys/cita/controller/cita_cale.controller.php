@@ -68,7 +68,7 @@ Class Cita_cale_Controller Extends Cita_Model {
 
                 array_push($this->data['calendario'],[
                     'id'=>$row['skCita'],
-                    'title'=>$row['sNombre']."\n\r".date('H:i:s', strtotime($row['tHoraInicio']))." - ".date('H:i:s', strtotime($row['tHoraFin'])),
+                    'title'=>$row['iFolioCita']." - ".$row['sNombre']."\n\r".date('H:i:s', strtotime($row['tHoraInicio']))." - ".date('H:i:s', strtotime($row['tHoraFin'])),
                     'display'=>'background',
                     'start'=>$row['dFechaCita'],
                     'end'=>$row['dFechaCita'],

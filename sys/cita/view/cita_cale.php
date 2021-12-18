@@ -224,6 +224,7 @@
                         toastr.success(response.message, 'NOTIFICACIÓN');
                         
                         // RECORREMOS LOS MUNICIPIOS //
+                            $("#skMunicipioMX").html('');
                             let option = '<option value="">- SELECCIONAR -</option>';
                             $.each(response.cat_municipiosMX,function(k,v){
                                 option += '<option value="'+v.skMunicipioMX+'">'+v.sNombre+'</option>';

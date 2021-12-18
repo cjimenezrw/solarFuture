@@ -229,7 +229,7 @@ Class Cita_conf_Controller Extends Cita_Model {
     }
 
     public function get_cat_municipiosMX(){
-        $this->data = ['success' => TRUE, 'message' => 'HORARIOS DISPONIBLES CARGADOS', 'datos' => NULL];
+        $this->data = ['success' => TRUE, 'message' => 'MUNICIPIOS DISPONIBLES CARGADOS', 'datos' => NULL];
 
         $this->cita['skEstadoMX'] = (isset($_POST['skEstadoMX']) && !empty($_POST['skEstadoMX'])) ? $_POST['skEstadoMX'] : NULL;
 

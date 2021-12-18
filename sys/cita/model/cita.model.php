@@ -265,6 +265,10 @@ Class Cita_Model Extends DLOREAN_Model {
             $sql .= " AND cit.skMunicipioMX = " . escape($params['skMunicipioMX']);
         }
 
+        if(isset($params['skUsuarioPersonal']) && !empty($params['skUsuarioPersonal'])){
+            $sql .= " AND cit.skCita IN (SELECT skCita FROM rel_citas_personal WHERE skUsuarioPersonal IN (".mssql_where_in($params['skUsuarioPersonal']).")) ";
+        }
+
         if(isset($params['skEmpresaSocioCliente']) && !empty($params['skEmpresaSocioCliente'])){
             $sql .= " AND cit.skEmpresaSocioCliente = " . escape($params['skEmpresaSocioCliente']);
         }
@@ -278,7 +282,7 @@ Class Cita_Model Extends DLOREAN_Model {
         }
 
         $sql .= " ORDER BY cit.dFechaCreacion DESC; ";
-//exit('<pre>'.print_r($sql,1).'</pre>');
+        //exit('<pre>'.print_r($sql,1).'</pre>');
         $result = Conn::query($sql);
         if(is_array($result) && isset($result['success']) && $result['success'] != 1){
             return $result;

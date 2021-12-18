@@ -24,6 +24,7 @@ Class Cita_cale_Controller Extends Cita_Model {
         $this->cita['skCita'] = (isset($_POST['iFolioCita']) ? $_POST['iFolioCita'] : NULL);
         $this->cita['skEstadoMX'] = (isset($_POST['skEstadoMX']) ? $_POST['skEstadoMX'] : NULL);
         $this->cita['skMunicipioMX'] = (isset($_POST['skMunicipioMX']) ? $_POST['skMunicipioMX'] : NULL);
+        $this->cita['skUsuarioPersonal'] = (isset($_POST['skCitaPersonal_array']) ? $_POST['skCitaPersonal_array'] : NULL);
         $this->cita['iFiltroHistorico'] = (isset($_POST['iFiltroHistorico']) ? $_POST['iFiltroHistorico'] : 0);
         $this->cita['skEmpresaSocioCliente'] = (isset($_POST['skEmpresaSocioCliente']) ? $_POST['skEmpresaSocioCliente'] : NULL);
         $this->cita['sNombre'] = (isset($_POST['sNombre']) ? $_POST['sNombre'] : NULL);
@@ -35,6 +36,7 @@ Class Cita_cale_Controller Extends Cita_Model {
             'skCita'=>$this->cita['skCita'],
             'skEstadoMX'=>$this->cita['skEstadoMX'],
             'skMunicipioMX'=>$this->cita['skMunicipioMX'],
+            'skUsuarioPersonal'=>$this->cita['skUsuarioPersonal'],
             'skEmpresaSocioCliente'=>$this->cita['skEmpresaSocioCliente'],
             'sNombre'=>$this->cita['sNombre'],
             'iFiltroHistorico'=>$this->cita['iFiltroHistorico']
@@ -115,6 +117,33 @@ Class Cita_cale_Controller Extends Cita_Model {
         ]);
 
         return $this->data;
+    }
+
+    public function get_personal(){
+        $this->cita['nombre'] = (isset($_POST['val']) && !empty($_POST['val'])) ? $_POST['val'] : NULL;
+
+        $sql = "SELECT N1.* FROM (
+            SELECT
+                u.skUsuario AS id,CONCAT(u.sNombre,' ',u.sApellidoPaterno,' ',u.sApellidoMaterno) AS nombre
+            FROM cat_usuarios u 
+                WHERE u.skEstatus = 'AC'
+            ) AS N1 WHERE 1=1 ";
+
+        if(isset($this->cita['nombre']) && !empty(trim($this->cita['nombre']))){
+            $sql .= " AND N1.nombre LIKE '%".escape($this->cita['nombre'],FALSE)."%' ";
+        }
+
+        $sql .= " LIMIT 10 ";
+        
+        $result = Conn::query($sql);
+        if(is_array($result) && isset($result['success']) && $result['success'] != 1){
+            return $result;
+        }
+
+        $records = Conn::fetch_assoc_all($result);
+        utf8($records, FALSE);
+        return $records;
+
     }
     
     public function get_cat_municipiosMX(){

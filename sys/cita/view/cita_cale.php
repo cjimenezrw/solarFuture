@@ -15,6 +15,12 @@
                         <button type="button" href="javascript:void(0);" onclick="limpiarFiltro();" class="btn btn-squared btn-outline ajax-popup-link 
                         btn-info btn-sm"><i class="fas fa-eraser"></i> LIMPIAR</button>
                     </li> 
+                    <li>
+                        <div class="form-group">    
+                            <input type="checkbox" class="js-switch-large" id="iFiltroHistorico" name="iFiltroHistorico" value="1" data-plugin="switchery"  data-color="#4d94ff" />
+                            <label for="iFiltroHistorico" class="text-dark"><b>HISTÓRICO</b></label>
+                        </div>
+                    </li> 
                 </ul>
                 </div>
                 <div class="panel-body container-fluid" id="filter">
@@ -83,6 +89,18 @@
                                 </select>
                             </div>
                         </div>
+
+                        <div class="col-lg-4 col-md-4">
+                            <div class="form-group">
+                                <h4 class="example-title">PERSONAL ASIGNADO:</h4>
+                                <div class="select2-primary">
+                                    <select name="skCitaPersonal_array[]" id="skCitaPersonal_array" class="form-control select2" multiple="multiple" data-plugin="select2" data-ajax--cache="true">
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-lg-12 col-md-12 clearfix"></div>
 
                         <div class="col-lg-4 col-md-4">
                             <h4 class="example-title">HISTÓRICO</h4>
@@ -163,6 +181,7 @@
         core.autocomplete2('#iFolioCita', 'get_iFolioCita', window.location.href, 'FOLIO CITA');
         core.autocomplete2('#sNombre', 'get_sNombre', window.location.href, 'NOMBRE');
         core.autocomplete2('#skEmpresaSocioCliente', 'get_cliente', window.location.href, 'CLIENTE');
+        core.autocomplete2('#skCitaPersonal_array', 'get_personal', window.location.href, 'PERSONAL ASIGNADO', {});
         $("#skEstadoMX").select2({placeholder: "ESTADO", allowClear: true });
         $("#skMunicipioMX").select2({placeholder: "MUNICIPIO", allowClear: true });
         
@@ -258,6 +277,7 @@
                 skEmpresaSocioCliente : $("#skEmpresaSocioCliente").val(),
                 skEstadoMX : $("#skEstadoMX").val(),
                 skMunicipioMX : $("#skMunicipioMX").val(),
+                skCitaPersonal_array : $("#skCitaPersonal_array").val(),
                 iFiltroHistorico : iFiltroHistorico
             },
             cache: false,

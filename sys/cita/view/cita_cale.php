@@ -144,7 +144,7 @@
     
     function listarProcesos(iCantidadCitasTotal){
         
-        var procesos = '<section class="page-aside-section"><div class="list-group menuProcesoItems"><h4 class="page-aside-title"><i class="fas fa-calendar"></i> Eventos</h4><hr>';
+        var procesos = '<section class="page-aside-section"><div class="list-group menuProcesoItems"><h4 class="page-aside-title"><i class="fas fa-calendar"></i> CITAS</h4><hr>';
         
         procesos += '<a id="DEFAULT-CATEGORIA" class="list-group-item procesoItem" onclick="filtrarCalendario(this)"  href="javascript:void(0)" data-sClaveCategoriaCita="DEFAULT-CATEGORIA" data-proceso="DEFAULT-CATEGORIA"><i class="icon fa fa-circle" style="color:#000000" aria-hidden="true"></i> TODAS (<span>'+iCantidadCitasTotal+'</span>)</a><hr>';
 

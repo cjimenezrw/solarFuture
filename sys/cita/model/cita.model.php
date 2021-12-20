@@ -278,7 +278,7 @@ Class Cita_Model Extends DLOREAN_Model {
         }
 
         if(isset($params['iFiltroHistorico']) && $params['iFiltroHistorico'] == 0){
-            $sql .= " AND cit.dFechaCita >= NOW() ";
+            $sql .= " AND DATE_FORMAT(cit.dFechaCita,'%Y-%m-%d') >= DATE_FORMAT(NOW(),'%Y-%m-%d') ";
         }
 
         $sql .= " ORDER BY cit.dFechaCreacion DESC; ";

@@ -277,8 +277,8 @@ Class Cita_Model Extends DLOREAN_Model {
             $sql .= " AND cit.sNombre LIKE '%".escape($params['sNombre'],FALSE)."%' ";
         }
 
-        if(!isset($params['iFiltroHistorico']) || empty($params['iFiltroHistorico'])){
-            //$sql .= " AND cit.dFechaCreacion >= NOW() ";
+        if(isset($params['iFiltroHistorico']) && $params['iFiltroHistorico'] == 0){
+            $sql .= " AND cit.dFechaCita >= NOW() ";
         }
 
         $sql .= " ORDER BY cit.dFechaCreacion DESC; ";

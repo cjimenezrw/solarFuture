@@ -140,39 +140,21 @@
 <script type="text/javascript">
     
     cita.cita_cale.procesos = <?php echo (!empty($data['cat_citas_categorias']) ? json_encode($data['cat_citas_categorias']) : json_encode([])); ?>;
+    var iCantidadCitasTotal = <?php echo (!empty($data['iCantidadCitasTotal']) ? $data['iCantidadCitasTotal'] : 0); ?>;
     
-    function listarProcesos(){
+    function listarProcesos(iCantidadCitasTotal){
+        
         var procesos = '<section class="page-aside-section"><div class="list-group menuProcesoItems"><h4 class="page-aside-title"><i class="fas fa-calendar"></i> Eventos</h4><hr>';
         
-        $.each(cita.cita_cale.procesos, function(k,v){
-            color = '';
-            iCantidadCitas = '';
-            linea = '';
-            switch(v.sClaveCategoriaCita){
-                case 'MANTEN':
-                    color = v.sColorCategoria;
-                    iCantidadCitas = v.iCantidadCitas;
-                    linea = '';
-                break;
-                case 'REVISI':
-                    color = v.sColorCategoria;
-                    iCantidadCitas = v.iCantidadCitas;
-                    linea = '';
-                break;
-                case 'INSTAL':
-                    color = v.sColorCategoria;
-                    iCantidadCitas = v.iCantidadCitas;
-                    linea = '';
-                break;
-                default:
-                    color = 'black';
-                    iCantidadCitas = 0;
-                    linea = '<br>';
-                break;
-            }
+        procesos += '<a id="DEFAULT-CATEGORIA" class="list-group-item procesoItem" onclick="filtrarCalendario(this)"  href="javascript:void(0)" data-sClaveCategoriaCita="DEFAULT-CATEGORIA" data-proceso="DEFAULT-CATEGORIA"><i class="icon fa fa-circle" style="color:#000000" aria-hidden="true"></i> TODAS (<span>'+iCantidadCitasTotal+'</span>)</a><hr>';
 
-           procesos += '<a id="'+v.sClaveCategoriaCita+'" class="list-group-item procesoItem" onclick="filtrarCalendario(this)"  href="javascript:void(0)" data-sClaveCategoriaCita="' + v.sClaveCategoriaCita + '" data-proceso="' + v.sNombreCategoria + '" ><i class="icon fa fa-circle" style="color:'+color+'" aria-hidden="true"></i> ' + v.sNombreCategoria+' (<span id="'+v.sClaveCategoriaCita+'2">'+iCantidadCitas+'</span>)' + '</a>'+linea;
+        $.each(cita.cita_cale.procesos, function(k,v){
+            if(typeof v.iCantidadCitas === "undefined"){
+                v.iCantidadCitas = 0;
+            }
+           procesos += '<a id="'+v.sClaveCategoriaCita+'" class="list-group-item procesoItem" onclick="filtrarCalendario(this)"  href="javascript:void(0)" data-sClaveCategoriaCita="' + v.sClaveCategoriaCita + '" data-proceso="' + v.sNombreCategoria + '" ><i class="icon fa fa-circle" style="color:'+v.sColorCategoria+'" aria-hidden="true"></i> ' + v.sNombreCategoria+' (<span>'+v.iCantidadCitas+'</span>)</a>';
         });
+
         procesos += '</div></section>';
         core.page_aside_content(procesos);
     }
@@ -204,7 +186,7 @@
             }
         });
         
-        listarProcesos();
+        listarProcesos(iCantidadCitasTotal);
 
         $("body").delegate("a.procesoItem", "click", function() {
             $("a.procesoItem").removeClass('active');
@@ -262,10 +244,12 @@
   
     function filtrarCalendario(conf){
         var sClaveCategoriaCita = conf.id; 
+        
         iFiltroHistorico = 0;
         if($('#iFiltroHistorico').prop('checked')){
             iFiltroHistorico = 1;
         }
+
         $.ajax({
             url: window.location.href,
             type: 'POST',
@@ -282,8 +266,11 @@
             },
             cache: false,
             processData: true,
-            beforeSend: function () {},
+            beforeSend: function () {
+                toastr.info('CARGANDO CITAS <i class="fa fa-spinner faa-spin animated"></i>', 'NOTIFICACIÓN', {timeOut: false});
+            },
             success: function (response) {
+
                 if (response.success == true) {
                     events = response.calendario;
 
@@ -306,12 +293,12 @@
                                     }
                                  }
                         });
-                        //$("#AUSENCIA2").html(response.nSolicitudes.permisoAusencia.nAusencia);
-                        //$("#VACACIONES2").html(response.nSolicitudes.vacaciones.nVacaciones);
-                        //$("#CAPACITACIONES2").html(response.nSolicitudes.capacitaciones.nCapacitaciones);
-                        //$("#INCAPACIDADES2").html(response.nSolicitudes.incapacidades.nIncapacidades);
-                        //$("#DEFAULT2").html(response.nSolicitudes.permisoAusencia.nAusencia + response.nSolicitudes.vacaciones.nVacaciones + response.nSolicitudes.incapacidades.nIncapacidades + response.nSolicitudes.capacitaciones.nCapacitaciones);
-                    return true;
+
+                        cita.cita_cale.procesos = response.cat_citas_categorias;
+                        listarProcesos(response.iCantidadCitasTotal);
+
+                        return true;
+
                 } else {
                     toastr.clear();
                     swal("¡Error!", 'NO SE PUDO OBTENER DATOS', "error");

@@ -29,6 +29,10 @@ Class Cita_cale_Controller Extends Cita_Model {
         $this->cita['skEmpresaSocioCliente'] = (isset($_POST['skEmpresaSocioCliente']) ? $_POST['skEmpresaSocioCliente'] : NULL);
         $this->cita['sNombre'] = (isset($_POST['sNombre']) ? $_POST['sNombre'] : NULL);
         $this->cita['empleado'] = (isset($_POST['empleado']) ? $_POST['empleado'] : NULL);
+
+        if($this->cita['sClaveCategoriaCita'] == 'DEFAULT-CATEGORIA'){
+            $this->cita['sClaveCategoriaCita'] = NULL;
+        }
         
         $this->data['citas'] = parent::_get_citas([
             'skEstatus'=>['CF'],
@@ -42,6 +46,8 @@ Class Cita_cale_Controller Extends Cita_Model {
             'iFiltroHistorico'=>$this->cita['iFiltroHistorico']
         ]);
 
+        $this->data['citas'] = (isset($this->data['citas'][0]) ? $this->data['citas'] : [$this->data['citas']]);
+
         $this->data['cat_citas_categorias'] = parent::_get_cat_citas_categorias([
             'skEstatus'=>'AC'
         ]);
@@ -49,24 +55,11 @@ Class Cita_cale_Controller Extends Cita_Model {
         $this->data['cat_estadosMX'] = parent::_get_cat_estadosMX([
             'skEstatus'=>'AC'
         ]);
-
+        
+        $this->data['iCantidadCitasTotal'] = 0;
         $this->data['calendario'] = [];
         if(!empty($this->data['citas'])){
-            //exit('<pre>'.print_r(count($this->data['citas']),1).'</pre>');
-            //if(count($this->data['citas']))
-            foreach($this->data['citas'] AS $row){
-                /*if(!isset($this->cita['calendario'][$row['skCita']])){
-                    $this->data['calendario'][$row['skCita']] = [
-                        'id'=>$row['skCita'],
-                        'title'=>$row['estatus']." - ".$row['sNombre']."\n\r".date('H:i:s', strtotime($row['tHoraInicio']))." - ".date('H:i:s', strtotime($row['tHoraFin'])),
-                        'display'=>'background',
-                        'start'=>$row['dFechaCita'],
-                        'end'=>$row['dFechaCita'],
-                        'color'=>$row['sColorCategoria'],
-                        'skModulo'=>'cita-deta',
-                        'sURL'=>'/'.DIR_PATH.'sys/cita/cita-deta/detalles-cita/'.$row['skCita'].'/'
-                    ];
-                }*/
+            foreach($this->data['citas'] AS $key=>$row){
 
                 array_push($this->data['calendario'],[
                     'id'=>$row['skCita'],
@@ -83,8 +76,10 @@ Class Cita_cale_Controller Extends Cita_Model {
                 if($index !== false){
                     if(!isset($this->data['cat_citas_categorias'][$index]['iCantidadCitas'])){
                         $this->data['cat_citas_categorias'][$index]['iCantidadCitas'] = 1;
+                        $this->data['iCantidadCitasTotal'] += 1;
                     }else{
                         $this->data['cat_citas_categorias'][$index]['iCantidadCitas'] += 1;
+                        $this->data['iCantidadCitasTotal'] += 1;
                     }
                 }
 

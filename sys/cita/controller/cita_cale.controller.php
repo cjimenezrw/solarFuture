@@ -46,7 +46,7 @@ Class Cita_cale_Controller Extends Cita_Model {
             'iFiltroHistorico'=>$this->cita['iFiltroHistorico']
         ]);
 
-        $this->data['citas'] = (isset($this->data['citas'][0]) ? $this->data['citas'] : [$this->data['citas']]);
+        $this->data['citas'] = (isset($this->data['citas'][0]) ? $this->data['citas'] : (!empty($this->data['citas']) ? [$this->data['citas']] : []));
 
         $this->data['cat_citas_categorias'] = parent::_get_cat_citas_categorias([
             'skEstatus'=>'AC'

@@ -14,13 +14,7 @@
                     <li>
                         <button type="button" href="javascript:void(0);" onclick="limpiarFiltro();" class="btn btn-squared btn-outline ajax-popup-link 
                         btn-info btn-sm"><i class="fas fa-eraser"></i> LIMPIAR</button>
-                    </li> 
-                    <!--<li>
-                        <div class="form-group">    
-                            <input type="checkbox" class="js-switch-large" id="iFiltroHistorico" name="iFiltroHistorico" value="1" data-plugin="switchery"  data-color="#4d94ff" />
-                            <label for="iFiltroHistorico" class="text-dark"><b>HISTÓRICO</b></label>
-                        </div>
-                    </li>!--> 
+                    </li>
                 </ul>
                 </div>
                 <div class="panel-body container-fluid" id="filter">
@@ -244,7 +238,6 @@
   
     function filtrarCalendario(conf){
         var sClaveCategoriaCita = conf.id; 
-        
         iFiltroHistorico = 0;
         if($('#iFiltroHistorico').prop('checked')){
             iFiltroHistorico = 1;
@@ -312,7 +305,10 @@
         $('#skEstadoMX').empty();
         $('#skMunicipioMX').empty();
         $('#skCitaPersonal_array').empty();
-        $('#iFiltroHistorico').prop("checked", false);
+        if($('#iFiltroHistorico').prop('checked')){
+            $('#iFiltroHistorico').trigger('click');
+            $('#iFiltroHistorico').prop("checked", false);
+        }
         filtrarCalendario($('#DEFAULT'));
     }
 

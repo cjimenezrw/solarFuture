@@ -68,6 +68,8 @@ Class Cita_cale_Controller Extends Cita_Model {
                     'start'=>$row['dFechaCita'].' '.date('H:i:s', strtotime($row['tHoraInicio'])),
                     'end'=>$row['dFechaCita'].' '.date('H:i:s', strtotime($row['tHoraFin'])),
                     'color'=>$row['sColorCategoria'],
+                    'backgroundColor'=>''.$row['sColorCategoria'],
+                    'borderColor'=>''.$row['sColorCategoria'],
                     'skModulo'=>'cita-deta',
                     'sURL'=>'/'.DIR_PATH.'sys/cita/cita-deta/detalles-cita/'.$row['skCita'].'/'
                 ]);

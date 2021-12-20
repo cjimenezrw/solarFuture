@@ -30,7 +30,7 @@ Class Cita_cale_Controller Extends Cita_Model {
         $this->cita['sNombre'] = (isset($_POST['sNombre']) ? $_POST['sNombre'] : NULL);
         $this->cita['empleado'] = (isset($_POST['empleado']) ? $_POST['empleado'] : NULL);
 
-        if($this->cita['sClaveCategoriaCita'] == 'DEFAULT-CATEGORIA'){
+        if($this->cita['sClaveCategoriaCita'] == 'DEFAULT'){
             $this->cita['sClaveCategoriaCita'] = NULL;
         }
         

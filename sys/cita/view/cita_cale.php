@@ -146,7 +146,7 @@
         
         var procesos = '<section class="page-aside-section"><div class="list-group menuProcesoItems"><h4 class="page-aside-title"><i class="fas fa-calendar"></i> CITAS</h4><hr>';
         
-        procesos += '<a id="DEFAULT-CATEGORIA" class="list-group-item procesoItem" onclick="filtrarCalendario(this)"  href="javascript:void(0)" data-sClaveCategoriaCita="DEFAULT-CATEGORIA" data-proceso="DEFAULT-CATEGORIA"><i class="icon fa fa-circle" style="color:#000000" aria-hidden="true"></i> TODAS (<span>'+iCantidadCitasTotal+'</span>)</a><hr>';
+        procesos += '<a id="DEFAULT" class="list-group-item procesoItem" onclick="filtrarCalendario(this)"  href="javascript:void(0)" data-sClaveCategoriaCita="DEFAULT" data-proceso="DEFAULT"><i class="icon fa fa-circle" style="color:#000000" aria-hidden="true"></i> TODAS (<span>'+iCantidadCitasTotal+'</span>)</a><hr>';
 
         $.each(cita.cita_cale.procesos, function(k,v){
             if(typeof v.iCantidadCitas === "undefined"){
@@ -249,7 +249,7 @@
         if($('#iFiltroHistorico').prop('checked')){
             iFiltroHistorico = 1;
         }
-
+        
         $.ajax({
             url: window.location.href,
             type: 'POST',
@@ -270,38 +270,35 @@
                 toastr.info('CARGANDO CITAS <i class="fa fa-spinner faa-spin animated"></i>', 'NOTIFICACIÓN', {timeOut: false});
             },
             success: function (response) {
+                toastr.clear();
+                if(response.success == true) {
 
-                if (response.success == true) {
                     events = response.calendario;
+                    $('#calendar').fullCalendar('destroy');
+                    $('#calendar').fullCalendar({
+                        height : 700,
+                        width  : 650,
+                        locale: 'es',
+                        header:{
+                            left: null,
+                            center: 'prev,title,next',
+                            right: 'month,agendaWeek,agendaDay'
+                        },
+                        events,
+                        eventClick: function(info) {
+                            if(typeof info.sURL !== 'undefined'){
+                                core.menuLoadModule({skModulo: info.skModulo, url: info.sURL, skComportamiento: 'MOWI', id: info.id });
+                            }
+                        }
+                    });
 
-                    swal.close();
-                    toastr.success("Filtro Realizado Correctamente", 'Enviado');
-                        $('#calendar').fullCalendar('destroy');
-                        $('#calendar').fullCalendar({
-                                height : 700,
-                                width  : 650,
-                                locale: 'es',
-                                header:{
-                                     left: null,
-                                     center: 'prev,title,next',
-                                     right: 'month,agendaWeek,agendaDay'
-                                },
-                                events,
-                                eventClick: function(info) {
-                                    if(typeof info.sURL !== 'undefined'){
-                                       core.menuLoadModule({skModulo: info.skModulo, url: info.sURL, skComportamiento: 'MOWI', id: info.id });
-                                    }
-                                 }
-                        });
+                    cita.cita_cale.procesos = response.cat_citas_categorias;
+                    listarProcesos(response.iCantidadCitasTotal);
+                    return true;
 
-                        cita.cita_cale.procesos = response.cat_citas_categorias;
-                        listarProcesos(response.iCantidadCitasTotal);
-
-                        return true;
-
-                } else {
+                }else{
                     toastr.clear();
-                    swal("¡Error!", 'NO SE PUDO OBTENER DATOS', "error");
+                    swal("¡Error!", 'NO SE PUDO OBTENER LOS DATOS', "error");
                 }
             }
         });
@@ -314,6 +311,8 @@
         $('#skEmpresaSocioCliente').empty();
         $('#skEstadoMX').empty();
         $('#skMunicipioMX').empty();
+        $('#skCitaPersonal_array').empty();
+        $('#iFiltroHistorico').prop("checked", false);
         filtrarCalendario($('#DEFAULT'));
     }
 

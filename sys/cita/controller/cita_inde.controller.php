@@ -76,7 +76,7 @@ Class Cita_inde_Controller Extends Cita_Model {
             WHERE 1=1 ";
         
         if(!isset($_POST['filters'])){
-            $configuraciones['query'] .= " AND cit.skEstatus = 'PE' ";
+            $configuraciones['query'] .= " AND cit.skEstatus IN ('PE','CF') ";
         }
 
         // SE EJECUTA LA CONSULTA //

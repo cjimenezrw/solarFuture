@@ -172,6 +172,11 @@
                 center: 'prev,title,next',
                 right: 'month,agendaWeek,agendaDay'
             },
+            footer:{
+                left: null,
+                center: 'prev,title,next',
+                right: 'month,agendaWeek,agendaDay'
+            },
             events,
             eventClick: function(info) {
                 if(typeof info.sURL !== 'undefined'){
@@ -273,6 +278,11 @@
                         width  : 650,
                         locale: 'es',
                         header:{
+                            left: null,
+                            center: 'prev,title,next',
+                            right: 'month,agendaWeek,agendaDay'
+                        },
+                        footer:{
                             left: null,
                             center: 'prev,title,next',
                             right: 'month,agendaWeek,agendaDay'

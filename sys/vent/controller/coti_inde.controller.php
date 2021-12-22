@@ -144,37 +144,37 @@ Class Coti_inde_Controller Extends Vent_Model {
         $this->vent['axn'] = 'cancelarVentaCotizacion';
 
 
-        $stpCUD_conceptosInventario = parent::stpCUD_conceptosInventario();
-        if(!$stpCUD_conceptosInventario || isset($stpCUD_conceptosInventario['success']) && $stpCUD_conceptosInventario['success'] != 1){
+        $stpCUD_serviciosInventario = parent::stpCUD_serviciosInventario();
+        if(!$stpCUD_serviciosInventario || isset($stpCUD_serviciosInventario['success']) && $stpCUD_serviciosInventario['success'] != 1){
             Conn::rollback($this->idTran);
             $this->data['success'] = FALSE;
             $this->data['message'] = 'HUBO UN ERROR AL CANCELAR LA COTIZACION EN GENERAL';
             return $this->data;
         }
 
-        $this->vent['axn'] = 'cancelarVentaConcepto';
+        $this->vent['axn'] = 'cancelarVentaServicio';
 
-        $this->data['conceptosCotizacion']  = parent::_getCotizacionConceptos();
+        $this->data['serviciosCotizacion']  = parent::_getCotizacionservicios();
       
 
-        foreach($this->data['conceptosCotizacion'] AS $keyConceptos => $rowConceptos){
+        foreach($this->data['serviciosCotizacion'] AS $keyservicios => $rowservicios){
            
-            $this->vent['skConcepto'] = $rowConceptos['skConcepto'];
-            $this->vent['skCotizacionConcepto'] = $rowConceptos['skCotizacionConcepto'];
-            $this->vent['skConceptoInventario']  = NULL;
-            if(!empty($rowConceptos['iDetalle'])){
+            $this->vent['skServicio'] = $rowservicios['skServicio'];
+            $this->vent['skCotizacionServicio'] = $rowservicios['skCotizacionServicio'];
+            $this->vent['skServicioInventario']  = NULL;
+            if(!empty($rowservicios['iDetalle'])){
                
-                    if(!empty($rowConceptos['venta']) && is_array($rowConceptos['venta'])){
+                    if(!empty($rowservicios['venta']) && is_array($rowservicios['venta'])){
                       
-                        foreach($rowConceptos['venta'] AS $row){
+                        foreach($rowservicios['venta'] AS $row){
                             
                             $this->vent['fCantidad'] = 1;
-                            $this->vent['skConceptoInventario'] = $row['skConceptoInventario'];
-                            $stpCUD_conceptosInventario = parent::stpCUD_conceptosInventario();
-                            if(!$stpCUD_conceptosInventario || isset($stpCUD_conceptosInventario['success']) && $stpCUD_conceptosInventario['success'] != 1){
+                            $this->vent['skServicioInventario'] = $row['skServicioInventario'];
+                            $stpCUD_serviciosInventario = parent::stpCUD_serviciosInventario();
+                            if(!$stpCUD_serviciosInventario || isset($stpCUD_serviciosInventario['success']) && $stpCUD_serviciosInventario['success'] != 1){
                                 Conn::rollback($this->idTran);
                                 $this->data['success'] = FALSE;
-                                $this->data['message'] = 'HUBO UN ERROR AL CANCELAR EL CONCEPTO DE DETALLE';
+                                $this->data['message'] = 'HUBO UN ERROR AL CANCELAR EL SERVICIO DE DETALLE';
                                 return $this->data;
                             }
 
@@ -184,12 +184,12 @@ Class Coti_inde_Controller Extends Vent_Model {
                 
             }else{
 
-                $this->vent['fCantidad'] = $rowConceptos['fCantidad'];
-                $stpCUD_conceptosInventario = parent::stpCUD_conceptosInventario();
-                if(!$stpCUD_conceptosInventario || isset($stpCUD_conceptosInventario['success']) && $stpCUD_conceptosInventario['success'] != 1){
+                $this->vent['fCantidad'] = $rowservicios['fCantidad'];
+                $stpCUD_serviciosInventario = parent::stpCUD_serviciosInventario();
+                if(!$stpCUD_serviciosInventario || isset($stpCUD_serviciosInventario['success']) && $stpCUD_serviciosInventario['success'] != 1){
                     Conn::rollback($this->idTran);
                     $this->data['success'] = FALSE;
-                    $this->data['message'] = 'HUBO UN ERROR AL CANCELAR EL CONCEPTO GENERAL';
+                    $this->data['message'] = 'HUBO UN ERROR AL CANCELAR EL SERVICIO GENERAL';
                     return $this->data;
                 }
 

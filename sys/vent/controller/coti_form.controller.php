@@ -74,9 +74,9 @@ Class Coti_form_Controller Extends Vent_Model {
                 return $this->data;
             }
 
-            // Guardar impuestos Concepto
-            $guardar_cotizacion_conceptos = $this->guardar_cotizacion_conceptos();
-            if(!$guardar_cotizacion_conceptos['success']){
+            // Guardar impuestos Servicio
+            $guardar_cotizacion_servicios = $this->guardar_cotizacion_servicios();
+            if(!$guardar_cotizacion_servicios['success']){
                Conn::rollback($this->idTran);
                 return $this->data;
             }
@@ -211,25 +211,24 @@ Class Coti_form_Controller Extends Vent_Model {
             return $this->data;
         }
       /**
-         * guardar_cotizacion_conceptos
+         * guardar_cotizacion_servicios
          *
          * Guardar Archivos
          *
          * @author Luis Alberto Valdez Alvarez <lvaldez@woodward.com.mx>
          * @return Array ['success'=>NULL,'message'=>NULL,'datos'=>NULL]
          */
-        public function guardar_cotizacion_conceptos(){
+        public function guardar_cotizacion_servicios(){
             $this->data['success'] = TRUE;
-            $this->vent['axn'] = 'guardar_cotizacion_conceptos';
+            $this->vent['axn'] = 'guardar_cotizacion_servicios';
           
-            $delete="DELETE FROM rel_cotizaciones_conceptos WHERE skCotizacion = '". $this->vent['skCotizacion'] ."'";
+            $delete="DELETE FROM rel_cotizaciones_servicios WHERE skCotizacion = '". $this->vent['skCotizacion'] ."'";
             $result = Conn::query($delete);
     
-            if(!empty($this->vent['conceptos'])){
-                foreach ($this->vent['conceptos'] AS $con){
-                    $this->vent['axn'] = 'guardar_cotizacion_conceptos';
-                    //$this->vent['skCotizacionConcepto']           = (isset($con['skCotizacionConcepto']) ? $con['skCotizacionConcepto'] : NULL);
-                    $this->vent['skConcepto']         = (isset($con['skConcepto']) ? $con['skConcepto'] : NULL);
+            if(!empty($this->vent['servicios'])){
+                foreach ($this->vent['servicios'] AS $con){
+                    $this->vent['axn'] = 'guardar_cotizacion_servicios';
+                    $this->vent['skServicio']         = (isset($con['skServicio']) ? $con['skServicio'] : NULL);
                     $this->vent['sDescripcion']       = (isset($con['sDescripcion']) ? $con['sDescripcion'] : NULL);
                     $this->vent['skTipoMedida']       = (isset($con['skTipoMedida']) ? $con['skTipoMedida'] : NULL);
                     $this->vent['fCantidad']          = (isset($con['fCantidad']) ? str_replace(',','',$con['fCantidad']) : NULL);
@@ -239,11 +238,11 @@ Class Coti_form_Controller Extends Vent_Model {
     
                     if(!$stpCUD_cotizaciones || isset($stpCUD_cotizaciones['success']) && $stpCUD_cotizaciones['success'] != 1){
                         $this->data['success'] = FALSE;
-                        $this->data['message'] = 'HUBO UN ERROR AL GUARDAR LOS CONCEPTOS DE LA COTIZACION';
+                        $this->data['message'] = 'HUBO UN ERROR AL GUARDAR LOS SERVICIOS DE LA COTIZACION';
                         return $this->data;
                     }
 
-                    $this->vent['skCotizacionConcepto'] = $stpCUD_cotizaciones['skCotizacionConcepto'];
+                    $this->vent['skCotizacionServicio'] = $stpCUD_cotizaciones['skCotizacionServicio'];
 
                     
 
@@ -253,7 +252,7 @@ Class Coti_form_Controller Extends Vent_Model {
             }
             
             $this->data['success'] = TRUE;
-            $this->data['message'] = 'CONCEPTOS GUARDADOS CON EXITO';
+            $this->data['message'] = 'servicios GUARDADOS CON EXITO';
             return $this->data;
         }
 
@@ -449,8 +448,8 @@ Class Coti_form_Controller Extends Vent_Model {
         if (!empty($this->vent['skCotizacion'])) {
             
             $this->data['datos'] = parent::_getCotizacion();
-            $cotizacionConceptos = parent::_getCotizacionConceptos();
-            $this->data['cotizacionesConceptos'] = $cotizacionConceptos;
+            $cotizacionservicios = parent::_getCotizacionservicios();
+            $this->data['cotizacionesservicios'] = $cotizacionservicios;
             $cotizacionCorreos= parent::_getCotizacionCorreos();
             $this->data['cotizacionesCorreos'] = $cotizacionCorreos;
 
@@ -520,19 +519,19 @@ Class Coti_form_Controller Extends Vent_Model {
     public function get_medidas(){
         return parent::consultar_tiposMedidas();
     }
-    public function get_conceptos(){
-        return parent::consultar_conceptos();
+    public function get_servicios(){
+        return parent::consultar_servicios();
     }
-    public function get_conceptos_impuestos(){
-        $this->vent['skConcepto'] = (isset($_POST['skConcepto']) ? $_POST['skConcepto'] : NULL);
-        return parent::consultar_conceptos_impuestos();
+    public function get_servicios_impuestos(){
+        $this->vent['skServicio'] = (isset($_POST['skServicio']) ? $_POST['skServicio'] : NULL);
+        return parent::consultar_servicios_impuestos();
   
     }
-    public function get_conceptos_datos(){
-        $this->vent['skConcepto'] = (isset($_POST['skConcepto']) ? $_POST['skConcepto'] : NULL);
+    public function get_servicios_datos(){
+        $this->vent['skServicio'] = (isset($_POST['skServicio']) ? $_POST['skServicio'] : NULL);
         $this->vent['skCategoriaPrecio'] = (isset($_POST['skCategoriaPrecio']) ? $_POST['skCategoriaPrecio'] : NULL);
        
-        return parent::consultar_conceptos_datos();
+        return parent::consultar_servicios_datos();
   
     }
     

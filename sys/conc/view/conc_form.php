@@ -169,8 +169,8 @@ if (isset($data['datos'])) {
                     <div class="select2-primary container-bl">
                         <select name="skImpuesto[]" id="skImpuesto" class="form-control select2" multiple="multiple" data-plugin="select2">
                         <?php
-                        if (isset($data['conceptosImpuestos']) && is_array($data['conceptosImpuestos'])) {
-                        foreach ($data['conceptosImpuestos'] AS $row) {
+                        if (isset($data['serviciosImpuestos']) && is_array($data['serviciosImpuestos'])) {
+                        foreach ($data['serviciosImpuestos'] AS $row) {
                         ?>
                         <option  value="<?php echo $row['id']; ?>" <?php echo ($row['selected'] == 1) ? 'selected' : ''; ?>><?php echo $row['nombre']; ?></option>
                         <?php

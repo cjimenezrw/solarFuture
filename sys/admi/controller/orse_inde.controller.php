@@ -197,12 +197,12 @@ Class Orse_inde_Controller Extends Admi_Model {
                 'fSubtotal'=>isset($consultarOrdenServicio['fImporteSubtotal']) ? $consultarOrdenServicio['fImporteSubtotal'] : NULL,
  
                 'fTotal'=>isset($consultarOrdenServicio['fImporteTotal']) ? $consultarOrdenServicio['fImporteTotal'] : NULL,
-                'conceptos'=>[]
+                'servicios'=>[]
 
             ];
 
             foreach($servicios AS $v_serv){
-                $dataConceptos = [
+                $dataservicios = [
                     'skServicio'=>isset($v_serv['skServicio']) ? $v_serv['skServicio']: NULL,
                     'skTipoMedida'=>isset($v_serv['skTipoMedida']) ? $v_serv['skTipoMedida']: NULL,
                     'sDescripcion'=>isset($v_serv['sDescripcion']) ? $v_serv['sDescripcion'] : NULL,
@@ -213,7 +213,7 @@ Class Orse_inde_Controller Extends Admi_Model {
                     'fDescuento'=>(isset($v_serv['fDescuento']) ? $v_serv['fDescuento'] : NULL),
                     'fImporte'=>isset($v_serv['fImporteTotal']) ? $v_serv['fImporteTotal'] : NULL
                 ];
-                array_push($inputData['conceptos'], $dataConceptos);
+                array_push($inputData['servicios'], $dataservicios);
             }
 
           

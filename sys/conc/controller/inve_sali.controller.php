@@ -45,7 +45,7 @@ Class Inve_sali_Controller Extends Conc_Model {
             print_r($this->conc);
             die();*/
 
-            $this->conc['skConcepto'] = (isset($_POST['skConcepto']) ? $_POST['skConcepto'] : NULL);  
+            $this->conc['skServicio'] = (isset($_POST['skServicio']) ? $_POST['skServicio'] : NULL);  
 
             
 
@@ -88,14 +88,14 @@ Class Inve_sali_Controller Extends Conc_Model {
           $this->conc['skUsuarioBaja'] = (!empty($_POST['skUsuarioBaja']) ? $_POST['skUsuarioBaja'] : NULL);  
           $this->conc['sDescripcionBaja'] = (!empty($_POST['sDescripcionBaja']) ? $_POST['sDescripcionBaja'] : NULL);  
           
-          if(!empty($this->conc['skConceptoInventario'])){
-            $inventario = $this->conc['skConceptoInventario'];
+          if(!empty($this->conc['skServicioInventario'])){
+            $inventario = $this->conc['skServicioInventario'];
             foreach($inventario AS $key => $row){
-                $this->conc['skConceptoInventario'] = $row;
+                $this->conc['skServicioInventario'] = $row;
                 $this->conc['fCantidad'] = 1;
                 $this->conc['iDetalle'] = 1;
-                    $stpCUD_conceptosInventario = parent::stpCUD_conceptosInventario();
-                    if(!$stpCUD_conceptosInventario || isset($stpCUD_conceptosInventario['success']) && $stpCUD_conceptosInventario['success'] != 1){
+                    $stpCUD_serviciosInventario = parent::stpCUD_serviciosInventario();
+                    if(!$stpCUD_serviciosInventario || isset($stpCUD_serviciosInventario['success']) && $stpCUD_serviciosInventario['success'] != 1){
                         $this->data['success'] = FALSE;
                         $this->data['message'] = 'HUBO UN ERROR AL GUARDAR LOS DATOS DE LA COTIZACION';
                         return $this->data;
@@ -110,10 +110,10 @@ Class Inve_sali_Controller Extends Conc_Model {
             }
 
             $this->conc['fCantidad'] =  $this->conc['fCantidad'];
-            $this->conc['skConceptoInventario'] = NULL;
+            $this->conc['skServicioInventario'] = NULL;
             $this->conc['iDetalle'] = NULL;
-            $stpCUD_conceptosInventario = parent::stpCUD_conceptosInventario();
-            if(!$stpCUD_conceptosInventario || isset($stpCUD_conceptosInventario['success']) && $stpCUD_conceptosInventario['success'] != 1){
+            $stpCUD_serviciosInventario = parent::stpCUD_serviciosInventario();
+            if(!$stpCUD_serviciosInventario || isset($stpCUD_serviciosInventario['success']) && $stpCUD_serviciosInventario['success'] != 1){
                 $this->data['success'] = FALSE;
                 $this->data['message'] = 'HUBO UN ERROR AL GUARDAR LOS DATOS DE LA COTIZACION';
                 return $this->data;
@@ -143,7 +143,7 @@ Class Inve_sali_Controller Extends Conc_Model {
 
 
           $validations = [
-              'skConcepto'=>['message'=>'CONCEPTO']
+              'skServicio'=>['message'=>'CONCEPTO']
           ];
 
           foreach($validations AS $k=>$v){
@@ -236,13 +236,13 @@ Class Inve_sali_Controller Extends Conc_Model {
 
     public function getDatos() {
         $this->data = ['success' => TRUE, 'message' => NULL, 'datos' => NULL];
-        $this->conc['skConcepto'] = (isset($_GET['p1']) && !empty($_GET['p1'])) ? $_GET['p1'] : NULL;
+        $this->conc['skServicio'] = (isset($_GET['p1']) && !empty($_GET['p1'])) ? $_GET['p1'] : NULL;
         $this->data['usuarioBaja'] = parent::_getUsuariosBaja();
-        if (!empty($this->conc['skConcepto'])) {
+        if (!empty($this->conc['skServicio'])) {
             
             $this->data['datos'] = parent::_getConcepto();
             $this->conc['skEstatus'] = 'NU';
-            $this->data['inventario'] = parent::_get_conceptos_inventario();
+            $this->data['inventario'] = parent::_get_servicios_inventario();
   
 
            

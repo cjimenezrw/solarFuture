@@ -5,7 +5,7 @@ Class Conc_form_Controller Extends Conc_Model {
     // PROTECTED VARIABLES //
     // PRIVATE VARIABLES //
     private $data = array();
-    private $idTran = 'conceptos'; //Mi procedimiento
+    private $idTran = 'servicios'; //Mi procedimiento
 
     public function __construct() {
         parent::init();
@@ -42,7 +42,7 @@ Class Conc_form_Controller Extends Conc_Model {
                 return $this->data;
             }
 
-            $this->conc['skConcepto'] = (isset($_GET['p1']) ? $_GET['p1'] : NULL);
+            $this->conc['skServicio'] = (isset($_GET['p1']) ? $_GET['p1'] : NULL);
 
             
             // Guardar Concepto
@@ -85,18 +85,18 @@ Class Conc_form_Controller Extends Conc_Model {
        */
       public function guardar_concepto(){
           $this->data['success'] = TRUE;
-          $this->conc['axn'] = 'guardar_concepto';
+          $this->conc['axn'] = 'guardar_servicio';
           $this->conc['skEstatus'] = 'NU';
 
-          $stpCUD_conceptos = parent::stpCUD_conceptos();
+          $stpCUD_serviciosConceptos = parent::stpCUD_serviciosConceptos();
            
-          if(!$stpCUD_conceptos || isset($stpCUD_conceptos['success']) && $stpCUD_conceptos['success'] != 1){
+          if(!$stpCUD_serviciosConceptos || isset($stpCUD_serviciosConceptos['success']) && $stpCUD_serviciosConceptos['success'] != 1){
               $this->data['success'] = FALSE;
               $this->data['message'] = 'HUBO UN ERROR AL GUARDAR LOS DATOS DEL CONCEPTO';
               return $this->data;
           }
 
-          $this->conc['skConcepto'] = $stpCUD_conceptos['skConcepto'];
+          $this->conc['skServicio'] = $stpCUD_serviciosConceptos['skServicio'];
 
           $this->data['success'] = TRUE;
           $this->data['message'] = 'DATOS DE CONCEPTO GUARDADOS';
@@ -112,18 +112,18 @@ Class Conc_form_Controller Extends Conc_Model {
          */
         public function guardar_concepto_impuestos(){
             $this->data['success'] = TRUE;
-            $this->conc['axn'] = 'guardar_concepto_impuestos';
+            $this->conc['axn'] = 'guardar_servicio_impuestos';
           
-            $delete="DELETE FROM rel_conceptos_impuestos WHERE skConcepto = '". $this->conc['skConcepto'] ."'";
+            $delete="DELETE FROM rel_servicios_impuestos WHERE skServicio = '". $this->conc['skServicio'] ."'";
             $result = Conn::query($delete);
             if(!empty($this->conc['skImpuesto'])){
                 foreach ($this->conc['skImpuesto'] as $k => $v) {
                     //verificamos si ya existe el producto en el catalogo, si no existe se inserta.
                     $this->conc['skImpuestoConcepto']= (!empty($v) ? $v : NULL);
                    
-                    $stpCUD_conceptos = parent::stpCUD_conceptos();
+                    $stpCUD_serviciosConceptos = parent::stpCUD_serviciosConceptos();
     
-                    if(!$stpCUD_conceptos || isset($stpCUD_conceptos['success']) && $stpCUD_conceptos['success'] != 1){
+                    if(!$stpCUD_serviciosConceptos || isset($stpCUD_serviciosConceptos['success']) && $stpCUD_serviciosConceptos['success'] != 1){
                         $this->data['success'] = FALSE;
                         $this->data['message'] = 'HUBO UN ERROR AL GUARDAR LOS IMPUESTOS DEL CONCEPTO';
                         return $this->data;
@@ -147,9 +147,9 @@ Class Conc_form_Controller Extends Conc_Model {
          */
         public function guardar_concepto_precios(){
             $this->data['success'] = TRUE;
-            $this->conc['axn'] = 'guardar_concepto_precios';
+            $this->conc['axn'] = 'guardar_servicio_precios';
           
-            $delete = "DELETE FROM rel_conceptos_precios WHERE skConcepto = ".escape($this->conc['skConcepto']);
+            $delete = "DELETE FROM rel_servicios_precios WHERE skServicio = ".escape($this->conc['skServicio']);
             $result = Conn::query($delete);
 
             if(!empty($this->conc['CATPRE'])){
@@ -158,9 +158,9 @@ Class Conc_form_Controller Extends Conc_Model {
                         $this->conc['skCategoriaPrecio']= $k;
                         $this->conc['fPrecioVenta']= $v;
 
-                        $stpCUD_conceptos = parent::stpCUD_conceptos();
+                        $stpCUD_serviciosConceptos = parent::stpCUD_serviciosConceptos();
         
-                        if(!$stpCUD_conceptos || isset($stpCUD_conceptos['success']) && $stpCUD_conceptos['success'] != 1){
+                        if(!$stpCUD_serviciosConceptos || isset($stpCUD_serviciosConceptos['success']) && $stpCUD_serviciosConceptos['success'] != 1){
                             $this->data['success'] = FALSE;
                             $this->data['message'] = 'HUBO UN ERROR AL GUARDAR LOS PRECIOS DEL CONCEPTO';
                             return $this->data;
@@ -282,7 +282,7 @@ Class Conc_form_Controller Extends Conc_Model {
 
     public function getDatos() {
         $this->data = ['success' => TRUE, 'message' => NULL, 'datos' => NULL];
-        $this->conc['skConcepto'] = (isset($_GET['p1']) && !empty($_GET['p1'])) ? $_GET['p1'] : NULL;
+        $this->conc['skServicio'] = (isset($_GET['p1']) && !empty($_GET['p1'])) ? $_GET['p1'] : NULL;
         $this->data['unidadesMedida'] = parent::consultar_unidadesMedida();
 
         // OBTENEMOS LAS CATEGORÍAS DE PRECIOS
@@ -303,22 +303,22 @@ Class Conc_form_Controller Extends Conc_Model {
           $conImpuestos[trim($v['nombre'])] = $v;
           }
 
-        if (!empty($this->conc['skConcepto'])) {
+        if (!empty($this->conc['skServicio'])) {
             $this->data['datos'] = parent::_getConcepto();
-            $conImpuestosConceptos = parent::_getConceptoImpuestos();
-            foreach($conImpuestosConceptos AS $k=>$v){
+            $conImpuestosservicios = parent::_getServicioImpuestos();
+            foreach($conImpuestosservicios AS $k=>$v){
                 if(isset($conImpuestos[trim($v['nombre'])])){
                     $conImpuestos[trim($v['nombre'])]['selected'] = 1;
                 }
             }
 
             //OBTENEMOS LOS VALORES DE CATEGORÍAS DE PRECIOS
-                $_get_conceptos_precios = parent::_get_conceptos_precios();
-                foreach($_get_conceptos_precios AS $k=>$v){
+                $_get_servicios_precios = parent::_get_servicios_precios();
+                foreach($_get_servicios_precios AS $k=>$v){
                     $this->data['categorias_precios'][$v['skCategoriaPrecio']]['fPrecioVenta'] = $v['fPrecioVenta'];
                 }
         }
-        $this->data['conceptosImpuestos'] = $conImpuestos;
+        $this->data['serviciosImpuestos'] = $conImpuestos;
 
         // OBTENEMOS EL CATÁLOGO DE INFORMACIÓN DE PRODUCTO
             $this->data['informacionProductoServicio'] = parent::_get_informacionProductoServicio();

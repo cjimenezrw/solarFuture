@@ -176,15 +176,15 @@ td.text-right {
 	<tbody>
 	    <?php
 	    $i = 1;
-	    if (isset($data['conceptosCotizacion'])) {
-		foreach ($data['conceptosCotizacion'] AS $conceptos) {
+	    if (isset($data['serviciosCotizacion'])) {
+		foreach ($data['serviciosCotizacion'] AS $servicios) {
 		    ?>
 		    <tr>
-			<td style="text-align:center; font-size: 10px; text-transform: uppercase; word-wrap: break-word;" ><?php echo $conceptos['sCodigo']; ?></td>
- 			<td style="text-align:left; font-size: 10px; text-transform: uppercase; word-wrap: break-word;" ><?php echo (!empty($conceptos['sDescripcion']) ? $conceptos['sDescripcion'] : $conceptos['concepto']); ?></td>
-			<td style="text-align:right; font-size: 10px; text-transform: uppercase;" ><?php echo number_format($conceptos['fCantidad'], 2); ?></td>
-            <td style="text-align:right; font-size: 10px; text-transform: uppercase;" ><?php echo "$" . number_format($conceptos['fPrecioUnitario'], 2); ?></td>
-			<td style="text-align:right; font-size: 10px; text-transform: uppercase;" ><?php echo "$" . number_format($conceptos['fImporte'], 2); ?></td>
+			<td style="text-align:center; font-size: 10px; text-transform: uppercase; word-wrap: break-word;" ><?php echo $servicios['sCodigo']; ?></td>
+ 			<td style="text-align:left; font-size: 10px; text-transform: uppercase; word-wrap: break-word;" ><?php echo (!empty($servicios['sDescripcion']) ? $servicios['sDescripcion'] : $servicios['servicio']); ?></td>
+			<td style="text-align:right; font-size: 10px; text-transform: uppercase;" ><?php echo number_format($servicios['fCantidad'], 2); ?></td>
+            <td style="text-align:right; font-size: 10px; text-transform: uppercase;" ><?php echo "$" . number_format($servicios['fPrecioUnitario'], 2); ?></td>
+			<td style="text-align:right; font-size: 10px; text-transform: uppercase;" ><?php echo "$" . number_format($servicios['fImporte'], 2); ?></td>
 		    </tr>
 		    <?php
 		    $i++;
@@ -222,7 +222,7 @@ td.text-right {
 
 <!-- AQUI VA LA INFORMACIÓN DE LOS PRODUCTOS DE INVENTARIO !-->
 <?php
-    if (isset($data['conceptosCotizacionInventario']) && !empty($data['conceptosCotizacionInventario'])) {
+    if (isset($data['serviciosCotizacionInventario']) && !empty($data['serviciosCotizacionInventario'])) {
 ?>
 <div class="col-md-12 clearfix"></div>
 <div class="col-md-offset-3 col-md-10 page-invoice-table table-responsive font-size-12" style="margin-top: 50px;">
@@ -239,13 +239,13 @@ td.text-right {
 	</thead>
 	<tbody>
 	    <?php
-	    if (isset($data['conceptosCotizacionInventario'])) {
-		foreach ($data['conceptosCotizacionInventario'] AS $conceptosInventario) {
+	    if (isset($data['serviciosCotizacionInventario'])) {
+		foreach ($data['serviciosCotizacionInventario'] AS $serviciosInventario) {
 		    ?>
 		    <tr>
-			<td style="text-align:center; font-size: 10px; text-transform: uppercase; word-wrap: break-word;"><?php echo $conceptosInventario['sCodigo']; ?></td>
- 			<td style="text-align:left; font-size: 10px; text-transform: uppercase; word-wrap: break-word;"><?php echo (!empty($conceptosInventario['sDescripcion']) ? $conceptosInventario['sDescripcion'] : $conceptosInventario['concepto']); ?></td>
-             <td style="text-align:center; font-size: 10px; text-transform: uppercase; word-wrap: break-word;"><?php echo (!empty($conceptosInventario['sNumeroSerie']) ? implode(', ',$conceptosInventario['sNumeroSerie']) : ''); ?></td>
+			<td style="text-align:center; font-size: 10px; text-transform: uppercase; word-wrap: break-word;"><?php echo $serviciosInventario['sCodigo']; ?></td>
+ 			<td style="text-align:left; font-size: 10px; text-transform: uppercase; word-wrap: break-word;"><?php echo (!empty($serviciosInventario['sDescripcion']) ? $serviciosInventario['sDescripcion'] : $serviciosInventario['servicio']); ?></td>
+             <td style="text-align:center; font-size: 10px; text-transform: uppercase; word-wrap: break-word;"><?php echo (!empty($serviciosInventario['sNumeroSerie']) ? implode(', ',$serviciosInventario['sNumeroSerie']) : ''); ?></td>
 		    </tr>
 		    <?php
 		}//FOREACH

@@ -18,14 +18,14 @@ Class Conc_Model Extends DLOREAN_Model {
     }
 
     public function eliminarProductosInventario(){
-        $sql = "UPDATE rel_conceptos_inventarios SET 
+        $sql = "UPDATE rel_servicios_inventarios SET 
             skEstatus = 'EL',
             dFechaModificacion = NOW(),
             skUsuarioModificacion = ".escape($_SESSION['usuario']['skUsuario'])."
-            WHERE skEstatus = 'NU' AND skConcepto = ".escape($this->conc['skConcepto']);
+            WHERE skEstatus = 'NU' AND skServicio = ".escape($this->conc['skServicio']);
 
-            if(isset($this->conc['skConceptoInventario']) && is_array($this->conc['skConceptoInventario'])){
-                $sql .= " AND skConceptoInventario NOT IN (".mssql_where_in($this->conc['skConceptoInventario']).") ";
+            if(isset($this->conc['skServicioInventario']) && is_array($this->conc['skServicioInventario'])){
+                $sql .= " AND skServicioInventario NOT IN (".mssql_where_in($this->conc['skServicioInventario']).") ";
             }
            
         $result = Conn::query($sql);
@@ -36,12 +36,12 @@ Class Conc_Model Extends DLOREAN_Model {
     }
 
     public function actualizarCantidadProductosInventario(){
-        $sql = "UPDATE cat_conceptos SET 
-            fCantidad = (SELECT COUNT(skConceptoInventario) AS fCantidad 
-                FROM rel_conceptos_inventarios
-                WHERE skConcepto = ".escape($this->conc['skConcepto'])." AND skEstatus = 'NU'
+        $sql = "UPDATE cat_servicios SET 
+            fCantidad = (SELECT COUNT(skServicioInventario) AS fCantidad 
+                FROM rel_servicios_inventarios
+                WHERE skServicio = ".escape($this->conc['skServicio'])." AND skEstatus = 'NU'
             ) 
-        WHERE skConcepto = ".escape($this->conc['skConcepto']);
+        WHERE skServicio = ".escape($this->conc['skServicio']);
         
         $result = Conn::query($sql);
         if (!$result) {
@@ -50,7 +50,7 @@ Class Conc_Model Extends DLOREAN_Model {
         return TRUE;
     }
 
-    public function _get_conceptos_inventario(){
+    public function _get_servicios_inventario(){
         $sql = "SELECT 
             rci.*
             ,ce.sNombre AS estatus
@@ -58,12 +58,12 @@ Class Conc_Model Extends DLOREAN_Model {
             ,ce.sColor AS estatusColor
             ,cub.sNombre AS usuarioBaja
             ,CONCAT('SFM',RIGHT(CONCAT('0000',CAST(oc.iFolio AS VARCHAR(4))),4)) AS iFolio
-            FROM rel_conceptos_inventarios rci
+            FROM rel_servicios_inventarios rci
             INNER JOIN core_estatus ce ON ce.skEstatus = rci.skEstatus
-            LEFT JOIN rel_cotizaciones_conceptos rcc ON rcc.skCotizacionConcepto = rci.skCotizacionConcepto
+            LEFT JOIN rel_cotizaciones_servicios rcc ON rcc.skCotizacionServicio = rci.skCotizacionServicio
             LEFT JOIN ope_cotizaciones oc ON oc.skCotizacion = rcc.skCotizacion
             LEFT JOIN cat_usuarios cub ON cub.skUsuario = rci.skUsuarioBaja
-            WHERE rci.skConcepto = ".escape($this->conc['skConcepto']);
+            WHERE rci.skServicio = ".escape($this->conc['skServicio']);
 
         if (isset($this->conc['skEstatus']) && !empty(trim($this->conc['skEstatus']))) {
             $sql .= " AND rci.skEstatus = ".escape($this->conc['skEstatus']);
@@ -80,12 +80,12 @@ Class Conc_Model Extends DLOREAN_Model {
         return $records;
     }
 
-    public function stpCUD_conceptosInventario(){
-        $sql = "CALL stpCUD_conceptosInventario (
-            " .escape(isset($this->conc['skConcepto']) ? $this->conc['skConcepto'] : NULL) . ",
+    public function stpCUD_serviciosInventario(){
+        $sql = "CALL stpCUD_serviciosInventario (
+            " .escape(isset($this->conc['skServicio']) ? $this->conc['skServicio'] : NULL) . ",
             " .escape(isset($this->conc['skCotizacion']) ? $this->conc['skCotizacion'] : NULL) . ",
-            " .escape(isset($this->conc['skCotizacionConcepto']) ? $this->conc['skCotizacionConcepto'] : NULL) . ",
-            " .escape(isset($this->conc['skConceptoInventario']) ? $this->conc['skConceptoInventario'] : NULL) . ",
+            " .escape(isset($this->conc['skCotizacionServicio']) ? $this->conc['skCotizacionServicio'] : NULL) . ",
+            " .escape(isset($this->conc['skServicioInventario']) ? $this->conc['skServicioInventario'] : NULL) . ",
             " .escape(isset($this->conc['skEstatus']) ? $this->conc['skEstatus'] : NULL) . ",
             " .escape(isset($this->conc['fCantidad']) ? $this->conc['fCantidad'] : NULL). ",
             " .escape(isset($this->conc['sNumeroSerie']) ? $this->conc['sNumeroSerie'] : NULL) . ",
@@ -168,10 +168,10 @@ Class Conc_Model Extends DLOREAN_Model {
    
  
      
-    public function stpCUD_conceptos() {
+    public function stpCUD_serviciosConceptos() {
 
-        $sql = "CALL stpCUD_conceptos (
-            " .escape(isset($this->conc['skConcepto']) ? $this->conc['skConcepto'] : NULL) . ",
+        $sql = "CALL stpCUD_serviciosConceptos (
+            " .escape(isset($this->conc['skServicio']) ? $this->conc['skServicio'] : NULL) . ",
             " .escape(isset($this->conc['skEstatus']) ? $this->conc['skEstatus'] : NULL) . ",
             " .escape(isset($this->conc['sCodigo']) ? $this->conc['sCodigo'] : NULL) . ",
             " .escape(isset($this->conc['sNombre']) ? $this->conc['sNombre'] : NULL). ",
@@ -193,7 +193,10 @@ Class Conc_Model Extends DLOREAN_Model {
             " .escape(isset($this->conc['axn']) ? $this->conc['axn'] : NULL) . ",
             '" . $_SESSION['usuario']['skUsuario'] . "',
             '" . $this->sysController . "' )";
-      
+        
+        if($this->conc['axn'] == 'guardar_servicio_precios'){
+            //exit('<pre>'.print_r($sql,1).'</pre>');
+        }
         
         $result = Conn::query($sql);
         //$codigo = Conn::fetch_assoc($result);
@@ -205,13 +208,13 @@ Class Conc_Model Extends DLOREAN_Model {
         return $record; 
     }
 
-    public function _get_conceptos_precios(){
+    public function _get_servicios_precios(){
         $sql = "SELECT rcp.*,cs.sNombre AS catalogo, cso.sNombre AS categoriaPrecio 
-            FROM rel_conceptos_precios rcp 
+            FROM rel_servicios_precios rcp 
             INNER JOIN rel_catalogosSistemasOpciones cso ON cso.skCatalogoSistemaOpciones = rcp.skCategoriaPrecio
             INNER JOIN cat_catalogosSistemas cs ON cs.skCatalogoSistema = cso.skCatalogoSistema
             WHERE cs.skCatalogoSistema = 'CATPRE' AND cso.skEstatus = 'AC' 
-            AND rcp.skConcepto = ".escape($this->conc['skConcepto'])." ORDER BY cso.sNombre ASC";
+            AND rcp.skServicio = ".escape($this->conc['skServicio'])." ORDER BY cso.sNombre ASC";
         $result = Conn::query($sql);
         if (!$result) {
             return FALSE;
@@ -240,7 +243,7 @@ Class Conc_Model Extends DLOREAN_Model {
      */
     public function _getConcepto() {
 
-        $sql = "SELECT cc.skConcepto,
+        $sql = "SELECT cc.skServicio,
                 cc.iFolio,
                 cc.sCodigo,
                 cc.dFechaCreacion,
@@ -266,7 +269,7 @@ Class Conc_Model Extends DLOREAN_Model {
                 cep.sRFC AS proveedorRFC,
                 cu.sNombre AS usuarioCreacion,
                 ips.sNombre AS informacionProductoServicio
-                FROM cat_conceptos cc
+                FROM cat_servicios cc
                 INNER JOIN core_estatus ce ON ce.skEstatus = cc.skEstatus
                 INNER JOIN cat_usuarios cu ON cu.skUsuario = cc.skUsuarioCreacion
                 LEFT JOIN rel_empresasSocios resp ON resp.skEmpresaSocio = cc.skEmpresaSocioProveedor
@@ -274,7 +277,7 @@ Class Conc_Model Extends DLOREAN_Model {
                 LEFT JOIN cat_unidadesMedidaSAT cum ON cum.skUnidadMedida = cc.skUnidadMedida
                 LEFT JOIN rel_catalogosSistemasOpciones cso ON cso.skClave = cc.skCategoriaProducto AND cso.skCatalogoSistema = 'CATPRO'
                 LEFT JOIN cat_informacionProductoServicio ips ON ips.skInformacionProductoServicio = cc.skInformacionProductoServicio
-                WHERE cc.skConcepto =  " . escape($this->conc['skConcepto']);
+                WHERE cc.skServicio =  " . escape($this->conc['skServicio']);
 
         $result = Conn::query($sql);
         if (!$result) {
@@ -325,11 +328,11 @@ Class Conc_Model Extends DLOREAN_Model {
         return Conn::fetch_assoc_all($result);
     }
 
-    public function _getConceptoImpuestos() {
+    public function _getServicioImpuestos() {
         $select = "SELECT cim.skImpuesto,CONCAT( cim.skTipoImpuesto,'-',cim.sNombre,'(', cim.svalor,'%)')  AS nombre 
-                    FROM rel_conceptos_impuestos  rci
+                    FROM rel_servicios_impuestos  rci
                     INNER JOIN cat_impuestos cim ON cim.skImpuesto = rci.skImpuesto
-                    where rci.skConcepto = '".$this->conc['skConcepto']."' ";
+                    where rci.skServicio = '".$this->conc['skServicio']."' ";
        
         $result = Conn::query($select);
         if (!$result) {

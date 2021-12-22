@@ -24,7 +24,7 @@ Class Conc_inde_Controller Extends Conc_Model {
         $configuraciones = [];
 
         //$configuraciones['log'] = TRUE;
-        $configuraciones['query'] = "SELECT cc.skConcepto,
+        $configuraciones['query'] = "SELECT cc.skServicio,
         cc.iFolio,
         cc.sCodigo,
         cc.dFechaCreacion,
@@ -39,7 +39,7 @@ Class Conc_inde_Controller Extends Conc_Model {
         ce.sColor AS estatusColor,
         cep.sNombre AS proveedor,
         cu.sNombre AS usuarioCreacion       
-        FROM cat_conceptos cc
+        FROM cat_servicios cc
         INNER JOIN core_estatus ce ON ce.skEstatus = cc.skEstatus
         INNER JOIN cat_usuarios cu ON cu.skUsuario = cc.skUsuarioCreacion
         LEFT JOIN rel_empresasSocios resp ON resp.skEmpresaSocio = cc.skEmpresaSocioProveedor
@@ -78,7 +78,7 @@ Class Conc_inde_Controller Extends Conc_Model {
                 $row['fCantidad'] = ($row['fCantidad']) ? number_format($row['fCantidad'],2) : '';
                 $row['dFechaCreacion'] = ($row['dFechaCreacion']) ? date('d/m/Y  H:i:s', strtotime($row['dFechaCreacion'])) : '';
                  
-               $row['menuEmergente'] = parent::menuEmergente($regla, $row['skConcepto']);
+               $row['menuEmergente'] = parent::menuEmergente($regla, $row['skServicio']);
                 array_push($data['data'],$row);
         }
         return $data;
@@ -102,13 +102,13 @@ Class Conc_inde_Controller Extends Conc_Model {
     public function cancelar(){
         $this->data = ['success' => TRUE, 'message' => NULL, 'datos' => NULL];
 
-        $this->conc['axn'] = 'cancelar_concepto';
-        $this->conc['skConcepto'] = (isset($_POST['id']) && !empty($_POST['id'])) ? $_POST['id'] : NULL;
+        $this->conc['axn'] = 'cancelar_servicio';
+        $this->conc['skServicio'] = (isset($_POST['id']) && !empty($_POST['id'])) ? $_POST['id'] : NULL;
         $this->conc['sObservacionesCancelacion'] = (isset($_POST['sObservaciones']) && !empty($_POST['sObservaciones'])) ? $_POST['sObservaciones'] : NULL;
         
-        $stpCUD_conceptos = parent::stpCUD_conceptos();
+        $stpCUD_serviciosConceptos = parent::stpCUD_serviciosConceptos();
            
-        if(!$stpCUD_conceptos || isset($stpCUD_conceptos['success']) && $stpCUD_conceptos['success'] != 1){
+        if(!$stpCUD_serviciosConceptos || isset($stpCUD_serviciosConceptos['success']) && $stpCUD_serviciosConceptos['success'] != 1){
             $this->data['success'] = FALSE;
             $this->data['message'] = 'HUBO UN ERROR AL CANCELAR EL REGISTRO';
             return $this->data;

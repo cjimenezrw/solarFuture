@@ -67,7 +67,7 @@ Class Cofa_form_Controller Extends Admi_Model {
 
 
         // Guardar facturas Servicios
-            if(isset($this->admi['conceptos']) && !empty($this->admi['conceptos'])){
+            if(isset($this->admi['servicios']) && !empty($this->admi['servicios'])){
                 $facturas_servicios = $this->facturas_servicios();
                 if(!$facturas_servicios['success']){
                     Conn::rollback($this->idTran);
@@ -221,7 +221,7 @@ Class Cofa_form_Controller Extends Admi_Model {
 
 
 
-        foreach ($this->admi['conceptos'] AS $srv){
+        foreach ($this->admi['servicios'] AS $srv){
             // AQUI VAN LOS SERVICIOS NORMALES.
             $this->admi['axn'] = "facturas_servicios";
 

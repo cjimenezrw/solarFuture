@@ -184,13 +184,13 @@ SIENDO EL DÍA <?php echo (isset($data['datos']['dFechaEntregaInstalacion']) && 
 	<tbody>
 	    <?php
 	    $i = 1;
-	    if (isset($data['conceptosCotizacion'])) {
-		foreach ($data['conceptosCotizacion'] AS $conceptos) {
+	    if (isset($data['serviciosCotizacion'])) {
+		foreach ($data['serviciosCotizacion'] AS $servicios) {
 		    ?>
 		    <tr>
-			<td style="text-align:center; font-size: 10px; text-transform: uppercase; word-wrap: break-word;" ><?php echo $conceptos['sCodigo']; ?></td>
- 			<td style="text-align:left; font-size: 10px; text-transform: uppercase; word-wrap: break-word;" ><?php echo (!empty($conceptos['sDescripcion']) ? $conceptos['sDescripcion'] : $conceptos['concepto']); ?></td>
-			<td style="text-align:right; font-size: 10px; text-transform: uppercase;" ><?php echo number_format($conceptos['fCantidad'], 2); ?></td>
+			<td style="text-align:center; font-size: 10px; text-transform: uppercase; word-wrap: break-word;" ><?php echo $servicios['sCodigo']; ?></td>
+ 			<td style="text-align:left; font-size: 10px; text-transform: uppercase; word-wrap: break-word;" ><?php echo (!empty($servicios['sDescripcion']) ? $servicios['sDescripcion'] : $servicios['servicio']); ?></td>
+			<td style="text-align:right; font-size: 10px; text-transform: uppercase;" ><?php echo number_format($servicios['fCantidad'], 2); ?></td>
 		    </tr>
 		    <?php
 		    $i++;
@@ -206,7 +206,7 @@ DICHO TRABAJO SE ENTREGA FUNCIONANDO Y A SATISFACCIÓN PLENA DEL CLIENTE, HABIÉ
 </div>
 
 <?php
-    if (isset($data['conceptosCotizacionInventario']) && !empty($data['conceptosCotizacionInventario'])) {
+    if (isset($data['serviciosCotizacionInventario']) && !empty($data['serviciosCotizacionInventario'])) {
 ?>
 <div class="col-md-12 clearfix" style="font-size:14px;text-transform: uppercase;font-weight:bold;">
 1.- LISTADO Y NÚMERO DE SERIE DE LOS EQUIPOS:
@@ -228,13 +228,13 @@ DICHO TRABAJO SE ENTREGA FUNCIONANDO Y A SATISFACCIÓN PLENA DEL CLIENTE, HABIÉ
 	</thead>
 	<tbody>
 	    <?php
-	    if (isset($data['conceptosCotizacionInventario'])) {
-		foreach ($data['conceptosCotizacionInventario'] AS $conceptosInventario) {
+	    if (isset($data['serviciosCotizacionInventario'])) {
+		foreach ($data['serviciosCotizacionInventario'] AS $serviciosInventario) {
 		    ?>
 		    <tr>
-			<td style="text-align:center; font-size: 10px; text-transform: uppercase; word-wrap: break-word;"><?php echo $conceptosInventario['sCodigo']; ?></td>
- 			<td style="text-align:left; font-size: 10px; text-transform: uppercase; word-wrap: break-word;"><?php echo (!empty($conceptosInventario['sDescripcion']) ? $conceptosInventario['sDescripcion'] : $conceptosInventario['concepto']); ?></td>
-            <td style="text-align:center; font-size: 10px; text-transform: uppercase; word-wrap: break-word;"><?php echo (!empty($conceptosInventario['sNumeroSerie']) ? implode(', ',$conceptosInventario['sNumeroSerie']) : ''); ?></td>
+			<td style="text-align:center; font-size: 10px; text-transform: uppercase; word-wrap: break-word;"><?php echo $serviciosInventario['sCodigo']; ?></td>
+ 			<td style="text-align:left; font-size: 10px; text-transform: uppercase; word-wrap: break-word;"><?php echo (!empty($serviciosInventario['sDescripcion']) ? $serviciosInventario['sDescripcion'] : $serviciosInventario['servicio']); ?></td>
+            <td style="text-align:center; font-size: 10px; text-transform: uppercase; word-wrap: break-word;"><?php echo (!empty($serviciosInventario['sNumeroSerie']) ? implode(', ',$serviciosInventario['sNumeroSerie']) : ''); ?></td>
 		    </tr>
 		    <?php
 		}//FOREACH

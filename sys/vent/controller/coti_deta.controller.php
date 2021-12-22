@@ -20,8 +20,8 @@ Class Coti_deta_Controller Extends Vent_Model {
 
         $this->vent['skCotizacion'] = $_GET['p1'];
         $this->data['datos'] =  parent::_getCotizacion();
-        $this->data['conceptosCotizacion']  = parent::_getCotizacionConceptos();
-        $this->data['conceptosCotizacionInventario'] = parent::_getCotizacionConceptos_inventario();
+        $this->data['serviciosCotizacion']  = parent::_getCotizacionservicios();
+        $this->data['serviciosCotizacionInventario'] = parent::_getCotizacionservicios_inventario();
         $this->data['cotizacionCorreos']  = parent::_getCotizacionCorreos();
         $this->data['cotizacionInformacionProducto'] = parent::_getCotizacionInformacionProductoPDF();
         $this->data['cotizacionTerminosCondiciones'] = parent::_getCotizacionTerminosCondiciones();
@@ -38,7 +38,7 @@ Class Coti_deta_Controller Extends Vent_Model {
         ]);
 
         $this->data['fotografiasEntrega'] = (isset($get_documentos['data']) && !empty($get_documentos['data']) ? $get_documentos['data'] : []);
-
+        
         return $this->data;
     }
 
@@ -102,20 +102,20 @@ Class Coti_deta_Controller Extends Vent_Model {
         
         $this->data = $this->consultar();
 
-        $conceptosInventario = [];
-        foreach($this->data['conceptosCotizacionInventario'] AS $row){
-            if(!isset($conceptosInventario[$row['sCodigo']])){
-                $conceptosInventario[$row['sCodigo']] = [
+        $serviciosInventario = [];
+        foreach($this->data['serviciosCotizacionInventario'] AS $row){
+            if(!isset($serviciosInventario[$row['sCodigo']])){
+                $serviciosInventario[$row['sCodigo']] = [
                     'sCodigo'=>$row['sCodigo'],
-                    'concepto'=>$row['concepto'],
+                    'servicio'=>$row['servicio'],
                     'sDescripcion'=>$row['sDescripcion'],
                     'sNumeroSerie'=>[]
                 ];
             }
-            array_push($conceptosInventario[$row['sCodigo']]['sNumeroSerie'],$row['sNumeroSerie']);
+            array_push($serviciosInventario[$row['sCodigo']]['sNumeroSerie'],$row['sNumeroSerie']);
         }
 
-        $this->data['conceptosCotizacionInventario'] = $conceptosInventario;
+        $this->data['serviciosCotizacionInventario'] = $serviciosInventario;
         
         ob_start();
             $this->load_view('formato_venta', $this->data, NULL, FALSE);
@@ -152,20 +152,20 @@ Class Coti_deta_Controller Extends Vent_Model {
  
         //exit("<pre>".print_r($this->data,1)."</pre>");
         
-        $conceptosInventario = [];
-        foreach($this->data['conceptosCotizacionInventario'] AS $row){
-            if(!isset($conceptosInventario[$row['sCodigo']])){
-                $conceptosInventario[$row['sCodigo']] = [
+        $serviciosInventario = [];
+        foreach($this->data['serviciosCotizacionInventario'] AS $row){
+            if(!isset($serviciosInventario[$row['sCodigo']])){
+                $serviciosInventario[$row['sCodigo']] = [
                     'sCodigo'=>$row['sCodigo'],
-                    'concepto'=>$row['concepto'],
+                    'servicio'=>$row['servicio'],
                     'sDescripcion'=>$row['sDescripcion'],
                     'sNumeroSerie'=>[]
                 ];
             }
-            array_push($conceptosInventario[$row['sCodigo']]['sNumeroSerie'],$row['sNumeroSerie']);
+            array_push($serviciosInventario[$row['sCodigo']]['sNumeroSerie'],$row['sNumeroSerie']);
         }
 
-        $this->data['conceptosCotizacionInventario'] = $conceptosInventario;
+        $this->data['serviciosCotizacionInventario'] = $serviciosInventario;
 
         
         ob_start();

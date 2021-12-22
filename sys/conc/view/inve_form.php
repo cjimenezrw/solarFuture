@@ -221,7 +221,7 @@
             };
 
             // AQUÍ SE AGREGA EL REGISTRO A LA TABLA MÚLTIPLE //
-                core.tableMultipleAddRow($('#tableMultiple'), params,'skConceptoInventario',index);
+                core.tableMultipleAddRow($('#tableMultiple'), params,'skServicioInventario',index);
     };
 
     var params = {

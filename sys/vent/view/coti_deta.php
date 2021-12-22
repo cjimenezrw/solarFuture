@@ -175,7 +175,7 @@ if (isset($data['datos'])) {
          <div class="panel panel-bordered panel-primary panel-line" style="display: block;">
             
             <div class="panel-heading">
-			    <h3 class="panel-title">CONCEPTOS</h3>
+			    <h3 class="panel-title">servicios</h3>
                 <ul class="panel-actions panel-actions-keep">
                     <li>
                         <a href="javascript:void(0);" class="btn btn-squared btn-outline btn-primary btn-sm" onclick="formatoPDF();"> Formato Cotizacion</a>
@@ -191,7 +191,7 @@ if (isset($data['datos'])) {
 				<tr>
 				    <th class="text-center">#</th>
 				    <th class="text-left" >Unidad de Medida</th>
-				    <th class="text-left" >Concepto</th>
+				    <th class="text-left" >Servicio</th>
 				    <th class="text-right">Cantidad</th>
 				    <th class="text-right">P. Unit</th>
 				    <th class="text-right">Importe </th>
@@ -200,18 +200,18 @@ if (isset($data['datos'])) {
 			    <tbody>
 				<?php
 				$i = 1;
-				if (isset($data['conceptosCotizacion'])) {
-				    foreach ($data['conceptosCotizacion'] AS $conceptos) {
+				if (isset($data['serviciosCotizacion'])) {
+				    foreach ($data['serviciosCotizacion'] AS $servicios) {
 					?>
 					<tr>
 					    <td style="text-align:center; text-transform: uppercase;" ><?php echo $i; ?></td>
-					    <td style="text-align:left; text-transform: uppercase;" ><?php echo $conceptos['tipoMedida']; ?></td>
+					    <td style="text-align:left; text-transform: uppercase;" ><?php echo $servicios['tipoMedida']; ?></td>
 					    <td style="text-align:left; text-transform: uppercase;" >
-              <?php echo $conceptos['concepto'].(!empty($conceptos['sDescripcion']) ? " (".$conceptos['sDescripcion'].")" : ''); ?>
-              <?php if(!empty($conceptos['venta'])){ ?>
+              <?php echo $servicios['servicio'].(!empty($servicios['sDescripcion']) ? " (".$servicios['sDescripcion'].")" : ''); ?>
+              <?php if(!empty($servicios['venta'])){ ?>
                   <table class="table table-responsive">
                   <tbody>
-                  <?php $j=1; foreach ($conceptos['venta'] AS $venta) { ?>
+                  <?php $j=1; foreach ($servicios['venta'] AS $venta) { ?>
 
                     <tr>
                     <td><?php echo $j; ?></td>
@@ -222,9 +222,9 @@ if (isset($data['datos'])) {
                   </table>
                 <?php } ?>
               </td>
-					    <td style="text-align:right; text-transform: uppercase;" ><?php echo number_format($conceptos['fCantidad'], 4); ?></td>
-					    <td style="text-align:right; text-transform: uppercase;" ><?php echo "$" . number_format($conceptos['fPrecioUnitario'], 2); ?></td>
-					    <td style="text-align:right; text-transform: uppercase;" ><?php echo "$" . number_format($conceptos['fImporte'], 2); ?></td>
+					    <td style="text-align:right; text-transform: uppercase;" ><?php echo number_format($servicios['fCantidad'], 4); ?></td>
+					    <td style="text-align:right; text-transform: uppercase;" ><?php echo "$" . number_format($servicios['fPrecioUnitario'], 2); ?></td>
+					    <td style="text-align:right; text-transform: uppercase;" ><?php echo "$" . number_format($servicios['fImporte'], 2); ?></td>
 					    
 					</tr>
 					<?php

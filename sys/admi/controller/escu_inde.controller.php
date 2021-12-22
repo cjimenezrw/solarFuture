@@ -172,28 +172,28 @@ Class Escu_inde_Controller Extends Admi_Model
     public function guardarConcepto(){
         set_time_limit(-1);
         ini_set('memory_limit', '-1');
-        $conceptosFile = parent::importData(array(
+        $serviciosFile = parent::importData(array(
             'fileName'=>TMP_HARDPATH."configuracion.xlsx",
             'asArray'=>TRUE
             ));
-            $arrayConceptos = array();
-            foreach ($conceptosFile['conceptos'] as $key => $value) {
+            $arrayservicios = array();
+            foreach ($serviciosFile['servicios'] as $key => $value) {
                 $tot = count($value);
                     for ($e=0; $e < $tot; $e++) {
-                            $arrayConceptos['conceptos'][$e][$key] =$value[$e];
+                            $arrayservicios['servicios'][$e][$key] =$value[$e];
                     }
             }
-            foreach($arrayConceptos['conceptos'] as $keyValue => $valueConceptos) {
+            foreach($arrayservicios['servicios'] as $keyValue => $valueservicios) {
                 $this->cfdi['sNombre'] = NULL;
                 $this->cfdi['sCuentaContable'] = NULL;
                 $this->cfdi['skCuentaGasto'] = NULL; 
-                $this->cfdi['sNombre'] = $valueConceptos['concepto'];
-                $this->cfdi['sCuentaContable'] = $valueConceptos['cuenta_contable'];                   
+                $this->cfdi['sNombre'] = $valueservicios['concepto'];
+                $this->cfdi['sCuentaContable'] = $valueservicios['cuenta_contable'];                   
                 $this->obCuentaGasto();
-                $this->guardarConceptos();          
+                $this->guardarservicios();          
             }
     }
-    public function guardarConceptos(){
+    public function guardarservicios(){
         $concepto = $this->sysAPI('cfdi', 'cuga_form', 'guardar', [
             'POST' => [
                 'skCuentaGasto' => $this->cfdi['skCuentaGasto'],
@@ -222,16 +222,16 @@ Class Escu_inde_Controller Extends Admi_Model
             'fileName'=>TMP_HARDPATH."configuracion.xlsx",
             'asArray'=>TRUE
             ));
-            $arrayConceptos = array();
+            $arrayservicios = array();
             foreach ($productosFile['productos'] as $key => $value) {
                 $tot = count($value);
                     for ($e=0; $e < $tot; $e++) {
-                            $arrayConceptos['productos'][$e][$key] =$value[$e];
+                            $arrayservicios['productos'][$e][$key] =$value[$e];
                     }
             }
             
 
-            foreach($arrayConceptos['productos'] as $keyValue => $valueProductos) {
+            foreach($arrayservicios['productos'] as $keyValue => $valueProductos) {
                 $this->cfdi['sNumeroIdentificacion'] = (!empty($valueProductos['clave_producto']) ? $valueProductos['clave_producto'] : NULL); ;
                 $this->cfdi['skEmpresaSocioProducto'] = NULL;
                 $this->cfdi['skCuentaGasto'] = NULL;                   

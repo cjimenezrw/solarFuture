@@ -10,7 +10,7 @@ if (isset($data['datos'])) {
 
 <div class="row">
 <form class="form-horizontal" id="core-guardar" method="post"  enctype="multipart/form-data">
-<input value="<?php echo (!empty($result['skConcepto']) ? $result['skConcepto'] : '');?>" name="skConcepto" id="skConcepto"  type="hidden">
+<input value="<?php echo (!empty($result['skServicio']) ? $result['skServicio'] : '');?>" name="skServicio" id="skServicio"  type="hidden">
 
 <div class="panel panel-bordered panel-primary panel-line" >
             
@@ -90,8 +90,8 @@ if (isset($data['datos'])) {
                     <tr> 
                     <td style="text-align:center; text-transform: uppercase;" >
                     <div class="checkbox-custom checkbox-primary">
-                  <input value="<?php  echo $inventario['skConceptoInventario']; ?>" name="skConceptoInventario[]" class="check_factura" id="check_factura_<?php  echo $inventario['skConceptoInventario']; ?>" type="checkbox"  > 
-                  <label for="check_factura_<?php  echo $inventario['skConceptoInventario']; ?>"></label>
+                  <input value="<?php  echo $inventario['skServicioInventario']; ?>" name="skServicioInventario[]" class="check_factura" id="check_factura_<?php  echo $inventario['skServicioInventario']; ?>" type="checkbox"  > 
+                  <label for="check_factura_<?php  echo $inventario['skServicioInventario']; ?>"></label>
                   </div>
                       </td> 
                     <td style="text-align:left; text-transform: uppercase;" >

@@ -78,17 +78,17 @@ Class Vent_Controller Extends Vent_Model {
                 echo json_encode($coti_form->get_empresasProspectos());
             break;
             
-            case 'get_conceptos':
+            case 'get_servicios':
                 header('Content-Type: application/json');
-                echo json_encode($coti_form->get_conceptos());
+                echo json_encode($coti_form->get_servicios());
             break;
-            case 'get_conceptos_impuestos':
+            case 'get_servicios_impuestos':
                 header('Content-Type: application/json');
-                echo json_encode($coti_form->get_conceptos_impuestos());
+                echo json_encode($coti_form->get_servicios_impuestos());
             break;
-            case 'get_conceptos_datos':
+            case 'get_servicios_datos':
                 header('Content-Type: application/json');
-                echo json_encode($coti_form->get_conceptos_datos());
+                echo json_encode($coti_form->get_servicios_datos());
             break;
             
             case 'get_medidas':
@@ -141,9 +141,9 @@ Class Vent_Controller Extends Vent_Model {
         $axn = (isset($_POST['axn']) ? $_POST['axn'] : (isset($_GET['axn']) ? $_GET['axn'] : NULL));
 
         switch ($axn) {
-            case 'get_conceptosInventario':
+            case 'get_serviciosInventario':
                 header('Content-Type: application/json');
-                echo json_encode($vent_coti->get_conceptosInventario());
+                echo json_encode($vent_coti->get_serviciosInventario());
             break;
             case 'guardar':
                 header('Content-Type: application/json');

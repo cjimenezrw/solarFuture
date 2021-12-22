@@ -73,7 +73,7 @@ Class Orse_form_Controller Extends Admi_Model {
 
 
         // Guardar facturas Servicios
-            if(isset($this->admi['conceptos']) && !empty($this->admi['conceptos'])){
+            if(isset($this->admi['servicios']) && !empty($this->admi['servicios'])){
                 $ordenes_servicios = $this->ordenes_servicios();
                 if(!$ordenes_servicios['success']){
                     Conn::rollback($this->idTran);
@@ -263,7 +263,7 @@ Class Orse_form_Controller Extends Admi_Model {
         }
 
  
-        foreach ($this->admi['conceptos'] AS $srv){
+        foreach ($this->admi['servicios'] AS $srv){
             $this->admi['axn'] = "ordenes_servicios";
 
             // AQUI VAN LOS SERVICIOS NORMALES.

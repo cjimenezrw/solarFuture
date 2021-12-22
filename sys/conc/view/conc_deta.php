@@ -118,9 +118,9 @@ if (isset($data['datos'])) {
                     <div class="form-group">
                             <h4 class="example-title">IMPUESTOS A APLICAR:</h4>
                       <?php
-                      if (!empty($data['conceptosImpuestos'])) {
+                      if (!empty($data['serviciosImpuestos'])) {
 
-                          foreach ($data['conceptosImpuestos'] as $val) { ?>
+                          foreach ($data['serviciosImpuestos'] as $val) { ?>
                               <div class="col-md-4 checkbox-custom checkbox-primary">
                                     <input type="checkbox" checked disabled    />
                                     <label ><?php echo (isset($val['nombre'])) ? ($val['nombre']) : ''; ?></label>

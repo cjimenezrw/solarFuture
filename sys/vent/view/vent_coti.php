@@ -73,7 +73,7 @@ if (isset($data['datos'])) {
         <div class="panel panel-bordered panel-primary panel-line" >
             
             <div class="panel-heading">
-			        <h3 class="panel-title">CONCEPTOS</h3>
+			        <h3 class="panel-title">servicios</h3>
 		  	    </div>
 
             <div class="panel-body container-fluid">
@@ -89,39 +89,39 @@ if (isset($data['datos'])) {
                 </thead>
               <tbody>
                 <?php
-                if (isset($data['conceptosCotizacion'])) {
+                if (isset($data['serviciosCotizacion'])) {
                   $i=0;
-                  foreach ($data['conceptosCotizacion'] AS $conceptos) {
+                  foreach ($data['serviciosCotizacion'] AS $servicios) {
                     ?>
                     <tr> 
                     <td style="text-align:right; text-transform: uppercase;" >
-                        <input type="hidden" name="concepto[<?php echo $i;?>][fCantidad]" value="<?php  echo $conceptos['fCantidad']; ?>">
-                        <input type="hidden" name="concepto[<?php echo $i;?>][skCotizacionConcepto] " value="<?php  echo $conceptos['skCotizacionConcepto']; ?>">
-                        <input type="hidden" name="concepto[<?php echo $i;?>][skConcepto]" value="<?php  echo $conceptos['skConcepto']; ?>">
-                        <input type="hidden" name="concepto[<?php echo $i;?>][iDetalle]" value="<?php  echo (!empty($conceptos['iDetalle']) ? $conceptos['iDetalle'] : NULL ); ?>">
-                        <?php echo number_format($conceptos['fCantidad'], 2); ?>
+                        <input type="hidden" name="concepto[<?php echo $i;?>][fCantidad]" value="<?php  echo $servicios['fCantidad']; ?>">
+                        <input type="hidden" name="concepto[<?php echo $i;?>][skCotizacionConcepto] " value="<?php  echo $servicios['skCotizacionConcepto']; ?>">
+                        <input type="hidden" name="concepto[<?php echo $i;?>][skServicio]" value="<?php  echo $servicios['skServicio']; ?>">
+                        <input type="hidden" name="concepto[<?php echo $i;?>][iDetalle]" value="<?php  echo (!empty($servicios['iDetalle']) ? $servicios['iDetalle'] : NULL ); ?>">
+                        <?php echo number_format($servicios['fCantidad'], 2); ?>
                     </td> 
                     <td style="text-align:right; text-transform: uppercase;" >
-                      <?php echo $conceptos['sCodigo']; ?>
+                      <?php echo $servicios['sCodigo']; ?>
                     </td> 
                     <td style="text-align:left; text-transform: uppercase;" >
-                      <?php echo $conceptos['concepto'].(!empty($conceptos['sDescripcion']) ? " (".$conceptos['sDescripcion'].")" : ''); ?>
+                      <?php echo $servicios['concepto'].(!empty($servicios['sDescripcion']) ? " (".$servicios['sDescripcion'].")" : ''); ?>
                     </td>
                     </tr>
-                    <?php if(!empty($conceptos['iDetalle']) && $conceptos['iDetalle'] == 1 ){  
+                    <?php if(!empty($servicios['iDetalle']) && $servicios['iDetalle'] == 1 ){  
                       // for sobre la cantidad 
-                      for ($j=0; $j < $conceptos['fCantidad']; $j++) {  ?> 
+                      for ($j=0; $j < $servicios['fCantidad']; $j++) {  ?> 
                          <tr>
                          <td></td>
                          <td></td>
-                         <td class="text-left"> <select name="concepto[<?php echo $i;?>][skConceptoInventario][<?php echo $j;?>]"  class="<?php  echo $conceptos['skConcepto']; ?> form-control js-data-example-ajax" data-plugin="select2" data-ajax--cache="true">  </select></td>
+                         <td class="text-left"> <select name="concepto[<?php echo $i;?>][skServicioInventario][<?php echo $j;?>]"  class="<?php  echo $servicios['skServicio']; ?> form-control js-data-example-ajax" data-plugin="select2" data-ajax--cache="true">  </select></td>
                          </tr>
 
                         
                      <?php  } //ENDFOR ?>
                      <script type="text/javascript">
  
-                      core.autocomplete2('.<?php  echo $conceptos['skConcepto']; ?>', 'get_conceptosInventario', window.location.href, 'Concepto', { skConcepto : '<?php  echo $conceptos['skConcepto']; ?>'});
+                      core.autocomplete2('.<?php  echo $servicios['skServicio']; ?>', 'get_serviciosInventario', window.location.href, 'Concepto', { skServicio : '<?php  echo $servicios['skServicio']; ?>'});
                      </script>
 
 

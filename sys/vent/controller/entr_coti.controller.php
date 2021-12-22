@@ -206,8 +206,8 @@ Class Entr_coti_Controller Extends Vent_Model {
         if (!empty($this->vent['skCotizacion'])) {
             
             $this->data['datos'] = parent::_getCotizacion();
-            $cotizacionConceptos = parent::_getCotizacionConceptos();
-            $this->data['conceptosCotizacion'] = $cotizacionConceptos;
+            $cotizacionservicios = parent::_getCotizacionservicios();
+            $this->data['serviciosCotizacion'] = $cotizacionservicios;
         }
  //exit('<pre>'.print_r($this->data,1).'</pre>');
         return $this->data;

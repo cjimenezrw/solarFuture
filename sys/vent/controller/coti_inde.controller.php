@@ -144,8 +144,8 @@ Class Coti_inde_Controller Extends Vent_Model {
         $this->vent['axn'] = 'cancelarVentaCotizacion';
 
 
-        $stpCUD_conceptosInventario = parent::stpCUD_conceptosInventario();
-        if(!$stpCUD_conceptosInventario || isset($stpCUD_conceptosInventario['success']) && $stpCUD_conceptosInventario['success'] != 1){
+        $stpCUD_serviciosserviciosInventario = parent::stpCUD_serviciosserviciosInventario();
+        if(!$stpCUD_serviciosserviciosInventario || isset($stpCUD_serviciosserviciosInventario['success']) && $stpCUD_serviciosserviciosInventario['success'] != 1){
             Conn::rollback($this->idTran);
             $this->data['success'] = FALSE;
             $this->data['message'] = 'HUBO UN ERROR AL CANCELAR LA COTIZACION EN GENERAL';
@@ -154,24 +154,24 @@ Class Coti_inde_Controller Extends Vent_Model {
 
         $this->vent['axn'] = 'cancelarVentaConcepto';
 
-        $this->data['conceptosCotizacion']  = parent::_getCotizacionConceptos();
+        $this->data['serviciosCotizacion']  = parent::_getCotizacionservicios();
       
 
-        foreach($this->data['conceptosCotizacion'] AS $keyConceptos => $rowConceptos){
+        foreach($this->data['serviciosCotizacion'] AS $keyservicios => $rowservicios){
            
-            $this->vent['skConcepto'] = $rowConceptos['skConcepto'];
-            $this->vent['skCotizacionConcepto'] = $rowConceptos['skCotizacionConcepto'];
-            $this->vent['skConceptoInventario']  = NULL;
-            if(!empty($rowConceptos['iDetalle'])){
+            $this->vent['skServicio'] = $rowservicios['skServicio'];
+            $this->vent['skCotizacionConcepto'] = $rowservicios['skCotizacionConcepto'];
+            $this->vent['skServicioInventario']  = NULL;
+            if(!empty($rowservicios['iDetalle'])){
                
-                    if(!empty($rowConceptos['venta']) && is_array($rowConceptos['venta'])){
+                    if(!empty($rowservicios['venta']) && is_array($rowservicios['venta'])){
                       
-                        foreach($rowConceptos['venta'] AS $row){
+                        foreach($rowservicios['venta'] AS $row){
                             
                             $this->vent['fCantidad'] = 1;
-                            $this->vent['skConceptoInventario'] = $row['skConceptoInventario'];
-                            $stpCUD_conceptosInventario = parent::stpCUD_conceptosInventario();
-                            if(!$stpCUD_conceptosInventario || isset($stpCUD_conceptosInventario['success']) && $stpCUD_conceptosInventario['success'] != 1){
+                            $this->vent['skServicioInventario'] = $row['skServicioInventario'];
+                            $stpCUD_serviciosserviciosInventario = parent::stpCUD_serviciosserviciosInventario();
+                            if(!$stpCUD_serviciosserviciosInventario || isset($stpCUD_serviciosserviciosInventario['success']) && $stpCUD_serviciosserviciosInventario['success'] != 1){
                                 Conn::rollback($this->idTran);
                                 $this->data['success'] = FALSE;
                                 $this->data['message'] = 'HUBO UN ERROR AL CANCELAR EL CONCEPTO DE DETALLE';
@@ -184,9 +184,9 @@ Class Coti_inde_Controller Extends Vent_Model {
                 
             }else{
 
-                $this->vent['fCantidad'] = $rowConceptos['fCantidad'];
-                $stpCUD_conceptosInventario = parent::stpCUD_conceptosInventario();
-                if(!$stpCUD_conceptosInventario || isset($stpCUD_conceptosInventario['success']) && $stpCUD_conceptosInventario['success'] != 1){
+                $this->vent['fCantidad'] = $rowservicios['fCantidad'];
+                $stpCUD_serviciosserviciosInventario = parent::stpCUD_serviciosserviciosInventario();
+                if(!$stpCUD_serviciosserviciosInventario || isset($stpCUD_serviciosserviciosInventario['success']) && $stpCUD_serviciosserviciosInventario['success'] != 1){
                     Conn::rollback($this->idTran);
                     $this->data['success'] = FALSE;
                     $this->data['message'] = 'HUBO UN ERROR AL CANCELAR EL CONCEPTO GENERAL';

@@ -5,7 +5,7 @@ Class Inve_form_Controller Extends Conc_Model {
     // PROTECTED VARIABLES //
     // PRIVATE VARIABLES //
         private $data = [];
-        private $idTran = 'stpCUD_conceptosInventario';
+        private $idTran = 'stpCUD_serviciosserviciosInventario';
 
     public function __construct(){
         parent::init();
@@ -33,7 +33,7 @@ Class Inve_form_Controller Extends Conc_Model {
                 return $this->data;
             }
 
-            $this->conc['skConcepto'] = (isset($_GET['p1']) ? $_GET['p1'] : NULL);
+            $this->conc['skServicio'] = (isset($_GET['p1']) ? $_GET['p1'] : NULL);
 
             // Guardar Concepto Producto
             $guardar_concepto_productos = $this->guardar_concepto_productos();
@@ -68,17 +68,17 @@ Class Inve_form_Controller Extends Conc_Model {
                 }
             
             // AGREGAMOS LOS PRODUCTOS DE INVENTARIO CON NÚMERO DE SERIE
-                if(isset($this->conc['skConceptoInventario']) && is_array($this->conc['skConceptoInventario'])){
-                    $skConceptoInventario = $this->conc['skConceptoInventario'];
+                if(isset($this->conc['skServicioInventario']) && is_array($this->conc['skServicioInventario'])){
+                    $skServicioInventario = $this->conc['skServicioInventario'];
                     $sNumeroSerie = $this->conc['sNumeroSerie'];
-                    foreach($skConceptoInventario AS $k=>$v){
-                        $this->conc['skConceptoInventario'] = $v;
+                    foreach($skServicioInventario AS $k=>$v){
+                        $this->conc['skServicioInventario'] = $v;
                         $this->conc['sNumeroSerie'] = $sNumeroSerie[$k];
                         $this->conc['fCantidad'] = 1;
 
-                        $stpCUD_conceptosInventario = parent::stpCUD_conceptosInventario();
+                        $stpCUD_serviciosserviciosInventario = parent::stpCUD_serviciosserviciosInventario();
                     
-                        if(!$stpCUD_conceptosInventario || isset($stpCUD_conceptosInventario['success']) && $stpCUD_conceptosInventario['success'] != 1){
+                        if(!$stpCUD_serviciosserviciosInventario || isset($stpCUD_serviciosserviciosInventario['success']) && $stpCUD_serviciosserviciosInventario['success'] != 1){
                             $this->data['success'] = FALSE;
                             $this->data['message'] = 'HUBO UN ERROR AL GUARDAR LOS PRODUCTOS DEL CONCEPTO';
                             return $this->data;
@@ -97,9 +97,9 @@ Class Inve_form_Controller Extends Conc_Model {
         }else{
             
             // AGREGAMOS LOS PRODUCTOS DE INVENTARIO CON CANTIDAD
-                $stpCUD_conceptosInventario = parent::stpCUD_conceptosInventario();
+                $stpCUD_serviciosserviciosInventario = parent::stpCUD_serviciosserviciosInventario();
             
-                if(!$stpCUD_conceptosInventario || isset($stpCUD_conceptosInventario['success']) && $stpCUD_conceptosInventario['success'] != 1){
+                if(!$stpCUD_serviciosserviciosInventario || isset($stpCUD_serviciosserviciosInventario['success']) && $stpCUD_serviciosserviciosInventario['success'] != 1){
                     $this->data['success'] = FALSE;
                     $this->data['message'] = 'HUBO UN ERROR AL GUARDAR LOS PRODUCTOS DEL CONCEPTO';
                     return $this->data;
@@ -216,22 +216,22 @@ Class Inve_form_Controller Extends Conc_Model {
 
     public function getDatos() {
         $this->data = ['success' => TRUE, 'message' => NULL, 'datos' => NULL];
-        $this->conc['skConcepto'] = (isset($_GET['p1']) && !empty($_GET['p1'])) ? $_GET['p1'] : NULL;
+        $this->conc['skServicio'] = (isset($_GET['p1']) && !empty($_GET['p1'])) ? $_GET['p1'] : NULL;
 
-        if (!empty($this->conc['skConcepto'])) {
+        if (!empty($this->conc['skServicio'])) {
             $this->data['datos'] = parent::_getConcepto();
 
             if (isset($this->data['datos']['iDetalle']) && $this->data['datos']['iDetalle'] == 1) {
                 $this->conc['skEstatus'] = 'NU';
-                $inventario = parent::_get_conceptos_inventario();
+                $inventario = parent::_get_servicios_inventario();
                 $this->data["inventario"] = [];
                 if ($inventario && is_array($inventario)) {
                     foreach ($inventario AS $row) {
-                        $input = '<input data-name="'.$row['skConceptoInventario'].'" value="'.$row['skConceptoInventario'].'" name="skConceptoInventario[]" type="text" hidden />';
+                        $input = '<input data-name="'.$row['skServicioInventario'].'" value="'.$row['skServicioInventario'].'" name="skServicioInventario[]" type="text" hidden />';
                         $input .= '<input data-name="'.$row['sNumeroSerie'].'" value="'.$row['sNumeroSerie'].'" name="sNumeroSerie[]" type="text" hidden />';
 
                         array_push($this->data["inventario"], [
-                            'id' => $row['skConceptoInventario'],
+                            'id' => $row['skServicioInventario'],
                             'sNumeroSerie' => $row['sNumeroSerie'].$input
                         ]);
                     }

@@ -791,25 +791,25 @@ Class Admi_Model Extends DLOREAN_Model {
     //COMPLEMENTOS
     $this->data['datos']['Complemento']= (!empty($result['Complemento']['TimbreFiscalDigital']) ? $result['Complemento']['TimbreFiscalDigital'] : NULL);
 
-    //CONCEPTOS
-    $this->data['datos']['Conceptos'] = [];
-    if(!empty($result['Conceptos']) && in_array($this->data['datos']['comprobante']['TipoDeComprobante'],['E','I']) ){
+    //servicios
+    $this->data['datos']['servicios'] = [];
+    if(!empty($result['servicios']) && in_array($this->data['datos']['comprobante']['TipoDeComprobante'],['E','I']) ){
         $i=0;
-        foreach ($result['Conceptos'] as $key => $conceptos) {
-            if(!empty($conceptos)){
-            $this->data['datos']['Conceptos'][$i] = $conceptos;
-            unset($this->data['datos']['Conceptos'][$i]['Impuestos']);
-            if(!empty($conceptos['Impuestos']['Traslados']['Traslado'])){
-                $this->data['datos']['Conceptos'][$i]['fImpuestosTrasladados']= $conceptos['Impuestos']['Traslados']['Traslado']['Importe'];
+        foreach ($result['servicios'] as $key => $servicios) {
+            if(!empty($servicios)){
+            $this->data['datos']['servicios'][$i] = $servicios;
+            unset($this->data['datos']['servicios'][$i]['Impuestos']);
+            if(!empty($servicios['Impuestos']['Traslados']['Traslado'])){
+                $this->data['datos']['servicios'][$i]['fImpuestosTrasladados']= $servicios['Impuestos']['Traslados']['Traslado']['Importe'];
             }
-            if(!empty($conceptos['Impuestos']['Retenciones']['Retencion'])){
-                $this->data['datos']['Conceptos'][$i]['fImpuestosRetenidos']= $conceptos['Impuestos']['Retenciones']['Retencion']['Importe'];
+            if(!empty($servicios['Impuestos']['Retenciones']['Retencion'])){
+                $this->data['datos']['servicios'][$i]['fImpuestosRetenidos']= $servicios['Impuestos']['Retenciones']['Retencion']['Importe'];
             }
             }
             $i++;
         }
     }
-    //CONCEPTOS
+    //servicios
     $this->data['datos']['Pagos'] = [];
     if($this->data['datos']['comprobante']['TipoDeComprobante'] == "P"){
             if(is_array($result['Complemento']['Pagos'])){

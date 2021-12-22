@@ -21,7 +21,7 @@ Class Inve_inde_Controller Extends Conc_Model {
         $configuraciones = [];
 
         //$configuraciones['log'] = TRUE;
-        $configuraciones['query'] = "SELECT cc.skConcepto,
+        $configuraciones['query'] = "SELECT cc.skServicio,
             cc.iFolio,
             cc.fCantidad,
             cc.iDetalle,
@@ -36,7 +36,7 @@ Class Inve_inde_Controller Extends Conc_Model {
             ce.sColor AS estatusColor,
             cep.sNombre AS proveedor,
             cu.sNombre AS usuarioCreacion       
-            FROM cat_conceptos cc
+            FROM cat_servicios cc
             INNER JOIN core_estatus ce ON ce.skEstatus = cc.skEstatus
             INNER JOIN cat_usuarios cu ON cu.skUsuario = cc.skUsuarioCreacion
             LEFT JOIN rel_empresasSocios resp ON resp.skEmpresaSocio = cc.skEmpresaSocioProveedor
@@ -74,7 +74,7 @@ Class Inve_inde_Controller Extends Conc_Model {
                 $row['fCantidad'] = ($row['fCantidad']) ? number_format($row['fCantidad'],2) : '';
                 $row['dFechaCreacion'] = ($row['dFechaCreacion']) ? date('d/m/Y  H:i:s', strtotime($row['dFechaCreacion'])) : '';
                 
-                $row['menuEmergente'] = parent::menuEmergente($regla, $row['skConcepto']);
+                $row['menuEmergente'] = parent::menuEmergente($regla, $row['skServicio']);
                 array_push($data['data'],$row);
             }
         return $data;

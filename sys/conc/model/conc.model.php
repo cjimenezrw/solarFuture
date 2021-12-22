@@ -193,8 +193,11 @@ Class Conc_Model Extends DLOREAN_Model {
             " .escape(isset($this->conc['axn']) ? $this->conc['axn'] : NULL) . ",
             '" . $_SESSION['usuario']['skUsuario'] . "',
             '" . $this->sysController . "' )";
-      
-        //exit('<pre>'.print_r($sql,1).'</pre>');
+        
+        if($this->conc['axn'] == 'guardar_servicio_precios'){
+            //exit('<pre>'.print_r($sql,1).'</pre>');
+        }
+        
         $result = Conn::query($sql);
         //$codigo = Conn::fetch_assoc($result);
         if (!$result) {

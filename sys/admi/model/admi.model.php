@@ -1350,7 +1350,7 @@ Class Admi_Model Extends DLOREAN_Model {
         $sql = "SELECT skUnidadMedida AS id,CONCAT('(',sClaveSAT,') ', sNombre) AS nombre  FROM cat_unidadesMedidaSAT
 				WHERE skEstatus = 'AC' ";
         if (!empty(trim($_POST['val']))) {
-            $sql .= " AND sNombre  COLLATE Latin1_General_CI_AI LIKE '%" . escape($_POST['val'], false) . "%' ";
+            $sql .= " AND sNombre   LIKE '%" . escape($_POST['val'], false) . "%' ";
         }
 
         $result = Conn::query($sql);
@@ -1374,7 +1374,7 @@ Class Admi_Model Extends DLOREAN_Model {
         $sql = "SELECT skServicio AS id,sNombre AS nombre  FROM cat_servicios
 				WHERE 1 = 1 ";
         if (!empty(trim($_POST['val']))) {
-            $sql .= " AND sNombre  COLLATE Latin1_General_CI_AI LIKE '%" . escape($_POST['val'], false) . "%' ";
+            $sql .= " AND sNombre LIKE '%" . escape($_POST['val'], false) . "%' ";
         }
 
         $result = Conn::query($sql);

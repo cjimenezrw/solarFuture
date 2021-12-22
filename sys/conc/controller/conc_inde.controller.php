@@ -102,13 +102,13 @@ Class Conc_inde_Controller Extends Conc_Model {
     public function cancelar(){
         $this->data = ['success' => TRUE, 'message' => NULL, 'datos' => NULL];
 
-        $this->conc['axn'] = 'cancelar_concepto';
+        $this->conc['axn'] = 'cancelar_servicio';
         $this->conc['skServicio'] = (isset($_POST['id']) && !empty($_POST['id'])) ? $_POST['id'] : NULL;
         $this->conc['sObservacionesCancelacion'] = (isset($_POST['sObservaciones']) && !empty($_POST['sObservaciones'])) ? $_POST['sObservaciones'] : NULL;
         
-        $stpCUD_serviciosservicios = parent::stpCUD_serviciosservicios();
+        $stpCUD_serviciosConceptos = parent::stpCUD_serviciosConceptos();
            
-        if(!$stpCUD_serviciosservicios || isset($stpCUD_serviciosservicios['success']) && $stpCUD_serviciosservicios['success'] != 1){
+        if(!$stpCUD_serviciosConceptos || isset($stpCUD_serviciosConceptos['success']) && $stpCUD_serviciosConceptos['success'] != 1){
             $this->data['success'] = FALSE;
             $this->data['message'] = 'HUBO UN ERROR AL CANCELAR EL REGISTRO';
             return $this->data;

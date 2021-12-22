@@ -60,7 +60,7 @@ Class Conc_Model Extends DLOREAN_Model {
             ,CONCAT('SFM',RIGHT(CONCAT('0000',CAST(oc.iFolio AS VARCHAR(4))),4)) AS iFolio
             FROM rel_servicios_inventarios rci
             INNER JOIN core_estatus ce ON ce.skEstatus = rci.skEstatus
-            LEFT JOIN rel_cotizaciones_servicios rcc ON rcc.skCotizacionConcepto = rci.skCotizacionConcepto
+            LEFT JOIN rel_cotizaciones_servicios rcc ON rcc.skCotizacionServicio = rci.skCotizacionServicio
             LEFT JOIN ope_cotizaciones oc ON oc.skCotizacion = rcc.skCotizacion
             LEFT JOIN cat_usuarios cub ON cub.skUsuario = rci.skUsuarioBaja
             WHERE rci.skServicio = ".escape($this->conc['skServicio']);
@@ -84,7 +84,7 @@ Class Conc_Model Extends DLOREAN_Model {
         $sql = "CALL stpCUD_serviciosInventario (
             " .escape(isset($this->conc['skServicio']) ? $this->conc['skServicio'] : NULL) . ",
             " .escape(isset($this->conc['skCotizacion']) ? $this->conc['skCotizacion'] : NULL) . ",
-            " .escape(isset($this->conc['skCotizacionConcepto']) ? $this->conc['skCotizacionConcepto'] : NULL) . ",
+            " .escape(isset($this->conc['skCotizacionServicio']) ? $this->conc['skCotizacionServicio'] : NULL) . ",
             " .escape(isset($this->conc['skServicioInventario']) ? $this->conc['skServicioInventario'] : NULL) . ",
             " .escape(isset($this->conc['skEstatus']) ? $this->conc['skEstatus'] : NULL) . ",
             " .escape(isset($this->conc['fCantidad']) ? $this->conc['fCantidad'] : NULL). ",
@@ -328,7 +328,7 @@ Class Conc_Model Extends DLOREAN_Model {
         return Conn::fetch_assoc_all($result);
     }
 
-    public function _getConceptoImpuestos() {
+    public function _getServicioImpuestos() {
         $select = "SELECT cim.skImpuesto,CONCAT( cim.skTipoImpuesto,'-',cim.sNombre,'(', cim.svalor,'%)')  AS nombre 
                     FROM rel_servicios_impuestos  rci
                     INNER JOIN cat_impuestos cim ON cim.skImpuesto = rci.skImpuesto

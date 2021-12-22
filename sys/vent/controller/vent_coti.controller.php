@@ -59,8 +59,8 @@ Class Vent_coti_Controller Extends Vent_Model {
              }
              
 
-            $descontar_concepto_inventario = $this->descontar_concepto_inventario();
-            if(!$descontar_concepto_inventario['success']){
+            $descontar_servicio_inventario = $this->descontar_servicio_inventario();
+            if(!$descontar_servicio_inventario['success']){
                 Conn::rollback($this->idTran);
                 return $this->data;
             }
@@ -107,32 +107,32 @@ Class Vent_coti_Controller Extends Vent_Model {
     }
 
     /**
-       * descontar_concepto_inventario
+       * descontar_servicio_inventario
        *
-       * Guardar descontar_concepto_inventario
+       * Guardar descontar_servicio_inventario
        *
        * @author Luis Alberto Valdez Alvarez <lvaldez@woodward.com.mx>
        * @return Array ['success'=>NULL,'message'=>NULL,'datos'=>NULL]
        */
-      public function descontar_concepto_inventario(){
+      public function descontar_servicio_inventario(){
           $this->data['success'] = TRUE;
-          $this->vent['axn'] = 'descontar_concepto_inventario';
+          $this->vent['axn'] = 'descontar_servicio_inventario';
           $this->vent['skEstatus'] = NULL;
-          if(!empty($this->vent['concepto'])){
+          if(!empty($this->vent['servicio'])){
         
-            foreach($this->vent['concepto'] AS $key => $row){
+            foreach($this->vent['servicio'] AS $key => $row){
 
                 if(!empty($row['skServicioInventario'])){
                     $this->vent['fCantidad'] = 1;
                     $this->vent['iDetalle'] = $row['iDetalle'];
                     $this->vent['skServicio'] = $row['skServicio'];
-                    $this->vent['skCotizacionConcepto'] = $row['skCotizacionConcepto'];
-                    foreach($row['skServicioInventario'] AS $rowConcepto){
+                    $this->vent['skCotizacionServicio'] = $row['skCotizacionServicio'];
+                    foreach($row['skServicioInventario'] AS $rowServicio){
                       
-                        $this->vent['skServicioInventario'] = $rowConcepto; 
+                        $this->vent['skServicioInventario'] = $rowServicio; 
                         
-                        $stpCUD_serviciosserviciosInventario = parent::stpCUD_serviciosserviciosInventario();
-                        if(!$stpCUD_serviciosserviciosInventario || isset($stpCUD_serviciosserviciosInventario['success']) && $stpCUD_serviciosserviciosInventario['success'] != 1){
+                        $stpCUD_serviciosInventario = parent::stpCUD_serviciosInventario();
+                        if(!$stpCUD_serviciosInventario || isset($stpCUD_serviciosInventario['success']) && $stpCUD_serviciosInventario['success'] != 1){
                             $this->data['success'] = FALSE;
                             $this->data['message'] = 'HUBO UN ERROR AL GUARDAR LOS DATOS DE LA COTIZACION';
                             return $this->data;
@@ -141,12 +141,12 @@ Class Vent_coti_Controller Extends Vent_Model {
                     }
                 }else{
                     $this->vent['fCantidad'] = number_format($row['fCantidad'],2);
-                    $this->vent['skCotizacionConcepto'] = NULL;
+                    $this->vent['skCotizacionServicio'] = NULL;
                     $this->vent['skServicioInventario'] = NULL;
                     $this->vent['iDetalle'] = NULL;
                     $this->vent['skServicio'] = $row['skServicio'];
-                    $stpCUD_serviciosserviciosInventario = parent::stpCUD_serviciosserviciosInventario();
-                    if(!$stpCUD_serviciosserviciosInventario || isset($stpCUD_serviciosserviciosInventario['success']) && $stpCUD_serviciosserviciosInventario['success'] != 1){
+                    $stpCUD_serviciosInventario = parent::stpCUD_serviciosInventario();
+                    if(!$stpCUD_serviciosInventario || isset($stpCUD_serviciosInventario['success']) && $stpCUD_serviciosInventario['success'] != 1){
                         $this->data['success'] = FALSE;
                         $this->data['message'] = 'HUBO UN ERROR AL GUARDAR LOS DATOS DE LA COTIZACION';
                         return $this->data;

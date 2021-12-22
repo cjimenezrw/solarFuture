@@ -84,7 +84,7 @@ if (isset($data['datos'])) {
                     <th class="text-right">Cantidad</th>
                     <th class="text-right">CODIGO</th>
                     
-                    <th class="text-left" >Concepto</th>   
+                    <th class="text-left" >Servicio</th>   
                   </tr>
                 </thead>
               <tbody>
@@ -95,17 +95,17 @@ if (isset($data['datos'])) {
                     ?>
                     <tr> 
                     <td style="text-align:right; text-transform: uppercase;" >
-                        <input type="hidden" name="concepto[<?php echo $i;?>][fCantidad]" value="<?php  echo $servicios['fCantidad']; ?>">
-                        <input type="hidden" name="concepto[<?php echo $i;?>][skCotizacionConcepto] " value="<?php  echo $servicios['skCotizacionConcepto']; ?>">
-                        <input type="hidden" name="concepto[<?php echo $i;?>][skServicio]" value="<?php  echo $servicios['skServicio']; ?>">
-                        <input type="hidden" name="concepto[<?php echo $i;?>][iDetalle]" value="<?php  echo (!empty($servicios['iDetalle']) ? $servicios['iDetalle'] : NULL ); ?>">
+                        <input type="hidden" name="servicio[<?php echo $i;?>][fCantidad]" value="<?php  echo $servicios['fCantidad']; ?>">
+                        <input type="hidden" name="servicio[<?php echo $i;?>][skCotizacionServicio] " value="<?php  echo $servicios['skCotizacionServicio']; ?>">
+                        <input type="hidden" name="servicio[<?php echo $i;?>][skServicio]" value="<?php  echo $servicios['skServicio']; ?>">
+                        <input type="hidden" name="servicio[<?php echo $i;?>][iDetalle]" value="<?php  echo (!empty($servicios['iDetalle']) ? $servicios['iDetalle'] : NULL ); ?>">
                         <?php echo number_format($servicios['fCantidad'], 2); ?>
                     </td> 
                     <td style="text-align:right; text-transform: uppercase;" >
                       <?php echo $servicios['sCodigo']; ?>
                     </td> 
                     <td style="text-align:left; text-transform: uppercase;" >
-                      <?php echo $servicios['concepto'].(!empty($servicios['sDescripcion']) ? " (".$servicios['sDescripcion'].")" : ''); ?>
+                      <?php echo $servicios['servicio'].(!empty($servicios['sDescripcion']) ? " (".$servicios['sDescripcion'].")" : ''); ?>
                     </td>
                     </tr>
                     <?php if(!empty($servicios['iDetalle']) && $servicios['iDetalle'] == 1 ){  
@@ -114,14 +114,14 @@ if (isset($data['datos'])) {
                          <tr>
                          <td></td>
                          <td></td>
-                         <td class="text-left"> <select name="concepto[<?php echo $i;?>][skServicioInventario][<?php echo $j;?>]"  class="<?php  echo $servicios['skServicio']; ?> form-control js-data-example-ajax" data-plugin="select2" data-ajax--cache="true">  </select></td>
+                         <td class="text-left"> <select name="servicio[<?php echo $i;?>][skServicioInventario][<?php echo $j;?>]"  class="<?php  echo $servicios['skServicio']; ?> form-control js-data-example-ajax" data-plugin="select2" data-ajax--cache="true">  </select></td>
                          </tr>
 
                         
                      <?php  } //ENDFOR ?>
                      <script type="text/javascript">
  
-                      core.autocomplete2('.<?php  echo $servicios['skServicio']; ?>', 'get_serviciosInventario', window.location.href, 'Concepto', { skServicio : '<?php  echo $servicios['skServicio']; ?>'});
+                      core.autocomplete2('.<?php  echo $servicios['skServicio']; ?>', 'get_serviciosInventario', window.location.href, 'Servicio', { skServicio : '<?php  echo $servicios['skServicio']; ?>'});
                      </script>
 
 

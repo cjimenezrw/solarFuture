@@ -20,7 +20,7 @@ Class Conc_deta_Controller Extends Conc_Model {
 
         $this->conc['skServicio'] = $_GET['p1'];
         $this->data['datos'] =  parent::_getConcepto();
-        $this->data['serviciosImpuestos']  = parent::_getConceptoImpuestos();
+        $this->data['serviciosImpuestos']  = parent::_getServicioImpuestos();
         $this->data['inventario'] = parent::_get_servicios_inventario();
         
         // OBTENEMOS LAS CATEGORÍAS DE PRECIOS

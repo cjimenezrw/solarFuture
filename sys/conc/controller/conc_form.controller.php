@@ -305,7 +305,7 @@ Class Conc_form_Controller Extends Conc_Model {
 
         if (!empty($this->conc['skServicio'])) {
             $this->data['datos'] = parent::_getConcepto();
-            $conImpuestosservicios = parent::_getConceptoImpuestos();
+            $conImpuestosservicios = parent::_getServicioImpuestos();
             foreach($conImpuestosservicios AS $k=>$v){
                 if(isset($conImpuestos[trim($v['nombre'])])){
                     $conImpuestos[trim($v['nombre'])]['selected'] = 1;

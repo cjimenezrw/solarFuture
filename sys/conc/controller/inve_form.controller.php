@@ -5,7 +5,7 @@ Class Inve_form_Controller Extends Conc_Model {
     // PROTECTED VARIABLES //
     // PRIVATE VARIABLES //
         private $data = [];
-        private $idTran = 'stpCUD_serviciosserviciosInventario';
+        private $idTran = 'stpCUD_serviciosInventario';
 
     public function __construct(){
         parent::init();
@@ -36,8 +36,8 @@ Class Inve_form_Controller Extends Conc_Model {
             $this->conc['skServicio'] = (isset($_GET['p1']) ? $_GET['p1'] : NULL);
 
             // Guardar Concepto Producto
-            $guardar_concepto_productos = $this->guardar_concepto_productos();
-            if(!$guardar_concepto_productos['success']){
+            $guardar_servicio_productos = $this->guardar_servicio_productos();
+            if(!$guardar_servicio_productos['success']){
                 //Conn::rollback($this->idTran);
                 return $this->data;
             }
@@ -50,9 +50,9 @@ Class Inve_form_Controller Extends Conc_Model {
         return $this->data;
     }
 
-      public function guardar_concepto_productos(){
+      public function guardar_servicio_productos(){
         $this->data['success'] = TRUE;
-        $this->conc['axn'] = 'guardar_concepto_inventario';
+        $this->conc['axn'] = 'guardar_servicio_inventario';
         $this->conc['skEstatus'] = 'NU';
     
         $_getConcepto = parent::_getConcepto();
@@ -76,9 +76,9 @@ Class Inve_form_Controller Extends Conc_Model {
                         $this->conc['sNumeroSerie'] = $sNumeroSerie[$k];
                         $this->conc['fCantidad'] = 1;
 
-                        $stpCUD_serviciosserviciosInventario = parent::stpCUD_serviciosserviciosInventario();
+                        $stpCUD_serviciosInventario = parent::stpCUD_serviciosInventario();
                     
-                        if(!$stpCUD_serviciosserviciosInventario || isset($stpCUD_serviciosserviciosInventario['success']) && $stpCUD_serviciosserviciosInventario['success'] != 1){
+                        if(!$stpCUD_serviciosInventario || isset($stpCUD_serviciosInventario['success']) && $stpCUD_serviciosInventario['success'] != 1){
                             $this->data['success'] = FALSE;
                             $this->data['message'] = 'HUBO UN ERROR AL GUARDAR LOS PRODUCTOS DEL CONCEPTO';
                             return $this->data;
@@ -97,9 +97,9 @@ Class Inve_form_Controller Extends Conc_Model {
         }else{
             
             // AGREGAMOS LOS PRODUCTOS DE INVENTARIO CON CANTIDAD
-                $stpCUD_serviciosserviciosInventario = parent::stpCUD_serviciosserviciosInventario();
+                $stpCUD_serviciosInventario = parent::stpCUD_serviciosInventario();
             
-                if(!$stpCUD_serviciosserviciosInventario || isset($stpCUD_serviciosserviciosInventario['success']) && $stpCUD_serviciosserviciosInventario['success'] != 1){
+                if(!$stpCUD_serviciosInventario || isset($stpCUD_serviciosInventario['success']) && $stpCUD_serviciosInventario['success'] != 1){
                     $this->data['success'] = FALSE;
                     $this->data['message'] = 'HUBO UN ERROR AL GUARDAR LOS PRODUCTOS DEL CONCEPTO';
                     return $this->data;

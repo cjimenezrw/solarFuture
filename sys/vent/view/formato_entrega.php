@@ -189,7 +189,7 @@ SIENDO EL DÍA <?php echo (isset($data['datos']['dFechaEntregaInstalacion']) && 
 		    ?>
 		    <tr>
 			<td style="text-align:center; font-size: 10px; text-transform: uppercase; word-wrap: break-word;" ><?php echo $servicios['sCodigo']; ?></td>
- 			<td style="text-align:left; font-size: 10px; text-transform: uppercase; word-wrap: break-word;" ><?php echo (!empty($servicios['sDescripcion']) ? $servicios['sDescripcion'] : $servicios['concepto']); ?></td>
+ 			<td style="text-align:left; font-size: 10px; text-transform: uppercase; word-wrap: break-word;" ><?php echo (!empty($servicios['sDescripcion']) ? $servicios['sDescripcion'] : $servicios['servicio']); ?></td>
 			<td style="text-align:right; font-size: 10px; text-transform: uppercase;" ><?php echo number_format($servicios['fCantidad'], 2); ?></td>
 		    </tr>
 		    <?php
@@ -233,7 +233,7 @@ DICHO TRABAJO SE ENTREGA FUNCIONANDO Y A SATISFACCIÓN PLENA DEL CLIENTE, HABIÉ
 		    ?>
 		    <tr>
 			<td style="text-align:center; font-size: 10px; text-transform: uppercase; word-wrap: break-word;"><?php echo $serviciosInventario['sCodigo']; ?></td>
- 			<td style="text-align:left; font-size: 10px; text-transform: uppercase; word-wrap: break-word;"><?php echo (!empty($serviciosInventario['sDescripcion']) ? $serviciosInventario['sDescripcion'] : $serviciosInventario['concepto']); ?></td>
+ 			<td style="text-align:left; font-size: 10px; text-transform: uppercase; word-wrap: break-word;"><?php echo (!empty($serviciosInventario['sDescripcion']) ? $serviciosInventario['sDescripcion'] : $serviciosInventario['servicio']); ?></td>
             <td style="text-align:center; font-size: 10px; text-transform: uppercase; word-wrap: break-word;"><?php echo (!empty($serviciosInventario['sNumeroSerie']) ? implode(', ',$serviciosInventario['sNumeroSerie']) : ''); ?></td>
 		    </tr>
 		    <?php

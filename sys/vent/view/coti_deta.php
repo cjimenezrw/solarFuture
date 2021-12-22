@@ -191,7 +191,7 @@ if (isset($data['datos'])) {
 				<tr>
 				    <th class="text-center">#</th>
 				    <th class="text-left" >Unidad de Medida</th>
-				    <th class="text-left" >Concepto</th>
+				    <th class="text-left" >Servicio</th>
 				    <th class="text-right">Cantidad</th>
 				    <th class="text-right">P. Unit</th>
 				    <th class="text-right">Importe </th>
@@ -207,7 +207,7 @@ if (isset($data['datos'])) {
 					    <td style="text-align:center; text-transform: uppercase;" ><?php echo $i; ?></td>
 					    <td style="text-align:left; text-transform: uppercase;" ><?php echo $servicios['tipoMedida']; ?></td>
 					    <td style="text-align:left; text-transform: uppercase;" >
-              <?php echo $servicios['concepto'].(!empty($servicios['sDescripcion']) ? " (".$servicios['sDescripcion'].")" : ''); ?>
+              <?php echo $servicios['servicio'].(!empty($servicios['sDescripcion']) ? " (".$servicios['sDescripcion'].")" : ''); ?>
               <?php if(!empty($servicios['venta'])){ ?>
                   <table class="table table-responsive">
                   <tbody>

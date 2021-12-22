@@ -23,7 +23,7 @@ Class Vent_Model Extends DLOREAN_Model {
 
         $sql = "CALL stpCUD_cotizaciones (
             " .escape(isset($this->vent['skCotizacion']) ? $this->vent['skCotizacion'] : NULL) . ",
-            " .escape(isset($this->vent['skCotizacionConcepto']) ? $this->vent['skCotizacionConcepto'] : NULL) . ",
+            " .escape(isset($this->vent['skCotizacionServicio']) ? $this->vent['skCotizacionServicio'] : NULL) . ",
             " .escape(isset($this->vent['skEstatus']) ? $this->vent['skEstatus'] : NULL) . ",
             " .escape(isset($this->vent['skDivisa']) ? $this->vent['skDivisa'] : NULL) . ",
             " .escape(isset($this->vent['dFechaVigencia']) ? $this->vent['dFechaVigencia'] : NULL) . ",
@@ -61,7 +61,9 @@ Class Vent_Model Extends DLOREAN_Model {
             '" . $_SESSION['usuario']['skUsuario'] . "',
             '" . $this->sysController . "' )";
          
-        
+        if($this->vent['axn'] == 'guardar_cotizacion_servicios'){
+            //exit('<pre>'.print_r($sql,1).'</pre>');
+        }
         $result = Conn::query($sql);
         if (!$result) {
             return false;
@@ -122,12 +124,12 @@ Class Vent_Model Extends DLOREAN_Model {
         (SELECT SUM(rcc.fCantidad) FROM rel_cotizaciones_servicios rcc  
         INNER JOIN cat_servicios cc2 ON cc2.skServicio = rcc.skServicio AND cc2.skCategoriaProducto = 'PANSOL' 
         WHERE rcc.skCotizacion = oc.skCotizacion ) AS cantidadPanel,
-        (SELECT  (SUM(fKwConcepto)/1000) FROM rel_cotizaciones_servicios WHERE skCotizacion = oc.skCotizacion  ) AS capacidad,
-        (SELECT  ((SUM(fKwConcepto)*4.5)/1000) FROM rel_cotizaciones_servicios WHERE skCotizacion = oc.skCotizacion  ) AS produccionDiaria,
-        (SELECT  ((SUM(fKwConcepto)*4.5)/1000)*30 FROM rel_cotizaciones_servicios WHERE skCotizacion = oc.skCotizacion  ) AS produccionMensual,
-        (SELECT  ((SUM(fKwConcepto)*4.5)/1000)*60 FROM rel_cotizaciones_servicios WHERE skCotizacion = oc.skCotizacion  ) AS produccionBimestral,
-        (SELECT  ((SUM(fKwConcepto)*4.5)/1000)*365 FROM rel_cotizaciones_servicios WHERE skCotizacion = oc.skCotizacion  ) AS produccionAnual,
-        (SELECT  ((((SUM(fKwConcepto)*4.5)/1000)*365) /(oc.fKwGastados*(IF(TARIFA = 'INDUSTRIAL',12,6)))*100) FROM rel_cotizaciones_servicios WHERE skCotizacion = oc.skCotizacion  ) AS porcentajeAnualCubierto,
+        (SELECT  (SUM(fKwServicio)/1000) FROM rel_cotizaciones_servicios WHERE skCotizacion = oc.skCotizacion  ) AS capacidad,
+        (SELECT  ((SUM(fKwServicio)*4.5)/1000) FROM rel_cotizaciones_servicios WHERE skCotizacion = oc.skCotizacion  ) AS produccionDiaria,
+        (SELECT  ((SUM(fKwServicio)*4.5)/1000)*30 FROM rel_cotizaciones_servicios WHERE skCotizacion = oc.skCotizacion  ) AS produccionMensual,
+        (SELECT  ((SUM(fKwServicio)*4.5)/1000)*60 FROM rel_cotizaciones_servicios WHERE skCotizacion = oc.skCotizacion  ) AS produccionBimestral,
+        (SELECT  ((SUM(fKwServicio)*4.5)/1000)*365 FROM rel_cotizaciones_servicios WHERE skCotizacion = oc.skCotizacion  ) AS produccionAnual,
+        (SELECT  ((((SUM(fKwServicio)*4.5)/1000)*365) /(oc.fKwGastados*(IF(TARIFA = 'INDUSTRIAL',12,6)))*100) FROM rel_cotizaciones_servicios WHERE skCotizacion = oc.skCotizacion  ) AS porcentajeAnualCubierto,
 
         ROUND(ROUND(oc.fImporteTotal/oc.fCostoRecibo,1)/(IF(TARIFA = 'INDUSTRIAL',12,6)),1) AS recuperacionInversion,
         (oc.fCostoRecibo * (IF(TARIFA = 'INDUSTRIAL',12,6))) AS gastoAnual,
@@ -153,12 +155,12 @@ Class Vent_Model Extends DLOREAN_Model {
     public function _getCotizacionservicios_inventario(){
         $sql = "SELECT 
         cc.sCodigo,
-        cc.sNombre AS concepto,
+        cc.sNombre AS servicio,
         rcc.sDescripcion,
         rci.sNumeroSerie
         FROM rel_cotizaciones_servicios rcc
         INNER JOIN cat_servicios cc ON cc.skServicio = rcc.skServicio
-        INNER JOIN rel_servicios_inventarios rci ON rci.skCotizacionConcepto = rcc.skCotizacionConcepto
+        INNER JOIN rel_servicios_inventarios rci ON rci.skCotizacionServicio = rcc.skCotizacionServicio
         WHERE rcc.skCotizacion = ".escape($this->vent['skCotizacion'])." AND cc.iDetalle = 1
         ORDER BY cc.sNombre ASC";
         $result = Conn::query($sql);
@@ -180,7 +182,7 @@ Class Vent_Model Extends DLOREAN_Model {
     public function _getCotizacionservicios() {
 
         $sql = "SELECT DISTINCT
-		                cse.skCotizacionConcepto,
+		                cse.skCotizacionServicio,
 		                cse.skCotizacion,
 		                cse.skServicio,
                         cse.skTipoMedida,
@@ -188,7 +190,7 @@ Class Vent_Model Extends DLOREAN_Model {
                         cse.fPrecioUnitario,
                         cse.fImporte,
                         cse.sDescripcion,
-                        cc.sNombre AS concepto,
+                        cc.sNombre AS servicio,
                         cc.sCodigo AS sCodigo,
                         cc.iDetalle,
                         cum.sNombre as tipoMedida
@@ -205,7 +207,7 @@ Class Vent_Model Extends DLOREAN_Model {
         $i = 0;
         foreach ($records as $value) {
 
-            $this->vent['skCotizacionConcepto'] = $value['skCotizacionConcepto'];
+            $this->vent['skCotizacionServicio'] = $value['skCotizacionServicio'];
 
             $this->vent['skServicio'] = $value['skServicio'];
             $records[$i]['impuestos'] = $this->_getCotizacionservicios_impuestos();
@@ -226,14 +228,13 @@ Class Vent_Model Extends DLOREAN_Model {
      */
     public function _getCotizacionservicios_impuestos() {
 
-        $sql = "SELECT
-							
-							 ras.skTipoImpuesto  AS tipoImpuesto,
-							 ci.sNombre AS impuesto
-							 FROM rel_cotizaciones_serviciosImpuestos ras
-							 INNER JOIN cat_impuestos ci ON ci.skImpuesto = ras.skImpuesto
-							 WHERE ras.skCotizacion = " . escape($this->vent['skCotizacion']) . " AND ras.skCotizacionConcepto = " . escape($this->vent['skCotizacionConcepto']) . "  AND ras.skServicio= " . escape($this->vent['skServicio']);
-   
+        $sql = "SELECT	
+            ras.skTipoImpuesto  AS tipoImpuesto,
+            ci.sNombre AS impuesto
+            FROM rel_cotizaciones_serviciosImpuestos ras
+            INNER JOIN cat_impuestos ci ON ci.skImpuesto = ras.skImpuesto
+            WHERE ras.skCotizacion = " . escape($this->vent['skCotizacion']) . " AND ras.skCotizacionServicio = " . escape($this->vent['skCotizacionServicio']) . "  AND ras.skServicio = " . escape($this->vent['skServicio']);
+
         $result = Conn::query($sql);
         if (!$result) {
             return FALSE;
@@ -252,14 +253,13 @@ Class Vent_Model Extends DLOREAN_Model {
      */
     public function _getCotizacionservicios_ventas() {
 
-        $sql = "SELECT
-							  
-                             rci.sNumeroSerie,
-                             rci.skServicioInventario
-							 FROM rel_cotizaciones_servicios  ras
-							 INNER JOIN rel_servicios_inventarios rci ON rci.skCotizacionConcepto = ras.skCotizacionConcepto
-							 WHERE ras.skCotizacion = " . escape($this->vent['skCotizacion']) . " AND ras.skCotizacionConcepto = " . escape($this->vent['skCotizacionConcepto']) . "  AND ras.skServicio= " . escape($this->vent['skServicio']);
-     
+        $sql = "SELECT	  
+        rci.sNumeroSerie,
+        rci.skServicioInventario
+        FROM rel_cotizaciones_servicios  ras
+        INNER JOIN rel_servicios_inventarios rci ON rci.skCotizacionServicio = ras.skCotizacionServicio
+        WHERE ras.skCotizacion = " . escape($this->vent['skCotizacion']) . " AND ras.skCotizacionServicio = " . escape($this->vent['skCotizacionServicio']) . "  AND ras.skServicio = " . escape($this->vent['skServicio']);
+
         $result = Conn::query($sql);
         if (!$result) {
             return FALSE;
@@ -312,7 +312,7 @@ Class Vent_Model Extends DLOREAN_Model {
     /**
      * getImpuestos
      *
-     * Obtiene los impuestos que pueden aplicar al Concepto
+     * Obtiene los impuestos que pueden aplicar al Servicio
      *
      * @author Luis Alberto Valdez Alvarez <lvaldez@woodward.com.mx>
      * @return object | false Retorna el objeto de resultados de la consulta o false si algo falla.
@@ -330,7 +330,7 @@ Class Vent_Model Extends DLOREAN_Model {
         return Conn::fetch_assoc_all($result);
     }
 
-    public function _getConceptoImpuestos() {
+    public function _getServicioImpuestos() {
         $select = "SELECT cim.skImpuesto,CONCAT( cim.skTipoImpuesto,'-',cim.sNombre,'(', cim.svalor,'%)')  AS nombre 
                     FROM rel_servicios_impuestos  rci
                     INNER JOIN cat_impuestos cim ON cim.skImpuesto = rci.skImpuesto
@@ -763,12 +763,12 @@ Class Vent_Model Extends DLOREAN_Model {
         utf8($records);
         return $records;
     }
-    public function stpCUD_serviciosserviciosInventario() {
+    public function stpCUD_serviciosInventario() {
 
-        $sql = "CALL stpCUD_serviciosserviciosInventario (
+        $sql = "CALL stpCUD_serviciosInventario (
             " .escape(isset($this->vent['skServicio']) ? $this->vent['skServicio'] : NULL) . ",
             " .escape(isset($this->vent['skCotizacion']) ? $this->vent['skCotizacion'] : NULL) . ",
-            " .escape(isset($this->vent['skCotizacionConcepto']) ? $this->vent['skCotizacionConcepto'] : NULL) . ",
+            " .escape(isset($this->vent['skCotizacionServicio']) ? $this->vent['skCotizacionServicio'] : NULL) . ",
             " .escape(isset($this->vent['skServicioInventario']) ? $this->vent['skServicioInventario'] : NULL) . ",
             " .escape(isset($this->vent['skEstatus']) ? $this->vent['skEstatus'] : NULL) . ",
             " .escape(isset($this->vent['fCantidad']) ? $this->vent['fCantidad'] : NULL) . ",

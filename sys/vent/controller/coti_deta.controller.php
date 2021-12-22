@@ -38,7 +38,7 @@ Class Coti_deta_Controller Extends Vent_Model {
         ]);
 
         $this->data['fotografiasEntrega'] = (isset($get_documentos['data']) && !empty($get_documentos['data']) ? $get_documentos['data'] : []);
-
+        
         return $this->data;
     }
 
@@ -107,7 +107,7 @@ Class Coti_deta_Controller Extends Vent_Model {
             if(!isset($serviciosInventario[$row['sCodigo']])){
                 $serviciosInventario[$row['sCodigo']] = [
                     'sCodigo'=>$row['sCodigo'],
-                    'concepto'=>$row['concepto'],
+                    'servicio'=>$row['servicio'],
                     'sDescripcion'=>$row['sDescripcion'],
                     'sNumeroSerie'=>[]
                 ];
@@ -157,7 +157,7 @@ Class Coti_deta_Controller Extends Vent_Model {
             if(!isset($serviciosInventario[$row['sCodigo']])){
                 $serviciosInventario[$row['sCodigo']] = [
                     'sCodigo'=>$row['sCodigo'],
-                    'concepto'=>$row['concepto'],
+                    'servicio'=>$row['servicio'],
                     'sDescripcion'=>$row['sDescripcion'],
                     'sNumeroSerie'=>[]
                 ];

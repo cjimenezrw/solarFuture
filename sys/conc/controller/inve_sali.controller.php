@@ -94,8 +94,8 @@ Class Inve_sali_Controller Extends Conc_Model {
                 $this->conc['skServicioInventario'] = $row;
                 $this->conc['fCantidad'] = 1;
                 $this->conc['iDetalle'] = 1;
-                    $stpCUD_serviciosserviciosInventario = parent::stpCUD_serviciosserviciosInventario();
-                    if(!$stpCUD_serviciosserviciosInventario || isset($stpCUD_serviciosserviciosInventario['success']) && $stpCUD_serviciosserviciosInventario['success'] != 1){
+                    $stpCUD_serviciosInventario = parent::stpCUD_serviciosInventario();
+                    if(!$stpCUD_serviciosInventario || isset($stpCUD_serviciosInventario['success']) && $stpCUD_serviciosInventario['success'] != 1){
                         $this->data['success'] = FALSE;
                         $this->data['message'] = 'HUBO UN ERROR AL GUARDAR LOS DATOS DE LA COTIZACION';
                         return $this->data;
@@ -112,8 +112,8 @@ Class Inve_sali_Controller Extends Conc_Model {
             $this->conc['fCantidad'] =  $this->conc['fCantidad'];
             $this->conc['skServicioInventario'] = NULL;
             $this->conc['iDetalle'] = NULL;
-            $stpCUD_serviciosserviciosInventario = parent::stpCUD_serviciosserviciosInventario();
-            if(!$stpCUD_serviciosserviciosInventario || isset($stpCUD_serviciosserviciosInventario['success']) && $stpCUD_serviciosserviciosInventario['success'] != 1){
+            $stpCUD_serviciosInventario = parent::stpCUD_serviciosInventario();
+            if(!$stpCUD_serviciosInventario || isset($stpCUD_serviciosInventario['success']) && $stpCUD_serviciosInventario['success'] != 1){
                 $this->data['success'] = FALSE;
                 $this->data['message'] = 'HUBO UN ERROR AL GUARDAR LOS DATOS DE LA COTIZACION';
                 return $this->data;

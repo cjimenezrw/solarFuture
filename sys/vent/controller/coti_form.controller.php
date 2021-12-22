@@ -74,7 +74,7 @@ Class Coti_form_Controller Extends Vent_Model {
                 return $this->data;
             }
 
-            // Guardar impuestos Concepto
+            // Guardar impuestos Servicio
             $guardar_cotizacion_servicios = $this->guardar_cotizacion_servicios();
             if(!$guardar_cotizacion_servicios['success']){
                Conn::rollback($this->idTran);
@@ -228,7 +228,6 @@ Class Coti_form_Controller Extends Vent_Model {
             if(!empty($this->vent['servicios'])){
                 foreach ($this->vent['servicios'] AS $con){
                     $this->vent['axn'] = 'guardar_cotizacion_servicios';
-                    //$this->vent['skCotizacionConcepto']           = (isset($con['skCotizacionConcepto']) ? $con['skCotizacionConcepto'] : NULL);
                     $this->vent['skServicio']         = (isset($con['skServicio']) ? $con['skServicio'] : NULL);
                     $this->vent['sDescripcion']       = (isset($con['sDescripcion']) ? $con['sDescripcion'] : NULL);
                     $this->vent['skTipoMedida']       = (isset($con['skTipoMedida']) ? $con['skTipoMedida'] : NULL);
@@ -239,11 +238,11 @@ Class Coti_form_Controller Extends Vent_Model {
     
                     if(!$stpCUD_cotizaciones || isset($stpCUD_cotizaciones['success']) && $stpCUD_cotizaciones['success'] != 1){
                         $this->data['success'] = FALSE;
-                        $this->data['message'] = 'HUBO UN ERROR AL GUARDAR LOS servicios DE LA COTIZACION';
+                        $this->data['message'] = 'HUBO UN ERROR AL GUARDAR LOS SERVICIOS DE LA COTIZACION';
                         return $this->data;
                     }
 
-                    $this->vent['skCotizacionConcepto'] = $stpCUD_cotizaciones['skCotizacionConcepto'];
+                    $this->vent['skCotizacionServicio'] = $stpCUD_cotizaciones['skCotizacionServicio'];
 
                     
 

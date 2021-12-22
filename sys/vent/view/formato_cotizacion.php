@@ -182,7 +182,7 @@ td.text-right {
 		    ?>
 		    <tr>
 			<td style="text-align:center; font-size: 10px; text-transform: uppercase; word-wrap: break-word;" ><?php echo $servicios['sCodigo']; ?></td>
- 			<td style="text-align:left; font-size: 10px; text-transform: uppercase; word-wrap: break-word;" ><?php echo (!empty($servicios['sDescripcion']) ? $servicios['sDescripcion'] : $servicios['concepto']); ?></td>
+ 			<td style="text-align:left; font-size: 10px; text-transform: uppercase; word-wrap: break-word;" ><?php echo (!empty($servicios['sDescripcion']) ? $servicios['sDescripcion'] : $servicios['servicio']); ?></td>
 			<td style="text-align:right; font-size: 10px; text-transform: uppercase;" ><?php echo number_format($servicios['fCantidad'], 2); ?></td>
             <td style="text-align:right; font-size: 10px; text-transform: uppercase;" ><?php echo "$" . number_format($servicios['fPrecioUnitario'], 2); ?></td>
 			<td style="text-align:right; font-size: 10px; text-transform: uppercase;" ><?php echo "$" . number_format($servicios['fImporte'], 2); ?></td>

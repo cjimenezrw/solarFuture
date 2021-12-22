@@ -85,18 +85,18 @@ Class Conc_form_Controller Extends Conc_Model {
        */
       public function guardar_concepto(){
           $this->data['success'] = TRUE;
-          $this->conc['axn'] = 'guardar_concepto';
+          $this->conc['axn'] = 'guardar_servicio';
           $this->conc['skEstatus'] = 'NU';
 
-          $stpCUD_serviciosservicios = parent::stpCUD_serviciosservicios();
+          $stpCUD_serviciosConceptos = parent::stpCUD_serviciosConceptos();
            
-          if(!$stpCUD_serviciosservicios || isset($stpCUD_serviciosservicios['success']) && $stpCUD_serviciosservicios['success'] != 1){
+          if(!$stpCUD_serviciosConceptos || isset($stpCUD_serviciosConceptos['success']) && $stpCUD_serviciosConceptos['success'] != 1){
               $this->data['success'] = FALSE;
               $this->data['message'] = 'HUBO UN ERROR AL GUARDAR LOS DATOS DEL CONCEPTO';
               return $this->data;
           }
 
-          $this->conc['skServicio'] = $stpCUD_serviciosservicios['skServicio'];
+          $this->conc['skServicio'] = $stpCUD_serviciosConceptos['skServicio'];
 
           $this->data['success'] = TRUE;
           $this->data['message'] = 'DATOS DE CONCEPTO GUARDADOS';
@@ -112,7 +112,7 @@ Class Conc_form_Controller Extends Conc_Model {
          */
         public function guardar_concepto_impuestos(){
             $this->data['success'] = TRUE;
-            $this->conc['axn'] = 'guardar_concepto_impuestos';
+            $this->conc['axn'] = 'guardar_servicio_impuestos';
           
             $delete="DELETE FROM rel_servicios_impuestos WHERE skServicio = '". $this->conc['skServicio'] ."'";
             $result = Conn::query($delete);
@@ -121,9 +121,9 @@ Class Conc_form_Controller Extends Conc_Model {
                     //verificamos si ya existe el producto en el catalogo, si no existe se inserta.
                     $this->conc['skImpuestoConcepto']= (!empty($v) ? $v : NULL);
                    
-                    $stpCUD_serviciosservicios = parent::stpCUD_serviciosservicios();
+                    $stpCUD_serviciosConceptos = parent::stpCUD_serviciosConceptos();
     
-                    if(!$stpCUD_serviciosservicios || isset($stpCUD_serviciosservicios['success']) && $stpCUD_serviciosservicios['success'] != 1){
+                    if(!$stpCUD_serviciosConceptos || isset($stpCUD_serviciosConceptos['success']) && $stpCUD_serviciosConceptos['success'] != 1){
                         $this->data['success'] = FALSE;
                         $this->data['message'] = 'HUBO UN ERROR AL GUARDAR LOS IMPUESTOS DEL CONCEPTO';
                         return $this->data;
@@ -147,7 +147,7 @@ Class Conc_form_Controller Extends Conc_Model {
          */
         public function guardar_concepto_precios(){
             $this->data['success'] = TRUE;
-            $this->conc['axn'] = 'guardar_concepto_precios';
+            $this->conc['axn'] = 'guardar_servicio_precios';
           
             $delete = "DELETE FROM rel_servicios_precios WHERE skServicio = ".escape($this->conc['skServicio']);
             $result = Conn::query($delete);
@@ -158,9 +158,9 @@ Class Conc_form_Controller Extends Conc_Model {
                         $this->conc['skCategoriaPrecio']= $k;
                         $this->conc['fPrecioVenta']= $v;
 
-                        $stpCUD_serviciosservicios = parent::stpCUD_serviciosservicios();
+                        $stpCUD_serviciosConceptos = parent::stpCUD_serviciosConceptos();
         
-                        if(!$stpCUD_serviciosservicios || isset($stpCUD_serviciosservicios['success']) && $stpCUD_serviciosservicios['success'] != 1){
+                        if(!$stpCUD_serviciosConceptos || isset($stpCUD_serviciosConceptos['success']) && $stpCUD_serviciosConceptos['success'] != 1){
                             $this->data['success'] = FALSE;
                             $this->data['message'] = 'HUBO UN ERROR AL GUARDAR LOS PRECIOS DEL CONCEPTO';
                             return $this->data;

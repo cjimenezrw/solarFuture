@@ -80,8 +80,8 @@ Class Conc_Model Extends DLOREAN_Model {
         return $records;
     }
 
-    public function stpCUD_serviciosserviciosInventario(){
-        $sql = "CALL stpCUD_serviciosserviciosInventario (
+    public function stpCUD_serviciosInventario(){
+        $sql = "CALL stpCUD_serviciosInventario (
             " .escape(isset($this->conc['skServicio']) ? $this->conc['skServicio'] : NULL) . ",
             " .escape(isset($this->conc['skCotizacion']) ? $this->conc['skCotizacion'] : NULL) . ",
             " .escape(isset($this->conc['skCotizacionConcepto']) ? $this->conc['skCotizacionConcepto'] : NULL) . ",
@@ -168,9 +168,9 @@ Class Conc_Model Extends DLOREAN_Model {
    
  
      
-    public function stpCUD_serviciosservicios() {
+    public function stpCUD_serviciosConceptos() {
 
-        $sql = "CALL stpCUD_serviciosservicios (
+        $sql = "CALL stpCUD_serviciosConceptos (
             " .escape(isset($this->conc['skServicio']) ? $this->conc['skServicio'] : NULL) . ",
             " .escape(isset($this->conc['skEstatus']) ? $this->conc['skEstatus'] : NULL) . ",
             " .escape(isset($this->conc['sCodigo']) ? $this->conc['sCodigo'] : NULL) . ",
@@ -194,7 +194,7 @@ Class Conc_Model Extends DLOREAN_Model {
             '" . $_SESSION['usuario']['skUsuario'] . "',
             '" . $this->sysController . "' )";
       
-        
+        //exit('<pre>'.print_r($sql,1).'</pre>');
         $result = Conn::query($sql);
         //$codigo = Conn::fetch_assoc($result);
         if (!$result) {

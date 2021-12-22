@@ -64,6 +64,12 @@ Class Vent_coti_Controller Extends Vent_Model {
                 Conn::rollback($this->idTran);
                 return $this->data;
             }
+             // GENERAR ORDEN DE SERVICIO 
+            $generar_orden = $this->generar_orden();
+            if(!$generar_orden['success']){
+                Conn::rollback($this->idTran);
+                return $this->data;
+            }
 
             
 
@@ -161,6 +167,45 @@ Class Vent_coti_Controller Extends Vent_Model {
           $this->data['message'] = 'DATOS DE COTIZACION GUARDADOS';
           return $this->data;
       }
+
+      /**
+       * generar_orden
+       *
+       * Guardar generar_orden
+       *
+       * @author Luis Alberto Valdez Alvarez <lvaldez@woodward.com.mx>
+       * @return Array ['success'=>NULL,'message'=>NULL,'datos'=>NULL]
+       */
+      public function generar_orden(){
+        $this->data['success'] = TRUE;
+        $this->vent['axn'] = 'generar_orden';
+        $this->vent['skVenta'] = NULL;
+ 
+
+        $generarOrden = $this->sysAPI('admi', 'orse_inde', 'generarOrden', [
+            'POST'=>[
+                'axn'=>'GE',
+                'skProceso'=>'VENT',
+                'skCodigo'=>$this->vent['skCotizacion']
+            ]
+        ]); 
+        if(!$generarOrden || isset($generarOrden['success']) && $generarOrden['success'] != 1){
+            $this->data['success'] = FALSE;
+            $this->data['message'] = $generarOrden['message'];
+            return $this->data;
+        }
+
+        
+
+
+        $this->data['success'] = TRUE;
+        $this->data['message'] = 'ORDEN GENERADA CON EXITO';
+        return $this->data;
+    }
+
+
+
+      
        
    
     /**

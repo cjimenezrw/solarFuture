@@ -227,7 +227,7 @@ Class Cofa_form_Controller Extends Admi_Model {
 
             $this->admi['skServicio']           = (isset($srv['skServicio']) ? $srv['skServicio'] : NULL);
             $this->admi['sDescripcion']         = (isset($srv['sDescripcion']) ? $srv['sDescripcion'] : NULL);
-            $this->admi['skTipoMedida']         = (isset($srv['skTipoMedida']) ? $srv['skTipoMedida'] : NULL);
+            $this->admi['skUnidadMedida']         = (isset($srv['skUnidadMedida']) ? $srv['skUnidadMedida'] : NULL);
             $this->admi['fCantidad']            = (isset($srv['fCantidad']) ? str_replace(',','',$srv['fCantidad']) : NULL);
             $this->admi['fPrecioUnitario']      = (isset($srv['fPrecioUnitario']) ? str_replace(',','',$srv['fPrecioUnitario']) : NULL);
             $this->admi['fImporte']             = (isset($srv['fImporte']) ? str_replace(',','',$srv['fImporte']) : NULL);

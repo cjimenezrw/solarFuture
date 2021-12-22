@@ -81,7 +81,9 @@ Class Cofa_inde_Controller Extends Admi_Model {
                 $regla = [ ];
 
                  $row['dFechaCreacion'] = ($row['dFechaCreacion']) ? date('d/m/Y  H:i:s', strtotime($row['dFechaCreacion'])) : ''; 
-                 
+                 $row['fSubtotal'] = (!empty($row['fSubtotal']) ? '$'.number_format($row['fSubtotal'],2) : '$ 0.00'); 
+                 $row['fTotal'] = (!empty($row['fTotal']) ? '$'.number_format($row['fTotal'],2) : '$ 0.00'); 
+
                $row['menuEmergente'] = parent::menuEmergente($regla, $row['skFactura']);
                 array_push($data['data'],$row);
         }

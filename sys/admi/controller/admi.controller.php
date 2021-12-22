@@ -414,6 +414,33 @@ Class Admi_Controller Extends Admi_Model {
     }
 
     /**
+     * cofa_deta
+     *
+     * Módulo para visualizar toda la informacion de un control de cobro(cofa_deta)
+     *
+     * @author  <lvaldez>
+     */
+
+    public function cofa_deta() {
+        $this->load_class("cofa_deta", "controller");
+        $cofa_deta = new Cofa_deta_Controller();
+        $axn = (isset($_POST['axn']) ? $_POST['axn'] : (isset($_GET['axn']) ? $_GET['axn'] : NULL));
+        switch ($axn) {
+            case 'generarFormatoFA':
+                $cofa_deta->generarFormatoFA();
+            break;
+            case 'mostrarDocumento':
+                     $cofa_deta->mostrarDocumento();
+             break;
+            default:
+                $this->data = $cofa_deta->consultar();
+                $this->load_view('cofa_deta', $this->data);
+            break;
+        }
+        return TRUE;
+    }
+
+    /**
      * Módulo de consulta de empresas socios (prov-inde)
      *
      * Módulo para consultar el caracteristicas de clientes

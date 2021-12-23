@@ -289,7 +289,7 @@ DICHO TRABAJO SE ENTREGA FUNCIONANDO Y A SATISFACCIÓN PLENA DEL CLIENTE, HABIÉ
 </div>
 
 <div class="col-md-12 clearfix" style="font-size:11px;text-transform: uppercase;">
-DECLARAN LAS PARTES QUE LA ENTREGA DE DICHO SERVICIO, PROYECTO O PRODUCTO ES A ENTERA Y PLENA SATISFACCIÓN SIN DOLO ALGUNO, EN MANZANILLO, COLIMA EL DÍA <?php echo (isset($data['datos']['dFechaCreacion']) && !empty($data['datos']['dFechaCreacion'])) ? $this->obtenerFechaEnLetra($data['datos']['dFechaCreacion']) : '-'; ?>
+DECLARAN LAS PARTES QUE LA ENTREGA DE DICHO SERVICIO, PROYECTO O PRODUCTO ES A ENTERA Y PLENA SATISFACCIÓN SIN DOLO ALGUNO, EN MANZANILLO, COLIMA EL DÍA <?php echo (isset($data['datos']['dFechaEntregaInstalacion']) && !empty($data['datos']['dFechaEntregaInstalacion'])) ? $this->obtenerFechaEnLetra($data['datos']['dFechaEntregaInstalacion']) : '-'; ?>
 </div>
  
 <div class="col-md-5 clearfix" style="font-size:13px;text-transform: uppercase;margin-top:30px;">

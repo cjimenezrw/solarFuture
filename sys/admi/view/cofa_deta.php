@@ -318,6 +318,9 @@ if (isset($data['datos'])) {
 <script type="text/javascript">
 
 				$(document).ready(function () {
+					$('.ajax-popup-link').magnificPopup({
+					type: 'iframe'
+			});
 				    $('#mowi').iziModal('setBackground', '#f1f4f5');
 				});
 

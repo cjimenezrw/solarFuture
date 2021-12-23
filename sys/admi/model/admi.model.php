@@ -1511,6 +1511,15 @@ Class Admi_Model Extends DLOREAN_Model {
             " .escape(isset($this->admi['skTipoImpuesto']) ? $this->admi['skTipoImpuesto'] : NULL) . ",
             " .escape(isset($this->admi['fTasa']) ? $this->admi['fTasa'] : NULL) . ",
             " .escape(isset($this->admi['fImporte']) ? $this->admi['fImporte'] : NULL) . ",
+
+
+            " .escape(isset($this->admi['sFolioFactura']) ? $this->admi['sFolioFactura'] : NULL) . ",
+            " .escape(isset($this->admi['skUUIDSAT']) ? $this->admi['skUUIDSAT'] : NULL) . ",
+            " .escape(isset($this->admi['fTotalFactura']) ? $this->admi['fTotalFactura'] : NULL) . ",
+            " .escape(isset($this->admi['dFechaFactura']) ? $this->admi['dFechaFactura'] : NULL) . ",
+            " .escape(isset($this->admi['dFechaTimbrado']) ? $this->admi['dFechaTimbrado'] : NULL) . ",
+
+
             
            
             " .escape(isset($this->admi['axn']) ? $this->admi['axn'] : NULL) . ",

@@ -29,18 +29,18 @@ Class Cofa_deta_Controller Extends Admi_Model {
             $VARCFD =  DIR_PROJECT.$VARCFD;
             $VARCFD = $VARCFD.$carpeta."/".$anio."/";
 
-            $rutaCompleta= $VARCFD.$this->data['datos']['sRFCEmisor']."/";
+            $rutaCompleta= $VARCFD;
 
-            $fileNameXML = $this->data['datos']['iFolio'].'.xml';
-            $fileNamePDF = $this->data['datos']['iFolio'].'.pdf';
+            $fileNameXML = $this->data['datos']['skUUIDSAT'].'.xml';
+            $fileNamePDF = $this->data['datos']['skUUIDSAT'].'.pdf';
             //SI UUID ES DIFERENTE DE VACIO, SE VA A CONSULTAR LA RUTA PARA VER SI EXISTEN LOS DOS DOCUMENTOS.
             if(!empty($this->data['datos']['skUUIDSAT'])){
-              $filePDF = $rutaCompleta.$this->data['datos']['iFolio'].".pdf";
-              $fileXML = $rutaCompleta.$this->data['datos']['iFolio'].".xml";
+              $filePDF = $rutaCompleta.$this->data['datos']['skUUIDSAT'].".pdf";
+              $fileXML = $rutaCompleta.$this->data['datos']['skUUIDSAT'].".xml";
              
 
               $nombreArchivo = '';
-              $nombreArchivo = $this->data['datos']['iFolio'];
+              $nombreArchivo = $this->data['datos']['skUUIDSAT'];
   			
               if(file_exists($filePDF)){
                   $this->data['datos']['facturaPDF'] = '?axn=mostrarDocumento&tipo=pdf&name='.$nombreArchivo.'&urlDocumento='.$filePDF;
@@ -52,7 +52,7 @@ Class Cofa_deta_Controller Extends Admi_Model {
 
 
 
-            }
+            } 
 
             $this->data['VARCFD'] =$VARCFD;
             $this->data['facturas_servicios'] = parent::consultar_facturas_servicios();

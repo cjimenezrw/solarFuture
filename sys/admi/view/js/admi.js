@@ -7,6 +7,7 @@ admi.uscf_inde = {};
 admi.cotr_form = {};
 admi.orse_form = {};
 admi.cofa_inde = {};
+admi.cofa_suba = {};
 
 admi.uscf_inde.dataTableConf = {
     'serverSide': true,
@@ -814,4 +815,53 @@ admi.escu_inde.dataTableConf = {
         "width": '25px' 
     }
     ]
+};
+
+admi.cofa_suba.validations = {
+ 
+
+};
+admi.cofa_inde.noAplica = function noAplica(obj) {
+    swal({
+        title: "¿La pre-factura no requiere factura?",
+        text: "Factura " ,
+        type: "warning",
+        confirmButtonClass: "btn-warning",
+        confirmButtonText: "SI",
+        showCancelButton: true,
+        closeOnConfirm: false,
+        showLoaderOnConfirm: true,
+        animation: "slide-from-top"
+    },
+    function () {
+        $.ajax({
+            url: window.location.href,
+            type: 'POST',
+            data: {
+                axn: 'noAplica',
+                skFactura: core.rowDataTable.skFactura
+            },
+            cache: false,
+            processData: true,
+            beforeSend: function () {
+                toastr.info('Guardar factura # '+core.rowDataTable.iFolio, 'Notificación');
+            },
+            success: function (response) {
+                toastr.clear();
+
+                if(!response.success){
+                    toastr.error(response.message+ " Folio:" +core.rowDataTable.iFolio, 'Notificación');
+                    swal.close();
+                    core.dataTable.sendFilters(true);
+                    return false;
+                }
+
+                toastr.success('Factura finalizada con exito# '+core.rowDataTable.iFolio, 'Notificación');
+                swal("¡Notificación!", 'Factura finalizada con exirto# '+core.rowDataTable.iFolio, "success");
+                core.dataTable.sendFilters(true);
+                 return true;
+            }
+        });
+    });
+   
 };

@@ -105,6 +105,21 @@ Class Cofa_inde_Controller Extends Admi_Model {
         );
     }
 
+    public function noAplica(){
+        $this->data = ['success' => TRUE, 'message' => NULL, 'datos' => NULL];
+
+        $this->admi['axn'] = 'noAplica';
+        $this->admi['skFactura'] = (isset($_POST['skFactura']) && !empty($_POST['skFactura'])) ? $_POST['skFactura'] : NULL;
+        $stpCUD_facturas = parent::stpCUD_facturas();
+        if(!$stpCUD_facturas || isset($stpCUD_facturas['success']) && $stpCUD_facturas['success'] != 1){
+            $this->data['success'] = FALSE;
+            $this->data['message'] = 'HUBO UN ERROR AL GUARDAR LOS FINALIZAR LA FACTURA.';
+            return $this->data;
+        }
+
+        return $this->data;
+    } 
+
      
 }
     

@@ -43,7 +43,13 @@ Class Orse_inde_Controller Extends Admi_Model {
         ce.sIcono AS estatusIcono,
         ce.sColor AS estatusColor, 
         cu.sNombre AS usoCFDI,
-        '' AS folioServicio,
+        (SELECT  
+        CASE
+            WHEN rosp.skServicioProceso = 'VENT' THEN CONCAT('SFM', LPAD(osv.iFolio, 4, 0))   
+            ELSE NULL END AS folioServicio
+        FROM rel_ordenesServicios_procesos rosp
+        LEFT JOIN ope_cotizaciones osv ON osv.skCotizacion = rosp.skCodigo  
+        WHERE rosp.skOrdenServicio = oos.skOrdenServicio LIMIT 1) AS folioServicio,
         cuc.sNombre AS usuarioCreacion,
         (SELECT  occ.iFolio   FROM rel_ordenesServicios_facturas rpf  INNER JOIN ope_facturas occ ON occ.skFactura = rpf.skFactura  AND occ.skEstatus !='CA' AND occ.iFolio IS NOT NULL WHERE rpf.skOrdenServicio = oos.skOrdenServicio LIMIT 1 ) AS iFolioFactura
         FROM ope_ordenesServicios oos
@@ -204,7 +210,7 @@ Class Orse_inde_Controller Extends Admi_Model {
             foreach($servicios AS $v_serv){
                 $dataservicios = [
                     'skServicio'=>isset($v_serv['skServicio']) ? $v_serv['skServicio']: NULL,
-                    'skTipoMedida'=>isset($v_serv['skTipoMedida']) ? $v_serv['skTipoMedida']: NULL,
+                    'skUnidadMedida'=>isset($v_serv['skUnidadMedida']) ? $v_serv['skUnidadMedida']: NULL,
                     'sDescripcion'=>isset($v_serv['sDescripcion']) ? $v_serv['sDescripcion'] : NULL,
                     'fCantidad'=>isset($v_serv['fCantidad']) ? trim($v_serv['fCantidad']) : NULL,
                     'fPrecioUnitario'=>(isset($v_serv['fPrecioUnitario']) ? $v_serv['fPrecioUnitario'] : NULL),
@@ -291,7 +297,7 @@ Class Orse_inde_Controller Extends Admi_Model {
             $this->data['message'] = 'EL PROCESO ES REQUERIDO';
             return $this->data;
         }
-        if(!empty($this->admi['skProceso']) &&  !in_array($this->admi['skProceso'], ['VACI','LAVA'])){
+        if(!empty($this->admi['skProceso']) &&  !in_array($this->admi['skProceso'], ['VENT','CITA'])){
             $this->data['success'] = FALSE;
             $this->data['message'] = 'EL CODIGO DEL PROCESO NO ES VALIDO ';
             return $this->data;
@@ -344,7 +350,7 @@ Class Orse_inde_Controller Extends Admi_Model {
             $this->data['message'] = 'EL PROCESO ES REQUERIDO';
             return $this->data;
         }
-        if(!empty($this->admi['skProceso']) &&  !in_array($this->admi['skProceso'], ['VACI','LAVA'])){
+        if(!empty($this->admi['skProceso']) &&  !in_array($this->admi['skProceso'], ['VENT','CITA'])){
             $this->data['success'] = FALSE;
             $this->data['message'] = 'EL CODIGO DEL PROCESO NO ES VALIDO ';
             return $this->data;
@@ -355,7 +361,7 @@ Class Orse_inde_Controller Extends Admi_Model {
        
         $this->data['datos'] = $stpCUD_cobros;
         $this->data['success'] = TRUE;
-        $this->data['message'] = 'ORDEN DE SERVICIO GENERADA CON EXITO';
+        $this->data['message'] = 'ORDEN DE SERVICIO CONSULTADA CON EXITO';
         return $this->data;
  
     } 

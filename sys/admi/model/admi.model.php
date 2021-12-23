@@ -27,6 +27,7 @@ Class Admi_Model Extends DLOREAN_Model {
             " .escape(isset($this->admi['axn']) ? $this->admi['axn'] : NULL) . ",
             '" . $_SESSION['usuario']['skUsuario'] . "',
             '" . $this->sysController . "' )";
+ 
        
         $this->log($sql, true);
         $result = Conn::query($sql);
@@ -1062,8 +1063,7 @@ Class Admi_Model Extends DLOREAN_Model {
          occ.iFolio AS iFolio,
         occ.iFolio AS iFolioOriginal,
         RIGHT('0000000000'+ CAST(occ.iFolio AS VARCHAR(10)),10) AS iFolioFactura,
-        occ.dFechaCreacion,
-        occ.dFechaFactura,
+        occ.dFechaCreacion, 
         occ.skEmpresaSocioEmisor,
         occ.skEmpresaSocioResponsable,
         occ.skEmpresaSocioFacturacion,
@@ -1080,8 +1080,7 @@ Class Admi_Model Extends DLOREAN_Model {
         
         occ.fTotal, 
         occ.fTotal AS fImporteTotal, 
-        occ.fSaldo,
-        occ.fSaldoRelacionado,
+        occ.fSaldo, 
         occ.fDescuento,
         occ.sRFCEmisor,
         occ.sRFCReceptor,
@@ -1144,13 +1143,12 @@ Class Admi_Model Extends DLOREAN_Model {
         IF(cse.sNombre IS NULL, rfa.sDescripcion,cse.sNombre) AS servicio,
         (cse.sNombre + IF(rfa.sDescripcion IS NOT NULL, ' '+rfa.sDescripcion,'') ) AS servicioFact,
         cse.iClaveProductoServicio,  
-        rfa.sDescripcion,
-        rfa.sNumeroIdentificacion, 
+        rfa.sDescripcion, 
         rfa.fCantidad,
         rfa.fPrecioUnitario,
         rfa.fDescuento,
-        rfa.fImporte,
-        rfa.fImporte AS fImporteTotal, 
+        rfa.fImporteTotal AS fImporte,
+        rfa.fImporteTotal AS fImporteTotal, 
         rfa.skUnidadMedida,
         cus.sClaveSAT, 
         cus.sNombre AS unidadMedida,
@@ -1163,7 +1161,7 @@ Class Admi_Model Extends DLOREAN_Model {
          LEFT JOIN cat_servicios cse ON cse.skServicio = rfa.skServicio
         LEFT JOIN cat_unidadesMedidaSAT cus ON cus.skUnidadMedida = rfa.skUnidadMedida
         LEFT JOIN rel_servicios_impuestos rsir ON rsir.skServicio = rfa.skServicio AND rsir.skImpuesto = 'RETIVA'
-        LEFT JOIN rel_servicios_impuestos rsit ON rsit.skServicio = rfa.skServicio AND rsit.skImpuesto = 'TRAIVA'
+        LEFT JOIN rel_servicios_impuestos rsit ON rsit.skServicio = rfa.skServicio AND rsit.skImpuesto = 'TRAIVA'	 
         WHERE  rfa.skFactura = " . escape($this->admi['skFactura']);
 
 
@@ -1350,7 +1348,7 @@ Class Admi_Model Extends DLOREAN_Model {
         $sql = "SELECT skUnidadMedida AS id,CONCAT('(',sClaveSAT,') ', sNombre) AS nombre  FROM cat_unidadesMedidaSAT
 				WHERE skEstatus = 'AC' ";
         if (!empty(trim($_POST['val']))) {
-            $sql .= " AND sNombre  COLLATE Latin1_General_CI_AI LIKE '%" . escape($_POST['val'], false) . "%' ";
+            $sql .= " AND sNombre   LIKE '%" . escape($_POST['val'], false) . "%' ";
         }
 
         $result = Conn::query($sql);
@@ -1374,7 +1372,7 @@ Class Admi_Model Extends DLOREAN_Model {
         $sql = "SELECT skServicio AS id,sNombre AS nombre  FROM cat_servicios
 				WHERE 1 = 1 ";
         if (!empty(trim($_POST['val']))) {
-            $sql .= " AND sNombre  COLLATE Latin1_General_CI_AI LIKE '%" . escape($_POST['val'], false) . "%' ";
+            $sql .= " AND sNombre LIKE '%" . escape($_POST['val'], false) . "%' ";
         }
 
         $result = Conn::query($sql);
@@ -1505,7 +1503,7 @@ Class Admi_Model Extends DLOREAN_Model {
             " .escape(isset($this->admi['sRFCReceptor']) ? $this->admi['sRFCReceptor'] : NULL) . ",
 
 
-            " .escape(isset($this->admi['skTipoMedida']) ? $this->admi['skTipoMedida'] : NULL) . ",
+            " .escape(isset($this->admi['skUnidadMedida']) ? $this->admi['skUnidadMedida'] : NULL) . ",
             " .escape(isset($this->admi['fCantidad']) ? $this->admi['fCantidad'] : NULL) . ",
             " .escape(isset($this->admi['fPrecioUnitario']) ? $this->admi['fPrecioUnitario'] : NULL) . ",
 
@@ -1513,6 +1511,15 @@ Class Admi_Model Extends DLOREAN_Model {
             " .escape(isset($this->admi['skTipoImpuesto']) ? $this->admi['skTipoImpuesto'] : NULL) . ",
             " .escape(isset($this->admi['fTasa']) ? $this->admi['fTasa'] : NULL) . ",
             " .escape(isset($this->admi['fImporte']) ? $this->admi['fImporte'] : NULL) . ",
+
+
+            " .escape(isset($this->admi['sFolioFactura']) ? $this->admi['sFolioFactura'] : NULL) . ",
+            " .escape(isset($this->admi['skUUIDSAT']) ? $this->admi['skUUIDSAT'] : NULL) . ",
+            " .escape(isset($this->admi['fTotalFactura']) ? $this->admi['fTotalFactura'] : NULL) . ",
+            " .escape(isset($this->admi['dFechaFactura']) ? $this->admi['dFechaFactura'] : NULL) . ",
+            " .escape(isset($this->admi['dFechaTimbrado']) ? $this->admi['dFechaTimbrado'] : NULL) . ",
+
+
             
            
             " .escape(isset($this->admi['axn']) ? $this->admi['axn'] : NULL) . ",
@@ -1600,8 +1607,7 @@ Class Admi_Model Extends DLOREAN_Model {
           $record = Conn::fetch_assoc_all($result);
           return $record;
       }
-
-
+ 
 
      
 

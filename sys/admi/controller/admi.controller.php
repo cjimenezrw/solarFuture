@@ -398,7 +398,12 @@ Class Admi_Controller Extends Admi_Model {
                 $data = $cofa_inde->consulta();
                 header('Content-Type: application/json');
                 echo json_encode($data);
-                break;
+            break;
+            case 'noAplica':
+                $data = $cofa_inde->noAplica();
+                header('Content-Type: application/json');
+                echo json_encode($data);
+            break; 
             case 'generarExcel':
                 $cofa_inde->generarExcel();
                 break;
@@ -411,6 +416,54 @@ Class Admi_Controller Extends Admi_Model {
                 break;
         }
         return TRUE;
+    }
+
+    /**
+     * cofa_deta
+     *
+     * Módulo para visualizar toda la informacion de un control de cobro(cofa_deta)
+     *
+     * @author  <lvaldez>
+     */
+
+    public function cofa_deta() {
+        $this->load_class("cofa_deta", "controller");
+        $cofa_deta = new Cofa_deta_Controller();
+        $axn = (isset($_POST['axn']) ? $_POST['axn'] : (isset($_GET['axn']) ? $_GET['axn'] : NULL));
+        switch ($axn) {
+            case 'generarFormatoFA':
+                $cofa_deta->generarFormatoFA();
+            break;
+            case 'mostrarDocumento':
+                     $cofa_deta->mostrarDocumento();
+             break;
+            default:
+                $this->data = $cofa_deta->consultar();
+                $this->load_view('cofa_deta', $this->data);
+            break;
+        }
+        return TRUE;
+    }
+
+    public function cofa_suba()
+    {
+        $this->load_class("cofa_suba", "controller");
+        $cofa_suba = new Cofa_suba_Controller();
+        $axn = (isset($_POST['axn']) ? $_POST['axn'] : (isset($_GET['axn']) ? $_GET['axn'] : NULL));
+        switch ($axn) {
+            case 'guardar':
+                header('Content-Type: application/json');
+                echo json_encode($cofa_suba->guardar());
+            break; 
+            case 'obtenerDatos':
+                header('Content-Type: application/json');
+                echo json_encode($cofa_suba->obtenerDatosXML());
+            break; 
+            default:
+                $this->load_view('cofa_suba', $this->data);
+            break;
+        }
+        return true;
     }
 
     /**

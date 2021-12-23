@@ -43,7 +43,13 @@ Class Orse_inde_Controller Extends Admi_Model {
         ce.sIcono AS estatusIcono,
         ce.sColor AS estatusColor, 
         cu.sNombre AS usoCFDI,
-        '' AS folioServicio,
+        (SELECT  
+        CASE
+            WHEN rosp.skServicioProceso = 'VENT' THEN CONCAT('SFM', LPAD(osv.iFolio, 4, 0))   
+            ELSE NULL END AS folioServicio
+        FROM rel_ordenesServicios_procesos rosp
+        LEFT JOIN ope_cotizaciones osv ON osv.skCotizacion = rosp.skCodigo  
+        WHERE rosp.skOrdenServicio = oos.skOrdenServicio LIMIT 1) AS folioServicio,
         cuc.sNombre AS usuarioCreacion,
         (SELECT  occ.iFolio   FROM rel_ordenesServicios_facturas rpf  INNER JOIN ope_facturas occ ON occ.skFactura = rpf.skFactura  AND occ.skEstatus !='CA' AND occ.iFolio IS NOT NULL WHERE rpf.skOrdenServicio = oos.skOrdenServicio LIMIT 1 ) AS iFolioFactura
         FROM ope_ordenesServicios oos

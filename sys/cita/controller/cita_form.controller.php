@@ -37,9 +37,16 @@ Class Cita_form_Controller Extends Cita_Model {
 
             $this->cita['skCita'] = (isset($_GET['p1']) ? $_GET['p1'] : NULL);  
 
-        // guardar_actaEntrega 
+        // guardar_agendarCita 
             $guardar_cita = $this->guardar_agendarCita();
             if(!$guardar_cita['success']){
+                Conn::rollback($this->idTran);
+                return $this->data;
+            }
+
+        // confirmar_cita_personal 
+            $confirmar_cita_personal = $this->confirmar_cita_personal();
+            if(!$confirmar_cita_personal['success']){
                 Conn::rollback($this->idTran);
                 return $this->data;
             }
@@ -161,6 +168,52 @@ Class Cita_form_Controller Extends Cita_Model {
         $this->data['success'] = TRUE;
         $this->data['message'] = 'DATOS DE CITA GUARDADOS';
         return $this->data;
+    }
+
+    public function confirmar_cita_personal(){
+        $this->data['success'] = TRUE;
+
+        // BORRAMOS EL PERSONAL ACTUAL DE LA CITA //
+            $this->cita['axn'] = 'delete_cita_personal';
+            $stp_cita_agendar = parent::stp_cita_agendar();
+            if(!$stp_cita_agendar || isset($stp_cita_agendar['success']) && $stp_cita_agendar['success'] != 1){
+                $this->data['success'] = FALSE;
+                $this->data['message'] = 'HUBO UN ERROR AL GUARDAR LA CITA';
+                return $this->data;
+            }
+
+        // GUARDAMOS EL PERSONAL DE LA CITA //
+            $this->cita['axn'] = 'confirmar_cita_personal';
+            $this->cita['skEstatus'] = 'AC';
+            if(!empty($this->cita['skCitaPersonal_array'])){
+                foreach($this->cita['skCitaPersonal_array'] AS $k=>$v){
+                    $this->cita['skUsuarioPersonal'] = $v;
+                    
+                    $stp_cita_agendar = parent::stp_cita_agendar();
+                    if(!$stp_cita_agendar || isset($stp_cita_agendar['success']) && $stp_cita_agendar['success'] != 1){
+                        $this->data['success'] = FALSE;
+                        $this->data['message'] = 'HUBO UN ERROR AL GUARDAR LA CITA';
+                        return $this->data;
+                    }
+    
+                }
+            }
+
+        $this->data['success'] = TRUE;
+        $this->data['message'] = 'DATOS DE CITA GUARDADOS';
+        return $this->data;
+    }
+
+    public function get_ordenServicio(){
+
+        $this->cita['iFolioOrdenServicio'] = (isset($_POST['val']) && !empty($_POST['val'])) ? $_POST['val'] : NULL;
+
+        $_get_ordenServicio = parent::_get_ordenServicio([
+            'iFolioOrdenServicio'=>$this->cita['iFolioOrdenServicio'],
+            'skEstatus'=>'AC'
+        ]);
+
+        return $_get_ordenServicio;
     }
 
     public function get_horarios_disponibles(){

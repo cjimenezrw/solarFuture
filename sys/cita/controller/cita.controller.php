@@ -55,6 +55,10 @@ Class Cita_Controller Extends Cita_Model {
                 header('Content-Type: application/json');
                 echo json_encode($cita_form->guardar());
                 break;
+            case 'get_ordenServicio':
+                header('Content-Type: application/json');
+                echo json_encode($cita_form->get_ordenServicio());
+                break;
             case 'get_horarios_disponibles':
                 header('Content-Type: application/json');
                 echo json_encode($cita_form->get_horarios_disponibles());

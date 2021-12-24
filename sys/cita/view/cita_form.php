@@ -10,6 +10,33 @@
                 </div>
                 <div class="panel-body container-fluid">
                     <div class="row row-lg">
+
+                        <?php 
+                            if($this->verify_permissions('A')){
+                        ?>
+
+                        <div class="col-lg-4 col-md-4">
+                            <div class="form-group">
+                                <h4 class="example-title">ORDEN DE SERVICIO:</h4>
+                                <select id="skOrdenServicio"  name="skOrdenServicio" class="form-control" data-plugin="select2" select2Simple>
+                                    <option value="">- SELECCIONAR -</option>
+                                    <?php
+                                        if (!empty($data['datos']['skOrdenServicio'])) {
+                                    ?>
+                                        <option selected="selected"
+                                        value="<?php echo $data['datos']['skOrdenServicio']; ?>"><?php echo $row['iFolioOrdenServicio']; ?></option>
+                                    <?php
+                                        }//ENDIF
+                                    ?>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="col-lg-12 col-md-12 clearfix"><hr></div>
+
+                        <?php
+                            }//ENDIF
+                        ?>
                         
                         <div class="col-lg-4 col-md-4">
                             <div class="form-group">
@@ -162,6 +189,44 @@
                                 <textarea id="sObservaciones" name="sObservaciones" placeholder="OBSERVACIONES" class="form-control" rows="3"><?php echo isset($data['datos']['sObservaciones']) ? $data['datos']['sObservaciones'] : ''; ?></textarea>
                             </div>
                         </div>
+
+                        <?php 
+                            if($this->verify_permissions('A')){
+                        ?>
+
+                        <div class="col-lg-12 col-md-12 clearfix"></div>
+                        
+                        <div class="col-lg-4 col-md-4">
+                            <div class="form-group">
+                                <h4 class="example-title"><span style="color:red;">* </span>PERSONAL ASIGNADO:</h4>
+                                <div class="select2-primary">
+                                    <select name="skCitaPersonal_array[]" id="skCitaPersonal_array" class="form-control select2" multiple="multiple" data-plugin="select2" data-ajax--cache="true">
+                                        <?php
+                                            if (!empty($data['citas_personal'])) {
+                                                foreach ($data['citas_personal'] as $row) {
+                                        ?>
+                                            <option selected="selected" value="<?php echo $row['skUsuarioPersonal']; ?>"><?php echo $row['nombre']; ?></option>
+                                        <?php
+                                                }//ENDWHILE
+                                            }//ENDIF
+                                        ?>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="col-lg-12 col-md-12 clearfix"></div>
+
+                        <div class="col-lg-12 col-md-12">
+                            <div class="form-group">
+                                <h4 class="example-title">INSTRUCCIONES DE SERVICIO:</h4>
+                                <textarea id="sInstruccionesServicio" name="sInstruccionesServicio" placeholder="INSTRUCCIONES DE SERVICIO" class="form-control" rows="3"><?php echo isset($data['datos']['sInstruccionesServicio']) ? $data['datos']['sInstruccionesServicio'] : ''; ?></textarea>
+                            </div>
+                        </div>
+
+                        <?php
+                            }//ENDIF
+                        ?>
                     
                     </div>
 
@@ -176,11 +241,20 @@
 <script type="text/javascript">
     core.formValidaciones.fields = <?php echo $this->sysModule; ?>.<?php echo $this->sysFunction; ?>.validaciones;
     $(document).ready(function () {
+        
         $('#core-guardar').formValidation(core.formValidaciones);
 
         $("#skCategoriaCita").select2({placeholder: "CATEGORIA", allowClear: true });
         $("#skEstadoMX").select2({placeholder: "ESTADO", allowClear: true });
         $("#skMunicipioMX").select2({placeholder: "MUNICIPIO", allowClear: true });
+
+        core.autocomplete2('#skOrdenServicio', 'get_ordenServicio', window.location.href, 'ORDEN SERVICIO', {});
+        core.autocomplete2('#skCitaPersonal_array', 'get_personal', window.location.href, 'PERSONAL ASIGNADO', {
+            skCategoriaCita: $('#skCategoriaCita'),
+            skEstadoMX: $('#skEstadoMX'),
+            skMunicipioMX: $('#skMunicipioMX'),
+            dFechaCita: $('#dFechaCita')
+        });
 
         $(".input-datepicker").datepicker({
             format: "dd/mm/yyyy"

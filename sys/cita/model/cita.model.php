@@ -318,13 +318,38 @@ Class Cita_Model Extends DLOREAN_Model {
         $records = Conn::fetch_assoc_all($result);
         utf8($records, FALSE);
         return $records;
+    }
 
+    public function _get_ordenServicio($params = []){
+        $sql = "SELECT N1.* FROM (
+            SELECT os.skOrdenServicio AS id, CONCAT('ORD-', LPAD(os.iFolio, 5, 0))  AS nombre 
+        FROM ope_ordenesServicios os
+        WHERE os.skEstatus != 'CA'
+        ) AS N1 WHERE 1=1 ";
+
+        if(isset($params['iFolioOrdenServicio']) && !empty(trim($params['iFolioOrdenServicio']))){
+            $sql .= " AND N1.nombre LIKE '%".escape(trim($params['iFolioOrdenServicio']),FALSE)."%' ";
+        }
+
+        $sql .= " ORDER BY N1.id DESC ";
+
+        $sql .= " LIMIT 10 ;";
+
+        $result = Conn::query($sql);
+        if(is_array($result) && isset($result['success']) && $result['success'] != 1){
+            return $result;
+        }
+
+        $records = Conn::fetch_assoc_all($result);
+        utf8($records, FALSE);
+        return $records;
     }
 
     public function stp_cita_agendar(){
         $sql = "CALL stp_cita_agendar (
             ".escape(isset($this->cita['skCita']) ? $this->cita['skCita'] : NULL).",
             ".escape(isset($this->cita['skCategoriaCita']) ? $this->cita['skCategoriaCita'] : NULL).",
+            ".escape(isset($this->cita['skOrdenServicio']) ? $this->cita['skOrdenServicio'] : NULL).",
             ".escape(isset($this->cita['skEstatus']) ? $this->cita['skEstatus'] : NULL).",
             ".escape(isset($this->cita['dFechaCita']) ? $this->cita['dFechaCita'] : NULL).",
             ".escape(isset($this->cita['tHoraInicio']) ? $this->cita['tHoraInicio'] : NULL).",

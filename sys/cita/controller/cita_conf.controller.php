@@ -204,6 +204,18 @@ Class Cita_conf_Controller Extends Cita_Model {
         return $this->data;
     }
 
+    public function get_ordenServicio(){
+
+        $this->cita['iFolioOrdenServicio'] = (isset($_POST['val']) && !empty($_POST['val'])) ? $_POST['val'] : NULL;
+
+        $_get_ordenServicio = parent::_get_ordenServicio([
+            'iFolioOrdenServicio'=>$this->cita['iFolioOrdenServicio'],
+            'skEstatus'=>'AC'
+        ]);
+
+        return $_get_ordenServicio;
+    }
+
     public function get_horarios_disponibles(){
         $this->data = ['success' => TRUE, 'message' => 'HORARIOS DISPONIBLES CARGADOS', 'datos' => NULL];
 

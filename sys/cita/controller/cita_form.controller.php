@@ -35,7 +35,7 @@ Class Cita_form_Controller Extends Cita_Model {
                 return $this->data;
             }
 
-            $this->cita['skCita'] = (isset($_GET['p1']) ? $_GET['p1'] : NULL);  
+            $this->cita['skCita'] = (isset($_GET['p1']) ? $_GET['p1'] : NULL);
 
         // guardar_agendarCita 
             $guardar_cita = $this->guardar_agendarCita();
@@ -156,7 +156,7 @@ Class Cita_form_Controller Extends Cita_Model {
     public function guardar_agendarCita(){
         $this->data['success'] = TRUE;
         $this->cita['axn'] = 'guardar_agendarCita';
-        $this->cita['skEstatus'] = 'PE';
+        $this->cita['skEstatus'] = 'CF';
 
         $stp_cita_agendar = parent::stp_cita_agendar();
         if(!$stp_cita_agendar || isset($stp_cita_agendar['success']) && $stp_cita_agendar['success'] != 1){
@@ -164,6 +164,8 @@ Class Cita_form_Controller Extends Cita_Model {
             $this->data['message'] = 'HUBO UN ERROR AL GUARDAR LA CITA';
             return $this->data;
         }
+
+        $this->cita['skCita'] = (isset($stp_cita_agendar['skCita']) ? $stp_cita_agendar['skCita'] : NULL);
 
         $this->data['success'] = TRUE;
         $this->data['message'] = 'DATOS DE CITA GUARDADOS';
@@ -178,7 +180,7 @@ Class Cita_form_Controller Extends Cita_Model {
             $stp_cita_agendar = parent::stp_cita_agendar();
             if(!$stp_cita_agendar || isset($stp_cita_agendar['success']) && $stp_cita_agendar['success'] != 1){
                 $this->data['success'] = FALSE;
-                $this->data['message'] = 'HUBO UN ERROR AL GUARDAR LA CITA';
+                $this->data['message'] = 'HUBO UN ERROR AL CONFIGURAR EL PERSONAL DE LA CITA';
                 return $this->data;
             }
 
@@ -192,7 +194,7 @@ Class Cita_form_Controller Extends Cita_Model {
                     $stp_cita_agendar = parent::stp_cita_agendar();
                     if(!$stp_cita_agendar || isset($stp_cita_agendar['success']) && $stp_cita_agendar['success'] != 1){
                         $this->data['success'] = FALSE;
-                        $this->data['message'] = 'HUBO UN ERROR AL GUARDAR LA CITA';
+                        $this->data['message'] = 'HUBO UN ERROR AL GUARDAR EL PERSONAL DE LA CITA';
                         return $this->data;
                     }
     
@@ -253,6 +255,33 @@ Class Cita_form_Controller Extends Cita_Model {
         return $this->data;
     }
 
+    public function get_personal(){
+        $this->cita['nombre'] = (isset($_POST['val']) && !empty($_POST['val'])) ? $_POST['val'] : NULL;
+
+        $sql = "SELECT N1.* FROM (
+            SELECT
+                u.skUsuario AS id,CONCAT(u.sNombre,' ',u.sApellidoPaterno,' ',u.sApellidoMaterno) AS nombre
+            FROM cat_usuarios u 
+                WHERE u.skEstatus = 'AC'
+            ) AS N1 WHERE 1=1 ";
+
+        if(isset($this->cita['nombre']) && !empty(trim($this->cita['nombre']))){
+            $sql .= " AND N1.nombre LIKE '%".escape($this->cita['nombre'],FALSE)."%' ";
+        }
+
+        $sql .= " LIMIT 10; ";
+
+        $result = Conn::query($sql);
+        if(is_array($result) && isset($result['success']) && $result['success'] != 1){
+            return $result;
+        }
+
+        $records = Conn::fetch_assoc_all($result);
+        utf8($records, FALSE);
+        return $records;
+
+    }
+
     public function getDatos() {
         $this->data = ['success' => TRUE, 'message' => NULL, 'datos' => NULL];
         $this->cita['skCita'] = (isset($_GET['p1']) && !empty($_GET['p1'])) ? $_GET['p1'] : NULL;
@@ -268,6 +297,10 @@ Class Cita_form_Controller Extends Cita_Model {
         if(!empty($this->cita['skCita'])){
             
             $this->data['datos'] = parent::_get_citas([
+                'skCita'=>$this->cita['skCita']
+            ]);
+
+            $this->data['citas_personal'] = parent::_get_citas_personal([
                 'skCita'=>$this->cita['skCita']
             ]);
 

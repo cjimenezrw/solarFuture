@@ -8,8 +8,36 @@
                 <div class="panel-heading">
                     <h3 class="panel-title">DATOS GENERALES</h3>
                 </div>
+                <?php
+                    if(!empty($data['datos']['iFolioCita'])){
+                ?>
+                <div class="alert alert-primary alert-dismissible" role="alert">
+                    <b class="red-600 font-size-24"><?php echo (!empty($data['datos']['iFolioCita'])) ? $data['datos']['iFolioCita'] : '-'; ?></b>
+                </div>
+                <?php
+                    }//ENDIF
+                ?>
                 <div class="panel-body container-fluid">
                     <div class="row row-lg">
+
+                        <div class="col-lg-4 col-md-4">
+                            <div class="form-group">
+                                <h4 class="example-title">ORDEN DE SERVICIO:</h4>
+                                <select id="skOrdenServicio"  name="skOrdenServicio" class="form-control" data-plugin="select2" select2Simple>
+                                    <option value="">- SELECCIONAR -</option>
+                                    <?php
+                                        if (!empty($data['datos']['skOrdenServicio'])) {
+                                    ?>
+                                        <option selected="selected"
+                                        value="<?php echo $data['datos']['skOrdenServicio']; ?>"><?php echo $data['datos']['iFolioOrdenServicio']; ?></option>
+                                    <?php
+                                        }//ENDIF
+                                    ?>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="col-lg-12 col-md-12 clearfix"><hr></div>
                         
                         <div class="col-lg-4 col-md-4">
                             <div class="form-group">

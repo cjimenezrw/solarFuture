@@ -20,10 +20,11 @@ cita.cita_inde.dataTableConf = {
         }
     },
     'axn': 'consultar',
-    'order': [[17, "desc"]],
+    'order': [[18, "desc"]],
     'columns': [
         {'title': 'E', 'data': 'estatus', 'dataType': 'string', 'tooltip': 'Estatus', 'filterT': 'Estatus'},
         {'title': 'Folio', 'data': 'iFolioCita', 'dataType': 'string','tooltip': 'Folio'},
+        {'title': 'OS', 'data': 'iFolioOrdenServicio', 'dataType': 'string','tooltip': 'Folio Orden Servicio'},
         {'title': 'Categoría', 'data': 'sNombreCategoria', 'dataType': 'string','tooltip': 'Categoría'},
         {'title': 'F. Cita', 'data': 'dFechaCita', 'dataType': 'date','tooltip': 'Fecha Cita', 'filterT': 'Fecha Cita'},
         {'title': 'H. Cita', 'data': 'tHoraInicio', 'dataType': 'string','tooltip': 'Hora Cita', 'filterT': 'Hora Cita'},

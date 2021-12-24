@@ -67,6 +67,10 @@ Class Cita_Controller Extends Cita_Model {
                 header('Content-Type: application/json');
                 echo json_encode($cita_form->get_cat_municipiosMX());
                 break;
+            case 'get_personal':
+                header('Content-Type: application/json');
+                echo json_encode($cita_form->get_personal());
+                break;
             default:
                 $this->load_view('cita_form', $cita_form->getDatos());
                 break;
@@ -82,6 +86,10 @@ Class Cita_Controller Extends Cita_Model {
             case 'guardar':
                 header('Content-Type: application/json');
                 echo json_encode($cita_conf->guardar());
+                break;
+            case 'get_ordenServicio':
+                header('Content-Type: application/json');
+                echo json_encode($cita_conf->get_ordenServicio());
                 break;
             case 'get_horarios_disponibles':
                 header('Content-Type: application/json');

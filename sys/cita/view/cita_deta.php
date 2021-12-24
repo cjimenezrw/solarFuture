@@ -22,9 +22,15 @@
                 <div class="panel-heading">
                     <h3 class="panel-title">DATOS GENERALES</h3>
                 </div>
+                <?php
+                    if(!empty($data['datos']['iFolioCita'])){
+                ?>
                 <div class="alert alert-primary alert-dismissible" role="alert">
                     <b class="red-600 font-size-24"><?php echo (!empty($data['datos']['iFolioCita'])) ? $data['datos']['iFolioCita'] : '-'; ?></b>
                 </div>
+                <?php
+                    }//ENDIF
+                ?>
                 <div class="panel-body container-fluid">
                     <div class="row row-lg">
                         

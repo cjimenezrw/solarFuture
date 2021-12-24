@@ -371,7 +371,10 @@ Class Cita_Model Extends DLOREAN_Model {
             ".escape(isset($this->cita['axn']) ? $this->cita['axn'] : NULL).",
             ".escape($_SESSION['usuario']['skUsuario']).",
             ".escape($this->sysController).")";
-//exit('<pre>'.print_r($sql,1).'</pre>');
+        
+        //exit('<pre>'.print_r($sql,1).'</pre>');
+        //$this->log($sql,TRUE);
+
         $result = Conn::query($sql);
         if(is_array($result) && isset($result['success']) && $result['success'] != 1){
             return $result;

@@ -194,7 +194,7 @@
 
                         <div class="col-lg-12 col-md-12">
                             <div class="form-group">
-                                <h4 class="example-title"><span style="color:red;">* </span>OBSERVACIONES:</h4>
+                                <h4 class="example-title">OBSERVACIONES:</h4>
                                 <textarea id="sObservaciones" name="sObservaciones" placeholder="OBSERVACIONES" class="form-control" rows="3"><?php echo isset($data['datos']['sObservaciones']) ? $data['datos']['sObservaciones'] : ''; ?></textarea>
                             </div>
                         </div>
@@ -205,9 +205,9 @@
 
                         <div class="col-lg-12 col-md-12 clearfix"></div>
                         
-                        <div class="col-lg-4 col-md-4">
+                        <div class="col-lg-12 col-md-12">
                             <div class="form-group">
-                                <h4 class="example-title"><span style="color:red;">* </span>PERSONAL ASIGNADO:</h4>
+                                <h4 class="example-title">PERSONAL ASIGNADO:</h4>
                                 <div class="select2-primary">
                                     <select name="skCitaPersonal_array[]" id="skCitaPersonal_array" class="form-control select2" multiple="multiple" data-plugin="select2" data-ajax--cache="true">
                                         <?php

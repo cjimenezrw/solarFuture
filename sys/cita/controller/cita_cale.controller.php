@@ -35,7 +35,7 @@ Class Cita_cale_Controller Extends Cita_Model {
         }
         
         $this->data['citas'] = parent::_get_citas([
-            'skEstatus'=>['CF'],
+            'skEstatus'=>(!empty($this->cita['iFiltroHistorico']) ? ['CF','FI'] : ['CF']),
             'sClaveCategoriaCita'=>$this->cita['sClaveCategoriaCita'],
             'skCita'=>$this->cita['skCita'],
             'skEstadoMX'=>$this->cita['skEstadoMX'],

@@ -193,7 +193,7 @@
 
                         <div class="col-lg-12 col-md-12 clearfix"></div>
                         
-                        <div class="col-lg-4 col-md-4">
+                        <div class="col-lg-12 col-md-12">
                             <div class="form-group">
                                 <h4 class="example-title"><span style="color:red;">* </span>PERSONAL ASIGNADO:</h4>
                                 <div class="select2-primary">

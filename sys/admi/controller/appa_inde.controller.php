@@ -15,6 +15,7 @@ Class Appa_inde_Controller Extends Admi_Model {
 
     public function __construct() {
         parent::init();
+        $this->idTran = 'stpCUD_facturas';
     }
 
     public function __destruct() {
@@ -125,6 +126,8 @@ Class Appa_inde_Controller Extends Admi_Model {
             }
             return SELF::OCULTO;
         }else{
+
+            Conn::begin($this->idTran);
             $this->data = ['success'=>TRUE,'message'=>NULL,'datos'=>NULL];
 
             $this->admi['axn'] = 'cancelar_transaccion_aplicacion_pago';
@@ -133,12 +136,14 @@ Class Appa_inde_Controller Extends Admi_Model {
     
             if($this->admi['skTransaccionPago']){
 
-                $cancelar_transaccion_aplicacion_pago = parent::stpCUD_transacciones();
-                if(!$cancelar_transaccion_aplicacion_pago || isset($cancelar_transaccion_aplicacion_pago['success']) && $cancelar_transaccion_aplicacion_pago['success'] != 1){
+                $stpCUD_transacciones = parent::stpCUD_transacciones();
+                if(!$stpCUD_transacciones || isset($stpCUD_transacciones['success']) && $stpCUD_transacciones['success'] != 1){
                     $this->data = ['success'=>FALSE,'message'=>'NO SE PUDO CANCELAR EL REGISTRO','datos'=>NULL];
+                    Conn::rollback($this->idTran);
                     return $this->data;
                 }
             }
+            Conn::commit($this->idTran);
             return $this->data;
         }
     }

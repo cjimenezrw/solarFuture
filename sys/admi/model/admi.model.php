@@ -735,7 +735,7 @@ Class Admi_Model Extends DLOREAN_Model {
         " .escape(isset($this->admi['axn']) ? $this->admi['axn'] : NULL) . ",
         '" . $_SESSION['usuario']['skUsuario'] . "',
         '" . $this->sysController . "' )";
-
+        
 
         $result = Conn::query($sql);
         if (!$result) {

@@ -114,6 +114,7 @@ Class Cita_inde_Controller Extends Cita_Model {
             
             // FORMATEO DE DATOS //
                 $row['dFechaCreacion'] = ($row['dFechaCreacion']) ? date('d/m/Y H:i:s', strtotime($row['dFechaCreacion'])) : NULL;
+                $row['dFechaCita'] = ($row['dFechaCita']) ? date('d/m/Y', strtotime($row['dFechaCita'])) : NULL;
                 $row['dFechaModificacion'] = ($row['dFechaModificacion']) ? date('d/m/Y H:i:s', strtotime($row['dFechaModificacion'])) : NULL;
                 $row['dFechaConfirmacion'] = ($row['dFechaConfirmacion']) ? date('d/m/Y H:i:s', strtotime($row['dFechaConfirmacion'])) : NULL;
                 $row['menuEmergente'] = parent::menuEmergente($regla, $row['skCita']);

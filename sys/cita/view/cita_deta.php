@@ -22,6 +22,9 @@
                 <div class="panel-heading">
                     <h3 class="panel-title">DATOS GENERALES</h3>
                 </div>
+                <div class="alert alert-primary alert-dismissible" role="alert">
+                    <b class="red-600 font-size-24"><?php echo (!empty($data['datos']['iFolioCita'])) ? $data['datos']['iFolioCita'] : '-'; ?></b>
+                </div>
                 <div class="panel-body container-fluid">
                     <div class="row row-lg">
                         
@@ -43,6 +46,15 @@
                             <div class="form-group">
                                 <h4 class="example-title">FECHA CREACIÓN:</h4>
                                 <span><?php echo (!empty($data['datos']['dFechaCreacion']) ? date('d/m/Y H:i:s', strtotime($data['datos']['dFechaCreacion'])) : '-'); ?></span>
+                            </div>
+                        </div>
+
+                        <div class="col-lg-12 col-md-12 clearfix"><hr></div>
+
+                        <div class="col-lg-4 col-md-4">
+                            <div class="form-group">
+                                <h4 class="example-title">ORDEN DE SERVICIO:</h4>
+                                <span><?php echo (!empty($data['datos']['iFolioOrdenServicio']) ? $data['datos']['iFolioOrdenServicio'] : '-'); ?></span>
                             </div>
                         </div>
 

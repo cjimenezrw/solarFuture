@@ -24,7 +24,7 @@
                                         if (!empty($data['datos']['skOrdenServicio'])) {
                                     ?>
                                         <option selected="selected"
-                                        value="<?php echo $data['datos']['skOrdenServicio']; ?>"><?php echo $row['iFolioOrdenServicio']; ?></option>
+                                        value="<?php echo $data['datos']['skOrdenServicio']; ?>"><?php echo $data['datos']['iFolioOrdenServicio']; ?></option>
                                     <?php
                                         }//ENDIF
                                     ?>

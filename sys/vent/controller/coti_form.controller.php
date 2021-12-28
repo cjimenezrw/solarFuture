@@ -35,7 +35,7 @@ Class Coti_form_Controller Extends Vent_Model {
                 return $this->data;
             }
 
-            // Validamos los datos de entrada
+        // Validamos los datos de entrada
             $validar_datos_entrada = $this->validar_datos_entrada();
             if(!$validar_datos_entrada['success']){
                 Conn::rollback($this->idTran);
@@ -45,8 +45,8 @@ Class Coti_form_Controller Extends Vent_Model {
 
             $this->vent['skCotizacion'] = (isset($_POST['skCotizacion']) ? $_POST['skCotizacion'] : NULL);  
 
-            // REGISTRAR CLIENTE NUEVO
-            $registrar_cliente = $this->registrar_cliente();
+        // REGISTRAR CLIENTE NUEVO
+            /*$registrar_cliente = $this->registrar_cliente();
             if(!$registrar_cliente['success']){
                 Conn::rollback($this->idTran);
                 return $this->data;
@@ -58,44 +58,43 @@ Class Coti_form_Controller Extends Vent_Model {
                 $this->data['message'] = 'EL CLIENTE O PROSPECTO ES REQUERIDO';
 
                 return $this->data;
-            }
+            }*/
 
-            // Guardar cotizacion
+        // Guardar cotizacion
             $guardar_cotizacion = $this->guardar_cotizacion();
             if(!$guardar_cotizacion['success']){
                 Conn::rollback($this->idTran);
                 return $this->data;
             }
 
-            // Guardar correos
+        // Guardar correos
             $guardar_cotizacion_correos = $this->guardar_cotizacion_correos();
             if(!$guardar_cotizacion_correos['success']){
                Conn::rollback($this->idTran);
                 return $this->data;
             }
 
-            // Guardar impuestos Servicio
+        // Guardar impuestos Servicio
             $guardar_cotizacion_servicios = $this->guardar_cotizacion_servicios();
             if(!$guardar_cotizacion_servicios['success']){
                Conn::rollback($this->idTran);
                 return $this->data;
             }
-            // Guardar informacion Producto
+            
+        // Guardar informacion Producto
             $guardar_cotizacion_productosServicios = $this->guardar_cotizacion_productosServicios();
             if(!$guardar_cotizacion_productosServicios['success']){
                Conn::rollback($this->idTran);
                 return $this->data;
             }
 
-             // Guardar terminos Condiciones
+        // Guardar terminos Condiciones
              $guardar_cotizacion_terminosCondiciones= $this->guardar_cotizacion_terminosCondiciones();
              if(!$guardar_cotizacion_terminosCondiciones['success']){
                 Conn::rollback($this->idTran);
                  return $this->data;
              }
           
-
-        //Conn::commit($this->idTran);
         Conn::commit($this->idTran);
         $this->data['datos'] = $this->vent;
         $this->data['success'] = TRUE;
@@ -104,7 +103,7 @@ Class Coti_form_Controller Extends Vent_Model {
         return $this->data;
     }
 
-    public function registrar_cliente(){
+    /*public function registrar_cliente(){
 
         $validarEmpresaSocio = $this->sysAPI('empr','emso_form','validarEmpresaSocio',[
             'POST'=>[
@@ -146,7 +145,7 @@ Class Coti_form_Controller Extends Vent_Model {
             $this->data['message'] = 'HUBO UN ERROR AL REGISTRAR EL CLIENTE';
             return $this->data; 
         }
-    }
+    }*/
 
     /**
        * guardar_comprobante
@@ -160,9 +159,6 @@ Class Coti_form_Controller Extends Vent_Model {
           $this->data['success'] = TRUE;
           $this->vent['axn'] = 'guardar_cotizacion';
           $this->vent['skEstatus'] = 'NU';
-            /*echo "<PRE>";
-            print_r($this->vent);
-            die();*/
 
           $stpCUD_cotizaciones = parent::stpCUD_cotizaciones();
            

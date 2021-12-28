@@ -17,11 +17,12 @@ vent.coti_inde.dataTableConf = {
         }
     },
     'axn': 'consulta',
-    'order': [[5, "desc"]],
+    'order': [[6, "desc"]],
     'columns': [
         {'title': 'E', 'data': 'estatus', 'dataType': 'string', 'tooltip': 'Estatus', 'filterT': 'Estatus'},
         {'title': 'Folio', 'data': 'iFolio', 'dataType': 'string','tooltip': 'Folio'},
-        {'title': 'Cliente', 'data': 'cliente', 'dataType': 'string'},
+        {'title': 'Razón Social', 'data': 'cliente', 'dataType': 'string'},
+        {'title': 'Nombre Comercial', 'data': 'sNombreCliente', 'dataType': 'string'},
         {'title': 'Usuario Creacion', 'data': 'usuarioCreacion', 'dataType': 'string'},
         {'title': 'Total', 'data': 'fImporteTotal', 'dataType': 'string'},
         {'title': 'F. Creacion', 'data': 'dFechaCreacion', 'dataType': 'date'}
@@ -47,7 +48,10 @@ vent.coti_inde.dataTableConf = {
         {
             "targets": [1],
             "width": '10px'
-            
+        },
+        {
+            "targets": [2,3],
+            "width": '40px'
         }
     ]
 };
@@ -94,10 +98,24 @@ vent.coti_inde.descargarEntregaPDF = function descargarEntregaPDF(obj){
 
 
 vent.coti_form.validaciones = {
+    skEmpresaSocioCliente: {
+        validators: {
+            notEmpty: {
+                message: 'DATO REQUERIDO'
+            }
+        }
+    },
+    skCategoriaPrecio: {
+        validators: {
+            notEmpty: {
+                message: 'DATO REQUERIDO'
+            }
+        }
+    },
     skDivisa: {
         validators: {
             notEmpty: {
-                message: 'La divisa es Requerida'
+                message: 'DATO REQUERIDO'
             }
         }
     } 

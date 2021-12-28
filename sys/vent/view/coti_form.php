@@ -37,33 +37,8 @@ if (isset($data['cotizacionTerminosCondiciones'])) {
         </div>
         <div class="panel-body container-fluid">
                   <div class="row row-lg col-lg-12">
-
-                    <div class="col-md-4 col-lg-4">
-                        <div class="form-group">
-                            <h4 class="example-title"><b class="text-danger"></b>CLIENTE REGISTRADO:</h4>
-                            <input onchange="clienteRegistrado();" type="checkbox" name="iClienteRegistrado" id="iClienteRegistrado" value="1" 
-                            <?php echo (isset($result['skEmpresaSocioCliente']) ? 'checked': ''); ?>
-                            class="js-switch-large" data-plugin="switchery" data-color="#4d94ff" />
-                        </div>
-                    </div>
-
-                    <div class="col-md-12 col-lg-12 clearfix"></div>
                 
-                    <div class="col-md-4 col-lg-4 cliente_nuevo" <?php echo (isset($result['skEmpresaSocioCliente']) ? 'style="display:none;"': ''); ?>>
-                        <div class="form-group">
-                            <h4 class="example-title"><b class="text-danger">*</b> RAZÓN SOCIAL / NOMBRE:</h4>
-                            <input class="form-control" onkeyup="this.value = this.value.toUpperCase();" name="sRazonSocial" id="sRazonSocial" value="<?php echo (isset($result['sRazonSocial'])) ? $result['sRazonSocial'] : ''; ?>" placeholder="RAZÓN SOCIAL" autocomplete="off" type="text">
-                        </div>
-                    </div>
-
-                    <div class="col-md-4 col-lg-4 cliente_nuevo" <?php echo (isset($result['skEmpresaSocioCliente']) ? 'style="display:none;"': ''); ?>>
-                        <div class="form-group">
-                            <h4 class="example-title"><b class="text-danger"></b>RFC:</h4>
-                            <input class="form-control" onkeyup="this.value = this.value.toUpperCase();" name="sRFC" id="sRFC" value="<?php echo (isset($result['sRFC'])) ? $result['sRFC'] : ''; ?>" placeholder="XAXX010101000" autocomplete="off" type="text">
-                        </div>
-                    </div>
-
-                    <div class="col-md-4 col-lg-4 cliente_registrado" <?php echo (isset($result['skEmpresaSocioCliente']) ? 'style="display:block;"': 'style="display:none;"'); ?>>
+                    <div class="col-md-4 col-lg-4">
                         <div class="form-group">
                             <h4 class="example-title"><b class="text-danger">*</b> CLIENTE:</h4>
                             <select name="skEmpresaSocioCliente" id="skEmpresaSocioCliente" class="form-control" data-plugin="select2" data-ajax--cache="true" >
@@ -75,6 +50,13 @@ if (isset($data['cotizacionTerminosCondiciones'])) {
                                 }//ENDIF
                                 ?>
                             </select>
+                        </div>
+                    </div>
+
+                    <div class="col-md-4 col-lg-4">
+                        <div class="form-group">
+                            <h4 class="example-title">NOMBRE CLIENTE:</h4>
+                            <input class="form-control" onkeyup="this.value = this.value.toUpperCase();" name="sNombreCliente" id="sNombreCliente" value="<?php echo (isset($result['sNombreCliente'])) ? $result['sNombreCliente'] : ''; ?>" placeholder="NOMBRE CLIENTE" autocomplete="off" type="text">
                         </div>
                     </div>
                     
@@ -439,19 +421,6 @@ if (isset($data['cotizacionTerminosCondiciones'])) {
 <script type="text/javascript">
 
     core.formValidaciones.fields = vent.coti_form.validaciones;
-
-    function clienteRegistrado(){
-        $("#skEmpresaSocioCliente").val(null).trigger("change");
-        $("#sRazonSocial").val("");
-        $("#sRFC").val("");
-        if($("#iClienteRegistrado").prop('checked')){
-            $(".cliente_nuevo").hide();
-            $(".cliente_registrado").show();
-        }else{
-            $(".cliente_registrado").hide();
-            $(".cliente_nuevo").show();
-        }
-    }
 
     function filterFloat(evt,input){
 

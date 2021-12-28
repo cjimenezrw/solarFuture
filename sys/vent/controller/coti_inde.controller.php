@@ -38,7 +38,8 @@ Class Coti_inde_Controller Extends Vent_Model {
         ce.sIcono AS estatusIcono,
         ce.sColor AS estatusColor, 
         cu.sNombre AS usuarioCreacion,
-        IF(cep.sNombre IS NOT NULL,cep.sNombre,IF(cp.sNombreContacto IS NOT NULL,cp.sNombreContacto,NULL)) AS cliente
+        IF(oc.sNombreCliente IS NOT NULL, oc.sNombreCliente, IF(cep.sNombreCorto IS NOT NULL, cep.sNombreCorto, cep.sNombre)) AS sNombreCliente,
+        IF(cep.sNombreCorto IS NOT NULL, cep.sNombreCorto, cep.sNombre) AS cliente
         FROM ope_cotizaciones oc
         INNER JOIN core_estatus ce ON ce.skEstatus = oc.skEstatus
         INNER JOIN cat_usuarios cu ON cu.skUsuario = oc.skUsuarioCreacion

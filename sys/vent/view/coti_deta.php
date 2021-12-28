@@ -15,7 +15,7 @@ if (isset($data['datos'])) {
                 <h3 class="panel-title">DATOS GENERALES</h3>
                 <ul class="panel-actions panel-actions-keep">
                     <li>
-                        <a href="javascript:void(0);" class="btn btn-squared btn-outline btn-primary btn-sm" onclick="formatoPDF();"> Formato Cotizacion</a>
+                        <a href="javascript:void(0);" class="btn btn-squared btn-outline btn-primary btn-sm" onclick="formatoPDF();">FORMATO COTIZACIÓN</a>
                     </li>
                 </ul>
             </div>
@@ -50,8 +50,8 @@ if (isset($data['datos'])) {
                         </div>
 						<div class="col-md-4 col-lg-4">
                             <div class="form-group">
-                                <h4 class="example-title">PROSPECTO:</h4>
-                                <p><?php echo (!empty($result['prospecto'])) ? $result['prospecto'] : '';?> </p>
+                                <h4 class="example-title">NOMBRE COMERCIAL:</h4>
+                                <p><?php echo (!empty($result['sNombreCliente'])) ? $result['sNombreCliente'] : '';?> </p>
                             </div>
                         </div>
 						<div class="col-md-4 col-lg-4">
@@ -88,13 +88,13 @@ if (isset($data['datos'])) {
 				<div class="col-md-12 same-heigth">
                   <div class="col-md-12 col-lg-12">
       								<div class="form-group">
-      										<h4 class="example-title">CONDICION:</h4>
+      										<h4 class="example-title">CONDICIÓN:</h4>
       										<p><?php echo (!empty($result['sCondicion'])) ? $result['sCondicion'] : 'N/D'; ?> </p>
       								</div>
       						</div>
 							  <div class="col-md-12 col-lg-12">
       								<div class="form-group">
-      										<h4 class="example-title">RETORNO DE INVERSION:</h4>
+      										<h4 class="example-title">RETORNO DE INVERSIÓN:</h4>
       										<p><?php echo (!empty($result['recuperacionInversion'])) ? $result['recuperacionInversion'] : 'N/D'; ?> ANOS </p>
       								</div>
       						</div>
@@ -124,7 +124,7 @@ if (isset($data['datos'])) {
                 <button type="button" class="btn btn-floating btn-sm btn-warning">
                   <i class="icon fa-credit-card"></i>
                 </button>
-                <span class="ml-15 font-weight-400">Gasto Total</span>
+                <span class="ml-15 font-weight-400">GASTO TOTAL</span>
                 <div class="content-text text-center mb-0">
                   <span class="font-size-20 font-weight-100"><?php echo (!empty($result['gastoAnual'])) ? "$".number_format($result['gastoAnual'],2) : '0';?></span>
                 </div>
@@ -137,7 +137,7 @@ if (isset($data['datos'])) {
                 <button type="button" class="btn btn-floating btn-sm btn-danger">
                   <i class="icon fa-bolt"></i>
                 </button>
-                <span class="ml-15 font-weight-400">Consumo Total</span>
+                <span class="ml-15 font-weight-400">CONSUMO TOTAL</span>
                 <div class="content-text text-center mb-0">
                   <span class="font-size-20 font-weight-100"><?php echo (!empty($result['consumoAnual'])) ? number_format($result['consumoAnual'],2)." Kwh" : '0';?></span>
                 </div>
@@ -150,7 +150,7 @@ if (isset($data['datos'])) {
                 <button type="button" class="btn btn-floating btn-sm btn-success">
                   <i class="icon fa-credit-card"></i>
                 </button>
-                <span class="ml-15 font-weight-400">Produccion Total</span>
+                <span class="ml-15 font-weight-400">PRODUCCIÓN TOTAL</span>
                 <div class="content-text text-center mb-0">
                   <span class="font-size-20 font-weight-100"><?php echo (!empty($result['produccionAnual'])) ? number_format($result['produccionAnual'],2)." Kwh" : '0';?></span>
                 </div>
@@ -163,7 +163,7 @@ if (isset($data['datos'])) {
                 <button type="button" class="btn btn-floating btn-sm btn-success">
                   <i class="icon fa-bolt"></i>
                 </button>
-                <span class="ml-15 font-weight-400">Porcentaje Cubierto</span>
+                <span class="ml-15 font-weight-400">PORCENTAJE CUBIERTO</span>
                 <div class="content-text text-center mb-0">
                   <span class="font-size-20 font-weight-100"><?php echo (!empty($result['porcentajeAnualCubierto'])) ? number_format($result['porcentajeAnualCubierto'],2)."%" : '0';?></span>
                 </div>
@@ -175,10 +175,10 @@ if (isset($data['datos'])) {
          <div class="panel panel-bordered panel-primary panel-line" style="display: block;">
             
             <div class="panel-heading">
-			    <h3 class="panel-title">servicios</h3>
+			    <h3 class="panel-title">SERVICIOS</h3>
                 <ul class="panel-actions panel-actions-keep">
                     <li>
-                        <a href="javascript:void(0);" class="btn btn-squared btn-outline btn-primary btn-sm" onclick="formatoPDF();"> Formato Cotizacion</a>
+                        <a href="javascript:void(0);" class="btn btn-squared btn-outline btn-primary btn-sm" onclick="formatoPDF();">FORMATO COTIZACIÓN</a>
                     </li>
                 </ul>
 

@@ -28,6 +28,7 @@ Class Vent_Model Extends DLOREAN_Model {
             " .escape(isset($this->vent['skDivisa']) ? $this->vent['skDivisa'] : NULL) . ",
             " .escape(isset($this->vent['dFechaVigencia']) ? $this->vent['dFechaVigencia'] : NULL) . ",
             " .escape(isset($this->vent['skEmpresaSocioCliente']) ? $this->vent['skEmpresaSocioCliente'] : NULL) . ",
+            " .escape(isset($this->vent['sNombreCliente']) ? $this->vent['sNombreCliente'] : NULL) . ",
             " .escape(isset($this->vent['skProspecto']) ? $this->vent['skProspecto'] : NULL) . ",
             " .escape(isset($this->vent['sObservaciones']) ? $this->vent['sObservaciones'] : NULL) . ",
             " .escape(isset($this->vent['sObservacionesCancelacion']) ? $this->vent['sObservacionesCancelacion'] : NULL) . ",
@@ -114,8 +115,10 @@ Class Vent_Model Extends DLOREAN_Model {
         oc.sTelefonoRecepcionEntrega,
         oc.dFechaEntregaInstalacion,
         oc.sObservacionesInstalacion,
-        cp.sNombreContacto AS prospecto,
+        IF(oc.sNombreCliente IS NOT NULL, oc.sNombreCliente, IF(cep.sNombreCorto IS NOT NULL, cep.sNombreCorto, cep.sNombre)) AS sNombreCliente,
+        IF(cep.sNombreCorto IS NOT NULL, cep.sNombreCorto, cep.sNombre) AS cliente,
         cep.sRFC AS clienteRFC,
+        cp.sNombreContacto AS prospecto,
         rca.sNombre AS categoria,
         cu.sNombre AS usuarioCreacion,
         (SELECT SUM(cc2.fMetros2*rcc.fCantidad) FROM rel_cotizaciones_servicios rcc  
@@ -134,12 +137,13 @@ Class Vent_Model Extends DLOREAN_Model {
         ROUND(ROUND(oc.fImporteTotal/oc.fCostoRecibo,1)/(IF(TARIFA = 'INDUSTRIAL',12,6)),1) AS recuperacionInversion,
         (oc.fCostoRecibo * (IF(TARIFA = 'INDUSTRIAL',12,6))) AS gastoAnual,
         (oc.fKwGastados * (IF(TARIFA = 'INDUSTRIAL',12,6))) AS consumoAnual,
-        (oc.fImporteTotal /(oc.fKwGastados * (IF(TARIFA = 'INDUSTRIAL',12,6)))) AS precioPromedio,
-        IF(cep.sNombre IS NOT NULL,cep.sNombre,IF(cp.sNombreContacto IS NOT NULL,cp.sNombreContacto,NULL)) AS cliente
+        (oc.fImporteTotal /(oc.fKwGastados * (IF(TARIFA = 'INDUSTRIAL',12,6)))) AS precioPromedio
+        
         FROM ope_cotizaciones oc 
+
         LEFT JOIN rel_empresasSocios resc ON resc.skEmpresaSocio = oc.skEmpresaSocioCliente
-        LEFT JOIN cat_prospectos cp ON cp.skProspecto = oc.skEmpresaSocioCliente
         LEFT JOIN cat_empresas cep ON cep.skEmpresa = resc.skEmpresa
+        LEFT JOIN cat_prospectos cp ON cp.skProspecto = oc.skEmpresaSocioCliente
         LEFT JOIN cat_usuarios cu ON cu.skUsuario = oc.skUsuarioCreacion 
         LEFT JOIN rel_catalogosSistemasOpciones rca ON rca.skCatalogoSistemaOpciones = oc.skCategoriaPrecio
  

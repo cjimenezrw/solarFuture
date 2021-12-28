@@ -691,7 +691,7 @@ admi.orse_inde.cancelarOrden = function cancelarOrden(obj) {
     });
    
 };
-admi.orse_form.validaciones = {
+admi.orse_form.validations = {
  
 
 };

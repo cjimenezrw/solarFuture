@@ -138,18 +138,25 @@ if (isset($data['datos'])) {
 		    </div> 
 		 
 		    <div class="col-md-12 same-heigth">
-			<div class="col-md-6 col-lg-4">
-			    <div class="form-group">
-				<h4 class="example-title">Referencia:</h4>
-				<p><?php echo (isset($result['sReferencia'])) ? $result['sReferencia'] : 'N/D'; ?> </p>
+				<div class="col-md-6 col-lg-4">
+					<div class="form-group">
+					<h4 class="example-title">Nombre Cliente:</h4>
+					<p><?php echo (isset($result['sNombreCliente'])) ? $result['sNombreCliente'] : 'N/D'; ?> </p>
+					</div>
+				</div>
+				<div class="col-md-6 col-lg-4">
+					<div class="form-group">
+						<h4 class="example-title">Referencia:</h4>
+						<p><?php echo (isset($result['sReferencia'])) ? $result['sReferencia'] : 'N/D'; ?> </p>
 			    </div>
 			</div>
-			<div class="col-md-6 col-lg-8">
-			    <div class="form-group">
-				<h4 class="example-title">Observaciones:</h4>
-				<p><?php echo (isset($result['sDescripcion'])) ? $result['sDescripcion'] : 'N/D'; ?> </p>
-			    </div>
-			</div>
+			<div class="col-md-12 same-heigth">
+				<div class="col-md-6 col-lg-8">
+					<div class="form-group">
+						<h4 class="example-title">Observaciones:</h4>
+						<p><?php echo (isset($result['sDescripcion'])) ? $result['sDescripcion'] : 'N/D'; ?> </p>
+					</div>
+				</div>
 		    </div>
 
 

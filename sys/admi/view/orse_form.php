@@ -9,7 +9,7 @@ if (isset($data['datos'])) {
 ?>
 
 <form class="form-horizontal" id="core-guardar" method="post"  enctype="multipart/form-data">
-<input type="hidden" name="skPago"  id="skPago" value="<?php echo (isset($result['skPago'])) ? $result['skPago'] : ''; ?>">
+<input type="hidden" name="skOrdenServicio"  id="skOrdenServicio" value="<?php echo (isset($result['skOrdenServicio'])) ? $result['skOrdenServicio'] : ''; ?>">
 
     <div class="panel panel-bordered panel-info panel-line">
         <div class="panel-heading">
@@ -55,7 +55,7 @@ if (isset($data['datos'])) {
                           foreach (  $data['metodoPago'] as $row) {
                               utf8($row);
                               ?>
-                              <option <?php echo(isset($result['sCodigo']) && $result['sCodigo'] == $row['sCodigo'] ? 'selected="selected"' : '') ?> value="<?php echo $row['sCodigo']; ?>"> <?php echo $row['sNombre']; ?> </option>
+                              <option <?php echo(isset($result['skMetodoPago']) && $result['skMetodoPago'] == $row['sCodigo'] ? 'selected="selected"' : '') ?> value="<?php echo $row['sCodigo']; ?>"> <?php echo $row['sNombre']; ?> </option>
                               <?php
                               }//ENDWHILE
                           }//ENDIF
@@ -73,7 +73,7 @@ if (isset($data['datos'])) {
                           foreach (  $data['formaPago'] as $row) {
                               utf8($row);
                               ?>
-                              <option <?php echo(isset($result['sCodigo']) && $result['sCodigo'] == $row['sCodigo'] ? 'selected="selected"' : '') ?> value="<?php echo $row['sCodigo']; ?>"> <?php echo $row['sNombre']; ?> </option>
+                              <option <?php echo(isset($result['skFormaPago']) && $result['skFormaPago'] == $row['sCodigo'] ? 'selected="selected"' : '') ?> value="<?php echo $row['sCodigo']; ?>"> <?php echo $row['sNombre']; ?> </option>
                               <?php
                               }//ENDWHILE
                           }//ENDIF
@@ -91,7 +91,7 @@ if (isset($data['datos'])) {
                           foreach (  $data['usoCFDI'] as $row) {
                               utf8($row);
                               ?>
-                              <option <?php echo(isset($result['sCodigo']) && $result['sCodigo'] == $row['sCodigo'] ? 'selected="selected"' : '') ?> value="<?php echo $row['sCodigo']; ?>"> <?php echo $row['sNombre']; ?> </option>
+                              <option <?php echo(isset($result['skUsoCFDI']) && $result['skUsoCFDI'] == $row['sCodigo'] ? 'selected="selected"' : '') ?> value="<?php echo $row['sCodigo']; ?>"> <?php echo $row['sNombre']; ?> </option>
                               <?php
                               }//ENDWHILE
                           }//ENDIF
@@ -110,6 +110,12 @@ if (isset($data['datos'])) {
 
                  <div class="row-lg col-lg-12" >
                      <div class="col-md-4 col-lg-3">
+                         <div class="form-group">
+                             <h4 class="example-title">Nombre Cliente  </h4>
+                             <input class="form-control" name="sNombreCliente" id="sNombreCliente" value="<?php echo (isset($result['sNombreCliente'])) ? $result['sNombreCliente'] : ''; ?>" placeholder="Nombre Cliente" autocomplete="off" type="text" >
+                         </div>
+                      </div>
+                      <div class="col-md-4 col-lg-3">
                          <div class="form-group">
                              <h4 class="example-title">Referencia </h4>
                              <input class="form-control" name="sReferencia" id="sReferencia" value="<?php echo (isset($result['sReferencia'])) ? $result['sReferencia'] : ''; ?>" placeholder="Referencia" autocomplete="off" type="text" >

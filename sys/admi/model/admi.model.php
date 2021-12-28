@@ -188,6 +188,7 @@ Class Admi_Model Extends DLOREAN_Model {
         oos.skDivisa,
         oos.fImporteTotal,
         oos.sReferencia, 
+        oos.sNombreCliente, 
         oos.fTipoCambio,
         oos.fImporteSubtotal,
         oos.fImpuestosRetenidos,
@@ -200,7 +201,9 @@ Class Admi_Model Extends DLOREAN_Model {
         oos.skEmpresaSocioCliente,
         oos.skEmpresaSocioFacturacion,
         oos.skEmpresaSocioPropietario,
+        oos.sDescripcion,
         cer.sNombre AS responsable,
+        cer.sRFC AS sRFCResponsable,
         cec.sNombre AS cliente,
         cef.sNombre AS facturacion,
         cef.sRFC AS sRFCReceptor,
@@ -1431,6 +1434,7 @@ Class Admi_Model Extends DLOREAN_Model {
             " .escape(isset($this->admi['skEmpresaSocioFacturacion']) ? $this->admi['skEmpresaSocioFacturacion'] : NULL) . ",
             " .escape(isset($this->admi['skDivisa']) ? $this->admi['skDivisa'] : NULL) . ",
             " .escape(isset($this->admi['sReferencia']) ? $this->admi['sReferencia'] : NULL) . ",
+            " .escape(isset($this->admi['sNombreCliente']) ? $this->admi['sNombreCliente'] : NULL) . ",
             " .escape(isset($this->admi['sDescripcion']) ? $this->admi['sDescripcion'] : NULL) . ",
 
 

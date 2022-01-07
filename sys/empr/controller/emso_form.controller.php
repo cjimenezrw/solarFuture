@@ -29,8 +29,10 @@ Class Emso_form_Controller Extends Empr_Model
     public function validarEmpresaSocio(){
         //$sRFC = isset($_POST['sRFC']) ?  ( ($_POST['sRFC'] === 'XAXX010101000') ?  NULL : $_POST['sRFC'] )    : NULL;
         $sRFC = isset($_POST['sRFC']) ?  ( ($_POST['sRFC'] === 'XAXX010101000') ?  NULL : ( ($_POST['sRFC'] === 'XEXX010101000') ?  NULL : $_POST['sRFC'] )   )    : NULL;
-        $skEmpresaTipo = isset($_POST['skEmpresaTipo']) ? $_POST['skEmpresaTipo'] : NULL;
-        $data = parent::validar_empresaSocio($sRFC,$skEmpresaTipo);
+        $sCorreo = (!empty($_POST['sCorreo']) ? $_POST['sCorreo'] : NULL);
+        $sTelefono = (!empty($_POST['sTelefono']) ? $_POST['sTelefono'] : NULL);
+        $skEmpresaTipo = (!empty($_POST['skEmpresaTipo']) ? $_POST['skEmpresaTipo'] : NULL);
+        $data = parent::validar_empresaSocio($sRFC,$skEmpresaTipo,$sTelefono,$sCorreo);
         $data['valid'] = TRUE;
         if(isset($data['skEmpresaSocio']) && !is_null($data['skEmpresaSocio'])){
             $data['valid'] = FALSE;
@@ -73,6 +75,8 @@ Class Emso_form_Controller Extends Empr_Model
         $this->empresaSocio['skEmpresaSocio'] = isset($_POST['skEmpresaSocio']) ? $_POST['skEmpresaSocio'] : NULL;
         $this->empresaSocio['skEmpresa'] = isset($_POST['skEmpresa']) ? $_POST['skEmpresa'] : NULL;
         $this->empresaSocio['sRFC'] = isset($_POST['sRFC']) ? $_POST['sRFC'] : NULL;
+        $this->empresaSocio['sTelefono'] = (!empty($_POST['sTelefono']) ? $_POST['sTelefono'] : NULL);
+        $this->empresaSocio['sCorreo'] = isset($_POST['sCorreo']) ? $_POST['sCorreo'] : NULL;
         $this->empresaSocio['sNombre'] = isset($_POST['sNombre']) ? $_POST['sNombre'] : NULL;
         $this->empresaSocio['sNombreCorto'] = isset($_POST['sNombreCorto']) ? $_POST['sNombreCorto'] : NULL;
         $this->empresaSocio['skEstatus'] = isset($_POST['skEstatus']) ? $_POST['skEstatus'] : NULL;

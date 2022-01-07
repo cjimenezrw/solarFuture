@@ -6,58 +6,43 @@ if (isset($data['datos'])) {
 }
 ?>
 <form class="form-horizontal" id="core-guardar" method="post"  enctype="multipart/form-data">
-    <div class="panel-body nav-tabs-animate nav-tabs-horizontal">
-        <ul class="nav nav-tabs nav-tabs-line" data-plugin="nav-tabs" role="tablist">
-            <li class="active" role="presentation">
-                <a data-toggle="tab" href="#general" aria-controls="general" role="tab">General</a>
-            </li>
-            <li role="presentation">
-                <a data-toggle="tab" href="#caracteristicas" aria-controls="caracteristicas" role="tab">Caracter&iacute;sticas</a>
-            </li>
-        </ul>
-        <div class="tab-content">
-            <div class="tab-pane active animation-slide-left" id="general" role="tabpanel">
+    <input type="hidden" name="skEmpresaSocio"  id="skEmpresaSocio" value="<?php echo (isset($result['skEmpresaSocio'])) ? $result['skEmpresaSocio'] : ''; ?>">
+    <input type="hidden" name="skDatosEmpreasSocios"  id="skDatosEmpreasSocios" value="<?php echo (isset($result['skDatosEmpreasSocios'])) ? $result['skDatosEmpreasSocios'] : ''; ?>">
+    <input type="hidden" name="skEmpresa"  id="skEmpresa" value="<?php echo (isset($result['skEmpresa'])) ? $result['skEmpresa'] : ''; ?>">
 
-                <div class="row margin-20">
-                  <input type="hidden" name="skEmpresaSocio"  id="skEmpresaSocio" value="<?php echo (isset($result['skEmpresaSocio'])) ? $result['skEmpresaSocio'] : ''; ?>">
-                    <input type="hidden" name="skDatosEmpreasSocios"  id="skDatosEmpreasSocios" value="<?php echo (isset($result['skDatosEmpreasSocios'])) ? $result['skDatosEmpreasSocios'] : ''; ?>">
-                    <input type="hidden" name="skEmpresa"  id="skEmpresa" value="<?php echo (isset($result['skEmpresa'])) ? $result['skEmpresa'] : ''; ?>">
-                    <div class="form-group col-md-12">
-                        <label class="col-md-2 control-label"><b>RFC:</b> </label>
-                        <div class="col-md-3">
-                            <input class="form-control" maxlength="13" <?php if (isset($result['sRFC'])) { ?>disabled="disabled"<?php }//ENDIF  ?>  name="sRFC" value="<?php echo (isset($result['sRFC'])) ? utf8_encode($result['sRFC']) : ''; ?>" placeholder="RFC" autocomplete="off" type="text" onblur="empr.emso_form.getEmpresaSocio(this);">
+                    
+    <div class="panel panel-bordered panel-primary panel-line animated slideInUp">
+        <div class="panel-heading">
+            <h3 class="panel-title">DATOS GENERALES</h3>
+        </div>
+        <div class="panel-body container-fluid">
+            <div class="row row-lg">
+ 
+                        <div class="col-md-4 col-lg-4 " >
+                            <div class="form-group">
+                                <h4 class="example-title">RFC :</h4>
+                                <input class="form-control" maxlength="13" <?php if (isset($result['sRFC'])) { ?>disabled="disabled"<?php }//ENDIF  ?>  name="sRFC" value="<?php echo (isset($result['sRFC'])) ? utf8_encode($result['sRFC']) : ''; ?>" placeholder="RFC" autocomplete="off" type="text" onblur="empr.emso_form.getEmpresaSocio(this);">
+                            </div>
                         </div>
-                    </div>
-                    <div class="form-group col-md-12">
-                        <div class="col-md-2">
+                        <div class="col-md-4 col-lg-4 " >
+                            <div class="form-group">
+                                <h4 class="example-title">TELEFONO :</h4>
+                                <input class="form-control" id="sTelefono" name="sTelefono" value="<?php echo (isset($result['sTelefono'])) ? ($result['sTelefono']) : ''; ?>" placeholder="TELEFONO" autocomplete="off" type="text">
+                            </div>
                         </div>
-                        <div class="col-md-8">
-                            <hr>
-                        </div>
-                    </div>
-
-                    <div class="col-md-12">
-                        <label class="col-sm-2 control-label"><b>Estatus:</b> </label>
-                        <div class="form-group col-sm-3">
-                            <select id="skEstatus" name="skEstatus" class="form-control">
-                                <option value="">Seleccionar</option>
-                                <?php
-                                if ($data['estatus']) {
-                                    foreach (  $data['estatus'] as $row) {
-                                        utf8($row);
-                                        ?>
-                                        <option <?php echo(isset($result['skEstatus']) && $result['skEstatus'] == $row['skEstatus'] ? 'selected="selected"' : '') ?>
-                                            value="<?php echo $row['skEstatus']; ?>"> <?php echo $row['sNombre']; ?> </option>
-                                        <?php
-                                        }//ENDWHILE
-                                    }//ENDIF
-                                    ?>
-                            </select>
-
-                        </div>
-                        <label class="col-sm-2 control-label"><b>Tipo Empresa:</b> </label>
-                        <div class="form-group col-sm-3">
-                            <select id="skEmpresaTipo" name="skEmpresaTipo" class="form-control" onchange="empr.emso_form.change_skEmpresaTipo(this);empr.emso_form.revalidarFormulario();">
+                        <div class="col-md-4 col-lg-4" >
+                            <div class="form-group">
+                                <h4 class="example-title">CORREO :</h4>
+                                <input class="form-control" id="sCorreo" name="sCorreo" value="<?php echo (isset($result['sCorreo'])) ? ($result['sCorreo']) : ''; ?>" placeholder="CORREO" autocomplete="off" type="text">
+                            </div>
+                        </div> 
+                    <div class="col-md-12 clearfix"><hr></div>
+ 
+                        <div class="col-md-4 col-lg-4">
+                            <div class="form-group">
+                                <h4 class="example-title"><span style="color:red;">* </span> TIPO DE EMPRESA:</h4>
+                                
+                                <select id="skEmpresaTipo" name="skEmpresaTipo" class="form-control selectpicker" data-live-search="true" data-plugin="selectpicker" onchange="empr.emso_form.change_skEmpresaTipo(this);empr.emso_form.revalidarFormulario();">
                                 <option value="">Seleccionar</option>
                                 <?php
                                 if ($data['empresasTipos']) {
@@ -71,33 +56,36 @@ if (isset($data['datos'])) {
                                 }//ENDIF
                                 ?>
                             </select>
-
+                            </div>
                         </div>
-                    </div>
-                    <div class="col-md-12">
-                        <label class="col-md-2 control-label"><b>Nombre:</b> </label>
-                        <div class="form-group col-md-3">
-                            <input class="form-control" id="sNombre" name="sNombre" value="<?php echo (isset($result['sNombre'])) ? ($result['sNombre']) : ''; ?>" placeholder="Nombre" autocomplete="off" type="text">
+                        <div class="col-md-12 clearfix"><hr></div>
+ 
+                        <div class="col-md-4 col-lg-4 " >
+                            <div class="form-group">
+                                <h4 class="example-title">NOMBRE :</h4>
+                                <input class="form-control" id="sNombre" name="sNombre" value="<?php echo (isset($result['sNombre'])) ? ($result['sNombre']) : ''; ?>" placeholder="Nombre" autocomplete="off" type="text">
+                            </div>
                         </div>
-                        <label class="col-md-2 control-label"><b>Nombre Corto:</b> </label>
-                        <div class="form-group col-md-3">
-                            <input class="form-control" id="sNombreCorto" name="sNombreCorto" value="<?php echo (isset($result['sNombreCorto'])) ? ($result['sNombreCorto']) : ''; ?>"  placeholder="Nombre Corto" autocomplete="off" type="text">
-                        </div>
-                    </div>
-                  
+                        <div class="col-md-4 col-lg-4" >
+                            <div class="form-group">
+                                <h4 class="example-title">NOMBRE CORTO :</h4>
+                                <input class="form-control" id="sNombreCorto" name="sNombreCorto" value="<?php echo (isset($result['sNombreCorto'])) ? ($result['sNombreCorto']) : ''; ?>"  placeholder="Nombre Corto" autocomplete="off" type="text">
+                            </div>
+                        </div> 
 
-
-
-
-
-                </div>
             </div>
+        </div>
+    </div>
 
-            <!-- CARACTERÍSTICAS DE EMPRESAS SOCIOS !-->
+    <div class="panel panel-bordered panel-primary panel-line animated slideInUp">
+        <div class="panel-heading">
+            <h3 class="panel-title">CARACTERISTICAS</h3>
+           
+        </div>
+        <div class="panel-body container-fluid">
+            <div class="row row-lg">
 
-            <div class="tab-pane animation-slide-left" id="caracteristicas" role="tabpanel">
-                <div class="row margin-20">
-                    <div class="col-md-12" id="rel_caracteristica_empesaTipo">
+            <div class="col-md-12" id="rel_caracteristica_empesaTipo">
                         <?php
                             if(isset($result['skEmpresaTipo'])){
                                 $rel_caracteristica_empesaTipo = $this->getCaracteristica_empesaTipo($result['skEmpresaTipo']);
@@ -180,14 +168,15 @@ if (isset($data['datos'])) {
                             }//ENDIF
                         ?>
                     </div>
-                </div>
+
             </div>
-
-
-
-
         </div>
     </div>
+
+
+
+
+    
 </form>
 
 <script src="<?php echo SYS_URL; ?><?php echo $this->sysProject; ?>/<?php echo $this->sysModule; ?>/view/js/<?php echo VERSION; ?>/<?php echo $this->sysModule; ?>.js"></script>
@@ -209,8 +198,9 @@ if (isset($data['datos'])) {
         <?php
             }//ENDFOREACH
         }//ENDIF
-        ?>
-        $("#skPais").select2();
+        ?> 
+
+    $("#skEmpresaTipo").selectpicker();
 
     });
 

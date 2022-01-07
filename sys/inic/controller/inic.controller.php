@@ -87,7 +87,7 @@ Class Inic_Controller Extends Inic_Model {
                 header('Content-Type: application/json');
                 echo $data;
                 return true;
-            break;
+            break; 
             case 'count':
                 $data = $inic_dash->countNotifications();
                 if ($data){
@@ -644,6 +644,20 @@ Class Inic_Controller Extends Inic_Model {
 
             default:
                 $this->load_view('dlorean_catalogo', $this->data);
+                break;
+        }
+        return true;
+    }
+
+    public function send_noti(){
+        $this->load_class("send_noti", "controller");
+        $send_noti = new Send_noti_Controller();
+        $axn = (isset($_POST['axn']) ? $_POST['axn'] : (isset($_GET['axn']) ? $_GET['axn'] : NULL));
+        switch ($axn) {
+            default:
+                $data = $send_noti->send_notify();
+                header('Content-Type: application/json');
+                echo json_encode($data);
                 break;
         }
         return true;

@@ -178,13 +178,24 @@ Class Empr_Model Extends DLOREAN_Model {
      * @param string $sRFC RFC del empresaSocio a buscar
      * @return object | false Retorna el objeto de resultados de la consulta o false si algo falla.
      */
-    public function validar_empresaSocio($sRFC = NULL, $skEmpresaTipo = NULL) {
-        $sql = "SELECT e.*,es.skEmpresaSocio,es.skEmpresaSocioPropietario,es.skEmpresaTipo  FROM cat_empresas e
+    public function validar_empresaSocio($sRFC = NULL, $skEmpresaTipo = NULL,$sTelefono = NULL, $sCorreo = NULL ) {
+        $sql = "SELECT e.*,es.skEmpresaSocio,es.skEmpresaSocioPropietario,es.skEmpresaTipo  
+            FROM cat_empresas e
             LEFT JOIN rel_empresasSocios es ON es.skEmpresa = e.skEmpresa AND es.skEmpresaSocioPropietario = '" . $_SESSION['usuario']['skEmpresaSocioPropietario'] . "'";
         if (!is_null($skEmpresaTipo)) {
             $sql .= " AND es.skEmpresaTipo = '" . $skEmpresaTipo . "'";
         }
-        $sql .= " WHERE e.sRFC = '" . $sRFC . "'";
+
+        $sql .= " WHERE  1 = 1 ";
+        if (isset($sRFC) && !empty($sRFC)) {
+            $sql .= " AND e.sRFC = ".escape($sRFC);
+        }
+        if (isset($sTelefono) && !empty($sTelefono)) {
+            $sql .= " AND e.sTelefono = ".escape($sTelefono);
+        }
+        if (isset($sCorreo) && !empty($sCorreo)) {
+            $sql .= " AND e.sCorreo = ".escape($sCorreo);
+        } 
         $result = Conn::query($sql);
         if (!$result) {
             return FALSE;
@@ -247,12 +258,14 @@ Class Empr_Model Extends DLOREAN_Model {
             /*@skEmpresaSocioPropietario  = */" . escape($_SESSION['usuario']['skEmpresaSocioPropietario']) . ",
             /*@skEmpresaTipo              = */" . escape($this->empresaSocio['skEmpresaTipo']) . ",
             /*@sRFC                       = */" . escape($this->empresaSocio['sRFC']) . ",
+            /*@sTelefono                  = */" . escape($this->empresaSocio['sTelefono']) . ",
+            /*@sCorreo                    = */" . escape($this->empresaSocio['sCorreo']) . ",
             /*@sNombre                    = */" . escape($this->empresaSocio['sNombre']) . ",
             /*@sNombreCorto               = */" . escape($this->empresaSocio['sNombreCorto']) . ",
             /*@skEstatus                  = */" . escape($this->empresaSocio['skEstatus']) . ",
             /*@skUsuarioCreacion          = */" . escape($_SESSION['usuario']['skUsuario']) . ",
             /*@skModulo                   = */" . escape($this->sysController) . ")";
-
+            
         $result = Conn::query($sql);
         if (!$result) {
             return FALSE;

@@ -20,13 +20,14 @@ empr.empr_inde.dataTableConf = {
             data.filters = core.dataFilterSend;
         }
     },
-    'order': [[3, "desc"]],
+    'order': [[2, "desc"]],
     'rowId': 'skEmpresa',
     'columns': [
-        {'title': 'contextM', 'data': 'menuEmergente', 'tooltip': 'Estatus', 'dataType': 'hidde', 'hiddenF': '', 'excluirExcel': true},
-        {'title': 'E', 'data': 'estatus', 'filterT': 'Estatus', 'dataType': 'string', 'excluirExcel': true},
+         {'title': 'E', 'data': 'estatus', 'filterT': 'Estatus', 'dataType': 'string', 'excluirExcel': true},
         {'title': 'RFC', 'data': 'sRFC', 'dataType': 'string'},
         {'title': 'Fecha Creación', 'data': 'dFechaCreacion', 'dataType': 'date'},
+        {'title': 'Telefono', 'data': 'sTelefono', 'dataType': 'string'},
+        {'title': 'sCorreo', 'data': 'sCorreo', 'dataType': 'string'},
         {'title': 'Nombre', 'data': 'sNombre', 'dataType': 'string'},
         {'title': 'Nombre Corto', 'data': 'sNombreCorto', 'dataType': 'string'}
     ],
@@ -38,12 +39,9 @@ empr.empr_inde.dataTableConf = {
         $('[data-toggle="tooltip"]').tooltip();
     },
     "columnDefs": [
+        
         {
             "targets": [0],
-            "visible": false
-        },
-        {
-            "targets": [1],
             "width": '20px',
             "createdCell": function (td, cellData, rowData, row, col) {
                 switch (cellData) {
@@ -158,6 +156,8 @@ empr.emso_form.getEmpresaSocio = function getEmpresaSocio(obj) {
         type: 'POST',
         data: {
             axn: 'validarEmpresaSocio',
+            sCorreo: $('#sCorreo').val(),
+            sTelefono: $('#sTelefono').val(),
             sRFC: $(obj).val()
         },
         cache: false,
@@ -263,16 +263,15 @@ empr.emso_form.validaciones = {
     sRFC: {
         threshold: 10,
         validators: {
-            notEmpty: {
-                message: 'El RFC es requerido.'
-            },
             remote: {
                 url: window.location.href,
                 type: 'POST',
                 data: function (validator, $field, value) {
                     return {
                         axn: 'validarEmpresaSocio',
-                        skEmpresaTipo: $('#skEmpresaTipo').val()
+                        skEmpresaTipo: $('#skEmpresaTipo').val(),
+                        sCorreo: $('#sCorreo').val(),
+                        sTelefono: $('#sTelefono').val()
                     };
                 },
                 message: 'El RFC ya ha sido dado de alta anteriormente.'
@@ -287,10 +286,39 @@ empr.emso_form.validaciones = {
             }
         }
     },
-    skEstatus: {
+    sCorreo: {
+        threshold: 10,
         validators: {
-            notEmpty: {
-                message: 'Seleccione un estatus.'
+            remote: {
+                url: window.location.href,
+                type: 'POST',
+                data: function (validator, $field, value) {
+                    return {
+                        axn: 'validarEmpresaSocio',
+                        skEmpresaTipo: $('#skEmpresaTipo').val(),
+                        sCorreo: $('#sCorreo').val(),
+                        sTelefono: $('#sTelefono').val()
+                    };
+                },
+                message: 'El Correo ya ha sido dado de alta anteriormente.'
+            }
+        }
+    },
+    sTelefono: {
+        threshold: 9,
+        validators: {
+            remote: {
+                url: window.location.href,
+                type: 'POST',
+                data: function (validator, $field, value) {
+                    return {
+                        axn: 'validarEmpresaSocio',
+                        skEmpresaTipo: $('#skEmpresaTipo').val(),
+                        sCorreo: $('#sCorreo').val(),
+                        sTelefono: $('#sTelefono').val()
+                    };
+                },
+                message: 'El Telefono ya ha sido dado de alta anteriormente.'
             }
         }
     },

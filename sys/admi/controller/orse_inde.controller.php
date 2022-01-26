@@ -30,10 +30,11 @@ Class Orse_inde_Controller Extends Admi_Model {
         CONCAT('ORD-', LPAD(oos.iFolio, 5, 0))  AS iFolio,
         oos.dFechaCreacion,
         oos.skDivisa,
-        oos.fImporteTotal,
+        IF(iNoFacturable IS NOT NULL, oos.fImporteTotalSinIva, oos.fImporteTotal) AS fImporteTotal,
         oos.fImporteSubtotal,
         oos.fImpuestosRetenidos,
         oos.fImpuestosTrasladados,
+        IF(oos.iNoFacturable IS NOT NULL, 'SI',NULL) AS iNoFacturable,
         oos.fDescuento, 
         oos.skEstatus,
         cer.sNombre AS responsable,
@@ -45,10 +46,14 @@ Class Orse_inde_Controller Extends Admi_Model {
         cu.sNombre AS usoCFDI,
         (SELECT  
         CASE
-            WHEN rosp.skServicioProceso = 'VENT' THEN CONCAT('SFM', LPAD(osv.iFolio, 4, 0))   
+            WHEN rosp.skServicioProceso = 'VENT' THEN CONCAT('RM-', LPAD(osv.iFolio, 4, 0))   
+            WHEN rosp.skServicioProceso = 'CONT' THEN CONCAT('CON-', LPAD(oca.iFolio, 4, 0))   
+            WHEN rosp.skServicioProceso = 'CITA' THEN CONCAT('CIT-', LPAD(oci.iFolio, 4, 0))   
             ELSE NULL END AS folioServicio
         FROM rel_ordenesServicios_procesos rosp
         LEFT JOIN ope_cotizaciones osv ON osv.skCotizacion = rosp.skCodigo  
+        LEFT JOIN ope_contratos oca ON oca.skContrato = rosp.skCodigo  
+        LEFT JOIN ope_citas oci ON oci.skCita = rosp.skCodigo  
         WHERE rosp.skOrdenServicio = oos.skOrdenServicio LIMIT 1) AS folioServicio,
         cuc.sNombre AS usuarioCreacion,
         (SELECT  occ.iFolio   FROM rel_ordenesServicios_facturas rpf  INNER JOIN ope_facturas occ ON occ.skFactura = rpf.skFactura  AND occ.skEstatus !='CA' AND occ.iFolio IS NOT NULL WHERE rpf.skOrdenServicio = oos.skOrdenServicio LIMIT 1 ) AS iFolioFactura
@@ -86,8 +91,10 @@ Class Orse_inde_Controller Extends Admi_Model {
                 
             //REGLA DEL MENÚ EMERGENTE
                 $regla = [ 
-                    "menuEmergente2" => $this->ME_autorizar($row),
-                    "menuEmergente3" => $this->ME_cancelar($row)
+
+                    "menuEmergente2" => $this->ME_cancelar($row),
+                    "menuEmergente3" => $this->ME_autorizar($row),
+                    "menuEmergente4" => $this->ME_enviar($row)
                     
                 ];
                 $row['fImporteTotal'] = ($row['fImporteTotal']) ? '$ '.number_format($row['fImporteTotal'],2) : '$ 0.00'; 
@@ -133,6 +140,18 @@ Class Orse_inde_Controller Extends Admi_Model {
     * @param type $row
     * @return int
     */
+    public function ME_enviar(&$row){
+        if((in_array($row['skEstatus'], ['AU'])) ){
+            return self::HABILITADO;
+        }
+        return self::DESHABILITADO;
+    }
+    /* ME_cancelar
+    *
+    * @author Luis Alberto Valdez Alvarez <lvaldez >
+    * @param type $row
+    * @return int
+    */
     public function ME_cancelar(&$row){
         if((in_array($row['skEstatus'], ['PE'])) ){
             return self::HABILITADO;
@@ -148,8 +167,8 @@ Class Orse_inde_Controller Extends Admi_Model {
         $this->admi['axn'] = 'autorizarOrden';
         $this->admi['skOrdenServicio'] = (isset($_POST['skOrdenServicio']) && !empty($_POST['skOrdenServicio'])) ? $_POST['skOrdenServicio'] : NULL;
 
-        $stpCUD_ordenesServicios = parent::stpCUD_ordenesServicios();  
-        if(!$stpCUD_ordenesServicios || isset($stpCUD_ordenesServicios['success']) && $stpCUD_ordenesServicios['success'] != 1){
+        $stpCUD_ordenServicio = parent::stpCUD_ordenServicio();  
+        if(!$stpCUD_ordenServicio || isset($stpCUD_ordenServicio['success']) && $stpCUD_ordenServicio['success'] != 1){
             $this->data['success'] = FALSE;
             $this->data['message'] = 'HUBO UN ERROR AL AUTORIZAR LA SOLICITUD. ';
             return $this->data;
@@ -202,7 +221,7 @@ Class Orse_inde_Controller Extends Admi_Model {
                 'fDescuento'=>isset($consultarOrdenServicio['fDescuento']) ? $consultarOrdenServicio['fDescuento'] : NULL,
                 'fSubtotal'=>isset($consultarOrdenServicio['fImporteSubtotal']) ? $consultarOrdenServicio['fImporteSubtotal'] : NULL,
  
-                'fTotal'=>isset($consultarOrdenServicio['fImporteTotal']) ? $consultarOrdenServicio['fImporteTotal'] : NULL,
+                'fTotal'=>(!empty($consultarOrdenServicio['iNoFacturable']) && !empty($consultarOrdenServicio['fImporteTotalSinIva']) ? $consultarOrdenServicio['fImporteTotalSinIva'] :(isset($consultarOrdenServicio['fImporteTotal']) ? $consultarOrdenServicio['fImporteTotal'] : NULL) ),
                 'servicios'=>[]
 
             ];
@@ -244,8 +263,8 @@ Class Orse_inde_Controller Extends Admi_Model {
 
 
 
-      /*  $stpCUD_ordenesServicios = parent::stpCUD_ordenesServicios();  
-        if(!$stpCUD_ordenesServicios || isset($stpCUD_ordenesServicios['success']) && $stpCUD_ordenesServicios['success'] != 1){
+      /*  $stpCUD_ordenServicio = parent::stpCUD_ordenServicio();  
+        if(!$stpCUD_ordenServicio || isset($stpCUD_ordenServicio['success']) && $stpCUD_ordenServicio['success'] != 1){
             $this->data['success'] = FALSE;
             $this->data['message'] = 'HUBO UN ERROR AL AUTORIZAR LA SOLICITUD. ';
             return $this->data;
@@ -260,8 +279,8 @@ Class Orse_inde_Controller Extends Admi_Model {
         $this->admi['axn'] = 'cancelarOrden';
         $this->admi['skOrdenServicio'] = (isset($_POST['skOrdenServicio']) && !empty($_POST['skOrdenServicio'])) ? $_POST['skOrdenServicio'] : NULL;
 
-        $stpCUD_ordenesServicios = parent::stpCUD_ordenesServicios();  
-        if(!$stpCUD_ordenesServicios || isset($stpCUD_ordenesServicios['success']) && $stpCUD_ordenesServicios['success'] != 1){
+        $stpCUD_ordenServicio = parent::stpCUD_ordenServicio();  
+        if(!$stpCUD_ordenServicio || isset($stpCUD_ordenServicio['success']) && $stpCUD_ordenServicio['success'] != 1){
             $this->data['success'] = FALSE;
             $this->data['message'] = 'HUBO UN ERROR AL AUTORIZAR LA SOLICITUD. ';
             return $this->data;
@@ -297,7 +316,7 @@ Class Orse_inde_Controller Extends Admi_Model {
             $this->data['message'] = 'EL PROCESO ES REQUERIDO';
             return $this->data;
         }
-        if(!empty($this->admi['skProceso']) &&  !in_array($this->admi['skProceso'], ['VENT','CITA'])){
+        if(!empty($this->admi['skProceso']) &&  !in_array($this->admi['skProceso'], ['VENT','CITA','CONT'])){
             $this->data['success'] = FALSE;
             $this->data['message'] = 'EL CODIGO DEL PROCESO NO ES VALIDO ';
             return $this->data;
@@ -350,7 +369,7 @@ Class Orse_inde_Controller Extends Admi_Model {
             $this->data['message'] = 'EL PROCESO ES REQUERIDO';
             return $this->data;
         }
-        if(!empty($this->admi['skProceso']) &&  !in_array($this->admi['skProceso'], ['VENT','CITA'])){
+        if(!empty($this->admi['skProceso']) &&  !in_array($this->admi['skProceso'], ['VENT','CITA','CONT'])){
             $this->data['success'] = FALSE;
             $this->data['message'] = 'EL CODIGO DEL PROCESO NO ES VALIDO ';
             return $this->data;

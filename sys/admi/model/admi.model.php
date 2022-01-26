@@ -1,5 +1,4 @@
 <?php
-
 Class Admi_Model Extends DLOREAN_Model {
 
     // PUBLIC VARIABLES //
@@ -26,10 +25,8 @@ Class Admi_Model Extends DLOREAN_Model {
             " .escape(isset($this->admi['skProceso']) ? $this->admi['skProceso'] : NULL) . ", 
             " .escape(isset($this->admi['axn']) ? $this->admi['axn'] : NULL) . ",
             '" . $_SESSION['usuario']['skUsuario'] . "',
-            '" . $this->sysController . "' )";
- 
-       
-        $this->log($sql, true);
+            '" . $this->sysController . "' )";      
+        
         $result = Conn::query($sql);
         //$codigo = Conn::fetch_assoc($result);
         if (!$result) {
@@ -63,19 +60,24 @@ Class Admi_Model Extends DLOREAN_Model {
     public function stpCUD_servicios() {
 
         $sql = "CALL stpCUD_servicios (
-            " .escape(isset($this->admi['skServicio']) ? $this->admi['skServicio'] : NULL) . ",
-            " .escape(isset($this->admi['skEstatus']) ? $this->admi['skEstatus'] : NULL) . ",
-            " .escape(isset($this->admi['sCodigo']) ? $this->admi['sCodigo'] : NULL) . ",
-            " .escape(isset($this->admi['sNombre']) ? $this->admi['sNombre'] : NULL). ",
-            " .escape(isset($this->admi['skUnidadMedida']) ? $this->admi['skUnidadMedida'] : NULL) . ",
-            " .escape(isset($this->admi['iClaveProductoServicio']) ? $this->admi['iClaveProductoServicio'] : NULL) . ",
-            " .escape(isset($this->admi['sDescripcion']) ? $this->admi['sDescripcion'] : NULL) . ",
-            " .escape(isset($this->admi['skImpuestoServicio']) ? $this->admi['skImpuestoServicio'] : NULL) . ",
-            " .escape(isset($this->admi['axn']) ? $this->admi['axn'] : NULL) . ",
-            '" . $_SESSION['usuario']['skUsuario'] . "',
-            '" . $this->sysController . "' )";
+            ".escape(isset($this->admi['skServicio']) ? $this->admi['skServicio'] : NULL).",
+            ".escape(isset($this->admi['skEstatus']) ? $this->admi['skEstatus'] : NULL).",
+            ".escape(isset($this->admi['sCodigo']) ? $this->admi['sCodigo'] : NULL).",
+            ".escape(isset($this->admi['sNombre']) ? $this->admi['sNombre'] : NULL).",
+            ".escape(isset($this->admi['skUnidadMedida']) ? $this->admi['skUnidadMedida'] : NULL).",
+            ".escape(isset($this->admi['iClaveProductoServicio']) ? $this->admi['iClaveProductoServicio'] : NULL).",
+            ".escape(isset($this->admi['sDescripcion']) ? $this->admi['sDescripcion'] : NULL).",
+            ".escape(isset($this->admi['skImpuestoServicio']) ? $this->admi['skImpuestoServicio'] : NULL).",
+            ".escape(isset($this->admi['skCategoriaPrecio']) ? $this->admi['skCategoriaPrecio'] : NULL).",
+            ".escape(isset($this->admi['fPrecio']) ? $this->admi['fPrecio'] : NULL).",
+            ".escape(isset($this->admi['axn']) ? $this->admi['axn'] : NULL).",
+            ".escape($_SESSION['usuario']['skUsuario']).",
+            ".escape($this->sysController).")";
       
-        $this->log($sql, true);
+        if($this->admi['axn'] == 'guardar_servicio_precios'){
+            //exit('<pre>'.print_r($sql,1).'</pre>');
+        }
+
         $result = Conn::query($sql);
         //$codigo = Conn::fetch_assoc($result);
         if (!$result) {
@@ -180,6 +182,20 @@ Class Admi_Model Extends DLOREAN_Model {
         return Conn::fetch_assoc_all($result);
     }
 
+    public function _get_servicios_precios(){
+        $sql = "SELECT rcp.*,cs.sNombre AS catalogo, cso.sNombre AS categoriaPrecio 
+            FROM rel_servicios_precios rcp 
+            INNER JOIN rel_catalogosSistemasOpciones cso ON cso.skCatalogoSistemaOpciones = rcp.skCategoriaPrecio
+            INNER JOIN cat_catalogosSistemas cs ON cs.skCatalogoSistema = cso.skCatalogoSistema
+            WHERE cs.skCatalogoSistema = 'CATPRE' AND cso.skEstatus = 'AC' 
+            AND rcp.skServicio = ".escape($this->admi['skServicio'])." ORDER BY cso.sNombre ASC";
+        $result = Conn::query($sql);
+        if (!$result) {
+            return FALSE;
+        }
+        return Conn::fetch_assoc_all($result);
+    }
+
     public function _getOrdenServicio(){
         $sql= "SELECT oos.skOrdenServicio, 
         CONCAT('ORD-', LPAD(oos.iFolio, 5, 0)) AS iFolio,
@@ -187,6 +203,8 @@ Class Admi_Model Extends DLOREAN_Model {
         oos.skEstatus,
         oos.skDivisa,
         oos.fImporteTotal,
+        oos.iNoFacturable,
+        oos.fImporteTotalSinIva,
         oos.sReferencia, 
         oos.sNombreCliente, 
         oos.fTipoCambio,
@@ -211,12 +229,16 @@ Class Admi_Model Extends DLOREAN_Model {
         ce.sNombre AS estatus,
         ce.sIcono AS iconoEstatus,
         ce.sColor AS colorEstatus,
-        cu.sNombre AS usoCFDI,
         cuc.sNombre AS usuarioCreacion,
         cc.sSerie,
         cc.skComprobante,
         '' AS folioServicio,
         rosp.skServicioProceso AS proceso,
+        di.sNombre AS divisa,
+        meto.sNombre AS metodoPago,
+        form.sNombre AS formaPago,
+        uso.sNombre AS usoCFDI,
+
         
         rosp.skCodigo AS skCodigoServicio,
         (SELECT  occ.iFolio   FROM rel_ordenesServicios_facturas rpf  INNER JOIN ope_facturas occ ON occ.skFactura = rpf.skFactura  AND occ.skEstatus !='CA' AND occ.iFolio IS NOT NULL WHERE rpf.skOrdenServicio = oos.skOrdenServicio LIMIT 1 ) AS iFolioFactura
@@ -230,13 +252,16 @@ Class Admi_Model Extends DLOREAN_Model {
         LEFT JOIN cat_empresas cef ON cef.skEmpresa = resf.skEmpresa
         LEFT JOIN rel_empresasSocios resp ON resp.skEmpresaSocio = oos.skEmpresaSocioPropietario
         LEFT JOIN cat_empresas cep ON cep.skEmpresa = resp.skEmpresa
-        LEFT JOIN cat_usosCFDI cu ON cu.sClave = oos.skUsoCFDI
         LEFT JOIN cat_usuarios cuc ON cuc.skUsuario = oos.skUsuarioCreacion
         LEFT JOIN rel_ordenesServicios_procesos rosp ON rosp.skOrdenServicio = oos.skOrdenServicio
         LEFT JOIN cat_comprobantes cc ON cc.skEmpresa = resp.skEmpresa AND cc.sClave = 'FA'
+        LEFT JOIN cat_divisas di ON di.skDivisa = oos.skDivisa
+        LEFT JOIN cat_metodosPago meto ON meto.sCodigo = oos.skMetodoPago
+        LEFT JOIN cat_formasPago form ON form.sCodigo = oos.skFormaPago
+        LEFT JOIN cat_usosCFDI uso ON uso.sClave = oos.skUsoCFDI
         WHERE 1 = 1  AND  oos.skOrdenServicio =  " . escape($this->admi['skOrdenServicio']);
         
-        
+        //exit('<pre>'.print_r($sql,1).'</pre>');
         $result = Conn::query($sql);
         if (!$result) {
             return FALSE;
@@ -1458,11 +1483,13 @@ Class Admi_Model Extends DLOREAN_Model {
             " .escape(isset($this->admi['fTasa']) ? $this->admi['fTasa'] : NULL) . ",
             " .escape(isset($this->admi['fImporte']) ? $this->admi['fImporte'] : NULL) . ",
 
+            " .escape(isset($this->admi['iNoFacturable']) ? $this->admi['iNoFacturable'] : NULL) . ",
+
  
             " .escape(isset($this->admi['axn']) ? $this->admi['axn'] : NULL) . ",
             '" . $_SESSION['usuario']['skUsuario'] . "',
             '" . $this->sysController . "' )";
-      
+     
         $this->log($sql, true);
         $result = Conn::query($sql);
         //$codigo = Conn::fetch_assoc($result);

@@ -42,7 +42,6 @@ Class Serv_form_Controller Extends Admi_Model {
                 return $this->data;
             }
        
-
             $this->admi['skServicio'] = (isset($_GET['p1']) ? $_GET['p1'] : NULL);
 
             
@@ -56,6 +55,13 @@ Class Serv_form_Controller Extends Admi_Model {
             // Guardar impuestos Servicio
             $guardar_servicio_impuestos = $this->guardar_servicio_impuestos();
             if(!$guardar_servicio_impuestos['success']){
+               // Conn::rollback($this->idTran);
+                return $this->data;
+            }
+
+            // GUARDAR SERVICIOS PRECIOS
+            $guardar_servicio_precios = $this->guardar_servicio_precios();
+            if(!$guardar_servicio_precios['success']){
                // Conn::rollback($this->idTran);
                 return $this->data;
             }
@@ -80,7 +86,7 @@ Class Serv_form_Controller Extends Admi_Model {
       public function guardar_servicio(){
           $this->data['success'] = TRUE;
           $this->admi['axn'] = 'guardar_servicio';
-          $this->admi['skEstatus'] = 'NU';
+          $this->admi['skEstatus'] = 'AC';
 
           $stpCUD_servicios = parent::stpCUD_servicios();
            
@@ -140,7 +146,35 @@ Class Serv_form_Controller Extends Admi_Model {
             }
             
             $this->data['success'] = TRUE;
-            $this->data['message'] = 'IMPUESTOS GUARDADOS CON EXITO';
+            $this->data['message'] = 'IMPUESTOS GUARDADOS CON ÉXITO';
+            return $this->data;
+        }
+
+        public function guardar_servicio_precios(){
+            $this->data['success'] = TRUE;
+            $this->admi['axn'] = 'guardar_servicio_precios';
+          
+            $delete = "DELETE FROM rel_servicios_precios WHERE skServicio = ".escape($this->admi['skServicio']);
+            $result = Conn::query($delete);
+
+            if(!empty($this->admi['CATPRE'])){
+                foreach ($this->admi['CATPRE'] AS $k => $v) {
+                    if(!empty($v)){
+                        $this->admi['skCategoriaPrecio']= $k;
+                        $this->admi['fPrecio']= $v;
+
+                        $stpCUD_servicios = parent::stpCUD_servicios();
+                        if(!$stpCUD_servicios || isset($stpCUD_servicios['success']) && $stpCUD_servicios['success'] != 1){
+                            $this->data['success'] = FALSE;
+                            $this->data['message'] = 'HUBO UN ERROR AL GUARDAR LOS PRECIOS DEL SERVICIO';
+                            return $this->data;
+                        }
+                    }
+                }
+            }
+            
+            $this->data['success'] = TRUE;
+            $this->data['message'] = 'PRECIOS GUARDADOS CON ÉXITO';
             return $this->data;
         }
 
@@ -265,6 +299,13 @@ Class Serv_form_Controller Extends Admi_Model {
           $conImpuestos[trim($v['nombre'])] = $v;
           }
 
+        // OBTENEMOS LAS CATEGORÍAS DE PRECIOS
+            $_get_categorias_precios = parent::getCatalogoSistema(['skCatalogoSistema'=>'CATPRE']);
+            $this->data['categorias_precios'] = [];
+            foreach($_get_categorias_precios AS $k=>$v){
+                $this->data['categorias_precios'][$v['skCatalogoSistemaOpciones']] = $v;
+            }
+
         if (!empty($this->admi['skServicio'])) {
             $this->data['datos'] = parent::_getServicio();
             $conImpuestosServicios = parent::_getServicioImpuestos();
@@ -273,6 +314,12 @@ Class Serv_form_Controller Extends Admi_Model {
                     $conImpuestos[trim($v['nombre'])]['selected'] = 1;
                 }
             }
+
+            //OBTENEMOS LOS VALORES DE CATEGORÍAS DE PRECIOS
+                $_get_servicios_precios = parent::_get_servicios_precios();
+                foreach($_get_servicios_precios AS $k=>$v){
+                    $this->data['categorias_precios'][$v['skCategoriaPrecio']]['fPrecio'] = $v['fPrecio'];
+                }
 
             
         }

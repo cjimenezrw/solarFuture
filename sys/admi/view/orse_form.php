@@ -1,10 +1,7 @@
 <?php
 if (isset($data['datos'])) {
     $result = $data['datos'];
-
     utf8($result);
-
-
 }
 ?>
 
@@ -23,10 +20,8 @@ if (isset($data['datos'])) {
         </div>
         <div class="panel-body container-fluid">
 
-          
-            <div class="col-md-12 clearfix"><hr></div>
             <div class="row-lg col-lg-12">
-                <div class="col-md-4 col-lg-5">
+                <div class="col-md-6 col-lg-6">
                     <div class="form-group">
                     <h4 class="example-title"><b style="color:red;">* </b>EMPRESA RESPONSABLE:</h4>
                     <select name="skEmpresaSocioResponsable" id="skEmpresaSocioResponsable" class="form-control" data-plugin="select2" data-ajax--cache="true"  >
@@ -34,6 +29,21 @@ if (isset($data['datos'])) {
                         if (!empty($result['skEmpresaSocioResponsable'])) {
                             ?>
                             <option value="<?php echo $result['skEmpresaSocioResponsable']; ?>" selected="selected"><?php echo $result['responsable'] . ' (' . $result['sRFCResponsable'] . ')'; ?></option>
+                            <?php
+                        }//ENDIF
+                        ?>
+                    </select>
+                    </div>
+                </div>
+
+                <div class="col-md-6 col-lg-6">
+                    <div class="form-group">
+                    <h4 class="example-title">EMPRESA FACTURAR:</h4>
+                    <select name="skEmpresaSocioFacturacion" id="skEmpresaSocioFacturacion" class="form-control" data-plugin="select2" data-ajax--cache="true"  >
+                        <?php
+                        if (!empty($result['skEmpresaSocioFacturacion'])) {
+                            ?>
+                            <option value="<?php echo $result['skEmpresaSocioFacturacion']; ?>" selected="selected"><?php echo $result['facturacion'] . ' (' . $result['sRFCReceptor'] . ')'; ?></option>
                             <?php
                         }//ENDIF
                         ?>
@@ -100,13 +110,37 @@ if (isset($data['datos'])) {
                     </div>
                 </div>
             </div>
+
+            <div class="row-lg col-lg-12">
+            <div class="col-md-4 col-lg-3">
+                         <div class="form-group">
+                             <h4 class="example-title"><b style="color:red;">* </b>Divisa</h4>
+                                <select name="skDivisa" id="skDivisa"  class="form-control" data-plugin="select2" select2Simple>
+                                    <option value="">Seleccionar</option>
+                                <?php
+                                    if ($data['divisas']) {
+                                        foreach($data['divisas'] as $row) {
+                                        utf8($row,FALSE);
+                                ?>
+                                    <option <?php echo(isset($result['skDivisa']) && $result['skDivisa'] == $row['skDivisa'] ? 'selected="selected"' : '') ?> value="<?php echo $row['skDivisa']; ?>"> <?php echo $row['skDivisa']; ?> </option>
+                                <?php
+                                        }//ENDFOREACH
+                                    }//ENDIF
+                                ?>
+                                </select>
+                         </div>
+                      </div>
+                      <div class="col-md-4 col-lg-3">
+                         <div class="form-group">
+                             <h4 class="example-title">Tipo de Cambio</h4>
+                             <input class="form-control" name="fTipoCambio" id="fTipoCambio" value="<?php echo (isset($result['fTipoCambio'])) ? $result['fTipoCambio'] : ''; ?>" placeholder="Tipo de Cambio" autocomplete="off" type="text" >
+                         </div>
+                      </div>
+            </div>
              
                 <div class="col-md-12 clearfix"><hr></div>
 
 
-                
-                     
- 
 
                  <div class="row-lg col-lg-12" >
                      <div class="col-md-4 col-lg-3">
@@ -135,6 +169,16 @@ if (isset($data['datos'])) {
                   </div>
 
             </div>
+
+
+ 
+
+ <div class="col-md-4 col-lg-4">
+                        <div class="form-group">
+                            <h4 class="example-title"><b class="text-danger"></b>NO FACTURABLE:</h4>
+                            <input  type="checkbox" name="iNoFacturable" id="iNoFacturable"  <?php echo (!empty($result['iNoFacturable']) ? 'checked': ''); ?> value="1"  class="js-switch-large" data-plugin="switchery" data-color="#4d94ff" />
+                        </div>
+                    </div>
 
         </div>
     </div>
@@ -357,41 +401,52 @@ function addCommas(amount) {
                 }
                 function datosConcepto(obj){
 
-                    var skServicio = $(obj).closest('tr').find('td').eq(2).find('select').val();
-                    var tr = $(obj).parent().parent();
-                    $(tr).removeAttr("traiva");
-                    $(tr).removeAttr("retiva");
-                        if (skServicio) {
-
+                var skServicio = $(obj).closest('tr').find('td').eq(2).find('select').val();
+                var tr = $(obj).parent().parent();
+                $(tr).removeAttr("traiva");
+                $(tr).removeAttr("retiva");
+                    if (skServicio) {
+                        
                             $.post(window.location.href,
-                                {
-                                    axn: 'get_servicio_impuestos',
-                                    skServicio: skServicio
-                                },
-                                function (data) {
-                                    //if (element.nodeType === ELEMENT_NODE) {
-                                      // return jqLite(element);
-                                    // }
+                            {
+                                axn: 'get_servicio_impuestos',
+                                skServicio: skServicio
+                            },
+                            function (data) {
+                                //if (element.nodeType === ELEMENT_NODE) {
+                                // return jqLite(element);
+                                // }
 
-                                    //console.log(data);
-                                    if(data){
-                                        $.each(data, function (k, v) {
-                                                $(tr).attr(v.skImpuesto, v.sValor);
-                                            });
-                                    }
-                            });
+                                //console.log(data);
+                                if(data){
+                                    $.each(data, function (k, v) {
+                                            $(tr).attr(v.skImpuesto, v.sValor);
+                                        });
+                                }
+                        });
+                    
+                actualizarImporte(obj);
+                $(obj).closest('tr').find('td').eq(4).find('input').removeAttr("disabled");
+                $(obj).closest('tr').find('td').eq(5).find('input').removeAttr("disabled");
                         }
-                    actualizarImporte(obj);
-                    $(obj).closest('tr').find('td').eq(4).find('input').removeAttr("disabled");
-                    $(obj).closest('tr').find('td').eq(5).find('input').removeAttr("disabled");
+                    
 
 
-                 };
+                };
+
 
              
                 var tr_concepto = '';
 				//Una vez cargada la vista carga el javascript principal del modulo
 				$(document).ready(function () {
+
+                    $('[data-plugin="switchery"]').each(function () {
+                new Switchery(this, {
+                    color: $(this).data('color'),
+                    size: $(this).data('size')
+                });
+            });
+
                     $('#core-guardar').formValidation(core.formValidaciones);
 
 
@@ -537,13 +592,19 @@ function addCommas(amount) {
                     $("#skFormaPago").select2({placeholder: "Forma de Pago", allowClear: true });
                     $("#skMetodoPago").select2({placeholder: "Metodo de Pago", allowClear: true });
                     $("#skUsoCFDI").select2({placeholder: "Uso de CFDI", allowClear: true });
+                    $("#skDivisa").select2({placeholder: "Divisa", allowClear: true });
+                    
  			 
  
 
 
                 // Obtener Empresas (Responsable) //
                 core.autocomplete2('#skEmpresaSocioResponsable', 'getEmpresas', window.location.href, 'EMPRESA RESPONSABLE',{
-                    skEmpresaTipo : '["CLIE","TRAN","AGEN","TERM","RECI","AGCA"]'
+                    skEmpresaTipo : '["CLIE"]'
+                }); 
+
+                core.autocomplete2('#skEmpresaSocioFacturacion', 'getEmpresas', window.location.href, 'EMPRESA FACTURAR',{
+                    skEmpresaTipo : '["CLIE"]'
                 }); 
 
 

@@ -40,7 +40,9 @@ Class Cofa_inde_Controller Extends Admi_Model {
         ofa.fImpuestosTrasladados,
         ofa.fSubtotal,
         ofa.fTotal,
+        ofa.fSaldo,
         cef.sNombre AS facturacion,
+        cerp.sNombre AS responsable,
         cu.sNombre AS usuarioCreacion,
         ce.sNombre AS estatus,
         ce.sIcono AS estatusIcono,
@@ -54,6 +56,8 @@ Class Cofa_inde_Controller Extends Admi_Model {
         LEFT JOIN core_estatus cep ON cep.skEstatus = ofa.skEstatusPago
         LEFT JOIN rel_empresasSocios resf ON resf.skEmpresaSocio = ofa.skEmpresaSocioFacturacion
         LEFT JOIN cat_empresas cef ON cef.skEmpresa = resf.skEmpresa
+        LEFT JOIN rel_empresasSocios resp ON resp.skEmpresaSocio = ofa.skEmpresaSocioResponsable
+        LEFT JOIN cat_empresas cerp ON cerp.skEmpresa = resp.skEmpresa
         LEFT JOIN cat_usuarios cu ON cu.skUsuario = ofa.skUsuarioCreacion
         
         WHERE 1=1 ";
@@ -83,7 +87,8 @@ Class Cofa_inde_Controller Extends Admi_Model {
                  $row['dFechaCreacion'] = ($row['dFechaCreacion']) ? date('d/m/Y  H:i:s', strtotime($row['dFechaCreacion'])) : ''; 
                  $row['fSubtotal'] = (!empty($row['fSubtotal']) ? '$'.number_format($row['fSubtotal'],2) : '$ 0.00'); 
                  $row['fTotal'] = (!empty($row['fTotal']) ? '$'.number_format($row['fTotal'],2) : '$ 0.00'); 
-
+                 $row['fSaldo'] = (!empty($row['fSaldo']) ? '$'.number_format($row['fSaldo'],2) : '$ 0.00'); 
+                 
                $row['menuEmergente'] = parent::menuEmergente($regla, $row['skFactura']);
                 array_push($data['data'],$row);
         }

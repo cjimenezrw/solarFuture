@@ -1,313 +1,301 @@
 <?php
-if (isset($data)) {
-    $datos = $data['datos'];
-    $result = $data['datos'];
-    //exit(print_r($result['view']));
-    //utf8($result);
-}
-
-/* $conteiners = $result['contenedores'];
-  if (!empty($conteiners)) {
-  $prefix = $conList = '';
-  foreach ($conteiners as $cons) {
-  $conList .= $prefix . '' . $cons['sContenedor'] . '';
-  $prefix = ', ';
-  }
-  } */
-
-//exit(print_r($conteiners));
-//$total = $result['total'];
-//print_r($result['general']);
-//exit();
+    $bg = ['fbfdfd','e8f1f8'];
+    //exit("<pre>".print_r($data,1)."</pre>");
+    //exit("<pre>".print_r($data['datos']['iFolio'],1)."</pre>");
 ?>
-<style>
-
-    table {
-        background: white;
-        border-radius:4em;
-        border-collapse: collapse;
-        margin: auto;
-        padding:2px;
-        width: 100%;
-    }
-
-    th {
-        color: #fff;;
-        background: #313234;
-        border-bottom:4px solid #9ea7af;
-        border-right: 1px solid #343a45;
-        font-size: 12px;
-        font-weight: 300;
-        padding:4px;
-        text-align:center;
-        text-shadow: 0 1px 1px rgba(0, 0, 0, 0.1);
-        vertical-align:middle;
-    }
-
-    th:first-child {
-        border-top-left-radius:4em;
-    }
-
-    th:last-child {
-        border-top-right-radius:4em;
-        border-right:none;
-    }
-
-    tr {
-        border-top: 1px solid #C1C3D1;
-        border-bottom-: 1px solid #C1C3D1;
-        color:#666B85;
-        font-size: 12px;
-        font-weight:normal;
-        text-shadow: 0 1px 1px rgba(256, 256, 256, 0.1);
-    }
-
-    tr:hover td {
-        background:#4E5066;
-        color:#FFFFFF;
-        border-top: 1px solid #22262e;
-    }
-
-    tr:first-child {
-        border-top:none;
-    }
-
-    tr:last-child {
-        border-bottom:none;
-    }
-
-    tr:nth-child(odd) td {
-        background:#EBEBEB;
-    }
-
-    tr:nth-child(odd):hover td {
-        background:#4E5066;
-    }
-
-    tr:last-child td:first-child {
-        border-bottom-left-radius:3px;
-    }
-
-    tr:last-child td:last-child {
-        border-bottom-right-radius:3px;
-    }
-
-    td {
-        background:#FFFFFF;
-        padding:10px;
-        text-align:left;
-        vertical-align:middle;
-        font-weight:300;
-        font-size: 13px;
-        border-right: 1px solid #C1C3D1;
-    }
-
-    td:last-child {
-        border-right: 0px;
-    }
-
-    th.text-left {
-        text-align: left;
-    }
-
-    th.text-center {
-        text-align: center;
-    }
-
-    th.text-right {
-        text-align: right;
-    }
-
-    td.text-left {
-        text-align: left;
-    }
-
-    td.text-center {
-        text-align: center;
-    }
-
-    td.text-right {
-        text-align: right;
-    }
-
-    .input-group {
-        display: none;
-    }
-
-</style>
-
-<br>
-<div class="col-md-12 " style="margin-bottom: 10px;">
-    <div class="col-md-4 pull-left"><img style="margin-left:80px;" src="<?php echo IMAGE_LOGO_PDF; ?>" width="150px"></div>
-
-    <div class="col-md-2"><p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</p></div>
-
-    <div class="col-md-6" style="text-align: center; margin-left: -70px;">
-        <div class="" style=" color:black;">
-            <span class="bold" style="font-size: 12px;text-transform: uppercase;"><?php echo $_SESSION['usuario']['sEmpresa'] ?></span><br>
-            <span class="bold" style="font-size: 12px;">ORDEN DE SERVICIOS</span><br>
-        </div>
-    </div>
-</div>
-<br>
-<div class="col-md-12" style="font-size:13px;">
-    <div class="pull-left col-md-2"><b>FOLIO:</b> <span style="color:#000000;"></span></div>
-    <div class="pull-left col-md-3"> <span style="color:#000000;"><?php echo (isset($datos['iFolio'])) ? ($datos['iFolio']) : 'N/D'; ?></span></div>
-    
-    <div class="col-md-offset-1 col-md-6 pull-right text-right"><small>FECHA SERVICIO:</small> <small style="text-transform: uppercase;"><?php echo (isset($datos['dFechaServicio']) && !empty($datos['dFechaServicio'])) ? $this->obtenerFechaEnLetra($datos['dFechaServicio']) : 'N/D'; ?></small></div>
-</div>
-
-<div class="col-md-12" style="font-size:13px;">
-    <div class="pull-left col-md-2"><b>FOLIO SERVICIO:</b> <span style="color:#000000;"></span></div>
-    <div class="pull-left col-md-3"> <span style="color:#000000;"><?php echo (isset($datos['folioServicio'])) ? ($datos['folioServicio']) : 'N/D'; ?></span></div>
-    
-</div>
-
-<div class="col-md-12" style="font-size:13px;">
-    <div class="pull-left col-md-2"><b>REFERENCÍA:</b> <span style="color:#000000;"></span></div>
-    <div class="pull-left col-md-4"> <span style="color:#000000;"><?php echo (isset($datos['sReferencia'])) ? ($datos['sReferencia']) : 'N/D'; ?></span></div>
-
-</div>
-
-<div><br></div>
-
 <div class="col-md-6">
-    <div  style="font-size:13px;" class="pull-left col-md-12"><b>RESPONSABLE:</b></div>
-    <div  style="font-size:13px;" class="pull-left col-md-12"><span style="color:#000000;"><?php echo (isset($datos['responsable'])) ? ($datos['responsable']) : 'N/D'; ?></span></div>
-    <br>
-</div>
-
-<div class="col-md-offset-1 col-md-5">
-    <div  style="font-size:13px;" class="pull-left col-md-12"><b>CLIENTE:</b></div>
-    <div  style="font-size:13px;" class="pull-left col-md-12"><span style="color:#000000;"><?php echo (isset($datos['cliente'])) ? ($datos['cliente']) : 'N/D'; ?></span></div>
-</div>
-
-<div class="col-md-6">
-    <div  style="font-size:13px;" class="pull-left col-md-12"><b>FACTURAR A:</b></div>
-    <div  style="font-size:13px;" class="pull-left col-md-12"><span style="color:#000000;"><?php echo (isset($datos['facturacion'])) ? $datos['facturacion'] : 'N/D'; ?></span></div>
-</div>
-
-<div class="col-md-offset-1 col-md-5">
-    <div  style="font-size:13px;" class="pull-left col-md-12"><b>PEDIMENTO:</b></div>
-    <div  style="font-size:13px;" class="pull-left col-md-12"><span style="color:#000000;"><?php echo (isset($datos['sPedimento'])) ? $datos['sPedimento'] : 'N/D'; ?></span></div>
-    <br>
-</div>
-<div class="col-md-6">
-    <div  style="font-size:13px;" class="pull-left col-md-12"><b>BL:</b></div>
-    <div  style="font-size:13px;" class="pull-left col-md-12"><span style="color:#000000;"><?php echo (isset($datos['sBL'])) ? ($datos['sBL']) : 'N/D'; ?></span></div>
-    <br>
-</div> 
- 
-
-<div class="col-md-12">
-    <div  style="font-size:13px;" class="pull-left col-md-12"><b>DIRECCIÓN:</b></div>
-
-    <div  style="font-size:13px;" class="pull-left col-md-12"><span style="color:#000000;">
-    <?php echo (isset($data['domicilioReceptor']['calleReceptor'])) ? strtoupper($data['domicilioReceptor']['calleReceptor']) : ''; ?> <?php echo (isset($data['domicilioReceptor']['numeroExteriorReceptor'])) ? ", " . $data['domicilioReceptor']['numeroExteriorReceptor'] : ''; ?> <?php echo (isset($data['domicilioReceptor']['coloniaReceptor'])) ? ", " . strtoupper($data['domicilioReceptor']['coloniaReceptor']) : ''; ?> <?php echo (isset($data['domicilioReceptor']['municipioReceptor'])) ? ", " . strtoupper($data['domicilioReceptor']['municipioReceptor']) : ''; ?><?php echo (isset($data['domicilioReceptor']['estadoReceptor'])) ? ", " . strtoupper($data['domicilioReceptor']['estadoReceptor']) : ''; ?><?php echo (isset($data['domicilioReceptor']['paisReceptor'])) ? ", " . strtoupper($data['domicilioReceptor']['paisReceptor']) : ''; ?> 
-
-    <br>
-</div>
-
-<div class="col-md-12 page-invoice-table table-responsive font-size-12">
-    <table class="table text-right">
-	<thead>
-	    <tr>
-		<th class="text-center">#</th>
-		<th class="text-center" >Unidad de Medida</th>
-		<th class="text-center" >Servicio</th>
-		<th class="text-center">Cantidad</th>
-		<th class="text-center">P. Unit</th>
-		<th class="text-center">Importe </th>
-		<th class="text-center">Desc </th>
-		<th class="text-center" >Impuestos </th>
-	    </tr>
-	</thead>
-	<tbody>
-	    <?php
-	    $i = 1;
-	    if (isset($data['serviciosOrdenes'])) {
-		foreach ($data['serviciosOrdenes'] AS $servicios) {
-		    ?>
-		    <tr>
-			<td style="text-align:center; font-size: 8px; text-transform: uppercase;" ><?php echo $i; ?></td>
-			<td style="text-align:left; font-size: 8px; text-transform: uppercase;" ><?php echo $servicios['unidadMedida']; ?></td>
-			<td style="text-align:left; font-size: 8px; text-transform: uppercase;" ><?php echo $servicios['servicio']; ?></td>
-			<td style="text-align:right; font-size: 8px; text-transform: uppercase;" ><?php echo number_format($servicios['fCantidad'], 2); ?></td>
-			<td style="text-align:right; font-size: 8px; text-transform: uppercase;" ><?php echo "$" . number_format($servicios['fPrecioUnitario'], 2); ?></td>
-			<td style="text-align:right; font-size: 8px; text-transform: uppercase;" ><?php echo "$" . number_format($servicios['fImporteTotal'], 2); ?></td>
-			<td style="text-align:right; font-size: 8px; text-transform: uppercase;" ><?php echo "$" . number_format($servicios['fDescuento'], 2); ?></td>
-			<td style="text-align:right; font-size: 8px; text-transform: uppercase;" > <?php
-			    if (isset($servicios['impuestos'])) {
-				foreach ($servicios['impuestos'] AS $impuestos) {
-				    ?>
-				    <?php echo "(" . $impuestos['impuesto'] . " %" . $impuestos['fTasa'] . ")--$" . number_format($impuestos['fImporte'], 2); ?>
-
-				    <?php
-				}//FOREACH
-			    }
-			    ?>
-			</td>
-		    </tr>
-		    <?php
-		    $i++;
-		}//FOREACH
-	    }//ENDIF
-	    ?>
-	    <tr>
-		<td style="text-align:right; font-size: 8px; text-transform: uppercase;" ></td>
-		<td style="text-align:right; font-size: 8px; text-transform: uppercase;" ></td>
-		<td style="text-align:right; font-size: 8px; text-transform: uppercase;" ></td>
-		<td style="text-align:right; font-size: 8px; text-transform: uppercase;" ></td>
-		<td style="text-align:right; font-size: 8px; text-transform: uppercase;" ></td>
-		<td style="text-align:right; font-size: 8px; text-transform: uppercase;" ></td>
-		<td style="text-align:right; font-size: 8px; text-transform: uppercase;" >SUBTOTAL: </td>
-		<td style="text-align:right; font-size: 8px; text-transform: uppercase;" ><?php echo " $" . number_format($result['fImporteSubtotal'], 2); ?></td>
-	    </tr>
-	    <tr>
-		<td style="text-align:right; font-size: 8px; text-transform: uppercase;" ></td>
-		<td style="text-align:right; font-size: 8px; text-transform: uppercase;" ></td>
-		<td style="text-align:right; font-size: 8px; text-transform: uppercase;" ></td>
-		<td style="text-align:right; font-size: 8px; text-transform: uppercase;" ></td>
-		<td style="text-align:right; font-size: 8px; text-transform: uppercase;" ></td>
-		<td style="text-align:right; font-size: 8px; text-transform: uppercase;" ></td>
-		<td style="text-align:right; font-size: 8px; text-transform: uppercase;" >DESCUENTO: </td>
-		<td style="text-align:right; font-size: 8px; text-transform: uppercase;" ><?php echo " $" . number_format($result['fDescuento'], 2); ?></td>
-	    </tr>
-	    <tr>
-		<td style="text-align:right; font-size: 8px; text-transform: uppercase;" ></td>
-		<td style="text-align:right; font-size: 8px; text-transform: uppercase;" ></td>
-		<td style="text-align:right; font-size: 8px; text-transform: uppercase;" ></td>
-		<td style="text-align:right; font-size: 8px; text-transform: uppercase;" ></td>
-		<td style="text-align:right; font-size: 8px; text-transform: uppercase;" ></td>
-		<td style="text-align:right; font-size: 8px; text-transform: uppercase;" ></td>
-		<td style="text-align:right; font-size: 8px; text-transform: uppercase;" >RETENCION: </td>
-		<td style="text-align:right; font-size: 8px; text-transform: uppercase;" ><?php echo " $" . number_format($result['fImpuestosRetenidos'], 2); ?></td>
-	    </tr>
-	    <tr>
-		<td style="text-align:right; font-size: 8px; text-transform: uppercase;" ></td>
-		<td style="text-align:right; font-size: 8px; text-transform: uppercase;" ></td>
-		<td style="text-align:right; font-size: 8px; text-transform: uppercase;" ></td>
-		<td style="text-align:right; font-size: 8px; text-transform: uppercase;" ></td>
-		<td style="text-align:right; font-size: 8px; text-transform: uppercase;" ></td>
-		<td style="text-align:right; font-size: 8px; text-transform: uppercase;" ></td>
-		<td style="text-align:right; font-size: 8px; text-transform: uppercase;" >TRASLADOS: </td>
-		<td style="text-align:right; font-size: 8px; text-transform: uppercase;" ><?php echo " $" . number_format($result['fImpuestosTrasladados'], 2); ?></td>
-	    </tr>
-	    <tr>
-		<td style="text-align:right; font-size: 8px; text-transform: uppercase;" ></td>
-		<td style="text-align:right; font-size: 8px; text-transform: uppercase;" ></td>
-		<td style="text-align:right; font-size: 8px; text-transform: uppercase;" ></td>
-		<td style="text-align:right; font-size: 8px; text-transform: uppercase;" ></td>
-		<td style="text-align:right; font-size: 8px; text-transform: uppercase;" ></td>
-		<td style="text-align:right; font-size: 8px; text-transform: uppercase;" ></td>
-		<td style="text-align:right; font-size: 8px; text-transform: uppercase;" >TOTAL: </td>
-		<td style="text-align:right; font-size: 8px; text-transform: uppercase;" ><?php echo " $" . number_format($result['fImporteTotal'], 2); ?></td>
-	    </tr>
-
-	</tbody>
+    <table style="font-size:10px;" class="col-md-12">
+        <tr>
+            <th class="col-md-12" colspan="2" style="text-align:left;text-transform:uppercase;background-color: #cecece; color: #000000;font-weight: bold;word-break: break-all;">CLIENTE</th>
+        </tr>
+        <tr>
+            <th class="col-md-12" colspan="2" style="text-align:left;text-transform:uppercase;background-color: #FFFFFF; color: #000000;font-weight: normal;word-break: break-all;">
+                <?php echo isset($data['datos']['cliente']) ? substr($data['datos']['cliente'],0,59) : ''; ?>
+            </th>
+        </tr>
+        <tr>
+            <th class="col-md-12" colspan="2" style="text-align:left;text-transform:uppercase;background-color: #cecece; color: #000000;font-weight: bold;word-break: break-all;">ASUNTO</th>
+        </tr>
+        <tr>
+            <th class="col-md-12" colspan="2" style="text-align:left;text-transform:uppercase;background-color: #FFFFFF; color: #000000;font-weight: normal;word-break: break-all;">
+                <?php echo !empty($data['datos']['sReferencia']) ? substr($data['datos']['sReferencia'],0,59) : '-'; ?>
+            </th>
+        </tr>
+        <!--
+        <tr>
+            <th class="col-md-6" style="text-align:left;text-transform:uppercase;background-color: #cecece; color: #000000;font-weight: bold;">TELÉFONO</th>
+            <th class="col-md-6" style="text-align:left;text-transform:uppercase;background-color: #cecece; color: #000000;font-weight: bold;">DIRECCIÓN</th>
+        </tr>
+        <tr>
+            <th class="col-md-6" style="text-align:left;text-transform:uppercase;background-color: #FFFFFF; color: #000000;font-weight: normal;">
+                <?php echo !empty($data['datos']['sTelefono']) ? $data['datos']['sTelefono'] : '-'; ?>
+            </th>
+            <th class="col-md-6" style="text-align:left;text-transform:normal;background-color: #FFFFFF; color: #000000;font-weight: normal;">
+                <?php echo !empty($data['datos']['sDomicilio']) ? $data['datos']['sDomicilio'] : '-'; ?>
+            </th>
+        </tr>
+        !-->
+        <tr>
+            <th class="col-md-12" style="text-align:left;text-transform:uppercase;background-color: #cecece; color: #000000;font-weight: bold;">EMPRESA A FACTURAR</th>
+        </tr>
+        <tr>
+            <th class="col-md-12" style="text-align:left;text-transform:normal;background-color: #FFFFFF; color: #000000;font-weight: normal;">
+                <?php echo !empty($data['datos']['facturacion']) ? $data['datos']['facturacion'] : '-'; ?>
+            </th>
+        </tr>
     </table>
 </div>
 
-<br>
- 
+<div class="col-md-6 col-md-offset-1">
+    <table style="font-size:10px;" class="col-md-12">
+        <tr>
+            <th class="col-md-12" colspan="2" style="text-align:right;background-color: #FFFFFF;">
+                <span style="color:#000000;font-size: 14px;">Folio #</span> <span style="color:#f96868;font-size: 14px;">
+                    <?php echo !empty($data['datos']['iFolio']) ? $data['datos']['iFolio'] : '-'; ?>
+                </span>
+                <br>
+                <span style="color:#000000;font-size: 10px;font-weight: normal;">
+                    <?php echo !empty($data['datos']['dFechaCreacion']) ? $this->obtenerFechaEnLetra($data['datos']['dFechaCreacion']) : '-'; ?>    
+                </span>
+            </th>
+        </tr>
+        <!--
+        <tr>
+            <th class="col-md-6" style="text-align:left;text-transform:uppercase;background-color: #cecece; color: #000000;font-weight: bold;">ELABORÓ</th>
+            <th class="col-md-6" style="text-align:left;text-transform:uppercase;background-color: #cecece; color: #000000;font-weight: bold;">FECHA</th>
+        </tr>
+        <tr>
+            <th class="col-md-6" style="text-align:left;text-transform:uppercase;background-color: #FFFFFF; color: #000000;font-weight: normal;">
+                <?php echo !empty($data['datos']['usuarioCreacion']) ? $data['datos']['usuarioCreacion'] : '-'; ?>
+            </th>
+            <th class="col-md-6" style="text-align:left;text-transform:uppercase;background-color: #FFFFFF; color: #000000;font-weight: normal;">
+                <?php echo !empty($data['datos']['dFechaCreacion']) ? $this->obtenerFechaEnLetra($data['datos']['dFechaCreacion']) : '-'; ?>
+            </th>
+        </tr>
+        !-->
+        <tr>
+            <th class="col-md-12" colspan="2" style="text-align:left;text-transform:uppercase;background-color: #cecece; color: #000000;font-weight: bold;">ELABORÓ</th>
+        </tr>
+        <tr>
+            <th class="col-md-12" colspan="2" style="text-align:left;text-transform:uppercase;background-color: #FFFFFF; color: #000000;font-weight: normal;">
+                <?php echo !empty($data['datos']['usuarioCreacion']) ? $data['datos']['usuarioCreacion'] : '-'; ?>
+            </th>
+        </tr>
+        <tr>
+            <th class="col-md-6" style="text-align:left;text-transform:uppercase;background-color: #cecece; color: #000000;font-weight: bold;">DIVISA</th>
+            <th class="col-md-6" style="text-align:left;text-transform:uppercase;background-color: #cecece; color: #000000;font-weight: bold;">TIPO DE CAMBIO</th>
+        </tr>
+        <tr>
+            <th class="col-md-6" style="text-align:left;text-transform:uppercase;background-color: #FFFFFF; color: #000000;font-weight: normal;">
+                <?php echo !empty($data['datos']['divisa']) ? $data['datos']['divisa'].' ('.$data['datos']['skDivisa'].')' : '-'; ?>
+            </th>
+            <th class="col-md-6" style="text-align:left;text-transform:uppercase;background-color: #FFFFFF; color: #000000;font-weight: normal;">
+                $<?php echo !empty($data['datos']['fTipoCambio']) ? number_format($data['datos']['fTipoCambio'],4) : '0.00'; ?>
+            </th>
+        </tr>
+    </table>
+</div>
 
+<div class="col-md-12 clearfix"></div>
+
+<div class="col-md-12 clearfix">
+    <table style="font-size:10px;" class="col-md-12">
+        <tr>
+            <th class="col-md-4" style="text-align:center;background-color: #cecece; color: #000000;font-weight: bold;">MÉTODO DE PAGO</th>
+            <th class="col-md-4" style="text-align:center;background-color: #cecece; color: #000000;font-weight: bold;">FORMA DE PAGO</th>
+            <th class="col-md-4" style="text-align:center;background-color: #cecece; color: #000000;font-weight: bold;">USO DE CFDI</th>
+        </tr>
+        <tr>
+            <th class="col-md-4" style="text-align:left;text-transform:uppercase;background-color: #FFFFFF; color: #000000;font-weight: normal;text-transform: uppercase;">
+                <?php echo (!empty($data['datos']['skMetodoPago']) ? '('.$data['datos']['skMetodoPago'].') '.$data['datos']['metodoPago'] : '-'); ?>
+            </th>
+            <th class="col-md-4" style="text-align:left;text-transform:uppercase;background-color: #FFFFFF; color: #000000;font-weight: normal;text-transform: uppercase;">
+                <?php echo (!empty($data['datos']['skFormaPago']) ? '('.$data['datos']['skFormaPago'].') '.$data['datos']['formaPago'] : '-'); ?>
+            </th>
+            <th class="col-md-4" style="text-align:left;text-transform:uppercase;background-color: #FFFFFF; color: #000000;font-weight: normal;text-transform: uppercase;">
+                <?php echo (!empty($data['datos']['skUsoCFDI']) ? '('.$data['datos']['skUsoCFDI'].') '.$data['datos']['usoCFDI'] : '-'); ?>
+            </th>
+        </tr>
+    </table>
+</div>
+
+<div class="col-md-12 clearfix"></div>
+
+<?php
+    $bg = ['fbfdfd','e8f1f8'];
+?>
+<div class="col-md-12">
+    <table style="font-size:9px;" class="col-md-12">
+        <tr>
+            <th class="col-md-12" colspan="9" style="font-size:12px;text-align:center;text-transform:uppercase;background-color: #4776a5; color: #ffffff;font-weight: bold;">PRODUCTOS / SERVICIOS</th>
+        </tr>
+        <tr>
+            <th class="col-md-1" style="text-align:center;background-color: #2c3e50; color: #ffffff;font-weight: bold;">#</th>
+            <th class="col-md-1" style="text-align:center;background-color: #2c3e50; color: #ffffff;font-weight: bold;">UNIDAD</th>
+            <th class="col-md-4" style="text-align:center;background-color: #2c3e50; color: #ffffff;font-weight: bold;">PRODUCTO / SERVICIO</th>
+            <th class="col-md-1" style="text-align:center;background-color: #2c3e50; color: #ffffff;font-weight: bold;">CANTIDAD</th>
+            <th class="col-md-1" style="text-align:center;background-color: #2c3e50; color: #ffffff;font-weight: bold;">P. UNITARIO</th>
+            <th class="col-md-1" style="text-align:center;background-color: #2c3e50; color: #ffffff;font-weight: bold;">IVA</th>
+            <th class="col-md-1" style="text-align:center;background-color: #2c3e50; color: #ffffff;font-weight: bold;">RET IVA</th>
+            <th class="col-md-1" style="text-align:center;background-color: #2c3e50; color: #ffffff;font-weight: bold;">IMPORTE</th>
+            <th class="col-md-1" style="text-align:center;background-color: #2c3e50; color: #ffffff;font-weight: bold;">DESCUENTO</th>
+        </tr>
+        <?php
+            if(isset($data['serviciosOrdenes']) && count(($data['serviciosOrdenes'])) > 0){
+                $cont = 1;
+                $bg_flag = 0;
+                foreach($data['serviciosOrdenes'] AS $row){
+        ?>
+        <tr>
+            <td style="text-align:center;text-transform:uppercase;background-color:#<?php echo $bg[$bg_flag]; ?>;"><?php echo $cont; ?></td>
+            <td style="text-align:center;text-transform:uppercase;background-color:#<?php echo $bg[$bg_flag]; ?>;"><?php echo (isset($row['unidadMedida']) ? $row['unidadMedida'] : ''); ?></td>
+            <td style="text-align:left;text-transform:uppercase;background-color:#<?php echo $bg[$bg_flag]; ?>;"><?php echo (!empty($row['sDescripcion']) ? $row['sDescripcion'] : $row['servicio']); ?></td>
+            <td style="text-align:right;text-transform:uppercase;background-color:#<?php echo $bg[$bg_flag]; ?>;"><?php echo (isset($row['fCantidad']) ? number_format($row['fCantidad'],2) : '0.00');?></td>
+            <td style="text-align:right;text-transform:uppercase;background-color:#<?php echo $bg[$bg_flag]; ?>;">$<?php echo (isset($row['fPrecioUnitario']) ? number_format($row['fPrecioUnitario'],2) : '0.00');?></td>
+            <td style="text-align:right;text-transform:uppercase;background-color:#<?php echo $bg[$bg_flag]; ?>;">$<?php echo (isset($row['fImpuestosTrasladados']) ? number_format($row['fImpuestosTrasladados'],2) : '0.00');?></td>
+            <td style="text-align:right;text-transform:uppercase;background-color:#<?php echo $bg[$bg_flag]; ?>;">$<?php echo (isset($row['fImpuestosRetenidos']) ? number_format($row['fImpuestosRetenidos'],2) : '0.00');?></td>
+            <td style="text-align:right;text-transform:uppercase;background-color:#<?php echo $bg[$bg_flag]; ?>;">$<?php echo (isset($row['fImporteTotal']) ? number_format($row['fImporteTotal'],2) : '0.00');?></td>
+            <td style="text-align:right;text-transform:uppercase;background-color:#<?php echo $bg[$bg_flag]; ?>;">$<?php echo (isset($row['fDescuento']) ? number_format($row['fDescuento'],2) : '0.00');?></td>
+        </tr>
+        <?php
+                $bg_flag = ($bg_flag ? 0 : 1);
+                $cont++;
+                }//ENDFOREACH
+            }else{
+        ?>
+        <tr>
+            <td style="text-align:left;background-color:#<?php echo $bg[0]; ?>;" colspan="9">&nbsp;</td>
+        </tr>
+        <?php
+            }//ENDIF
+        ?>
+        <!--
+        <tr>
+            <td colspan="9" style="text-align:right;font-weight: bold;border-top:2px solid #cecece;background-color:#<?php echo $bg[1]; ?>;">
+                $<?php echo !empty($data['datos_cotizacion']['fGastosComprobados']) ? number_format($data['datos_cotizacion']['fGastosComprobados'],2) : '0.00'; ?>
+            </td>
+        </tr>
+        !-->
+    </table>
+</div>
+
+
+<div class="col-md-12 clearfix"></div>
+
+<div class="col-md-6 col-md-offset-7">
+    <table style="font-size:10px;" class="col-md-12">
+        <tr>
+            <th style="text-align:center;background-color: #<?php echo $bg[1]; ?>; color: #000000;font-weight: normal;">SUBTOTAL</th>
+            <th style="text-align:right; color: #000000;font-weight: normal;background-color:#<?php echo $bg[1]; ?>;">
+                $<?php echo (!empty($data['datos']['fImporteSubtotal']) ? number_format($data['datos']['fImporteSubtotal'],2) : '0.00'); ?>
+            </th>
+        </tr>
+        <tr>
+            <th style="text-align:center;background-color: #<?php echo $bg[1]; ?>; color: #000000;font-weight: normal;">DESCUENTO</th>
+            <th style="text-align:right; color: #000000;font-weight: normal;background-color:#<?php echo $bg[1]; ?>;">
+                $<?php echo (!empty($data['datos']['fDescuento']) ? number_format($data['datos']['fDescuento'],2) : '0.00'); ?>
+            </th>
+        </tr>
+        <tr>
+            <th style="text-align:center;background-color: #<?php echo $bg[1]; ?>; color: #000000;font-weight: normal;">IVA</th>
+            <th style="text-align:right; color: #000000;font-weight: normal;background-color:#<?php echo $bg[1]; ?>;">
+                $<?php echo (!empty($data['datos']['fImpuestosTrasladados']) ? number_format($data['datos']['fImpuestosTrasladados'],2) : '0.00'); ?>
+            </th>
+        </tr>
+        <tr>
+            <th style="text-align:center;background-color: #<?php echo $bg[1]; ?>; color: #000000;font-weight: normal;">RET IVA</th>
+            <th style="text-align:right; color: #000000;font-weight: normal;background-color:#<?php echo $bg[1]; ?>;">
+                $<?php echo (!empty($data['datos']['fImpuestosRetenidos']) ? number_format($data['datos']['fImpuestosRetenidos'],2) : '0.00'); ?>
+            </th>
+        </tr>
+        <tr>
+            <th style="text-align:center;background-color: #<?php echo $bg[1]; ?>; color: #000000;font-weight: bold;">TOTAL SIN IVA</th>
+            <th style="text-align:right; color: #f96868;font-weight: bold;background-color:#<?php echo $bg[1]; ?>;">
+                <!--$<?php echo (!empty($data['datos']['fImporteTotalSinIVA']) ? number_format($data['datos']['fImporteTotalSinIVA'],2) : '0.00'); ?>!-->
+                $<?php echo (!empty($data['datos']['fImporteTotalSinIva']) ? number_format($data['datos']['fImporteTotalSinIva'],2) : '0.00'); ?>
+            </th>
+        </tr>
+        <tr>
+            <th style="text-align:center;background-color: #4776a5; color: #FFFFFF;font-weight: bold;">TOTAL IVA INCLUIDO</th>
+            <th style="text-align:right; color: #f96868;font-weight: bold;background-color:#<?php echo $bg[1]; ?>;">
+                $<?php echo (!empty($data['datos']['fImporteTotal']) ? number_format($data['datos']['fImporteTotal'],2) : '0.00'); ?>
+            </th>
+        </tr>
+    </table>
+</div>
+<div class="col-md-12 pull-right" style="font-size:10px;text-align: right;text-transform:uppercase;">
+    <?php echo !empty($data['datos']['fImporteTotal']) ? strtolower(NumeroALetras::convertir($data['datos']['fImporteTotal'], 'PESOS', 'CENTAVOS',true)).' '.(substr((explode('.',number_format($data['datos']['fImporteTotal'],2))[1]),0,2)).'/100 M.N.' : ''; ?>
+</div> 
+
+<div class="col-md-12 clearfix">
+    <table style="font-size:10px;" class="col-md-12">
+        <tr>
+            <th class="col-md-12" style="text-align:left;background-color: #cecece; color: #000000;font-weight: bold;">OBSERVACIONES</th>
+        </tr>
+        <tr>
+            <th class="col-md-12" style="text-align:left;text-transform:uppercase;background-color: #FFFFFF; color: #000000;font-weight: normal;text-transform: uppercase;">
+                <?php echo !empty($data['datos']['sObservaciones']) ? nl2br($data['datos']['sObservaciones']) : ''; ?>
+            </th>
+        </tr>
+        <tr>
+            <th class="col-md-12" style="text-align:left;text-transform:uppercase;background-color: #FFFFFF; color: #000000;font-weight: normal;text-transform: uppercase;">
+                <?php echo !empty($data['PIECOT']) ? $data['PIECOT'] : ''; ?>
+            </th>
+        </tr>
+    </table>
+</div>
+
+<?php if(isset($data['informacionProducto'])){ ?>
+    <div class="col-md-12" style="color:#000000;font-size:10px;text-align:justify;text-transform:uppercase;">
+        <?php
+            if(isset($data['informacionProducto'])){
+                foreach($data['informacionProducto'] AS $val){
+        ?>
+            <div class="col-md-12"><?php echo !empty($val['sDescripcionHoja1']) ? $val['sDescripcionHoja1'] : ''; ?></div>
+        <?php 
+                }//ENDFOREACH
+            }//ENDIF
+        ?>
+    </div>
+<?php }//ENDIF ?>
+
+<div class="col-md-12 clearfix" style="color:#000000;font-size:7px;"><hr></div>
+
+<div class="col-md-8 col-md-offset-2 clearfix">
+    <table style="font-size:10px;" class="col-md-12">
+        <tr>
+            <th class="col-md-4" style="text-align:center;background-color: #2c3e50; color: #ffffff;font-weight: bold;">BANCO</th>
+            <th class="col-md-4" style="text-align:center;background-color: #2c3e50; color: #ffffff;font-weight: bold;">NÚMERO DE CUENTA</th>
+            <th class="col-md-4" style="text-align:center;background-color: #2c3e50; color: #ffffff;font-weight: bold;">CLABE INTERBANCARIA</th>
+        </tr>
+        <?php
+            if(!empty($data['get_bancosCuentasReceptor']) && is_array($data['get_bancosCuentasReceptor'])){
+                foreach($data['get_bancosCuentasReceptor'] AS $k_bancoCuenta=>$v_bancoCuenta){
+                    foreach($v_bancoCuenta AS $k_cuenta=>$v_cuenta){
+        ?>
+        <tr>
+            <td class="col-md-4" style="text-align:center;background-color:#<?php echo $bg[1]; ?>;"><?php echo $v_cuenta['bancoAlias'].' ('.$v_cuenta['skDivisa'].')'; ?></td>
+            <td class="col-md-4" style="text-align:center;background-color:#<?php echo $bg[1]; ?>;"><?php echo $v_cuenta['sNumeroCuenta']; ?></td>
+            <td class="col-md-4" style="text-align:center;background-color:#<?php echo $bg[1]; ?>;"><?php echo $v_cuenta['sClabeInterbancaria']; ?></td>
+        </tr>
+        <?php
+                    }//ENDFOREACH
+                }//ENDFOREACH
+            }else{
+        ?>
+        <tr>
+            <td class="col-md-12" colspan="3" style="text-align:center;background-color:#<?php echo $bg[1]; ?>;">- SIN REGISTRO DE CUENTAS BANCARIAS -</td>
+        </tr>
+        <?php
+            }//ENDIF
+        ?>
+        
+    </table>
+    <div class="col-md-12 clearfix" style="color:#000000;font-size:10px;text-align:center;">
+        FAVOR DE ENVIAR SU COMPROBANTE DE TRANSFERENCIA, INDICANDO SU REFERENCIA 
+        <b>
+            <?php echo !empty($data['datos']['iFolio']) ? $data['datos']['iFolio'] : '-'; ?>
+        </b>
+    </div>
+    
+</div>

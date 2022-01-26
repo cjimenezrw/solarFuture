@@ -22,43 +22,37 @@ Class Orse_form_Controller Extends Admi_Model {
         $this->data['formaPago'] = parent::consultar_formasPago();
         $this->data['metodoPago'] = parent::consultar_metodosPago();
         $this->data['usoCFDI'] = parent::consultar_usosCFDI(); 
+        $this->data['divisas'] = parent::_get_divisas(); 
 
         $this->data['Estatus'] = parent::consultar_core_estatus(['AC', 'IN'], true);
         //$this->log($MENSAGE, $FORZAR_ESCRITURA,$LIMPIAR_ANTES);
 
         if (isset($_GET['p1'])) {
             $this->admi['skOrdenServicio'] = $_GET['p1'];
- 
             $this->data['datos'] = parent::_getOrdenServicio();
             $this->data['serviciosOrdenes'] = parent::_getOrdenServicioServicios(); 
-          
-
-         
-
-
-
         }
+
         return $this->data;
     }
-  
 
     public function guardar() {
-        
+        $this->log('LIMPIAR', true,true);
         $this->data['success'] = FALSE;
         $this->data['message'] = 'No se recibieron los datos.';
         $this->data['datos'] = FALSE;
 
-            Conn::begin($this->idTran);
+            //Conn::begin($this->idTran);
 
         // Obtener datos de Orden de servicio de información
             if(!$this->getInputData()){
-                Conn::rollback($this->idTran);
+                //Conn::rollback($this->idTran);
                 return $this->data;
             }
 
         // Validamos los datos de Orden de servicio
             if(!$this->validar_datos_ordenes()){
-                Conn::rollback($this->idTran);
+                //Conn::rollback($this->idTran);
                 return $this->data;
             }
 
@@ -66,7 +60,7 @@ Class Orse_form_Controller Extends Admi_Model {
 
             $facturas = $this->ordenes();
             if(!$facturas['success']){
-                Conn::rollback($this->idTran);
+                //Conn::rollback($this->idTran);
                 return $this->data;
             }
 
@@ -76,23 +70,19 @@ Class Orse_form_Controller Extends Admi_Model {
             if(isset($this->admi['servicios']) && !empty($this->admi['servicios'])){
                 $ordenes_servicios = $this->ordenes_servicios();
                 if(!$ordenes_servicios['success']){
-                    Conn::rollback($this->idTran);
+                    //Conn::rollback($this->idTran);
                     return $this->data;
                 }
             }
             //if(isset($this->admi['skCodigo']) && !empty($this->admi['skCodigo'])){
                 $ordenes_procesos = $this->ordenes_procesos();
                 if(!$ordenes_procesos['success']){
-                    Conn::rollback($this->idTran);
+                    //Conn::rollback($this->idTran);
                     return $this->data;
                 }
             //}
 
-      
-            
-
-
-          Conn::commit($this->idTran);
+          //Conn::commit($this->idTran);
           $this->data['success'] = TRUE;
           $this->data['message'] = 'Registro insertado con éxito.';
         return $this->data;
@@ -152,7 +142,7 @@ Class Orse_form_Controller Extends Admi_Model {
     private function validar_datos_ordenes(){
         $validations = [
             'skEmpresaSocioResponsable'=>['message'=>'EMPRESA RESPONSABLE','requerido' => true],
-            //'skDivisa'=>['message'=>'DIVISA','requerido' => true],
+            'skDivisa'=>['message'=>'DIVISA','requerido' => true],
             //'skCentroCosto'=>['message'=>'CENTRO DE COSTO','requerido' => true],
             //'skEmpresaSocioCliente'=>['message'=>'CLIENTE','requerido' => true],
             //'skEmpresaSocioFacturacion'=>['message'=>'FACTURACION','requerido' => true],
@@ -216,10 +206,10 @@ Class Orse_form_Controller Extends Admi_Model {
              * @return Array ['success'=>NULL,'message'=>NULL,'datos'=>NULL]
              */
             private function ordenes(){
-                 $this->admi['skEmpresaSocioCliente'] = $this->admi['skEmpresaSocioResponsable'];
-                $this->admi['skEmpresaSocioFacturacion'] = $this->admi['skEmpresaSocioResponsable'];
-                $this->admi['skDivisa'] ='MXN';
-                $this->admi['fTipoCambio'] =1;
+                $this->admi['skEmpresaSocioCliente'] = $this->admi['skEmpresaSocioResponsable'];
+                $this->admi['skEmpresaSocioFacturacion'] = (!empty($this->admi['skEmpresaSocioFacturacion']) ? $this->admi['skEmpresaSocioFacturacion'] : $this->admi['skEmpresaSocioResponsable']);
+                //$this->admi['skDivisa'] ='MXN';
+                $this->admi['fTipoCambio'] = ((empty($this->admi['fTipoCambio']) || $this->admi['skDivisa'] == 'MXN')  ? 1 : $this->admi['fTipoCambio']);
                 $this->admi['skEstatus'] = 'PE';
                 
 

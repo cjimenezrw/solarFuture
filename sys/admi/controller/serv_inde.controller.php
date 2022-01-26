@@ -62,7 +62,7 @@ Class Serv_inde_Controller Extends Admi_Model {
                 
             //REGLA DEL MENÚ EMERGENTE
                 $regla = [
-                    'menuEmergente1'=>($row['skEstatus'] == 'NU' ? SELF::HABILITADO : SELF::DESHABILITADO),
+                    'menuEmergente1'=>($row['skEstatus'] == 'AC' ? SELF::HABILITADO : SELF::DESHABILITADO),
                     
                 ];
 

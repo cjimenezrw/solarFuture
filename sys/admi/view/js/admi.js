@@ -65,9 +65,10 @@ admi.orse_inde.dataTableConf = {
         }
     },
     'axn': 'consulta',
-    'order': [[3, "desc"]],
+    'order': [[4, "desc"]],
     'columns': [
         {'title': 'E', 'data': 'estatus', 'dataType': 'string', 'tooltip': 'Estatus', 'filterT': 'Estatus'},
+         {'title': 'NF', 'filterT': 'No Facturable','tooltip': 'No Facturable','data': 'iNoFacturable', 'dataType': 'string'},
          {'title': 'Folio F.', 'filterT': 'Folio Factura','tooltip': 'Folio Factura','data': 'iFolioFactura', 'dataType': 'string'},
         {'title': 'Folio OS', 'data': 'iFolio','tooltip': 'Folio Orden de Servicio', 'dataType': 'string'},
         {'title': 'F. Creacion', 'data': 'dFechaCreacion', 'dataType': 'date'},
@@ -86,8 +87,8 @@ admi.orse_inde.dataTableConf = {
 
     "drawCallback": function () {
         core.dataTable.contextMenuCore(true);
-        core.dataTable.changeColumnColor(2, 'success');
-        core.dataTable.fastFilters(2, [], true);
+        core.dataTable.changeColumnColor(3, 'success');
+        core.dataTable.fastFilters(3, [], true);
         $('[data-toggle="tooltip"]').tooltip();
     },
     "columnDefs": [
@@ -101,6 +102,19 @@ admi.orse_inde.dataTableConf = {
 
             }
         },
+        {
+            "targets": [1],
+            "width": '1px',
+            "createdCell": function (td, cellData, rowData, row, col) {
+                if(rowData.iNoFacturable == 'SI'){
+                         $(td).html('<i class="fa fa-ban"></i>');
+                         $(td).addClass('text-center text-danger');
+                         $(td).find('i').attr({"title": 'El servicio no se Facturara' ,"data-toggle": "tooltip","data-placement": "rigth"});
+                }
+  
+            }
+        },
+
         {
             "targets": [2],
             "width": '30px'
@@ -305,6 +319,20 @@ admi.serv_form.validaciones = {
         }
     },
     sCodigo: {
+        validators: {
+            notEmpty: {
+                message: 'El codigo del concepto es requerido'
+            }
+        }
+    },
+    iClaveProductoServicio: {
+        validators: {
+            notEmpty: {
+                message: 'El codigo del concepto es requerido'
+            }
+        }
+    },
+    skUnidadMedida: {
         validators: {
             notEmpty: {
                 message: 'El codigo del concepto es requerido'
@@ -718,8 +746,11 @@ admi.cofa_inde.dataTableConf = {
 
         {'title': 'SubTotal', 'data': 'fSubtotal', 'dataType': 'int'},
         {'title': 'Total', 'data': 'fTotal', 'dataType': 'int'},
+        {'title': 'Saldo', 'data': 'fSaldo', 'dataType': 'int'},
          {'title': 'Moneda', 'data': 'skDivisa', 'dataType': 'string'},
-        {'title': 'Facturar A', 'data': 'facturacion', 'dataType': 'string'}
+        {'title': 'Facturar A', 'data': 'facturacion', 'dataType': 'string'},
+        {'title': 'Responsable', 'data': 'responsable', 'dataType': 'string'}
+        
  
         
     ],

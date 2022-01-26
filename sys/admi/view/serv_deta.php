@@ -32,7 +32,7 @@ if (isset($data['datos'])) {
                         </div>
                         <div class="col-md-4 col-lg-4">
                             <div class="form-group">
-                                <h4 class="example-title">CLAVE PRODUCTO/ SERVICIO :</h4>
+                                <h4 class="example-title">CLAVE PRODUCTO / SERVICIO (SAT) :</h4>
                                 <p><?php echo (!empty($result['iClaveProductoServicio'])) ? $result['iClaveProductoServicio'] : '';?> </p>
                             </div>
                         </div>
@@ -84,6 +84,43 @@ if (isset($data['datos'])) {
             </div>
         </div>
 
+        <div class="panel panel-bordered panel-primary panel-line">
+            <div class="panel-heading">
+                <h3 class="panel-title">CATEGORÍA DE PRECIOS</h3>
+            </div>
+            <div class="panel-body container-fluid">
+                <div class="row row-lg">
+                    <div class="col-md-12">
+                        <div class="input-group margin-top-20"> <span class="input-group-addon">Filtrar</span>
+                            <input id="inputFilter" onkeyup="searchFilter();" type="text" class="form-control" autocomplete="off" placeholder="ESCRIBE AQUÍ PARA BUSCAR CUALQUIER DATO DE LA TABLA...">
+                        </div>
+                        <table class="table table-striped table-bordered">
+                        <thead>
+                            <tr>
+                                <th>CATEGORÍA</th>
+                                <th>PRECIO</th>
+                            </tr>
+                        </thead>
+                        <tbody class="tbody_searchable">
+                            <?php 
+                            if(isset($data['categorias_precios']) && !empty($data['categorias_precios']) && is_array($data['categorias_precios'])){
+                                foreach($data['categorias_precios'] AS $row) { 
+                            ?>
+                                <tr>
+                                    <td><?php echo (!empty($row['sNombre'])) ? $row['sNombre'] : ''; ?></td>
+                                    <td>$<?php echo (!empty($row['fPrecio']) ? $row['fPrecio'] : ''); ?></td>
+                                </tr>
+                            <?php 
+                                }//FOREACH
+                            }
+                            ?>
+                        </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+
          
          
 
@@ -92,6 +129,14 @@ if (isset($data['datos'])) {
 <script src="<?php echo SYS_URL; ?><?php echo $this->sysProject; ?>/<?php echo $this->sysModule; ?>/view/js/<?php echo VERSION; ?>/<?php echo $this->sysModule; ?>.js"></script>
 
 <script type="text/javascript">
+
+    function searchFilter() {
+        var rex = new RegExp($("#inputFilter").val(), 'i');
+        $('.tbody_searchable tr').hide();
+        $('.tbody_searchable tr').filter(function () {
+            return rex.test($(this).text());
+        }).show();
+    }
 
     $(document).ready(function () {
         $('#mowi').iziModal('setBackground', '#f1f4f5');

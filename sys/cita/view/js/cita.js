@@ -4,6 +4,7 @@ var cita = {};
 cita.cita_inde = {};
 cita.cita_form = {};
 cita.cita_conf = {};
+cita.cita_orde = {};
 cita.cita_cale = {};
 
 // CÓDIGO //
@@ -20,18 +21,16 @@ cita.cita_inde.dataTableConf = {
         }
     },
     'axn': 'consultar',
-    'order': [[18, "desc"]],
+    'order': [[16, "desc"]],
     'columns': [
         {'title': 'E', 'data': 'estatus', 'dataType': 'string', 'tooltip': 'Estatus', 'filterT': 'Estatus'},
-        {'title': 'Folio', 'data': 'iFolioCita', 'dataType': 'string','tooltip': 'Folio'},
-        {'title': 'OS', 'data': 'iFolioOrdenServicio', 'dataType': 'string','tooltip': 'Folio Orden Servicio'},
+        {'title': 'Folio', 'data': 'iFolio', 'dataType': 'string','tooltip': 'Folio'},
         {'title': 'Categoría', 'data': 'sNombreCategoria', 'dataType': 'string','tooltip': 'Categoría'},
         {'title': 'F. Cita', 'data': 'dFechaCita', 'dataType': 'date','tooltip': 'Fecha Cita', 'filterT': 'Fecha Cita'},
         {'title': 'H. Cita', 'data': 'tHoraInicio', 'dataType': 'string','tooltip': 'Hora Cita', 'filterT': 'Hora Cita'},
         {'title': 'Cliente', 'data': 'empresaCliente', 'dataType': 'string'},
-        {'title': 'Nombre', 'data': 'sNombre', 'dataType': 'string'},
+        {'title': 'Nombre', 'data': 'sNombreCliente', 'dataType': 'string'},
         {'title': 'Teléfono', 'data': 'sTelefono', 'dataType': 'string'},
-        {'title': 'Correo', 'data': 'sCorreo', 'dataType': 'string'},
         {'title': 'Estado', 'data': 'estado', 'dataType': 'string'},
         {'title': 'Municipio', 'data': 'municipio', 'dataType': 'string'},
         {'title': 'Dirección', 'data': 'sDomicilio', 'dataType': 'string'},
@@ -46,7 +45,7 @@ cita.cita_inde.dataTableConf = {
     "drawCallback": function () {
         core.dataTable.contextMenuCore(true);
         core.dataTable.changeColumnColor(1, 'success');
-        core.dataTable.fastFilters(1, [], true);
+        core.dataTable.fastFilters(6, [], true);
         $('[data-toggle="tooltip"]').tooltip();
     },
     "columnDefs": [
@@ -102,6 +101,19 @@ cita.cita_inde.finalizar = function finalizar(obj) {
     });
 };
 
+cita.cita_inde.generarFormato = function generarFormato(obj){
+    window.open(core.SYS_URL+'sys/cita/cita-deta/detalles-cita/'+obj.id+'/?axn=formatoPDF');
+    return true;
+};
+
+cita.cita_inde.descargarPDF = function descargarPDF(obj) {
+    core.download(window.location.href,'GET', {
+        axn: 'formatoPDF',
+        id: obj.id
+    });
+    return true;
+};
+
 cita.cita_form.validaciones = {
     skCategoriaCita: {
         validators: {
@@ -124,21 +136,14 @@ cita.cita_form.validaciones = {
             }
         }
     },
-    sNombre: {
+    /*sNombreCliente: {
         validators: {
             notEmpty: {
                 message: 'CAMPO REQUERIDO'
             }
         }
-    },
+    },*/
     sTelefono: {
-        validators: {
-            notEmpty: {
-                message: 'CAMPO REQUERIDO'
-            }
-        }
-    },
-    sCorreo: {
         validators: {
             notEmpty: {
                 message: 'CAMPO REQUERIDO'
@@ -190,13 +195,13 @@ cita.cita_conf.validaciones = {
             }
         }
     },
-    sNombre: {
+    /*sNombreCliente: {
         validators: {
             notEmpty: {
                 message: 'CAMPO REQUERIDO'
             }
         }
-    },
+    },*/
     sTelefono: {
         validators: {
             notEmpty: {
@@ -204,7 +209,59 @@ cita.cita_conf.validaciones = {
             }
         }
     },
-    sCorreo: {
+    skEstadoMX: {
+        validators: {
+            notEmpty: {
+                message: 'CAMPO REQUERIDO'
+            }
+        }
+    },
+    skMunicipioMX: {
+        validators: {
+            notEmpty: {
+                message: 'CAMPO REQUERIDO'
+            }
+        }
+    },
+    sDomicilio: {
+        validators: {
+            notEmpty: {
+                message: 'CAMPO REQUERIDO'
+            }
+        }
+    }
+};
+
+cita.cita_orde.validaciones = {
+    skCategoriaCita: {
+        validators: {
+            notEmpty: {
+                message: 'CAMPO REQUERIDO'
+            }
+        }
+    },
+    dFechaCita: {
+        validators: {
+            notEmpty: {
+                message: 'CAMPO REQUERIDO'
+            }
+        }
+    },
+    tHoraInicio: {
+        validators: {
+            notEmpty: {
+                message: 'CAMPO REQUERIDO'
+            }
+        }
+    },
+    /*sNombreCliente: {
+        validators: {
+            notEmpty: {
+                message: 'CAMPO REQUERIDO'
+            }
+        }
+    },*/
+    sTelefono: {
         validators: {
             notEmpty: {
                 message: 'CAMPO REQUERIDO'

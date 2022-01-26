@@ -1,5 +1,5 @@
 <?php
-Class Cita_conf_Controller Extends Cita_Model {
+Class Cita_orde_Controller Extends Cita_Model {
     
     // CONST //
 
@@ -9,7 +9,7 @@ Class Cita_conf_Controller Extends Cita_Model {
 
     // PRIVATE VARIABLES //
         private $data = [];
-        private $idTran = 'cita_conf';
+        private $idTran = 'cita_orde';
 
     public function __construct() {
         parent::init();
@@ -37,23 +37,23 @@ Class Cita_conf_Controller Extends Cita_Model {
 
             $this->cita['skCita'] = (isset($_GET['p1']) ? $_GET['p1'] : NULL);
 
-        // guardar_agendarCita 
-            $guardar_cita = $this->guardar_agendarCita();
-            if(!$guardar_cita['success']){
+        // guardar_datosFacturacion_cita 
+            $guardar_datosFacturacion_cita = $this->guardar_datosFacturacion_cita();
+            if(!$guardar_datosFacturacion_cita['success']){
                 Conn::rollback($this->idTran);
                 return $this->data;
             }
 
-        // Guardar correos
-            $guardar_cita_correos = $this->guardar_cita_correos();
-            if(!$guardar_cita_correos['success']){
-                Conn::rollback($this->idTran);
+        // Guardar Servicios
+            $guardar_cita_servicios = $this->guardar_cita_servicios();
+            if(!$guardar_cita_servicios['success']){
+            Conn::rollback($this->idTran);
                 return $this->data;
             }
-
-        // confirmar_cita_personal 
-            $confirmar_cita_personal = $this->confirmar_cita_personal();
-            if(!$confirmar_cita_personal['success']){
+            
+        // GENERAR ORDEN DE SERVICIO 
+            $generar_ordenServicio = $this->generar_ordenServicio();
+            if(!$generar_ordenServicio['success']){
                 Conn::rollback($this->idTran);
                 return $this->data;
             }
@@ -62,6 +62,128 @@ Class Cita_conf_Controller Extends Cita_Model {
         $this->data['datos'] = $this->cita;
         $this->data['success'] = TRUE;
         $this->data['message'] = 'REGISTRO GUARDADO CON ÉXITO.';
+        return $this->data;
+    }
+
+    public function guardar_datosFacturacion_cita(){
+        $this->data['success'] = TRUE;
+        $this->cita['axn'] = 'guardar_datosFacturacion_cita';
+        $this->cita['skEstatus'] = 'VE';
+
+        $stp_cita_agendar = parent::stp_cita_agendar();
+        if(!$stp_cita_agendar || isset($stp_cita_agendar['success']) && $stp_cita_agendar['success'] != 1){
+            $this->data['success'] = FALSE;
+            $this->data['message'] = 'HUBO UN ERROR AL GUARDAR LOS DATOS DE LA CITA';
+            return $this->data;
+        }
+
+        $this->cita['skCita'] = $stp_cita_agendar['skCita'];
+
+        $this->data['success'] = TRUE;
+        $this->data['message'] = 'DATOS DE CITA GUARDADOS';
+        return $this->data;
+
+    }
+
+    public function guardar_cita_servicios(){
+        $this->data['success'] = TRUE;
+          
+        $delete = "DELETE FROM rel_citas_servicios WHERE skCita = ".escape($this->cita['skCita']);
+        $result = Conn::query($delete);
+
+        $delete = "DELETE FROM rel_citas_serviciosImpuestos WHERE skCita = ".escape($this->cita['skCita']);
+        $result = Conn::query($delete);
+
+        $this->cita['axn'] = 'guardar_cita_servicios';
+        if(!empty($this->cita['servicios'])){
+            foreach ($this->cita['servicios'] AS $srv){
+                $this->cita['axn'] = 'guardar_cita_servicios';
+
+                // AQUI VAN LOS SERVICIOS NORMALES.
+                $this->cita['skServicio']           = (isset($srv['skServicio']) ? $srv['skServicio'] : NULL);
+                $this->cita['sDescripcion']         = (isset($srv['sDescripcionConcepto']) ? $srv['sDescripcionConcepto'] : NULL);
+                $this->cita['fCantidad']            = (isset($srv['fCantidad']) ? str_replace(',','',$srv['fCantidad']) : NULL);
+                $this->cita['skUnidadMedida']       = (isset($srv['skUnidadMedida']) ? str_replace(',','',$srv['skUnidadMedida']) : NULL);
+                $this->cita['fPrecioUnitario']      = (isset($srv['fPrecioUnitario']) ? str_replace(',','',$srv['fPrecioUnitario']) : NULL);
+                $this->cita['fImporte']             = (isset($srv['fImporte']) ? str_replace(',','',$srv['fImporte']) : NULL);
+                $this->cita['fDescuento']           = (isset($srv['fDescuento']) ? str_replace(',','',$srv['fDescuento']) : NULL);
+                $this->cita['fImpuestosTrasladados']  = (isset($srv['fImpuestosTrasladados']) ? str_replace(',','',$srv['fImpuestosTrasladados']) : NULL);
+                $this->cita['fImpuestosRetenidos']    = (isset($srv['fImpuestosRetenidos']) ? str_replace(',','',$srv['fImpuestosRetenidos']) : NULL);
+
+                //VALIDACION DE DATOS
+                if(empty($this->cita['skUnidadMedida']) || empty($this->cita['fCantidad']) || empty($this->cita['skServicio']) ){
+                    $this->data['success'] = FALSE;
+                    $this->data['message'] = 'FALTA LLENAR CAMPO REQUERIDO EN SERVICIO';
+                    return $this->data;
+                }
+
+                $stp_cita_agendar = parent::stp_cita_agendar();
+                if(!$stp_cita_agendar || isset($stp_cita_agendar['success']) && $stp_cita_agendar['success'] != 1){
+                    $this->data['success'] = FALSE;
+                    $this->data['message'] = 'HUBO UN ERROR AL GUARDAR EL SERVICIO';
+                    return $this->data;
+                }
+                $this->cita['skCitaServicio'] = $stp_cita_agendar['skCitaServicio'];
+
+                if(!empty($this->cita['fImpuestosTrasladados'])){
+                        $this->cita['axn'] = "guardar_cita_serviciosImpuestos";
+                        $this->cita['skImpuesto'] = "TRAIVA";
+                        $this->cita['fImporte']  = (isset($srv['fImpuestosTrasladados']) ? str_replace(',','',$srv['fImpuestosTrasladados']) : NULL);
+                        $stp_cita_agendar = parent::stp_cita_agendar();
+                        if(!$stp_cita_agendar || isset($stp_cita_agendar['success']) && $stp_cita_agendar['success'] != 1){
+                            $this->data['success'] = FALSE;
+                            $this->data['message'] = 'HUBO UN ERROR AL GUARDAR EL IMPUESTO DEL SERVICIO';
+                            return $this->data;
+                        }
+                }
+                if(!empty($this->cita['fImpuestosRetenidos'])){
+                        $this->cita['axn'] = "guardar_cita_serviciosImpuestos";
+                        $this->cita['skImpuesto'] = "RETIVA";
+                        $this->cita['fImporte']    = (isset($srv['fImpuestosRetenidos']) ? str_replace(',','',$srv['fImpuestosRetenidos']) : NULL);
+                        $stp_cita_agendar = parent::stp_cita_agendar();
+                        if(!$stp_cita_agendar || isset($stp_cita_agendar['success']) && $stp_cita_agendar['success'] != 1){
+                            $this->data['success'] = FALSE;
+                            $this->data['message'] = 'HUBO UN ERROR AL GUARDAR EL IMPUESTO DEL SERVICVIO';
+                            return $this->data;
+                        }
+                }
+
+            }
+        }
+
+        $this->data['success'] = TRUE;
+        $this->data['message'] = 'SERVICIOS DE ORDENES GUARDADOS';
+        return $this->data;
+    }
+
+    /**
+       * generar_orden
+       *
+       * Guardar generar_orden
+       *
+       * @author Luis Alberto Valdez Alvarez <lvaldez@woodward.com.mx>
+       * @return Array ['success'=>NULL,'message'=>NULL,'datos'=>NULL]
+       */
+      public function generar_ordenServicio(){
+        $this->data['success'] = TRUE;
+        $this->cita['axn'] = 'generar_orden';
+
+        $generarOrden = $this->sysAPI('admi', 'orse_inde', 'generarOrden', [
+            'POST'=>[
+                'axn'=>'GE',
+                'skProceso'=>'CITA',
+                'skCodigo'=>$this->cita['skCita']
+            ]
+        ]);
+        
+        if(!$generarOrden || isset($generarOrden['success']) && $generarOrden['success'] != 1){
+            $this->data['success'] = FALSE;
+            $this->data['message'] = $generarOrden['message'];
+            return $this->data;
+        }
+
+        $this->data['success'] = TRUE;
+        $this->data['message'] = 'ORDEN GENERADA CON EXITO';
         return $this->data;
     }
 
@@ -108,14 +230,14 @@ Class Cita_conf_Controller Extends Cita_Model {
 
 
         $validations = [
-        'skCategoriaCita'=>['message'=>'CATEGORÍA'],
-        'dFechaCita'=>['message'=>'FECHA DE CITA','validations'=>['date']],
-        'tHoraInicio'=>['message'=>'CATEGORÍA'],
+        //'skCategoriaCita'=>['message'=>'CATEGORÍA'],
+        //'dFechaCita'=>['message'=>'FECHA DE CITA','validations'=>['date']],
+        //'tHoraInicio'=>['message'=>'CATEGORÍA'],
         //'sNombre'=>['message'=>'NOMBRE'],
-        'sTelefono'=>['message'=>'TELÉFONO'],
+        //'sTelefono'=>['message'=>'TELÉFONO'],
         //'sCorreo'=>['message'=>'CORREO'],
-        'skEstadoMX'=>['message'=>'ESTADO'],
-        'skMunicipioMX'=>['message'=>'MUNICIPIO'],
+        //'skEstadoMX'=>['message'=>'ESTADO'],
+        //'skMunicipioMX'=>['message'=>'MUNICIPIO'],
         //'sDomicilio'=>['message'=>'DOMICILIO']
         ];
 
@@ -163,7 +285,7 @@ Class Cita_conf_Controller Extends Cita_Model {
     public function guardar_agendarCita(){
         $this->data['success'] = TRUE;
         $this->cita['axn'] = 'guardar_agendarCita';
-        $this->cita['skEstatus'] = 'CF';
+        $this->cita['skEstatus'] = 'PE';
 
         $stp_cita_agendar = parent::stp_cita_agendar();
         if(!$stp_cita_agendar || isset($stp_cita_agendar['success']) && $stp_cita_agendar['success'] != 1){
@@ -303,18 +425,6 @@ Class Cita_conf_Controller Extends Cita_Model {
 
     }
 
-    public function get_empresas(){
-        $this->cita['sNombre'] = (isset($_POST['val']) ? $_POST['val'] : NULL);
-        if(isset($_POST['skEmpresaTipo']) && !empty($_POST['skEmpresaTipo'])){
-            $skEmpresaTipo = json_decode($_POST['skEmpresaTipo'], true, 512);
-            if(!is_array($skEmpresaTipo)){
-                $skEmpresaTipo = $_POST['skEmpresaTipo'];
-            }
-            $this->cita['skEmpresaTipo'] = $skEmpresaTipo;
-        }
-        return parent::get_empresas();
-    }
-
     public function getDatos() {
         $this->data = ['success' => TRUE, 'message' => NULL, 'datos' => NULL];
         $this->cita['skCita'] = (isset($_GET['p1']) && !empty($_GET['p1'])) ? $_GET['p1'] : NULL;
@@ -405,6 +515,37 @@ Class Cita_conf_Controller Extends Cita_Model {
             $data['datos']['cuentasBancarias'][$row['skBanco']][] = $row;
         }
         return $data;
+    }
+
+    public function get_empresas(){
+        $this->cita['sNombre'] = (isset($_POST['val']) ? $_POST['val'] : NULL);
+        if(isset($_POST['skEmpresaTipo']) && !empty($_POST['skEmpresaTipo'])){
+            $skEmpresaTipo = json_decode($_POST['skEmpresaTipo'], true, 512);
+            if(!is_array($skEmpresaTipo)){
+                $skEmpresaTipo = $_POST['skEmpresaTipo'];
+            }
+            $this->cita['skEmpresaTipo'] = $skEmpresaTipo;
+        }
+        return parent::get_empresas();
+    }
+
+    public function get_medidas(){
+        return parent::consultar_tiposMedidas();
+    }
+
+    public function get_servicios(){
+        return parent::consultar_servicios();
+    }
+
+    public function get_servicio_impuestos(){
+        $this->cita['skServicio'] = (isset($_POST['skServicio']) ? $_POST['skServicio'] : NULL);
+        return parent::consultar_servicio_impuestos();
+    }
+
+    public function get_servicios_datos(){
+        $this->cita['skServicio'] = (isset($_POST['skServicio']) ? $_POST['skServicio'] : NULL);
+        $this->cita['skCategoriaPrecio'] = (isset($_POST['skCategoriaPrecio']) ? $_POST['skCategoriaPrecio'] : NULL);
+        return parent::consultar_servicios_datos();
     }
 
 }

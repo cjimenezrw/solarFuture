@@ -22,8 +22,8 @@
 
                         <div class="col-lg-4 col-md-4">
                             <div class="form-group">
-                                <h4 class="example-title">FOLIO CITA:</h4>
-                                <select name="iFolioCita" id="iFolioCita" class="form-control" data-plugin="select2" data-ajax--cache="true" >
+                                <h4 class="example-title">FOLIO TICKET:</h4>
+                                <select name="iFolio" id="iFolio" class="form-control" data-plugin="select2" data-ajax--cache="true" >
                                 </select>
                             </div>
                         </div>
@@ -138,7 +138,7 @@
     
     function listarProcesos(iCantidadCitasTotal){
         
-        var procesos = '<section class="page-aside-section"><div class="list-group menuProcesoItems"><h4 class="page-aside-title"><i class="fas fa-calendar"></i> CITAS</h4><hr>';
+        var procesos = '<section class="page-aside-section"><div class="list-group menuProcesoItems"><h4 class="page-aside-title"><i class="fas fa-calendar"></i> TICKETS</h4><hr>';
         
         procesos += '<a id="DEFAULT" class="list-group-item procesoItem" onclick="filtrarCalendario(this)"  href="javascript:void(0)" data-sClaveCategoriaCita="DEFAULT" data-proceso="DEFAULT"><i class="icon fa fa-circle" style="color:#000000" aria-hidden="true"></i> TODAS (<span>'+iCantidadCitasTotal+'</span>)</a><hr>';
 
@@ -154,7 +154,7 @@
     }
 
     $(document).ready(function(){
-        core.autocomplete2('#iFolioCita', 'get_iFolioCita', window.location.href, 'FOLIO CITA');
+        core.autocomplete2('#iFolio', 'get_iFolio', window.location.href, 'FOLIO TICKET');
         core.autocomplete2('#sNombre', 'get_sNombre', window.location.href, 'NOMBRE');
         core.autocomplete2('#skEmpresaSocioCliente', 'get_cliente', window.location.href, 'CLIENTE');
         core.autocomplete2('#skCitaPersonal_array', 'get_personal', window.location.href, 'PERSONAL ASIGNADO', {});
@@ -254,7 +254,7 @@
             data: {
                 axn: 'getDatos',
                 sClaveCategoriaCita: sClaveCategoriaCita,
-                iFolioCita : $("#iFolioCita").val(),
+                iFolio : $("#iFolio").val(),
                 sNombre : $("#sNombre").val(),
                 skEmpresaSocioCliente : $("#skEmpresaSocioCliente").val(),
                 skEstadoMX : $("#skEstadoMX").val(),
@@ -309,7 +309,7 @@
     }
     
     function limpiarFiltro(){
-        $('#iFolioCita').empty();
+        $('#iFolio').empty();
         $('#sNombre').empty();
         $('#skEmpresaSocioCliente').empty();
         $('#skEstadoMX').empty();

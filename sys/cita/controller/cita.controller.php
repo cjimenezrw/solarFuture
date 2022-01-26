@@ -31,6 +31,9 @@ Class Cita_Controller Extends Cita_Model {
             case 'pdf':
                 $cita_inde->generarPDF();
                 break;
+            case 'formatoPDF':
+                $cita_inde->formatoPDF();
+                break;
             case 'cancelar':
                 header('Content-Type: application/json');
                 echo json_encode($cita_inde->cancelar(),true,512);
@@ -55,9 +58,9 @@ Class Cita_Controller Extends Cita_Model {
                 header('Content-Type: application/json');
                 echo json_encode($cita_form->guardar());
                 break;
-            case 'get_ordenServicio':
+            case 'get_empresas':
                 header('Content-Type: application/json');
-                echo json_encode($cita_form->get_ordenServicio());
+                echo json_encode($cita_form->get_empresas());
                 break;
             case 'get_horarios_disponibles':
                 header('Content-Type: application/json');
@@ -87,9 +90,9 @@ Class Cita_Controller Extends Cita_Model {
                 header('Content-Type: application/json');
                 echo json_encode($cita_conf->guardar());
                 break;
-            case 'get_ordenServicio':
+            case 'get_empresas':
                 header('Content-Type: application/json');
-                echo json_encode($cita_conf->get_ordenServicio());
+                echo json_encode($cita_conf->get_empresas());
                 break;
             case 'get_horarios_disponibles':
                 header('Content-Type: application/json');
@@ -110,14 +113,62 @@ Class Cita_Controller Extends Cita_Model {
         return true;
     }
 
+    public function cita_orde() {
+        $this->load_class("cita_orde", "controller");
+        $cita_orde = new Cita_orde_Controller();
+        $axn = (isset($_POST['axn']) ? $_POST['axn'] : (isset($_GET['axn']) ? $_GET['axn'] : NULL));
+        switch ($axn) {
+            case 'guardar':
+                header('Content-Type: application/json');
+                echo json_encode($cita_orde->guardar());
+                break;
+            case 'get_empresas':
+                header('Content-Type: application/json');
+                echo json_encode($cita_orde->get_empresas());
+                break;
+            case 'get_horarios_disponibles':
+                header('Content-Type: application/json');
+                echo json_encode($cita_orde->get_horarios_disponibles());
+                break;
+            case 'get_cat_municipiosMX':
+                header('Content-Type: application/json');
+                echo json_encode($cita_orde->get_cat_municipiosMX());
+                break;
+            case 'get_personal':
+                header('Content-Type: application/json');
+                echo json_encode($cita_orde->get_personal());
+                break;
+            case 'get_servicios':
+                header('Content-Type: application/json');
+                echo json_encode($cita_orde->get_servicios());
+            break;
+            case 'get_servicio_impuestos':
+                header('Content-Type: application/json');
+                echo json_encode($cita_orde->get_servicio_impuestos());
+            break;
+            case 'get_servicios_datos':
+                header('Content-Type: application/json');
+                echo json_encode($cita_orde->get_servicios_datos());
+            break;
+            case 'get_medidas':
+                header('Content-Type: application/json');
+                echo json_encode($cita_orde->get_medidas());
+            break;
+            default:
+                $this->load_view('cita_orde', $cita_orde->getDatos());
+                break;
+        }
+        return true;
+    }
+
     public function cita_deta() {
         $this->load_class("cita_deta", "controller");
         $cita_deta = new Cita_deta_Controller();
         $axn = (isset($_POST['axn']) ? $_POST['axn'] : (isset($_GET['axn']) ? $_GET['axn'] : NULL));
         switch ($axn) {
-            case 'citaFormatoPDF':
-                $cita_deta->citaFormatoPDF();
-                break;
+            case 'formatoPDF':
+                echo $cita_deta->formatoPDF();
+            break;
             default:
                 $this->load_view('cita_deta', $cita_deta->getDatos());
                 break;
@@ -134,9 +185,9 @@ Class Cita_Controller Extends Cita_Model {
                 header('Content-Type: application/json');
                 echo json_encode($cita_cale->get_cat_municipiosMX());
                 break;
-            case 'get_iFolioCita':
+            case 'get_iFolio':
                 header('Content-Type: application/json');
-                echo json_encode($cita_cale->get_iFolioCita());
+                echo json_encode($cita_cale->get_iFolio());
                 break;
             case 'get_sNombre':
                 header('Content-Type: application/json');

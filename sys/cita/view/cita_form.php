@@ -9,10 +9,10 @@
                     <h3 class="panel-title">DATOS GENERALES</h3>
                 </div>
                 <?php
-                    if(!empty($data['datos']['iFolioCita'])){
+                    if(!empty($data['datos']['iFolio'])){
                 ?>
                 <div class="alert alert-primary alert-dismissible" role="alert">
-                    <b class="red-600 font-size-24"><?php echo (!empty($data['datos']['iFolioCita'])) ? $data['datos']['iFolioCita'] : '-'; ?></b>
+                    <b class="red-600 font-size-24"><?php echo (!empty($data['datos']['iFolio'])) ? $data['datos']['iFolio'] : '-'; ?></b>
                 </div>
                 <?php
                     }//ENDIF
@@ -20,32 +20,109 @@
                 <div class="panel-body container-fluid">
                     <div class="row row-lg">
 
-                        <?php 
-                            if($this->verify_permissions('A')){
-                        ?>
+                        <div class="col-md-4 col-lg-4">
+                            <div class="form-group">
+                                <h4 class="example-title"><b class="text-danger">*</b> CLIENTE:</h4>
+                                <select name="skEmpresaSocioCliente" id="skEmpresaSocioCliente" class="form-control" data-plugin="select2" data-ajax--cache="true" >
+                                    <?php
+                                    if (!empty($data['datos']['skEmpresaSocioCliente'])) {
+                                        ?>
+                                        <option value="<?php echo $data['datos']['skEmpresaSocioCliente']; ?>" selected="selected"><?php echo $data['datos']['empresaCliente'] . ' (' . $data['datos']['empresaClienteRFC'] . ')'; ?></option>
+                                        <?php
+                                    }//ENDIF
+                                    ?>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="col-md-4 col-lg-4">
+                            <div class="form-group">
+                                <h4 class="example-title"><span class="required text-danger">*</span> NOMBRE CLIENTE:</h4>
+                                <input class="form-control" onkeyup="this.value = this.value.toUpperCase();" name="sNombreCliente" id="sNombreCliente" value="<?php echo (isset($data['datos']['sNombreCliente'])) ? $data['datos']['sNombreCliente'] : ''; ?>" placeholder="NOMBRE CLIENTE" autocomplete="off" type="text">
+                            </div>
+                        </div>
+
+                        <div class="col-md-4 col-lg-4">
+                            <div class="form-group">
+                                <h4 class="example-title">ASUNTO:</h4>
+                                <input class="form-control" onkeyup="this.value = this.value.toUpperCase();" name="sAsunto" id="sAsunto" value="<?php echo (isset($data['datos']['sAsunto'])) ? $data['datos']['sAsunto'] : ''; ?>" placeholder="ASUNTO" autocomplete="off" type="text">
+                            </div>
+                        </div>
+                        
+                        <div class="row row-lg col-lg-12 clearfix"><hr></div>
+
+                        <div class="col-md-4 col-lg-4">
+                            <div class="form-group">
+                                <h4 class="example-title"><b class="text-danger"></b>TELÉFONO:</h4>
+                                <input class="form-control" onkeyup="this.value = this.value.toUpperCase();" name="sTelefono" value="<?php echo (isset($data['datos']['sTelefono'])) ? $data['datos']['sTelefono'] : ''; ?>" placeholder="TELÉFONO" autocomplete="off" type="text">
+                            </div>
+                        </div>
+
+                        <div class="col-md-4 col-lg-4">
+                            <div class="form-group">
+                                <h4 class="example-title"><b class="text-danger"></b>DOMICILIO:</h4>
+                                <input class="form-control" onkeyup="this.value = this.value.toUpperCase();" name="sDomicilio" value="<?php echo (isset($data['datos']['sDomicilio'])) ? $data['datos']['sDomicilio'] : ''; ?>" placeholder="DOMICILIO" autocomplete="off" type="text">
+                            </div>
+                        </div>
+
+                        <div class="col-md-4 col-lg-4">
+                            <div class="form-group">
+                                <h4 class="example-title">CORREOS:</h4>
+                                <select name="sCorreos[]" id="sCorreos" class="form-control select2"  autocomplete="off" multiple="multiple" data-plugin="select2">
+                                <?php
+                                    if(isset($data['citas_correos'])){
+                                        foreach ($data['citas_correos'] as $row){
+                                ?>
+                                    <option  value="<?php echo $row['sCorreo']; ?>"><?php echo $row['sCorreo']; ?></option>
+                                <?php
+                                        }//ENDFOREACH
+                                    }//ENDIF
+                                ?>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="row row-lg col-lg-12 clearfix"><hr></div>
 
                         <div class="col-lg-4 col-md-4">
                             <div class="form-group">
-                                <h4 class="example-title">ORDEN DE SERVICIO:</h4>
-                                <select id="skOrdenServicio"  name="skOrdenServicio" class="form-control" data-plugin="select2" select2Simple>
+                                <h4 class="example-title"><span style="color:red;">* </span>ESTADO:</h4>
+                                <select id="skEstadoMX"  name="skEstadoMX" class="form-control" data-plugin="select2" select2Simple>
                                     <option value="">- SELECCIONAR -</option>
                                     <?php
-                                        if (!empty($data['datos']['skOrdenServicio'])) {
+                                        if (!empty($data['cat_estadosMX'])) {
+                                            foreach (  $data['cat_estadosMX'] as $row) {
                                     ?>
-                                        <option selected="selected"
-                                        value="<?php echo $data['datos']['skOrdenServicio']; ?>"><?php echo $data['datos']['iFolioOrdenServicio']; ?></option>
+                                        <option <?php echo(isset($data['datos']['skEstadoMX']) && $data['datos']['skEstadoMX'] == $row['skEstadoMX'] ? 'selected="selected"' : ''); ?>
+                                        value="<?php echo $row['skEstadoMX']; ?>"> <?php echo $row['sNombre']; ?> </option>
                                     <?php
+                                            }//ENDWHILE
                                         }//ENDIF
                                     ?>
                                 </select>
                             </div>
                         </div>
 
-                        <div class="col-lg-12 col-md-12 clearfix"><hr></div>
+                        <div class="col-lg-4 col-md-4">
+                            <div class="form-group">
+                                <h4 class="example-title"><span style="color:red;">* </span>MUNICIPIO:</h4>
+                                <select id="skMunicipioMX"  name="skMunicipioMX" class="form-control" data-plugin="select2" select2Simple>
+                                    <option value="">- SELECCIONAR -</option>
+                                    <?php
+                                        if (!empty($data['cat_municipiosMX'])) {
+                                            foreach (  $data['cat_municipiosMX'] as $row) {
+                                    ?>
+                                        <option <?php echo(isset($data['datos']['skMunicipioMX']) && $data['datos']['skMunicipioMX'] == $row['skMunicipioMX'] ? 'selected="selected"' : ''); ?>
+                                        value="<?php echo $row['skMunicipioMX']; ?>"> <?php echo $row['sNombre']; ?> </option>
+                                    <?php
+                                            }//ENDWHILE
+                                        }//ENDIF
+                                    ?>
+                                </select>
+                            </div>
+                        </div>
 
-                        <?php
-                            }//ENDIF
-                        ?>
+                        <div class="row row-lg col-lg-12 clearfix"><hr></div>
                         
                         <div class="col-lg-4 col-md-4">
                             <div class="form-group">
@@ -96,101 +173,7 @@
                             </div>
                         </div>
 
-                        <div class="col-lg-12 col-md-12 clearfix"></div>
-
-                        <div class="col-lg-4 col-md-4">
-                            <div class="form-group">
-                                <h4 class="example-title"><span style="color:red;">* </span>NOMBRE:</h4>
-                                <div class="input-group">
-                                    <span class="input-group-addon">
-                                        <i class="fa-user" aria-hidden="true"></i>
-                                    </span>
-                                    <input id="sNombre" name="sNombre" placeholder="NOMBRE" type="text" class="form-control" autocomplete="off"   
-                                    value = "<?php echo isset($data['datos']['sNombre']) ? $data['datos']['sNombre'] : ''; ?>">
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="col-lg-4 col-md-4">
-                            <div class="form-group">
-                                <h4 class="example-title"><span style="color:red;">* </span>TELÉFONO:</h4>
-                                <div class="input-group">
-                                    <span class="input-group-addon">
-                                        <i class="fa-phone" aria-hidden="true"></i>
-                                    </span>
-                                    <input id="sTelefono" name="sTelefono" placeholder="TELÉFONO" type="text" class="form-control" autocomplete="off"   
-                                    value = "<?php echo isset($data['datos']['sTelefono']) ? $data['datos']['sTelefono'] : ''; ?>">
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="col-lg-4 col-md-4">
-                            <div class="form-group">
-                                <h4 class="example-title"><span style="color:red;">* </span>CORREO:</h4>
-                                <div class="input-group">
-                                    <span class="input-group-addon">
-                                        <i class="fa-envelope" aria-hidden="true"></i>
-                                    </span>
-                                    <input id="sCorreo" name="sCorreo" placeholder="CORREO" type="text" class="form-control" autocomplete="off"   
-                                    value = "<?php echo isset($data['datos']['sCorreo']) ? $data['datos']['sCorreo'] : ''; ?>">
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="col-lg-12 col-md-12 clearfix"></div>
-
-                        <div class="col-lg-4 col-md-4">
-                            <div class="form-group">
-                                <h4 class="example-title"><span style="color:red;">* </span>ESTADO:</h4>
-                                <select id="skEstadoMX"  name="skEstadoMX" class="form-control" data-plugin="select2" select2Simple>
-                                    <option value="">- SELECCIONAR -</option>
-                                    <?php
-                                        if (!empty($data['cat_estadosMX'])) {
-                                            foreach (  $data['cat_estadosMX'] as $row) {
-                                    ?>
-                                        <option <?php echo(isset($data['datos']['skEstadoMX']) && $data['datos']['skEstadoMX'] == $row['skEstadoMX'] ? 'selected="selected"' : ''); ?>
-                                        value="<?php echo $row['skEstadoMX']; ?>"> <?php echo $row['sNombre']; ?> </option>
-                                    <?php
-                                            }//ENDWHILE
-                                        }//ENDIF
-                                    ?>
-                                </select>
-                            </div>
-                        </div>
-
-                        <div class="col-lg-4 col-md-4">
-                            <div class="form-group">
-                                <h4 class="example-title"><span style="color:red;">* </span>MUNICIPIO:</h4>
-                                <select id="skMunicipioMX"  name="skMunicipioMX" class="form-control" data-plugin="select2" select2Simple>
-                                    <option value="">- SELECCIONAR -</option>
-                                    <?php
-                                        if (!empty($data['cat_municipiosMX'])) {
-                                            foreach (  $data['cat_municipiosMX'] as $row) {
-                                    ?>
-                                        <option <?php echo(isset($data['datos']['skMunicipioMX']) && $data['datos']['skMunicipioMX'] == $row['skMunicipioMX'] ? 'selected="selected"' : ''); ?>
-                                        value="<?php echo $row['skMunicipioMX']; ?>"> <?php echo $row['sNombre']; ?> </option>
-                                    <?php
-                                            }//ENDWHILE
-                                        }//ENDIF
-                                    ?>
-                                </select>
-                            </div>
-                        </div>
-
-                        <div class="col-lg-4 col-md-4">
-                            <div class="form-group">
-                                <h4 class="example-title"><span style="color:red;">* </span>DOMICILIO:</h4>
-                                <div class="input-group">
-                                    <span class="input-group-addon">
-                                        <i class="fa-home" aria-hidden="true"></i>
-                                    </span>
-                                    <input id="sDomicilio" name="sDomicilio" placeholder="DOMICILIO" type="text" class="form-control" autocomplete="off"   
-                                    value = "<?php echo isset($data['datos']['sDomicilio']) ? $data['datos']['sDomicilio'] : ''; ?>">
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="col-lg-12 col-md-12 clearfix"></div>
+                        <div class="row row-lg col-lg-12 clearfix"><hr></div>
 
                         <div class="col-lg-12 col-md-12">
                             <div class="form-group">
@@ -198,10 +181,6 @@
                                 <textarea id="sObservaciones" name="sObservaciones" placeholder="OBSERVACIONES" class="form-control" rows="3"><?php echo isset($data['datos']['sObservaciones']) ? $data['datos']['sObservaciones'] : ''; ?></textarea>
                             </div>
                         </div>
-
-                        <?php 
-                            if($this->verify_permissions('A')){
-                        ?>
 
                         <div class="col-lg-12 col-md-12 clearfix"></div>
                         
@@ -232,10 +211,6 @@
                                 <textarea id="sInstruccionesServicio" name="sInstruccionesServicio" placeholder="INSTRUCCIONES DE SERVICIO" class="form-control" rows="3"><?php echo isset($data['datos']['sInstruccionesServicio']) ? $data['datos']['sInstruccionesServicio'] : ''; ?></textarea>
                             </div>
                         </div>
-
-                        <?php
-                            }//ENDIF
-                        ?>
                     
                     </div>
 
@@ -253,11 +228,19 @@
         
         $('#core-guardar').formValidation(core.formValidaciones);
 
+        core.autocomplete2('#skEmpresaSocioCliente', 'get_empresas', window.location.href, 'CLIENTE');
         $("#skCategoriaCita").select2({placeholder: "CATEGORIA", allowClear: true });
         $("#skEstadoMX").select2({placeholder: "ESTADO", allowClear: true });
         $("#skMunicipioMX").select2({placeholder: "MUNICIPIO", allowClear: true });
 
-        core.autocomplete2('#skOrdenServicio', 'get_ordenServicio', window.location.href, 'ORDEN SERVICIO', {});
+        $('.help-text').webuiPopover();
+
+        $('#sCorreos').tagsinput({
+            trimValue: true,
+            freeInput: true,
+            tagClass: 'label label-primary'
+        });
+
         core.autocomplete2('#skCitaPersonal_array', 'get_personal', window.location.href, 'PERSONAL ASIGNADO', {
             skCategoriaCita: $('#skCategoriaCita'),
             skEstadoMX: $('#skEstadoMX'),

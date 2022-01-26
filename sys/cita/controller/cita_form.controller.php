@@ -44,6 +44,13 @@ Class Cita_form_Controller Extends Cita_Model {
                 return $this->data;
             }
 
+        // Guardar correos
+            $guardar_cita_correos = $this->guardar_cita_correos();
+            if(!$guardar_cita_correos['success']){
+                Conn::rollback($this->idTran);
+                return $this->data;
+            }
+
         // confirmar_cita_personal 
             $confirmar_cita_personal = $this->confirmar_cita_personal();
             if(!$confirmar_cita_personal['success']){
@@ -104,12 +111,12 @@ Class Cita_form_Controller Extends Cita_Model {
         'skCategoriaCita'=>['message'=>'CATEGORÍA'],
         'dFechaCita'=>['message'=>'FECHA DE CITA','validations'=>['date']],
         'tHoraInicio'=>['message'=>'CATEGORÍA'],
-        'sNombre'=>['message'=>'NOMBRE'],
+        //'sNombre'=>['message'=>'NOMBRE'],
         'sTelefono'=>['message'=>'TELÉFONO'],
-        'sCorreo'=>['message'=>'CORREO'],
+        //'sCorreo'=>['message'=>'CORREO'],
         'skEstadoMX'=>['message'=>'ESTADO'],
         'skMunicipioMX'=>['message'=>'MUNICIPIO'],
-        'sDomicilio'=>['message'=>'DOMICILIO']
+        //'sDomicilio'=>['message'=>'DOMICILIO']
         ];
 
         foreach($validations AS $k=>$v){
@@ -156,7 +163,7 @@ Class Cita_form_Controller Extends Cita_Model {
     public function guardar_agendarCita(){
         $this->data['success'] = TRUE;
         $this->cita['axn'] = 'guardar_agendarCita';
-        $this->cita['skEstatus'] = 'CF';
+        $this->cita['skEstatus'] = 'PE';
 
         $stp_cita_agendar = parent::stp_cita_agendar();
         if(!$stp_cita_agendar || isset($stp_cita_agendar['success']) && $stp_cita_agendar['success'] != 1){
@@ -171,6 +178,32 @@ Class Cita_form_Controller Extends Cita_Model {
         $this->data['message'] = 'DATOS DE CITA GUARDADOS';
         return $this->data;
     }
+
+    public function guardar_cita_correos(){
+        $this->data['success'] = TRUE;
+        $this->cita['axn'] = 'guardar_cita_correos';
+      
+        $delete="DELETE FROM rel_citas_correos WHERE skCita = ".escape($this->cita['skCita']);
+        $result = Conn::query($delete);
+       
+        if(!empty($this->cita['sCorreos'])){
+            $array_correos = $this->cita['sCorreos'];
+            foreach ($array_correos AS $correo){
+                $this->cita['axn'] = 'guardar_cita_correos';
+                $this->cita['sCorreo']         = (!empty($correo) ? $correo : NULL);         
+                 $stp_cita_agendar = parent::stp_cita_agendar();
+                if(!$stp_cita_agendar || isset($stp_cita_agendar['success']) && $stp_cita_agendar['success'] != 1){
+                    $this->data['success'] = FALSE;
+                    $this->data['message'] = 'HUBO UN ERROR AL GUARDAR LOS CORREOS DE LA CITA';
+                    return $this->data;
+                }
+            }
+        }
+        
+        $this->data['success'] = TRUE;
+        $this->data['message'] = 'CORREOS GUARDADOS CON ÉXITO';
+        return $this->data;
+}
 
     public function confirmar_cita_personal(){
         $this->data['success'] = TRUE;
@@ -204,18 +237,6 @@ Class Cita_form_Controller Extends Cita_Model {
         $this->data['success'] = TRUE;
         $this->data['message'] = 'DATOS DE CITA GUARDADOS';
         return $this->data;
-    }
-
-    public function get_ordenServicio(){
-
-        $this->cita['iFolioOrdenServicio'] = (isset($_POST['val']) && !empty($_POST['val'])) ? $_POST['val'] : NULL;
-
-        $_get_ordenServicio = parent::_get_ordenServicio([
-            'iFolioOrdenServicio'=>$this->cita['iFolioOrdenServicio'],
-            'skEstatus'=>'AC'
-        ]);
-
-        return $_get_ordenServicio;
     }
 
     public function get_horarios_disponibles(){
@@ -282,6 +303,18 @@ Class Cita_form_Controller Extends Cita_Model {
 
     }
 
+    public function get_empresas(){
+        $this->cita['sNombre'] = (isset($_POST['val']) ? $_POST['val'] : NULL);
+        if(isset($_POST['skEmpresaTipo']) && !empty($_POST['skEmpresaTipo'])){
+            $skEmpresaTipo = json_decode($_POST['skEmpresaTipo'], true, 512);
+            if(!is_array($skEmpresaTipo)){
+                $skEmpresaTipo = $_POST['skEmpresaTipo'];
+            }
+            $this->cita['skEmpresaTipo'] = $skEmpresaTipo;
+        }
+        return parent::get_empresas();
+    }
+
     public function getDatos() {
         $this->data = ['success' => TRUE, 'message' => NULL, 'datos' => NULL];
         $this->cita['skCita'] = (isset($_GET['p1']) && !empty($_GET['p1'])) ? $_GET['p1'] : NULL;
@@ -294,6 +327,22 @@ Class Cita_form_Controller Extends Cita_Model {
             'skEstatus'=>'AC'
         ]);
 
+        $this->data['formaPago'] = parent::consultar_formasPago();
+        $this->data['metodoPago'] = parent::consultar_metodosPago();
+        $this->data['usoCFDI'] = parent::consultar_usosCFDI(); 
+
+        $this->data['divisas'] = parent::_getDivisas();
+        $this->data['categoria'] = parent::_getCategorias();
+        
+        // TIPO DE CAMBIO
+            $this->data['fTipoCambio'] = parent::getVariable('TIPOCA');
+
+        // BANCOS Y CUENTAS BANCARIAS
+            $this->vent['skEmpresaSocioResponsable'] = $_SESSION['usuario']['skEmpresaSocio'];
+            $getBancosCuentasResponsable = $this->getBancosCuentasResponsable();
+            $this->data['get_bancosReceptor'] = isset($getBancosCuentasResponsable['datos']['bancos']) ? $getBancosCuentasResponsable['datos']['bancos']: [];
+            $this->data['get_bancosCuentasReceptor'] = isset($getBancosCuentasResponsable['datos']['cuentasBancarias']) ? $getBancosCuentasResponsable['datos']['cuentasBancarias']: [];
+
         if(!empty($this->cita['skCita'])){
             
             $this->data['datos'] = parent::_get_citas([
@@ -303,6 +352,8 @@ Class Cita_form_Controller Extends Cita_Model {
             $this->data['citas_personal'] = parent::_get_citas_personal([
                 'skCita'=>$this->cita['skCita']
             ]);
+
+            $this->data['citas_correos'] = parent::_getCitasCorreos();
 
             $this->data['cat_municipiosMX'] = parent::_get_cat_municipiosMX([
                 'skEstadoMX'=>$this->data['datos']['skEstadoMX'],
@@ -327,10 +378,33 @@ Class Cita_form_Controller Extends Cita_Model {
                 'dFechaCita'=>$this->cita['dFechaCita']
             ]);
 
+            $this->data['serviciosCita'] = parent::_getCitaServicios();
+
         }
 
         //exit('<pre>'.print_r($this->data,1).'</pre>');
-        return $this->data;
+        return
+         $this->data;
+    }
+
+    public function getBancosCuentasResponsable(){
+        $data = ['success'=>TRUE,'message'=>NULL,'datos'=>['bancos'=>[],'cuentasBancarias'=>[]]];
+        $this->vent['skEmpresaSocioResponsable'] = isset($_POST['skEmpresaSocioResponsable']) ? $_POST['skEmpresaSocioResponsable'] : $this->vent['skEmpresaSocioResponsable'];
+        
+        $_getBancosCuentasResponsable = parent::_getBancosCuentasResponsable();
+        if(!$_getBancosCuentasResponsable){
+            $data['success'] = FALSE;
+            $data['message'] = 'HUBO UN ERROR AL CONSULTAR LAS CUENTAS BANCARIAS';
+            return $data;
+        }
+        
+        foreach($_getBancosCuentasResponsable AS $row){
+            if(!isset($data['datos']['bancos'][$row['skBanco']])){
+                $data['datos']['bancos'][$row['skBanco']] = $row;
+            }
+            $data['datos']['cuentasBancarias'][$row['skBanco']][] = $row;
+        }
+        return $data;
     }
 
 }

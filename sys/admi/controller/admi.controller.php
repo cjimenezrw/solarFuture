@@ -404,6 +404,11 @@ Class Admi_Controller Extends Admi_Model {
                 header('Content-Type: application/json');
                 echo json_encode($data);
             break; 
+            case 'pagoEfectivo':
+                $data = $cofa_inde->pagoEfectivo();
+                header('Content-Type: application/json');
+                echo json_encode($data);
+            break; 
             case 'generarExcel':
                 $cofa_inde->generarExcel();
                 break;

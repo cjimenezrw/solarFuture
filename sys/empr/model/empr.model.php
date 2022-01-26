@@ -178,12 +178,15 @@ Class Empr_Model Extends DLOREAN_Model {
      * @param string $sRFC RFC del empresaSocio a buscar
      * @return object | false Retorna el objeto de resultados de la consulta o false si algo falla.
      */
-    public function validar_empresaSocio($sRFC = NULL, $skEmpresaTipo = NULL,$sTelefono = NULL, $sCorreo = NULL ) {
+    public function validar_empresaSocio($sRFC = NULL, $skEmpresaTipo = NULL,$sTelefono = NULL, $sCorreo = NULL, $skEmpresaSocio = NULL  ) {
         $sql = "SELECT e.*,es.skEmpresaSocio,es.skEmpresaSocioPropietario,es.skEmpresaTipo  
             FROM cat_empresas e
             LEFT JOIN rel_empresasSocios es ON es.skEmpresa = e.skEmpresa AND es.skEmpresaSocioPropietario = '" . $_SESSION['usuario']['skEmpresaSocioPropietario'] . "'";
         if (!is_null($skEmpresaTipo)) {
             $sql .= " AND es.skEmpresaTipo = '" . $skEmpresaTipo . "'";
+        }
+        if (!is_null($skEmpresaTipo)) {
+            $sql .= " AND es.skEmpresaSocio != '" . $skEmpresaSocio . "'";
         }
 
         $sql .= " WHERE  1 = 1 ";
@@ -265,7 +268,7 @@ Class Empr_Model Extends DLOREAN_Model {
             /*@skEstatus                  = */" . escape($this->empresaSocio['skEstatus']) . ",
             /*@skUsuarioCreacion          = */" . escape($_SESSION['usuario']['skUsuario']) . ",
             /*@skModulo                   = */" . escape($this->sysController) . ")";
-            
+           
         $result = Conn::query($sql);
         if (!$result) {
             return FALSE;

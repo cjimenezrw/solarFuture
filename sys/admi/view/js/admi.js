@@ -865,3 +865,49 @@ admi.cofa_inde.noAplica = function noAplica(obj) {
     });
    
 };
+
+
+admi.cofa_inde.pagoEfectivo = function pagoEfectivo(obj) {
+    swal({
+        title: "¿La factura se pago en Efectivo?",
+        text: "Factura " ,
+        type: "warning",
+        confirmButtonClass: "btn-warning",
+        confirmButtonText: "SI",
+        showCancelButton: true,
+        closeOnConfirm: false,
+        showLoaderOnConfirm: true,
+        animation: "slide-from-top"
+    },
+    function () {
+        $.ajax({
+            url: window.location.href,
+            type: 'POST',
+            data: {
+                axn: 'pagoEfectivo',
+                skFactura: core.rowDataTable.skFactura
+            },
+            cache: false,
+            processData: true,
+            beforeSend: function () {
+                toastr.info('Guardar factura # '+core.rowDataTable.iFolio, 'Notificación');
+            },
+            success: function (response) {
+                toastr.clear();
+
+                if(!response.success){
+                    toastr.error(response.message+ " Folio:" +core.rowDataTable.iFolio, 'Notificación');
+                    swal.close();
+                    core.dataTable.sendFilters(true);
+                    return false;
+                }
+
+                toastr.success('Factura pagada con exito# '+core.rowDataTable.iFolio, 'Notificación');
+                swal("¡Notificación!", 'Factura pagada con exito# '+core.rowDataTable.iFolio, "success");
+                core.dataTable.sendFilters(true);
+                 return true;
+            }
+        });
+    });
+   
+};

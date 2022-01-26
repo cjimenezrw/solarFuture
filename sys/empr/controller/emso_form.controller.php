@@ -32,7 +32,8 @@ Class Emso_form_Controller Extends Empr_Model
         $sCorreo = (!empty($_POST['sCorreo']) ? $_POST['sCorreo'] : NULL);
         $sTelefono = (!empty($_POST['sTelefono']) ? $_POST['sTelefono'] : NULL);
         $skEmpresaTipo = (!empty($_POST['skEmpresaTipo']) ? $_POST['skEmpresaTipo'] : NULL);
-        $data = parent::validar_empresaSocio($sRFC,$skEmpresaTipo,$sTelefono,$sCorreo);
+        $skEmpresaSocio = (!empty($_GET['p1']) ? $_GET['p1'] : NULL);
+        $data = parent::validar_empresaSocio($sRFC,$skEmpresaTipo,$sTelefono,$sCorreo,$skEmpresaSocio);
         $data['valid'] = TRUE;
         if(isset($data['skEmpresaSocio']) && !is_null($data['skEmpresaSocio'])){
             $data['valid'] = FALSE;
@@ -89,11 +90,11 @@ Class Emso_form_Controller Extends Empr_Model
             $this->data['message'] = 'Hubo un error al guardar el registro, intenta de nuevo.';
         }
 
-        $this->empresaSocio['skEmpresaSocio'] = isset($skEmpresaSocio["skEmpresaSocio"]) ? $skEmpresaSocio["skEmpresaSocio"] : NULL;
+        $this->empresaSocio['skEmpresaSocio'] = (!empty($skEmpresaSocio["skEmpresaSocio"]) ? $skEmpresaSocio["skEmpresaSocio"] : NULL);
         $this->data['skEmpresaSocio'] = isset($skEmpresaSocio["skEmpresaSocio"]) ? $skEmpresaSocio["skEmpresaSocio"] : NULL;
       
         if($skCaracteristicaEmpresaSocio){
-            $this->empresaSocio['skEmpresaSocio'] = $skEmpresaSocio['skEmpresaSocio'];
+            $this->empresaSocio['skEmpresaSocio'] = $this->empresaSocio['skEmpresaSocio'];
             // Eliminamos las características ANTERIORES //
             if(!parent::stpCD_caracteristica_empesaSocio(TRUE)){
                 $this->data['success'] = FALSE;

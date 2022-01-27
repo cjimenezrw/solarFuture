@@ -502,7 +502,7 @@ Class Vent_Model Extends DLOREAN_Model {
      */
     public function consultar_servicios() {
         $sql = "SELECT skServicio AS id,sNombre AS nombre  FROM cat_servicios
-				WHERE skEstatus = 'NU' ";
+				WHERE skEstatus = 'AC' ";
         if (!empty(trim($_POST['val']))) {
             if(isset($_POST['filter']) && $_POST['filter'] == 'like'){
                 $arr_str = explode(' ',trim($_POST['val']));

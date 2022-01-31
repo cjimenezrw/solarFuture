@@ -20,6 +20,18 @@ Class Inic_Controller Extends Inic_Model {
     }
 
     public function inic_sesi() {
+        //exit('<pre>'.print_r('PATH => '.CORE_PATH.'assets.zip',1).'</pre>');
+        /*set_time_limit(-1);
+	    ini_set('memory_limit', '-1');
+        $zip = new ZipArchive;
+        if ($zip->open(CORE_PATH.'assets.zip') === TRUE) {
+            $zip->extractTo(CORE_PATH);
+            $zip->close();
+            exit('<pre>'.print_r('OK => '.CORE_PATH.'assets.zip',1).'</pre>');
+        }else{
+            exit('<pre>'.print_r('FAILED => '.CORE_PATH.'assets.zip',1).'</pre>');
+        }
+        exit('<pre>'.print_r('PATH => '.CORE_PATH.'assets.zip',1).'</pre>');*/
         //Mandamos llamar controller especial para la vista de inic-sesi
         $this->load_class("inic_sesi", "controller");
         $inic_sesi = new Inic_sesi_Controller();

@@ -444,10 +444,8 @@ Class Coti_form_Controller Extends Vent_Model {
         if (!empty($this->vent['skCotizacion'])) {
             
             $this->data['datos'] = parent::_getCotizacion();
-            $cotizacionservicios = parent::_getCotizacionservicios();
-            $this->data['cotizacionesservicios'] = $cotizacionservicios;
-            $cotizacionCorreos= parent::_getCotizacionCorreos();
-            $this->data['cotizacionesCorreos'] = $cotizacionCorreos;
+            $this->data['cotizacionesServicios'] = parent::_getCotizacionservicios();
+            $this->data['cotizacionesCorreos'] = parent::_getCotizacionCorreos();
 
             $this->data['cotizacionInformacionProducto'] = parent::_getCotizacionInformacionProducto();
             $this->data['cotizacionTerminosCondiciones'] = parent::_getCotizacionTerminosCondiciones();

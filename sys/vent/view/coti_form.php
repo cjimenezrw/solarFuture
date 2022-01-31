@@ -348,9 +348,9 @@ if (isset($data['cotizacionTerminosCondiciones'])) {
                 <tbody class="searchable" id="servicios-body">
 
                         <?php
-                        if (isset($data['cotizacionesservicios'])){
+                        if (isset($data['cotizacionesServicios'])){
                             $cont = 1;
-                            foreach ($data['cotizacionesservicios'] as $row){ ?>
+                            foreach ($data['cotizacionesServicios'] as $row){ ?>
 
 
                             <tr> 
@@ -361,7 +361,7 @@ if (isset($data['cotizacionTerminosCondiciones'])) {
                                 </td>
                                 <td style="min-width:350px;max-width:350px;">
                                     <select style="min-width:500px;max-width:500px;" name="servicios[<?php echo $cont; ?>][skServicio]" onchange="obtenerDatos(this);" class="skServicio form-control js-data-example-ajax" data-plugin="select2" data-ajax--cache="true">
-                                        <option value="<?php echo (isset($row['skServicio']) ? $row['skServicio'] : ''); ?>"><?php echo (isset($row['concepto']) ? $row['concepto'] : ''); ?></option>
+                                        <option value="<?php echo (isset($row['skServicio']) ? $row['skServicio'] : ''); ?>"><?php echo (isset($row['servicio']) ? $row['servicio'] : ''); ?></option>
                                     </select>
                                 </td>
                                 <td><input class="form-control" value="<?php echo (isset($row['sDescripcion']) ? $row['sDescripcion'] : '');?>"   name="servicios[<?php echo $cont; ?>][sDescripcion]" placeholder="Descripción" autocomplete="off" type="text"></td>

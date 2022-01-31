@@ -86,7 +86,7 @@ Class Conc_form_Controller Extends Conc_Model {
       public function guardar_concepto(){
           $this->data['success'] = TRUE;
           $this->conc['axn'] = 'guardar_servicio';
-          $this->conc['skEstatus'] = 'NU';
+          $this->conc['skEstatus'] = 'AC';
 
           $stpCUD_serviciosConceptos = parent::stpCUD_serviciosConceptos();
            

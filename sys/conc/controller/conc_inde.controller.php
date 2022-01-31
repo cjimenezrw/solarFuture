@@ -69,9 +69,9 @@ Class Conc_inde_Controller Extends Conc_Model {
                 
             //REGLA DEL MENÚ EMERGENTE
                 $regla = [
-                    'menuEmergente1'=>($row['skEstatus'] == 'NU' ? SELF::HABILITADO : SELF::DESHABILITADO),
-                    'menuEmergente2'=>($row['skEstatus'] == 'NU' ? SELF::HABILITADO : SELF::DESHABILITADO),
-                    'menuEmergente3'=>($row['skEstatus'] == 'NU' ? SELF::HABILITADO : SELF::DESHABILITADO),
+                    'menuEmergente1'=>($row['skEstatus'] == 'AC' ? SELF::HABILITADO : SELF::DESHABILITADO),
+                    'menuEmergente2'=>($row['skEstatus'] == 'AC' ? SELF::HABILITADO : SELF::DESHABILITADO),
+                    'menuEmergente3'=>($row['skEstatus'] == 'AC' ? SELF::HABILITADO : SELF::DESHABILITADO),
                     'menuEmergente3'=>SELF::HABILITADO
                 ];
 

@@ -92,7 +92,7 @@ empr.emso_inde.dataTableConf = {
     'columns': [
         {'title': 'contextM', 'data': 'menuEmergente', 'tooltip': 'Estatus', 'dataType': 'hidde', 'hiddenF': '', 'excluirExcel': true},
         {'title': 'E', 'data': 'estatus', 'filterT': 'Estatus', 'dataType': 'string', 'excluirExcel': true},
-        {'title': 'RFC', 'data': 'sRFC', 'dataType': 'string'},
+        {'title': 'IDENTIFICADOR', 'data': 'sRFC', 'dataType': 'string'},
         {'title': 'Fecha Creación', 'data': 'dFechaCreacion', 'dataType': 'date'},
         {'title': 'Empresa', 'data': 'empresa', 'dataType': 'string'},
         {'title': 'Nombre Corto', 'data': 'sNombreCorto', 'dataType': 'string'},
@@ -179,14 +179,6 @@ empr.emso_form.getEmpresaSocio = function getEmpresaSocio(obj) {
 // Características EmpresasSocios //
 empr.emso_form.change_skEmpresaTipo = function change_skEmpresaTipo(obj) {
 
-    if ($(obj).val() == 'CLIE'){
-        $(".corresponsal").show();
-        $('#skClienteCorresponsal').attr('name', 'skClienteCorresponsal');
-    }else {
-        $(".corresponsal").hide();
-        $('#skClienteCorresponsal').removeAttr('name');
-    }
-
     $.ajax({
         url: window.location.href,
         type: 'POST',
@@ -259,7 +251,13 @@ empr.emso_form.change_skEmpresaTipo = function change_skEmpresaTipo(obj) {
 };
 
 empr.emso_form.validaciones = {
-
+    skEmpresaTipo: {
+        validators: {
+            notEmpty: {
+                message: 'Seleccione un tipo de empresa.'
+            }
+        }
+    },
     sRFC: {
         threshold: 10,
         validators: {
@@ -269,9 +267,10 @@ empr.emso_form.validaciones = {
                 data: function (validator, $field, value) {
                     return {
                         axn: 'validarEmpresaSocio',
-                        skEmpresaTipo: $('#skEmpresaTipo').val(),
-                        sCorreo: $('#sCorreo').val(),
-                        sTelefono: $('#sTelefono').val()
+                        skEmpresaTipo: function() { return $('#skEmpresaTipo').val(); },
+                        //sRFC: function() { return $('#sRFC').val(); },
+                        sTelefono: function() { return $('#sTelefono').val(); },
+                        sCorreo: function() { return $('#sCorreo').val(); }
                     };
                 },
                 message: 'El RFC ya ha sido dado de alta anteriormente.'
@@ -286,24 +285,6 @@ empr.emso_form.validaciones = {
             }
         }
     },
-    sCorreo: {
-        threshold: 10,
-        validators: {
-            remote: {
-                url: window.location.href,
-                type: 'POST',
-                data: function (validator, $field, value) {
-                    return {
-                        axn: 'validarEmpresaSocio',
-                        skEmpresaTipo: $('#skEmpresaTipo').val(),
-                        sCorreo: $('#sCorreo').val(),
-                        sTelefono: $('#sTelefono').val()
-                    };
-                },
-                message: 'El Correo ya ha sido dado de alta anteriormente.'
-            }
-        }
-    },
     sTelefono: {
         threshold: 9,
         validators: {
@@ -313,19 +294,33 @@ empr.emso_form.validaciones = {
                 data: function (validator, $field, value) {
                     return {
                         axn: 'validarEmpresaSocio',
-                        skEmpresaTipo: $('#skEmpresaTipo').val(),
-                        sCorreo: $('#sCorreo').val(),
-                        sTelefono: $('#sTelefono').val()
+                        skEmpresaTipo: function() { return $('#skEmpresaTipo').val(); },
+                        sRFC: function() { return $('#sRFC').val(); },
+                        //sTelefono: function() { return $('#sTelefono').val(); },
+                        sCorreo: function() { return $('#sCorreo').val(); }
+                        
                     };
                 },
                 message: 'El Telefono ya ha sido dado de alta anteriormente.'
             }
         }
     },
-    skEmpresaTipo: {
+    sCorreo: {
+        threshold: 10,
         validators: {
-            notEmpty: {
-                message: 'Seleccione un tipo de empresa.'
+            remote: {
+                url: window.location.href,
+                type: 'POST',
+                data: function (validator, $field, value) {
+                    return {
+                        axn: 'validarEmpresaSocio',
+                        skEmpresaTipo: function() { return $('#skEmpresaTipo').val(); },
+                        sRFC: function() { return $('#sRFC').val(); },
+                        sTelefono: function() { return $('#sTelefono').val(); },
+                        //sCorreo: function() { return $('#sCorreo').val(); }
+                    };
+                },
+                message: 'El Correo ya ha sido dado de alta anteriormente.'
             }
         }
     },
@@ -341,6 +336,8 @@ empr.emso_form.validaciones = {
 
 empr.emso_form.revalidarFormulario = function revalidarFormulario() {
     $('#core-guardar').formValidation('revalidateField', 'sRFC');
+    $('#core-guardar').formValidation('revalidateField', 'sTelefono');
+    $('#core-guardar').formValidation('revalidateField', 'sCorreo');
 };
 
 empr.tipo_inde.dataTableConf = {

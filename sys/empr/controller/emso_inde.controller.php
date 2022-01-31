@@ -22,7 +22,7 @@ Class Emso_inde_Controller Extends Empr_Model
         $configuraciones = array();
         $configuraciones['query'] = " SELECT 
             es.*
-            ,e.sRFC
+            ,IF(e.sRFC IS NOT NULL,e.sRFC,IF(e.sTelefono IS NOT NULL,e.sTelefono,IF(e.sCorreo IS NOT NULL,e.sCorreo,NULL))) AS sRFC
             ,e.sNombre AS empresa
             ,e.sNombreCorto
             ,et.sNombre AS empresaTipo

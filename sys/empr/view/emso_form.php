@@ -17,27 +17,7 @@ if (isset($data['datos'])) {
         </div>
         <div class="panel-body container-fluid">
             <div class="row row-lg">
- 
-                        <div class="col-md-4 col-lg-4 " >
-                            <div class="form-group">
-                                <h4 class="example-title">RFC :</h4>
-                                <input class="form-control" maxlength="13" <?php if (isset($result['sRFC'])) { ?>disabled="disabled"<?php }//ENDIF  ?>  name="sRFC" value="<?php echo (isset($result['sRFC'])) ? utf8_encode($result['sRFC']) : ''; ?>" placeholder="RFC" autocomplete="off" type="text" onblur="empr.emso_form.getEmpresaSocio(this);">
-                            </div>
-                        </div>
-                        <div class="col-md-4 col-lg-4 " >
-                            <div class="form-group">
-                                <h4 class="example-title">TELEFONO :</h4>
-                                <input class="form-control" id="sTelefono" name="sTelefono" value="<?php echo (isset($result['sTelefono'])) ? ($result['sTelefono']) : ''; ?>" placeholder="TELEFONO" autocomplete="off" type="text">
-                            </div>
-                        </div>
-                        <div class="col-md-4 col-lg-4" >
-                            <div class="form-group">
-                                <h4 class="example-title">CORREO :</h4>
-                                <input class="form-control" id="sCorreo" name="sCorreo" value="<?php echo (isset($result['sCorreo'])) ? ($result['sCorreo']) : ''; ?>" placeholder="CORREO" autocomplete="off" type="text">
-                            </div>
-                        </div> 
-                    <div class="col-md-12 clearfix"><hr></div>
- 
+
                         <div class="col-md-4 col-lg-4">
                             <div class="form-group">
                                 <h4 class="example-title"><span style="color:red;">* </span> TIPO DE EMPRESA:</h4>
@@ -62,6 +42,26 @@ if (isset($data['datos'])) {
  
                         <div class="col-md-4 col-lg-4 " >
                             <div class="form-group">
+                                <h4 class="example-title">RFC :</h4>
+                                <input class="form-control" maxlength="13" <?php if (isset($result['sRFC'])) { ?>disabled="disabled"<?php }//ENDIF  ?> id="sRFC"  name="sRFC" value="<?php echo (isset($result['sRFC'])) ? utf8_encode($result['sRFC']) : ''; ?>" placeholder="RFC" autocomplete="off" type="text" onblur="empr.emso_form.getEmpresaSocio(this);" onchange="empr.emso_form.revalidarFormulario();">
+                            </div>
+                        </div>
+                        <div class="col-md-4 col-lg-4 " >
+                            <div class="form-group">
+                                <h4 class="example-title">TELEFONO :</h4>
+                                <input class="form-control" id="sTelefono" name="sTelefono" value="<?php echo (isset($result['sTelefono'])) ? ($result['sTelefono']) : ''; ?>" placeholder="TELEFONO" autocomplete="off" type="text" onchange="empr.emso_form.revalidarFormulario();">
+                            </div>
+                        </div>
+                        <div class="col-md-4 col-lg-4" >
+                            <div class="form-group">
+                                <h4 class="example-title">CORREO :</h4>
+                                <input class="form-control" id="sCorreo" name="sCorreo" value="<?php echo (isset($result['sCorreo'])) ? ($result['sCorreo']) : ''; ?>" placeholder="CORREO" autocomplete="off" type="text" onchange="empr.emso_form.revalidarFormulario();">
+                            </div>
+                        </div> 
+                    <div class="col-md-12 clearfix"><hr></div>
+ 
+                        <div class="col-md-4 col-lg-4 " >
+                            <div class="form-group">
                                 <h4 class="example-title">NOMBRE :</h4>
                                 <input class="form-control" id="sNombre" name="sNombre" value="<?php echo (isset($result['sNombre'])) ? ($result['sNombre']) : ''; ?>" placeholder="Nombre" autocomplete="off" type="text">
                             </div>
@@ -76,6 +76,114 @@ if (isset($data['datos'])) {
             </div>
         </div>
     </div>
+
+<!-- COMIENZA DOMICILIOS !-->
+<div class="panel panel-bordered panel-primary panel-line animated slideInUp">
+        <div class="panel-heading">
+            <h3 class="panel-title">DOMICILIOS</h3>
+           
+        </div>
+        <div class="panel-body container-fluid">
+            <div class="row row-lg">
+                <div class="col-md-12">
+                    <button type="button" class="btn btn-outline btn-primary pull-right" id="agregar-domicilio">
+                        <i class="icon wb-plus" aria-hidden="true"></i> AGREGAR NUEVO DOMICILIO
+                    </button>
+		        </div>
+		    
+                <div class="input-group margin-top-20"> <span class="input-group-addon">Filtrar</span>
+			        <input id="filter" type="text" class="form-control" autocomplete="off" placeholder="Escribe aquí...">
+                </div>
+		    <div class="table-responsive clearfix" id="contenedores" style="height:400px;overflow-y:visible;font-size: 10pt;">
+			<table class="table table-striped table-bordered" id="mercancia">
+			    <thead>
+				<tr>
+				    <th class="col-xs-1 col-md-1 text-center">ESTATUS</th>
+				    <th class="col-xs-1 col-md-1 text-center">TIPO DOMICILIO</th>
+                    <th class="col-xs-1 col-md-1 text-center">NOMBRE</th>
+				    <th class="col-xs-1 col-md-1 text-center">PAIS</th>
+				    <th class="col-xs-1 col-md-1 text-center">ESTADO</th>
+				    <th class="col-xs-1 col-md-1 text-center">MUNICIPIO</th>
+				    <th class="col-xs-1 col-md-1 text-center">COLONIA</th>
+				    <th class="col-xs-1 col-md-1 text-center">CALLE</th>
+				    <th class="col-xs-1 col-md-1 text-center">CP</th>
+				    <th class="col-xs-1 col-md-1 text-center">NUM EXT.</th>
+				    <th class="col-xs-1 col-md-1 text-center">NUM INT.</th>
+				    <th class="col-xs-1 col-md-1 text-center">ELIMINAR</th>
+				</tr>
+			    </thead>
+			    <tbody class="searchable" id="body-domicilios">
+
+				<?php if(isset($data['empresasSocios_domicilios'])){
+				    $cont2 = 1;
+				    foreach ($data['empresasSocios_domicilios'] AS $dom){ ?>
+					<tr>
+					    <td>
+                            <select class="form-control skEstatus" name="domicilios[skEstatus][]">
+                                <option <?php echo (isset($dom['skEstatus'])?($dom['skEstatus'] == "AC")?'selected':'':'')?> value="AC" >ACTIVO</option>
+                                <option <?php echo (isset($dom['skEstatus'])?($dom['skEstatus'] == "IN")?'selected':'':'')?> value="IN" >INACTIVO</option>
+						    </select>
+                        </td>
+					    <td>
+                            <input class="form-control" name="domicilios[skEmpresaSocioDomicilio][]" value="<?php echo $dom['skEmpresaSocioDomicilio'] ?>" type="hidden">
+                            <select name="domicilios[skTipoDomicilio][]" class="form-control skTipoDomicilio" data-plugin="select2" data-ajax--cache="true">
+						        <option value="<?php echo $dom['skTipoDomicilio'] ?>"><?php echo $dom['tipoDomicilio'] ?></option>
+					        </select>
+                        </td>
+                        <td>
+                            <input class="form-control" name="domicilios[sNombre][]" value="<?php echo $dom['sNombre'] ?>" placeholder="Nombre" autocomplete="off" type="text">
+                        </td>
+					    <td>
+                            <select name="domicilios[skPais][]" class="form-control skPais" data-plugin="select2" data-ajax--cache="true">
+						        <option value="<?php echo $dom['skPais'] ?>"><?php echo $dom['pais'] ?></option>
+					        </select>
+                        </td>
+					    <td>
+                            <select name="domicilios[skEstado][]" class="form-control skEstado" data-plugin="select2" data-ajax--cache="true">
+						        <option value="<?php echo $dom['skEstado'] ?>"><?php echo $dom['estado'] ?></option>
+						    </select>
+                        </td>
+					    <td>
+                            <input class="form-control" name="domicilios[skMunicipio][]" value="<?php echo $dom['skMunicipio'] ?>" placeholder="MUNICIPIO" autocomplete="off" type="text">
+                        </td>
+					    <td>
+                            <input class="form-control" name="domicilios[sColonia][]" value="<?php echo $dom['sColonia'] ?>" placeholder="COLONIA" autocomplete="off" type="text">
+                        </td>
+					    <td>
+                            <input class="form-control" name="domicilios[sCalle][]" value="<?php echo $dom['sCalle'] ?>" placeholder="CALLE" autocomplete="off" type="text">
+                        </td>
+					    <td>
+                            <input class="form-control" name="domicilios[sCodigoPostal][]" value="<?php echo $dom['sCodigoPostal'] ?>" placeholder="CP" autocomplete="off" type="text">
+                        </td>
+					    <td>
+                            <input class="form-control" name="domicilios[sNumeroExterior][]" value="<?php echo $dom['sNumeroExterior'] ?>" autocomplete="off" type="text">
+                        </td>
+					    <td>
+                            <input class="form-control" name="domicilios[sNumeroInterior][]" value="<?php echo $dom['sNumeroInterior'] ?>" placeholder="NUMERO INT." autocomplete="off" type="text">
+                        </td>
+					    <td>
+                            <button style="width:100%;" type="button" class="btn btn-outline btn-danger pull-right mercancia-eliminar text-center" onclick="removeColumna(this);"><i class="icon wb-trash" aria-hidden="true"></i> Eliminar</button>                        </td>
+					</tr>
+					<!--<script type="text/javascript">		    
+                        $(".skEstatusDomicilio").select2({placeholder: "ESTATUS", allowClear: true });
+                        core.autocomplete2('.skTipoDomicilio', 'get_tiposDomicilios', window.location.href, 'TIPOS DOMICILIO');
+                        core.autocomplete2('.skPais', 'get_paises', window.location.href, 'PAISES');
+                        core.autocomplete2('.skEstado', 'get_estados', window.location.href, 'ESTADOS',{ skPais: function() { return $('.skPais').val(); } });
+					</script>!-->
+				<?php
+				    }
+				}?>
+			    </tbody>
+			</table>
+		    </div>
+
+            </div>
+            </div>
+            </div>
+<!-- TERMINA DOMICILIOS !-->
+
+
+
 
     <div class="panel panel-bordered panel-primary panel-line animated slideInUp">
         <div class="panel-heading">
@@ -185,6 +293,11 @@ if (isset($data['datos'])) {
 
     core.formValidaciones.fields = empr.emso_form.validaciones;
 
+    function removeColumna(obj) {
+        var tr = $(obj).parent().parent();
+        $(tr).remove();
+    };
+
     $(document).ready(function () {
 
         $('#core-guardar').formValidation(core.formValidaciones);
@@ -202,7 +315,37 @@ if (isset($data['datos'])) {
 
     $("#skEmpresaTipo").selectpicker();
 
+
+    $("#agregar-domicilio").click(function (event) {
+		$("#body-domicilios").append('<tr>' +
+		    '<td><select class="form-control skEstatusDomicilio" name="domicilios[skEstatus][]"><option value="AC" active>ACTIVO</option><option value="IN">INACTIVO</option></select></td>' +
+		    '<td><select name="domicilios[skTipoDomicilio][]" class="form-control skTipoDomicilio" data-plugin="select2" data-ajax--cache="true"></select></td>' +
+		    '<td><input class="form-control" name="domicilios[sNombre][]" value="" placeholder="NOMBRE" autocomplete="off" type="text"></td>' +
+		    '<td><select name="domicilios[skPais][]" class="form-control skPais" data-plugin="select2" data-ajax--cache="true"></select></td>' +
+		    '<td><select name="domicilios[skEstado][]" class="form-control skEstado" data-plugin="select2" data-ajax--cache="true"></select></td>' +
+		    '<td><input class="form-control" name="domicilios[skMunicipio][]" value="" placeholder="MUNICIPIO" autocomplete="off" type="text"></td>' +
+		    '<td><input class="form-control" name="domicilios[sColonia][]" value="" placeholder="COLONIA" autocomplete="off" type="text"></td>' +
+		    '<td><input class="form-control" name="domicilios[sCalle][]" value="" placeholder="CALLE" autocomplete="off" type="text"></td>' +
+		    '<td><input class="form-control" name="domicilios[sCodigoPostal][]" value="" placeholder="CP" autocomplete="off" type="text"></td>' +
+		    '<td><input class="form-control" name="domicilios[sNumeroExterior][]" value="" placeholder="NUMERO EXT." autocomplete="off" type="text"></td>' +
+		    '<td><input class="form-control" name="domicilios[sNumeroInterior][]" value="" placeholder="NUMERO INT." autocomplete="off" type="text"></td>' +
+		    '<td><button style="width:100%;" type="button" class="btn btn-outline btn-danger pull-right mercancia-eliminar text-center" onclick="removeColumna(this);"><i class="icon wb-trash" aria-hidden="true"></i> Eliminar</button></td>' +
+		    '<tr>');
+
+		$(".skEstatusDomicilio").select2({placeholder: "ESTATUS", allowClear: true });
+		core.autocomplete2('.skTipoDomicilio', 'get_tiposDomicilios', window.location.href, 'TIPOS DOMICILIO');
+		core.autocomplete2('.skPais', 'get_paises', window.location.href, 'PAISES');
+		core.autocomplete2('.skEstado', 'get_estados', window.location.href, 'ESTADOS',{ skPais: function() { return $('.skPais').val(); } });
+
+	    });
+
+
     });
+
+    $(".skEstatusDomicilio").select2({placeholder: "ESTATUS", allowClear: true });
+    core.autocomplete2('.skTipoDomicilio', 'get_tiposDomicilios', window.location.href, 'TIPOS DOMICILIO');
+    core.autocomplete2('.skPais', 'get_paises', window.location.href, 'PAISES');
+    core.autocomplete2('.skEstado', 'get_estados', window.location.href, 'ESTADOS',{ skPais: function() { return $('.skPais').val(); } });
 
     function guardarEmpresas(obj){
         if (core.SYS_URL + "sys/come/docu-inde/documentos-empresas/" == core.lastUrl) {

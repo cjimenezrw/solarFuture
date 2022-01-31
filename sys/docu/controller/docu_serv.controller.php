@@ -179,8 +179,8 @@ Class Docu_serv_Controller Extends Docu_Model {
         $this->docu['axn'] = 'subir_documento';
 
         $DOCUME = parent::getVariable('DOCUME');
-        $EXPEDIENTE = DIR_PROJECT.$DOCUME.'expedientes/'.$this->docu['skTipoExpediente'].'/'.$this->docu['skCodigo'].'/';
-        $THUMBNAIL = DIR_PROJECT.$DOCUME.'thumbnails/'.$this->docu['skTipoExpediente'].'/'.$this->docu['skCodigo'].'/';
+        $EXPEDIENTE = DIR_PROJECT.$DOCUME.'expedientes/'.$this->docu['skTipoExpediente'].'/'.date('Y').'/'.$this->docu['skCodigo'].'/';
+        $THUMBNAIL = DIR_PROJECT.$DOCUME.'thumbnails/'.$this->docu['skTipoExpediente'].'/'.date('Y').'/'.$this->docu['skCodigo'].'/';
 
         foreach($this->docu['docu_file_array'] AS $k=>&$v){
             $this->docu['skDocumento'] = $v['skDocumento'];
@@ -188,7 +188,7 @@ Class Docu_serv_Controller Extends Docu_Model {
             $this->docu['sExtensiona'] = $v['sExtension'];
             $this->docu['sNombre'] = $this->docu['skTipoExpediente'].'_'.$this->docu['skTipoDocumento'].'_'.$v['sConsecutivo'].'.'.$v['sExtension'];
             $this->docu['sNombreOriginal'] = $v['name'];
-            $this->docu['sUbicacion'] = 'expedientes/'.$this->docu['skTipoExpediente'].'/'.$this->docu['skCodigo'].'/'.$this->docu['sNombre'];
+            $this->docu['sUbicacion'] = 'expedientes/'.$this->docu['skTipoExpediente'].'/'.date('Y').'/'.$this->docu['skCodigo'].'/'.$this->docu['sNombre'];
             $this->docu['sUbicacionThumbnail'] = NULL;
             
             if(!is_dir($EXPEDIENTE)) {
@@ -240,7 +240,7 @@ Class Docu_serv_Controller Extends Docu_Model {
                         return $this->data;
                     }
 
-                    $this->docu['sUbicacionThumbnail'] = 'thumbnails/'.$this->docu['skTipoExpediente'].'/'.$this->docu['skCodigo'].'/'.$this->docu['sNombre'];
+                    $this->docu['sUbicacionThumbnail'] = 'thumbnails/'.$this->docu['skTipoExpediente'].'/'.date('Y').'/'.$this->docu['skCodigo'].'/'.$this->docu['sNombre'];
                 }
             
             // ACTUALIZAMOS LA UBICACIÓN DEL DOCUMENTO
@@ -361,14 +361,14 @@ Class Docu_serv_Controller Extends Docu_Model {
         $this->docu['sNombre'] = $_get_documentos[0]['sNombre'];
         $this->docu['sUbicacionThumbnail'] = $_get_documentos[0]['sUbicacionThumbnail'];
 
-        $this->docu['sUbicacion'] = 'trash_expedientes/'.$this->docu['skTipoExpediente'].'/'.$this->docu['skCodigo'].'/'.$this->docu['sNombre'];
+        $this->docu['sUbicacion'] = 'trash_expedientes/'.$this->docu['skTipoExpediente'].'/'.date('Y', strtotime($_get_documentos[0]['dFechaCreacion'])).'/'.$this->docu['skCodigo'].'/'.$this->docu['sNombre'];
 
         $DOCUME = parent::getVariable('DOCUME');
-        $EXPEDIENTE = DIR_PROJECT.$DOCUME.'expedientes/'.$this->docu['skTipoExpediente'].'/'.$this->docu['skCodigo'].'/';
-        $EXPEDIENTE_TRASH = DIR_PROJECT.$DOCUME.'trash_expedientes/'.$this->docu['skTipoExpediente'].'/'.$this->docu['skCodigo'].'/';
+        $EXPEDIENTE = DIR_PROJECT.$DOCUME.'expedientes/'.$this->docu['skTipoExpediente'].'/'.date('Y', strtotime($_get_documentos[0]['dFechaCreacion'])).'/'.$this->docu['skCodigo'].'/';
+        $EXPEDIENTE_TRASH = DIR_PROJECT.$DOCUME.'trash_expedientes/'.$this->docu['skTipoExpediente'].'/'.date('Y', strtotime($_get_documentos[0]['dFechaCreacion'])).'/'.$this->docu['skCodigo'].'/';
 
-        $THUMBNAIL = DIR_PROJECT.$DOCUME.'thumbnails/'.$this->docu['skTipoExpediente'].'/'.$this->docu['skCodigo'].'/';
-        $THUMBNAIL_TRASH = DIR_PROJECT.$DOCUME.'trash_thumbnails/'.$this->docu['skTipoExpediente'].'/'.$this->docu['skCodigo'].'/';
+        $THUMBNAIL = DIR_PROJECT.$DOCUME.'thumbnails/'.$this->docu['skTipoExpediente'].'/'.date('Y', strtotime($_get_documentos[0]['dFechaCreacion'])).'/'.$this->docu['skCodigo'].'/';
+        $THUMBNAIL_TRASH = DIR_PROJECT.$DOCUME.'trash_thumbnails/'.$this->docu['skTipoExpediente'].'/'.date('Y', strtotime($_get_documentos[0]['dFechaCreacion'])).'/'.$this->docu['skCodigo'].'/';
 
         // EXPEDIENTE //
             if(!is_dir($EXPEDIENTE_TRASH)) {
@@ -391,7 +391,7 @@ Class Docu_serv_Controller Extends Docu_Model {
 
         // THUMBNAIL //
             if(!empty($this->docu['sUbicacionThumbnail'])){
-                $this->docu['sUbicacionThumbnail'] = 'trash_thumbnails/'.$this->docu['skTipoExpediente'].'/'.$this->docu['skCodigo'].'/'.$this->docu['sNombre'];
+                $this->docu['sUbicacionThumbnail'] = 'trash_thumbnails/'.$this->docu['skTipoExpediente'].'/'.date('Y', strtotime($_get_documentos[0]['dFechaCreacion'])).'/'.$this->docu['skCodigo'].'/'.$this->docu['sNombre'];
                 if(!is_dir($THUMBNAIL_TRASH)) {
                     if(!mkdir($THUMBNAIL_TRASH, 0777, TRUE)) {
                         $this->data['success'] = FALSE;

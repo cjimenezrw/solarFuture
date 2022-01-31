@@ -182,23 +182,38 @@ Class Empr_Model Extends DLOREAN_Model {
         $sql = "SELECT e.*,es.skEmpresaSocio,es.skEmpresaSocioPropietario,es.skEmpresaTipo  
             FROM cat_empresas e
             LEFT JOIN rel_empresasSocios es ON es.skEmpresa = e.skEmpresa AND es.skEmpresaSocioPropietario = '" . $_SESSION['usuario']['skEmpresaSocioPropietario'] . "'";
-        if (!is_null($skEmpresaTipo)) {
-            $sql .= " AND es.skEmpresaTipo = '" . $skEmpresaTipo . "'";
-        }
-        if (!is_null($skEmpresaTipo)) {
-            $sql .= " AND es.skEmpresaSocio != '" . $skEmpresaSocio . "'";
+        
+        if (isset($skEmpresaTipo) && !empty($skEmpresaTipo)) {
+            $sql .= " AND es.skEmpresaTipo = ".escape($skEmpresaTipo);
         }
 
-        $sql .= " WHERE  1 = 1 ";
-        if (isset($sRFC) && !empty($sRFC)) {
-            $sql .= " AND e.sRFC = ".escape($sRFC);
+        if (isset($skEmpresaSocio) && !empty($skEmpresaSocio)) {
+            $sql .= " AND es.skEmpresaSocio != ".escape($skEmpresaSocio);
         }
-        if (isset($sTelefono) && !empty($sTelefono)) {
-            $sql .= " AND e.sTelefono = ".escape($sTelefono);
+
+        $sql .= " WHERE  es.skEstatus = 'AC' ";
+
+        if(!empty($sRFC) || !empty($sTelefono) || !empty($sCorreo)) {
+            $sql .= " AND ( 1 = 2 ";
         }
-        if (isset($sCorreo) && !empty($sCorreo)) {
-            $sql .= " AND e.sCorreo = ".escape($sCorreo);
-        } 
+
+            if (isset($sRFC) && !empty($sRFC)) {
+                $sql .= " OR e.sRFC = ".escape($sRFC);
+            }
+
+            if (isset($sTelefono) && !empty($sTelefono)) {
+                $sql .= " OR e.sTelefono = ".escape($sTelefono);
+            }
+
+            if (isset($sCorreo) && !empty($sCorreo)) {
+                $sql .= " OR e.sCorreo = ".escape($sCorreo);
+            } 
+
+        if(!empty($sRFC) || !empty($sTelefono) || !empty($sCorreo)) {
+            $sql .= " ) ";
+        }
+
+        //exit($sql);
         $result = Conn::query($sql);
         if (!$result) {
             return FALSE;
@@ -428,6 +443,157 @@ Class Empr_Model Extends DLOREAN_Model {
         $record = Conn::fetch_assoc($result);
         utf8($record);
         return $record;
+    }
+
+    public function _get_tiposDomicilios(){
+        $sql = "SELECT 
+            td.skTipoDomicilio AS id,td.sNombre AS nombre,
+            td.skTipoDomicilio,td.skEstatus,td.sNombre,td.dFechaCreacion,td.skUsuarioCreacion
+        FROM cat_tiposDomicilios td WHERE td.skEstatus = 'AC' ";
+
+        if(isset($this->empr['sNombre']) && !empty(trim($this->empr['sNombre']))){
+            $sql .= " AND td.sNombre LIKE '%" . trim($this->empr['sNombre']) . "%' ";
+        }
+
+        $sql .= " ORDER BY td.sNombre ASC ";
+        
+        $result = Conn::query($sql);
+        if(is_array($result) && isset($result['success']) && $result['success'] != 1){
+            return $result;
+        }
+
+        $records = Conn::fetch_assoc_all($result);
+        utf8($records, FALSE);
+        return $records;
+    }
+
+    public function _get_paises(){
+        $sql = "SELECT 
+            pa.skPais AS id,pa.sNombre AS nombre,
+            pa.skPais,pa.skEstatus,pa.sClave,pa.sNombre
+        FROM cat_paises pa WHERE pa.skEstatus = 'AC' ";
+
+        if(isset($this->empr['sNombre']) && !empty(trim($this->empr['sNombre']))){
+            $sql .= " AND pa.sNombre LIKE '%" . trim($this->empr['sNombre']) . "%' ";
+        }
+
+        $sql .= " ORDER BY pa.sNombre ASC ";
+        
+        $result = Conn::query($sql);
+        if(is_array($result) && isset($result['success']) && $result['success'] != 1){
+            return $result;
+        }
+
+        $records = Conn::fetch_assoc_all($result);
+        utf8($records, FALSE);
+        return $records;
+    }
+
+    public function _get_estados(){
+        $sql = "SELECT 
+            es.skEstadoMX AS id,es.sNombre AS nombre,
+            es.skEstadoMX,es.skPais,es.sClave,es.sNombre,es.sAbrev,es.skEstatus
+        FROM cat_estadosMX es WHERE es.skEstatus = 'AC' ";
+
+        if(isset($this->empr['sNombre']) && !empty(trim($this->empr['sNombre']))){
+            $sql .= " AND es.sNombre LIKE '%" . trim($this->empr['sNombre']) . "%' ";
+        }
+
+        $sql .= " ORDER BY es.sNombre ASC ";
+        
+        $result = Conn::query($sql);
+        if(is_array($result) && isset($result['success']) && $result['success'] != 1){
+            return $result;
+        }
+
+        $records = Conn::fetch_assoc_all($result);
+        utf8($records, FALSE);
+        return $records;
+    }
+
+    public function stp_empresasSocios_domicilios(){
+        $sql = "CALL stp_empresasSocios_domicilios (
+            ".escape(isset($this->empr['skEmpresaSocioDomicilio']) ? $this->empr['skEmpresaSocioDomicilio'] : NULL) . ",
+            ".escape(isset($this->empr['skEmpresaSocio']) ? $this->empr['skEmpresaSocio'] : NULL) . ",
+            ".escape(isset($this->empr['skTipoDomicilio']) ? $this->empr['skTipoDomicilio'] : NULL) . ",
+            ".escape(isset($this->empr['skEstatus']) ? $this->empr['skEstatus'] : NULL) . ",
+            ".escape(isset($this->empr['skPais']) ? $this->empr['skPais'] : NULL) . ",
+            ".escape(isset($this->empr['skEstado']) ? $this->empr['skEstado'] : NULL) . ",
+            ".escape(isset($this->empr['skMunicipio']) ? $this->empr['skMunicipio'] : NULL) . ",
+            ".escape(isset($this->empr['sColonia']) ? $this->empr['sColonia'] : NULL) . ",
+            ".escape(isset($this->empr['sCalle']) ? $this->empr['sCalle'] : NULL) . ",
+            ".escape(isset($this->empr['sCodigoPostal']) ? $this->empr['sCodigoPostal'] : NULL) . ",
+            ".escape(isset($this->empr['sNumeroExterior']) ? $this->empr['sNumeroExterior'] : NULL) . ",
+            ".escape(isset($this->empr['sNumeroInterior']) ? $this->empr['sNumeroInterior'] : NULL). ",
+            ".escape(isset($this->empr['sNombre']) ? $this->empr['sNombre'] : NULL) . ",
+
+            ".escape(isset($this->empr['axn']) ? $this->empr['axn'] : NULL) . ",
+            ".escape($_SESSION['usuario']['skUsuario']). ",
+            ".escape($this->sysController)." )";
+
+        $result = Conn::query($sql);
+        if (!$result) {
+            return false;
+        }
+        $record = Conn::fetch_assoc($result);
+        return $record;
+    }
+
+    public function _get_empresasSocios_domicilios(){
+        $sql = "SELECT 
+             dom.skEmpresaSocioDomicilio
+            ,dom.skEmpresaSocio
+            ,dom.skTipoDomicilio
+            ,dom.skEstatus
+            ,dom.skPais
+            ,dom.skEstado
+            ,dom.skMunicipio
+            ,dom.sColonia
+            ,dom.sCalle
+            ,dom.sCodigoPostal
+            ,dom.sNumeroExterior
+            ,dom.sNumeroInterior
+            ,dom.sNombre
+            ,dom.skUsuarioCreacion
+            ,dom.dFechaCreacion
+            ,dom.skUsuarioModificacion
+            ,dom.dFechaModificacion
+            
+            ,td.sNombre AS tipoDomicilio
+            ,est.sNombre AS estatus
+            ,pa.sNombre AS pais
+            ,esta.sNombre AS estado
+            
+            FROM rel_empresasSocios_domicilios dom 
+            INNER JOIN rel_empresasSocios es ON es.skEmpresaSocio = dom.skEmpresaSocio
+            INNER JOIN cat_empresas e ON e.skEmpresa = es.skEmpresa
+            INNER JOIN cat_tiposDomicilios td ON td.skTipoDomicilio = dom.skTipoDomicilio
+            INNER JOIN core_estatus est ON est.skEstatus = dom.skEstatus
+            INNER JOIN cat_paises pa ON pa.skPais = dom.skPais
+            INNER JOIN cat_estadosMX esta ON esta.skEstadoMX = dom.skEstado
+            INNER JOIN cat_usuarios uCre ON uCre.skUsuario = dom.skUsuarioCreacion
+            LEFT JOIN cat_usuarios uMod ON uMod.skUsuario = dom.skUsuarioModificacion
+            WHERE 1=1 ";
+
+        if(isset($this->empr['skEmpresaSocio']) && !empty($this->empr['skEmpresaSocio'])){
+            if(is_array($this->empr['skEmpresaSocio'])){
+                $sql .= " AND dom.skEmpresaSocio IN (" . mssql_where_in($this->empr['skEmpresaSocio']) . ") ";
+            }else{
+                $sql .= " AND dom.skEmpresaSocio = " . escape($this->empr['skEmpresaSocio']);
+            }
+        }
+
+        $sql .= " ORDER BY dom.dFechaCreacion DESC ";
+                
+        $result = Conn::query($sql);
+        if(is_array($result) && isset($result['success']) && $result['success'] != 1){
+            return $result;
+        }
+
+        $records = Conn::fetch_assoc_all($result);
+        utf8($records, FALSE);
+        return $records;
+
     }
 
 }

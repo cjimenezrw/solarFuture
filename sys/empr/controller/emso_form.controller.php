@@ -53,7 +53,9 @@ Class Emso_form_Controller Extends Empr_Model
         $this->data['estatus'] = parent::consultar_core_estatus(['AC','IN'],true);
         $this->data['empresasTipos'] = parent::getEmpresasTipos();
          if (isset($_GET['p1'])) {
+            $this->empr['skEmpresaSocio'] = (!empty($_GET['p1']) ? $_GET['p1'] : NULL);
             $this->data['datos'] = parent::consultar_empresaSocio($_GET['p1']);
+            $this->data['empresasSocios_domicilios'] = parent::_get_empresasSocios_domicilios();
              return $this->data;
         }
         return $this->data;
@@ -82,16 +84,26 @@ Class Emso_form_Controller Extends Empr_Model
         $this->empresaSocio['sNombreCorto'] = isset($_POST['sNombreCorto']) ? $_POST['sNombreCorto'] : NULL;
         $this->empresaSocio['skEstatus'] = isset($_POST['skEstatus']) ? $_POST['skEstatus'] : NULL;
         $this->empresaSocio['skEmpresaTipo'] = isset($_POST['skEmpresaTipo']) ? $_POST['skEmpresaTipo'] : NULL;
+        $this->empresaSocio['domicilios'] = isset($_POST['domicilios']) ? $_POST['domicilios'] : NULL;
+
         $skCaracteristicaEmpresaSocio = isset($_POST['skCaracteristicaEmpresaSocio']) ? $_POST['skCaracteristicaEmpresaSocio'] : NULL;
- 
+        
         $skEmpresaSocio = parent::stpCUD_empresaSocio();
         if(!$skEmpresaSocio){
             $this->data['success'] = FALSE;
             $this->data['message'] = 'Hubo un error al guardar el registro, intenta de nuevo.';
+            return $this->data;
         }
 
         $this->empresaSocio['skEmpresaSocio'] = (!empty($skEmpresaSocio["skEmpresaSocio"]) ? $skEmpresaSocio["skEmpresaSocio"] : NULL);
         $this->data['skEmpresaSocio'] = isset($skEmpresaSocio["skEmpresaSocio"]) ? $skEmpresaSocio["skEmpresaSocio"] : NULL;
+
+        $guardar_domicilios = $this->guardar_domicilios();
+        if(!$guardar_domicilios['success']){
+            $this->data['success'] = FALSE;
+            $this->data['message'] = 'Hubo un error al guardar los domicilios, intenta de nuevo.';
+            return $this->data;
+        }
       
         if($skCaracteristicaEmpresaSocio){
             $this->empresaSocio['skEmpresaSocio'] = $this->empresaSocio['skEmpresaSocio'];
@@ -99,6 +111,7 @@ Class Emso_form_Controller Extends Empr_Model
             if(!parent::stpCD_caracteristica_empesaSocio(TRUE)){
                 $this->data['success'] = FALSE;
                 $this->data['message'] = 'Hubo un error al guardar el registro, inténta de nuevo.';
+                return $this->data;
             }
             // Insertamos las características NUEVAS //
             foreach($skCaracteristicaEmpresaSocio AS $k=>&$v){
@@ -110,10 +123,51 @@ Class Emso_form_Controller Extends Empr_Model
                 if(!parent::stpCD_caracteristica_empesaSocio()){
                     $this->data['success'] = FALSE;
                     $this->data['message'] = 'Hubo un error al guardar el registro, intentá de nuevo.';
-                    break;
+                    return $this->data;
                 }
             }
         }
+        return $this->data;
+    }
+
+    public function guardar_domicilios(){
+        $this->data['success'] = TRUE;
+        $this->empr['skEmpresaSocio'] = $this->empresaSocio['skEmpresaSocio'];
+
+        $this->empr['axn'] = 'delete_empresasSocios_domicilios';
+        $stp_empresasSocios_domicilios = parent::stp_empresasSocios_domicilios();
+        if(!$stp_empresasSocios_domicilios || isset($stp_empresasSocios_domicilios['success']) && $stp_empresasSocios_domicilios['success'] != 1){
+            $this->data['success'] = FALSE;
+            $this->data['message'] = 'HUBO UN ERROR AL GUARDAR LOS DOMICILIOS';
+            return $this->data;
+        }
+
+        $this->empr['axn'] = 'guardar_empresasSocios_domicilios';
+        for($i=0;$i<count($this->empresaSocio['domicilios']['skTipoDomicilio']);$i++){
+            $this->empr['skEmpresaSocioDomicilio'] = NULL;
+            $this->empr['skEmpresaSocio'] = $this->empresaSocio['skEmpresaSocio'];
+            $this->empr['skTipoDomicilio'] = $this->empresaSocio['domicilios']['skTipoDomicilio'][$i];
+            $this->empr['skEstatus'] = $this->empresaSocio['domicilios']['skEstatus'][$i];
+            $this->empr['skPais'] = $this->empresaSocio['domicilios']['skPais'][$i];
+            $this->empr['skEstado'] = $this->empresaSocio['domicilios']['skEstado'][$i];
+            $this->empr['skMunicipio'] = $this->empresaSocio['domicilios']['skMunicipio'][$i];
+            $this->empr['sColonia'] = $this->empresaSocio['domicilios']['sColonia'][$i];
+            $this->empr['sCalle'] = $this->empresaSocio['domicilios']['sCalle'][$i];
+            $this->empr['sCodigoPostal'] = $this->empresaSocio['domicilios']['sCodigoPostal'][$i];
+            $this->empr['sNumeroExterior'] = $this->empresaSocio['domicilios']['sNumeroExterior'][$i];
+            $this->empr['sNumeroInterior'] = $this->empresaSocio['domicilios']['sNumeroInterior'][$i];
+            $this->empr['sNombre'] = $this->empresaSocio['domicilios']['sNombre'][$i];
+
+            $stp_empresasSocios_domicilios = parent::stp_empresasSocios_domicilios();
+            if(!$stp_empresasSocios_domicilios || isset($stp_empresasSocios_domicilios['success']) && $stp_empresasSocios_domicilios['success'] != 1){
+                $this->data['success'] = FALSE;
+                $this->data['message'] = 'HUBO UN ERROR AL GUARDAR LOS DOMICILIOS';
+                return $this->data;
+            }
+        }
+
+        $this->data['success'] = TRUE;
+        $this->data['message'] = 'DATOS DE DOMICILIOS GUARDADOS';
         return $this->data;
     }
 
@@ -148,6 +202,21 @@ Class Emso_form_Controller Extends Empr_Model
             ));
         }
         return $data;
+    }
+
+    public function get_tiposDomicilios(){
+        $this->empr['sNombre'] = isset($_POST['val']) ? $_POST['val'] : NULL;
+        return parent::_get_tiposDomicilios();
+    }
+
+    public function get_paises(){
+        $this->empr['sNombre'] = isset($_POST['val']) ? $_POST['val'] : NULL;
+        return parent::_get_paises();
+    }
+
+    public function get_estados(){
+        $this->empr['sNombre'] = isset($_POST['val']) ? $_POST['val'] : NULL;
+        return parent::_get_estados();
     }
 
 }

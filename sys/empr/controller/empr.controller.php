@@ -117,6 +117,18 @@ Class Empr_Controller Extends Empr_Model {
                 echo json_encode($data);
                 return TRUE;
                 break;
+            case 'get_tiposDomicilios':
+                header('Content-Type: application/json');
+                echo json_encode($emso_form->get_tiposDomicilios(),true,512);
+            break;
+            case 'get_paises':
+                header('Content-Type: application/json');
+                echo json_encode($emso_form->get_paises(),true,512);
+            break;
+            case 'get_estados':
+                header('Content-Type: application/json');
+                echo json_encode($emso_form->get_estados(),true,512);
+            break;
             case 'guardar':
                 $data = $emso_form->guardar();
                 header('Content-Type: application/json');

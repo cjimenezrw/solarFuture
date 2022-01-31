@@ -68,7 +68,7 @@ Class Cita_orde_Controller Extends Cita_Model {
     public function guardar_datosFacturacion_cita(){
         $this->data['success'] = TRUE;
         $this->cita['axn'] = 'guardar_datosFacturacion_cita';
-        $this->cita['skEstatus'] = 'VE';
+        $this->cita['skEstatus'] = 'CF';
 
         $stp_cita_agendar = parent::stp_cita_agendar();
         if(!$stp_cita_agendar || isset($stp_cita_agendar['success']) && $stp_cita_agendar['success'] != 1){

@@ -518,6 +518,140 @@ Class Admi_Controller Extends Admi_Model {
     }
 
 
+
+    public function banc_inde(){
+        $this->load_class("banc_inde", "controller");
+        $banc_inde = new Banc_inde_Controller();
+        $axn = (isset($_POST['axn']) ? $_POST['axn'] : (isset($_GET['axn']) ? $_GET['axn'] : NULL));
+        switch ($axn) {
+            case 'consultar':
+                header('Content-Type: application/json');
+                echo json_encode($banc_inde->consultar());
+                break;
+            case 'eliminar':
+                header('Content-Type: application/json');
+                echo json_encode($banc_inde->ME_Eliminar($_POST,TRUE));
+                break;
+            case 'generarExcel':
+                $banc_inde->generarExcel();
+                break;
+            case 'pdf':
+                $banc_inde->generarPDF();
+                break;
+            default:
+                $this->load_view('banc_inde', $this->data);
+                break;
+        }
+        return true;
+    }
+
+    public function banc_form(){
+        $this->load_class("banc_form", "controller");
+        $banc_form = new Banc_form_Controller();
+        $axn = (isset($_POST['axn']) ? $_POST['axn'] : (isset($_GET['axn']) ? $_GET['axn'] : NULL));
+        switch ($axn) {
+            case 'guardar':
+                header('Content-Type: application/json');
+                echo json_encode($banc_form->guardar());
+                break;
+            case 'validarRFC':
+                header('Content-Type: application/json');
+                echo json_encode($banc_form->validarRFC());
+                break;
+            case 'validarCuentaContable':
+                header('Content-Type: application/json');
+                echo json_encode($banc_form->validarCuentaContable());
+                break;
+            default:
+                $this->data = $banc_form->get_data_banco();
+                $this->load_view('banc_form', $this->data);
+                break;
+        }
+        return true;
+    }
+
+    public function banc_deta(){
+        $this->load_class("banc_deta", "controller");
+        $banc_deta = new Banc_deta_Controller();
+        $axn = (isset($_POST['axn']) ? $_POST['axn'] : (isset($_GET['axn']) ? $_GET['axn'] : NULL));
+        switch ($axn) {
+            default:
+                $this->data = $banc_deta->get_data_banco();
+                $this->load_view('banc_deta', $this->data);
+                break;
+        }
+        return true;
+    }
+
+    public function bacu_inde(){
+        $this->load_class("bacu_inde", "controller");
+        $bacu_inde = new Bacu_inde_Controller();
+        $axn = (isset($_POST['axn']) ? $_POST['axn'] : (isset($_GET['axn']) ? $_GET['axn'] : NULL));
+        switch ($axn) {
+            case 'consultar':
+                header('Content-Type: application/json');
+                echo json_encode($bacu_inde->consultar());
+                break;
+            case 'eliminar':
+                header('Content-Type: application/json');
+                echo json_encode($bacu_inde->ME_Eliminar($_POST,TRUE));
+                break;
+            case 'generarExcel':
+                $bacu_inde->generarExcel();
+                break;
+            case 'pdf':
+                $bacu_inde->generarPDF();
+                break;
+            default:
+                $this->load_view('bacu_inde', $this->data);
+                break;
+        }
+        return true;
+    }
+
+    public function bacu_form(){
+        $this->load_class("bacu_form", "controller");
+        $bacu_form = new Bacu_form_Controller();
+        $axn = (isset($_POST['axn']) ? $_POST['axn'] : (isset($_GET['axn']) ? $_GET['axn'] : NULL));
+        switch ($axn) {
+            case 'getEmpresas':
+                header('Content-Type: application/json');
+                echo json_encode($bacu_form->getEmpresas());
+                break;
+            case 'guardar':
+                header('Content-Type: application/json');
+                echo json_encode($bacu_form->guardar());
+                break;
+            case 'validarCuentaBanco':
+                header('Content-Type: application/json');
+                echo json_encode($bacu_form->validarCuentaBanco());
+                break;
+            case 'validarCuentaContable':
+                header('Content-Type: application/json');
+                echo json_encode($bacu_form->validarCuentaContable());
+                break;
+            default:
+                $this->data = $bacu_form->get_data_bancoCuentas();
+                $this->load_view('bacu_form', $this->data);
+                break;
+        }
+        return true;
+    }
+
+    public function bacu_deta(){
+        $this->load_class("bacu_deta", "controller");
+        $bacu_deta = new Bacu_deta_Controller();
+        $axn = (isset($_POST['axn']) ? $_POST['axn'] : (isset($_GET['axn']) ? $_GET['axn'] : NULL));
+        switch ($axn) {
+            default:
+                $this->data = $bacu_deta->get_data_bancoCuentas();
+                $this->load_view('bacu_deta', $this->data);
+                break;
+        }
+        return true;
+    }
+
+
      
 
 }

@@ -515,10 +515,51 @@ Class Admi_Model Extends DLOREAN_Model {
         utf8($records);
         return $records;
     }
+    public function _get_bancosCuenta(){
+        $sql = "SELECT
+             bc.*
+            ,b.sNombre AS banco
+            ,b.sNombreCorto AS bacoCorto
+            ,d.sNombre AS divisa
+            ,est.sNombre AS estatus
+            ,est.sIcono AS estatusIcono
+            ,est.sColor AS estatusColor
+            ,e.sNombre AS empresaResponsable
+            ,e.sRFC AS empresaResponsableRFC
+            ,CONCAT(ucre.sNombre,' ',ucre.sApellidoPaterno,' ',ucre.sApellidoMaterno) AS usuarioCreacion
+            ,IF(b.skUsuarioModificacion IS NOT NULL,CONCAT(umod.sNombre,' ',umod.sApellidoPaterno,' ',umod.sApellidoMaterno),NULL) AS usuarioModificacion
+            FROM cat_bancosCuentas bc
+            INNER JOIN cat_bancos b ON b.skBanco = bc.skBanco
+            INNER JOIN cat_divisas d ON d.skDivisa = bc.skDivisa
+            INNER JOIN core_estatus est ON est.skEstatus = bc.skEstatus
+            INNER JOIN cat_usuarios ucre ON ucre.skUsuario = bc.skUsuarioCreacion
+            LEFT JOIN rel_empresasSocios es ON es.skEmpresaSocio = bc.skEmpresaSocioResponsable
+            LEFT JOIN cat_empresas e ON e.skEmpresa = es.skEmpresa
+            LEFT JOIN cat_usuarios umod ON umod.skUsuario = bc.skUsuarioModificacion
+            WHERE bc.skEmpresaSocioPropietario = ".escape($_SESSION['usuario']['skEmpresaSocioPropietario']);
+
+        if (isset($this->admi['skBancoCuenta']) && !empty(trim($this->admi['skBancoCuenta']))) {
+            $sql .= " AND bc.skBancoCuenta = ".escape($this->admi['skBancoCuenta']);
+        }
+
+        if (isset($this->admi['skBanco']) && !empty(trim($this->admi['skBanco']))) {
+            $sql .= " AND bc.skBanco = ".escape($this->admi['skBanco']);
+        }
+
+        $result = Conn::query($sql);
+        if (!$result) {
+            return FALSE;
+        }
+        $records = Conn::fetch_assoc_all($result);
+        utf8($records);
+        return $records;
+    }
 
     public function _get_bancosCuentas(){
-        $sql = "SELECT banCue.*, ban.sNombre AS banco FROM cat_bancosCuentas banCue
-            INNER JOIN cat_bancos ban ON ban.skBanco = banCue.skBanco WHERE 1=1 ";
+        $sql = "SELECT banCue.*, ban.sNombre AS banco 
+        FROM cat_bancosCuentas banCue
+        INNER JOIN cat_bancos ban ON ban.skBanco = banCue.skBanco 
+        WHERE 1=1 ";
 
         if (isset($this->admi['skEstatus']) && !empty($this->admi['skEstatus'])) {
             $sql .= " AND banCue.skEstatus = ".escape($this->admi['skEstatus']);
@@ -676,7 +717,7 @@ Class Admi_Model Extends DLOREAN_Model {
                 ,ofa.fSaldo,
                 ofa.fTotal, 
                 ofa.skUUIDSAT, 
-                ofa.dFechaFactura,   
+                ofa.dFechaTimbrado AS dFechaFactura,     
                 tfac.iParcialidad
                 ,est.sNombre AS estatusTransaccionFactura, 
                 est.sIcono AS sIconoTransaccionFactura, 
@@ -1092,6 +1133,7 @@ Class Admi_Model Extends DLOREAN_Model {
         occ.iFolio AS iFolioOriginal,
         RIGHT('0000000000'+ CAST(occ.iFolio AS VARCHAR(10)),10) AS iFolioFactura,
         occ.dFechaCreacion, 
+        occ.dFechaTimbrado, 
         occ.skEmpresaSocioEmisor,
         occ.skEmpresaSocioResponsable,
         occ.skEmpresaSocioFacturacion,
@@ -1550,6 +1592,8 @@ Class Admi_Model Extends DLOREAN_Model {
             " .escape(isset($this->admi['dFechaFactura']) ? $this->admi['dFechaFactura'] : NULL) . ",
             " .escape(isset($this->admi['dFechaTimbrado']) ? $this->admi['dFechaTimbrado'] : NULL) . ",
 
+            " .escape(isset($this->admi['iNoFacturable']) ? $this->admi['iNoFacturable'] : NULL) . ",
+
 
             
            
@@ -1641,12 +1685,194 @@ Class Admi_Model Extends DLOREAN_Model {
  
 
      
+    /**
+     * _validarBanco
+     *
+     * Funcion para validar si existe el RFC, Cuenta Contable del Banco
+     *
+     * @author lvaldez
+     * @return array
+     */
+    public function _validarBanco(){
+        $sql = "SELECT * FROM cat_bancos WHERE skEstatus = 'AC' ";
+
+        if (isset($this->admi['sRFC']) && !empty(trim($this->admi['sRFC']))) {
+            $sql .= " AND sRFC = ".escape($this->admi['sRFC']);
+        }
+
+        if (isset($this->admi['sCuentaContable']) && !empty(trim($this->admi['sCuentaContable']))) {
+            $sql .= " AND sCuentaContable = ".escape($this->admi['sCuentaContable']);
+        }
+
+        if (isset($this->admi['skBanco']) && !empty(trim($this->admi['skBanco']))) {
+            $sql .= " AND skBanco != ".escape($this->admi['skBanco']);
+        }
+
+        $result = Conn::query($sql);
+        if (!$result) {
+            return FALSE;
+         }
+        $record = Conn::fetch_assoc($result);
+        utf8($record);
+        return $record;
+    }
+
+    public function _getBancos(){
+        $sql = "SELECT
+            b.*
+            ,est.sNombre AS estatus
+            ,est.sIcono AS estatusIcono
+            ,est.sColor AS estatusColor
+            ,CONCAT(ucre.sNombre,' ',ucre.sApellidoPaterno,' ',ucre.sApellidoMaterno) AS usuarioCreacion
+            ,IF(b.skUsuarioModificacion IS NOT NULL,CONCAT(umod.sNombre,' ',umod.sApellidoPaterno,' ',umod.sApellidoMaterno),NULL) AS usuarioModificacion
+            FROM cat_bancos b
+            INNER JOIN core_estatus est ON est.skEstatus = b.skEstatus
+            INNER JOIN cat_usuarios ucre ON ucre.skUsuario = b.skUsuarioCreacion
+            LEFT JOIN cat_usuarios umod ON umod.skUsuario = b.skUsuarioModificacion
+            WHERE b.skEstatus='AC' ";
+
+        if (isset($this->admi['skBanco']) && !empty(trim($this->admi['skBanco']))) {
+            $sql .= " AND b.skBanco = ".escape($this->admi['skBanco']);
+        }
+
+        $result = Conn::query($sql);
+        if (!$result) {
+            return FALSE;
+        }
+        $records = Conn::fetch_assoc_all($result);
+        utf8($records);
+        return $records;
+    }
 
     
 
+    public function stpCUD_bancos() {
+
+ 
+        
+        $sql = "CALL stpCUD_bancos (
+            " .escape(isset($this->admi['skBanco']) ? $this->admi['skBanco'] : NULL) . ",
+            " .escape(isset($this->admi['skEstatus']) ? $this->admi['skEstatus'] : NULL) . ",
+            " .escape(isset($this->admi['sNombre']) ? $this->admi['sNombre'] : NULL) . ",
+            " .escape(isset($this->admi['sNombreCorto']) ? $this->admi['sNombreCorto'] : NULL) . ",
+            " .escape(isset($this->admi['sRFC']) ? $this->admi['sRFC'] : NULL) . ",
+            " .escape(isset($this->admi['sObservaciones']) ? $this->admi['sObservaciones'] : NULL) . ",
+            " .escape($_SESSION['usuario']['skEmpresaSocioPropietario']).",
+ 
+
+            
+           
+            " .escape(isset($this->admi['axn']) ? $this->admi['axn'] : NULL) . ",
+            '" . $_SESSION['usuario']['skUsuario'] . "',
+            '" . $this->sysController . "' )";
+          
+       
+        $result = Conn::query($sql);
+        //$codigo = Conn::fetch_assoc($result);
+        if (!$result) {
+            return false;
+        }
+        $record = Conn::fetch_assoc($result);
+        utf8($record);
+        return $record; 
+    }
 
 
-   
+    public function stpCUD_bancoCuentas() {
 
+  
+        $sql = "CALL stpCUD_bancoCuentas (
+            " .escape(isset($this->admi['skBancoCuenta']) ? $this->admi['skBancoCuenta'] : NULL) . ",
+            " .escape(isset($this->admi['skBanco']) ? $this->admi['skBanco'] : NULL) . ",
+            " .escape(isset($this->admi['skDivisa']) ? $this->admi['skDivisa'] : NULL) . ",
+            " .escape(isset($this->admi['skEmpresaSocioResponsable']) ? $this->admi['skEmpresaSocioResponsable'] : NULL) . ",
+            " .escape(isset($this->admi['sTitular']) ? $this->admi['sTitular'] : NULL) . ",
+            " .escape(isset($this->admi['sNumeroCuenta']) ? $this->admi['sNumeroCuenta'] : NULL) . ",
+            " .escape(isset($this->admi['sClabeInterbancaria']) ? $this->admi['sClabeInterbancaria'] : NULL) . ",
+            " .escape(isset($this->admi['skEstatus']) ? $this->admi['skEstatus'] : NULL) . ",
+            " .escape(isset($this->admi['sCuentaContable']) ? $this->admi['sCuentaContable'] : NULL) . ",
+            " .escape(isset($this->admi['sCuentaContableComplementaria']) ? $this->admi['sCuentaContableComplementaria'] : NULL) . ",
+            " .escape(isset($this->admi['sObservaciones']) ? $this->admi['sObservaciones'] : NULL) . ",
+            " .escape($_SESSION['usuario']['skEmpresaSocioPropietario']).",
+ 
+
+            
+           
+            " .escape(isset($this->admi['axn']) ? $this->admi['axn'] : NULL) . ",
+            '" . $_SESSION['usuario']['skUsuario'] . "',
+            '" . $this->sysController . "' )";
+          
+       
+        $result = Conn::query($sql);
+        //$codigo = Conn::fetch_assoc($result);
+        if (!$result) {
+            return false;
+        }
+        $record = Conn::fetch_assoc($result);
+        utf8($record);
+        return $record; 
+    }
+
+   /**
+       * consultar_divisas
+       *
+       * Obtiene los tipos de procesos activos para servicios
+       *
+       * @author lvaldez
+       * @return object | false Retorna el objeto de resultados de la consulta o false si algo falla.
+       */
+      public function consultar_divisas() {
+        $sql = "SELECT skDivisa AS id, skDivisa AS nombre  FROM cat_divisas
+        WHERE skEstatus = 'AC' ";
+
+        if(isset($_POST['val']) && !empty(trim($_POST['val']))){
+            $sql.=" AND skDivisa  COLLATE Latin1_General_CI_AI LIKE '%".escape($_POST['val'], FALSE)."%' ";
+        }
+
+        $result = Conn::query($sql);
+        if (!$result) {
+            return FALSE;
+        }
+        $records = Conn::fetch_assoc_all($result);
+        utf8($records);
+        return $records;
+    }
+
+    /**
+     * _validarDatosCuentaBancaria
+     *
+     * Función para validar los datos de la cuenta bancaria
+     *
+     * @author lvaldez
+     * @return array
+     */
+    public function _validarDatosCuentaBancaria(){
+        $sql = "SELECT * FROM cat_bancosCuentas WHERE skEstatus = 'AC' ";
+
+        if (isset($this->admi['skBancoCuenta']) && !empty(trim($this->admi['skBancoCuenta']))) {
+            $sql .= " AND skBancoCuenta != ".escape($this->admi['skBancoCuenta']);
+        }
+
+        if (isset($this->admi['skBanco']) && !empty(trim($this->admi['skBanco']))) {
+            $sql .= " AND skBanco = ".escape($this->admi['skBanco']);
+        }
+
+        if (isset($this->admi['sNumeroCuenta']) && !empty(trim($this->admi['sNumeroCuenta']))) {
+            $sql .= " AND sNumeroCuenta = ".escape($this->admi['sNumeroCuenta']);
+        }
+
+        if (isset($this->admi['sCuentaContable']) && !empty(trim($this->admi['sCuentaContable']))) {
+            $sql .= " AND sCuentaContable = ".escape($this->admi['sCuentaContable']);
+        }
+
+        $result = Conn::query($sql);
+        if (!$result) {
+            return FALSE;
+         }
+        $record = Conn::fetch_assoc($result);
+        utf8($record);
+        return $record;
+    }
+    
 
 }

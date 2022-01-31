@@ -736,14 +736,15 @@ admi.cofa_inde.dataTableConf = {
         }
     },
     'axn': 'consulta',
-    'order': [[3, "desc"]],
+    'order': [[5, "desc"]],
     'columns': [
         {'title': 'E', 'data': 'estatus', 'dataType': 'string', 'tooltip': 'Estatus', 'filterT': 'Estatus'},
         {'title': 'E.P', 'data': 'estatusPago', 'dataType': 'string', 'tooltip': 'Estatus Pago', 'filterT': 'Estatus Pago'},
-         {'title': 'Folio ', 'filterT': 'Folio ','tooltip': 'Folio ','data': 'iFolio', 'dataType': 'string'},
-         {'title': 'F. Creacion', 'data': 'dFechaCreacion', 'dataType': 'date'},
-        {'title': 'Usuario Creacion', 'data': 'usuarioCreacion', 'dataType': 'string'},
-
+        {'title': 'NF', 'filterT': 'No Facturable','tooltip': 'No Facturable','data': 'iNoFacturable', 'dataType': 'string'},
+        {'title': 'D.F', 'filterT': 'Documento Factura','tooltip': 'Documento Factura','data': 'skUUIDSAT', 'dataType': 'string'},
+        {'title': 'Folio ', 'filterT': 'Folio ','tooltip': 'Folio ','data': 'iFolio', 'dataType': 'string'},
+         {'title': 'F. Creación', 'data': 'dFechaCreacion', 'dataType': 'date'},
+        {'title': 'Usuario Creación', 'data': 'usuarioCreacion', 'dataType': 'string'},
         {'title': 'SubTotal', 'data': 'fSubtotal', 'dataType': 'int'},
         {'title': 'Total', 'data': 'fTotal', 'dataType': 'int'},
         {'title': 'Saldo', 'data': 'fSaldo', 'dataType': 'int'},
@@ -757,8 +758,8 @@ admi.cofa_inde.dataTableConf = {
 
     "drawCallback": function () {
         core.dataTable.contextMenuCore(true);
-        core.dataTable.changeColumnColor(2, 'success');
-        core.dataTable.fastFilters(2, [], true);
+        core.dataTable.changeColumnColor(4, 'success');
+        core.dataTable.fastFilters(4, [], true);
         $('[data-toggle="tooltip"]').tooltip();
     },
     "columnDefs": [
@@ -783,11 +784,35 @@ admi.cofa_inde.dataTableConf = {
         },
         {
             "targets": [2],
+            "width": '1px',
+            "createdCell": function (td, cellData, rowData, row, col) {
+                if(rowData.iNoFacturable == 'SI'){
+                         $(td).html('<i class="fa fa-ban"></i>');
+                         $(td).addClass('text-center text-danger');
+                         $(td).find('i').attr({"title": 'El servicio no se Facturara' ,"data-toggle": "tooltip","data-placement": "rigth"});
+                }
+  
+            }
+        },
+        {
+            "targets": [3],
+            "width": '1px',
+            "createdCell": function (td, cellData, rowData, row, col) {
+                if(rowData.skUUIDSAT == 'SI'){
+                         $(td).html('<i class="fa fa-file-pdf-o"></i>');
+                         $(td).addClass('text-center text-success');
+                         $(td).find('i').attr({"title": 'Factura Cargada' ,"data-toggle": "tooltip","data-placement": "rigth"});
+                }
+  
+            }
+        },
+        {
+            "targets": [4],
             "width": '30px'
             
         },
         {
-            "targets": [3],
+            "targets": [5],
             "width": '30px'
             
         }
@@ -941,4 +966,220 @@ admi.cofa_inde.pagoEfectivo = function pagoEfectivo(obj) {
         });
     });
    
+};
+
+admi.banc_inde = {};
+admi.banc_form = {};
+admi.bacu_inde = {};
+admi.bacu_form = {};
+
+
+
+admi.banc_inde.dataTableConf = {
+    'serverSide': true,
+    'paging': true,
+    'ajax': {
+        'url': window.location.href,
+        'type': 'POST',
+        'data': function (data) {
+            data.axn = 'consultar';
+            data.filters = core.dataFilterSend;
+            data.generarExcel = core.generarExcel;
+        }
+    },
+    'axn': 'consultar',
+    'rowId': 'skBanco',
+    'order': [[4, "desc"]],
+    'columns': [
+        {'title': 'E', 'filterT': 'Estatus', 'tooltip': 'Estatus', 'data': 'estatus', 'dataType': 'string'},
+        {'title': 'RFC', 'data': 'sRFC', 'dataType': 'string'},
+        {'title': 'Banco', 'data': 'sNombre', 'dataType': 'string'},
+        {'title': 'Alias', 'data': 'sNombreCorto', 'dataType': 'string'},
+        {'title': 'U. Creación', 'data': 'usuarioCreacion', 'dataType': 'string', 'tooltip': 'Usuario de Creación', 'filterT': 'Usuario de Creación'},
+        {'title': 'F. Creación', 'data': 'dFechaCreacion', 'dataType': 'date', 'tooltip': 'Fecha de Creación', 'filterT': 'Fecha de Creación'}
+    ],
+    "drawCallback": function () {
+        core.dataTable.contextMenuCore(true);
+        core.dataTable.changeColumnColor(2, 'success');
+        $('[data-toggle="tooltip"]').tooltip();
+        core.dataTable.fastFilters(2, [], true);
+    },
+    "columnDefs": [
+        {
+            "targets": [0],
+            "width": '1px',
+            "createdCell": function (td, cellData, rowData, row, col) {
+                ((rowData.estatusIcono) ? $(td).html('<i class="'+rowData.estatusIcono+'"></i>') : $(td).html(cellData));
+                $(td).addClass('text-center '+((rowData.estatusColor) ? rowData.estatusColor : 'text-primary'));
+                ((rowData.estatusIcono) ? $(td).find('i').attr({"title": cellData,"data-toggle": "tooltip","data-placement": "rigth"}) : '');
+            }
+        },
+        {
+            "targets": [1],
+            "width": '1px'
+        }
+    ]
+};
+
+admi.banc_form.validations = {
+    sNombre: {
+        validators: {
+            notEmpty: {
+                message: 'ESTE CAMPO ES OBLIGATORIO'
+            }
+        }
+    },
+    sNombreCorto: {
+        validators: {
+            notEmpty: {
+                message: 'ESTE CAMPO ES OBLIGATORIO'
+            }
+        }
+    },
+    sRFC: {
+        validators: {
+            notEmpty: {
+                message: 'ESTE CAMPO ES OBLIGATORIO'
+            },
+            remote: {
+                type: 'POST',
+                url: window.location.href,
+                data: {
+                    axn: 'validarRFC'
+                },
+                message: 'El RFC YA EXISTE'
+            }
+        }
+    }
+};
+
+
+
+admi.bacu_inde.dataTableConf = {
+    'serverSide': true,
+    'paging': true,
+    'ajax': {
+        'url': window.location.href,
+        'type': 'POST',
+        'data': function (data) {
+            data.axn = 'consultar';
+            data.filters = core.dataFilterSend;
+            data.generarExcel = core.generarExcel;
+        }
+    },
+    'axn': 'consultar',
+    'rowId': 'skBancoCuenta',
+    'order': [[9, "desc"]],
+    'columns': [
+        {'title': 'E', 'filterT': 'Estatus', 'tooltip': 'Estatus', 'data': 'estatus', 'dataType': 'string'},
+        {'title': 'Divisa', 'data': 'skDivisa', 'dataType': 'string'},
+        {'title': 'Cuenta', 'data': 'sNumeroCuenta', 'dataType': 'string'},
+        {'title': 'CLABE', 'data': 'sClabeInterbancaria', 'dataType': 'string'},
+        {'title': 'Titular', 'data': 'sTitular', 'dataType': 'string'},
+        {'title': 'Empresa Titular', 'data': 'empresaTitular', 'dataType': 'string'},
+        {'title': 'Banco', 'data': 'banco', 'dataType': 'string'},
+        {'title': 'Alias', 'data': 'bancoCorto', 'dataType': 'string'},
+        {'title': 'U. Creación', 'data': 'usuarioCreacion', 'dataType': 'string', 'tooltip': 'Usuario de Creación', 'filterT': 'Usuario de Creación'},
+        {'title': 'F. Creación', 'data': 'dFechaCreacion', 'dataType': 'date', 'tooltip': 'Fecha de Creación', 'filterT': 'Fecha de Creación'}
+    ],
+    "drawCallback": function () {
+        core.dataTable.contextMenuCore(true);
+        core.dataTable.changeColumnColor(2, 'success');
+        $('[data-toggle="tooltip"]').tooltip();
+        core.dataTable.fastFilters(5, [], true);
+    },
+    "columnDefs": [
+        {
+            "targets": [0],
+            "width": '1px',
+            "createdCell": function (td, cellData, rowData, row, col) {
+                ((rowData.estatusIcono) ? $(td).html('<i class="'+rowData.estatusIcono+'"></i>') : $(td).html(cellData));
+                $(td).addClass('text-center '+((rowData.estatusColor) ? rowData.estatusColor : 'text-primary'));
+                ((rowData.estatusIcono) ? $(td).find('i').attr({"title": cellData,"data-toggle": "tooltip","data-placement": "rigth"}) : '');
+            }
+        },
+        {
+            "targets": [1],
+            "width": '1px'
+        }
+    ]
+};
+
+admi.bacu_form.validations = {
+    skBanco: {
+        validators: {
+            notEmpty: {
+                message: 'ESTE CAMPO ES OBLIGATORIO'
+            }
+        }
+    },
+    skDivisa: {
+        validators: {
+            notEmpty: {
+                message: 'ESTE CAMPO ES OBLIGATORIO'
+            }
+        }
+    },
+    sTitular: {
+        validators: {
+            notEmpty: {
+                message: 'ESTE CAMPO ES OBLIGATORIO'
+            }
+        }
+    },
+    sNumeroCuenta: {
+        validators: {
+            notEmpty: {
+                message: 'ESTE CAMPO ES OBLIGATORIO'
+            },
+            remote: {
+                type: 'POST',
+                url: window.location.href,
+                data: {
+                    axn: 'validarCuentaBanco',
+                    skBanco: function() {
+                        return $("#skBanco").val();
+                    }
+                },
+                message: 'ERROR EN LA CUENTA BANCARIA.'
+            }
+
+        }
+    },
+    sClabeInterbancaria: {
+        validators: {
+            notEmpty: {
+                message: 'ESTE CAMPO ES OBLIGATORIO'
+            }
+        }
+    },
+    sCuentaContable: {
+        validators: {
+            notEmpty: {
+                message: 'ESTE CAMPO ES OBLIGATORIO'
+            },
+            numeric: {
+                message: 'SOLO SE PERMITEN NÚMEROS'
+            },
+            remote: {
+                type: 'POST',
+                url: window.location.href,
+                data: {
+                    axn: 'validarCuentaContable',
+                    skBanco: function() {
+                        return $("#skBanco").val();
+                    }
+                },
+                message: 'ERROR EN LA CUENTA CONTABLE.'
+            }
+
+        }
+    },
+    skEmpresaSocioResponsable:{
+        validators: {
+            notEmpty: {
+                message: 'ESTE CAMPO ES OBLIGATORIO'
+            }
+        }
+    }
 };

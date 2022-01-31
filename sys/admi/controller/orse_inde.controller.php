@@ -91,7 +91,7 @@ Class Orse_inde_Controller Extends Admi_Model {
                 
             //REGLA DEL MENÚ EMERGENTE
                 $regla = [ 
-
+                    "menuEmergente1" => $this->ME_editar($row),
                     "menuEmergente2" => $this->ME_cancelar($row),
                     "menuEmergente3" => $this->ME_autorizar($row),
                     "menuEmergente4" => $this->ME_enviar($row)
@@ -121,6 +121,19 @@ Class Orse_inde_Controller Extends Admi_Model {
            $this->consulta()
         );
     }
+      /* ME_editar
+    *
+    * @author Luis Alberto Valdez Alvarez <lvaldez >
+    * @param type $row
+    * @return int
+    */
+    public function ME_editar(&$row){
+        if((in_array($row['skEstatus'], ['PE'])) ){
+            return self::HABILITADO;
+        }
+        return self::DESHABILITADO;
+    }
+
     /* ME_autorizar
     *
     * @author Luis Alberto Valdez Alvarez <lvaldez >
@@ -153,7 +166,7 @@ Class Orse_inde_Controller Extends Admi_Model {
     * @return int
     */
     public function ME_cancelar(&$row){
-        if((in_array($row['skEstatus'], ['PE'])) ){
+        if((in_array($row['skEstatus'], ['PE','AU'])) ){
             return self::HABILITADO;
         }
         return self::DESHABILITADO;
@@ -184,7 +197,11 @@ Class Orse_inde_Controller Extends Admi_Model {
         $this->admi['skOrdenServicio'] = (isset($_POST['skOrdenServicio']) && !empty($_POST['skOrdenServicio'])) ? $_POST['skOrdenServicio'] : NULL;
 
         $consultarOrdenServicio = parent::_getOrdenServicio();
-
+        if($consultarOrdenServicio['skEstatus'] == 'CA'){
+            $this->data['success'] = false;
+            $this->data['message'] = 'LA ORDEN YA SE HA CANCELADO ANTERIORMENTE.';
+            return $this->data;
+        }
         if($consultarOrdenServicio['skEstatus'] == 'EN'){
             $this->data['success'] = false;
             $this->data['message'] = 'LA ORDEN YA SE HA ENVIADO ANTERIORMENTE.';
@@ -210,8 +227,9 @@ Class Orse_inde_Controller Extends Admi_Model {
                 'skMetodoPago'=>isset($consultarOrdenServicio['skMetodoPago']) ? $consultarOrdenServicio['skMetodoPago'] : NULL,
                 'skUsoCFDI'=>isset($consultarOrdenServicio['skUsoCFDI']) ? $consultarOrdenServicio['skUsoCFDI'] : NULL,
  
-                    'sRFCEmisor'=>isset($consultarOrdenServicio['sRFCEmisor']) ? $consultarOrdenServicio['sRFCEmisor'] : NULL,
-                    'sRFCReceptor'=>isset($consultarOrdenServicio['sRFCReceptor']) ? $consultarOrdenServicio['sRFCReceptor'] : NULL,
+                'iNoFacturable'=>isset($consultarOrdenServicio['iNoFacturable']) ? $consultarOrdenServicio['iNoFacturable'] : NULL,
+                'sRFCEmisor'=>isset($consultarOrdenServicio['sRFCEmisor']) ? $consultarOrdenServicio['sRFCEmisor'] : NULL,
+                'sRFCReceptor'=>isset($consultarOrdenServicio['sRFCReceptor']) ? $consultarOrdenServicio['sRFCReceptor'] : NULL,
 
                 'sReferencia'=>isset($consultarOrdenServicio['sReferencia']) ? $consultarOrdenServicio['sReferencia'] : NULL,
                 'sDescripcion'=>isset($consultarOrdenServicio['sDescripcion']) ? $consultarOrdenServicio['sDescripcion'] : NULL,
@@ -219,6 +237,7 @@ Class Orse_inde_Controller Extends Admi_Model {
                 'fImpuestosRetenidos'=>isset($consultarOrdenServicio['fImpuestosRetenidos']) ? $consultarOrdenServicio['fImpuestosRetenidos'] : NULL,
                 'fImpuestosTrasladados'=>isset($consultarOrdenServicio['fImpuestosTrasladados']) ? $consultarOrdenServicio['fImpuestosTrasladados'] : NULL,
                 'fDescuento'=>isset($consultarOrdenServicio['fDescuento']) ? $consultarOrdenServicio['fDescuento'] : NULL,
+                'fSubtotal'=>isset($consultarOrdenServicio['fImporteSubtotal']) ? $consultarOrdenServicio['fImporteSubtotal'] : NULL,
                 'fSubtotal'=>isset($consultarOrdenServicio['fImporteSubtotal']) ? $consultarOrdenServicio['fImporteSubtotal'] : NULL,
  
                 'fTotal'=>(!empty($consultarOrdenServicio['iNoFacturable']) && !empty($consultarOrdenServicio['fImporteTotalSinIva']) ? $consultarOrdenServicio['fImporteTotalSinIva'] :(isset($consultarOrdenServicio['fImporteTotal']) ? $consultarOrdenServicio['fImporteTotal'] : NULL) ),

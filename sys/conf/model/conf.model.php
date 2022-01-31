@@ -672,7 +672,7 @@ Class Conf_Model Extends DLOREAN_Model {
         ) AS N1 WHERE 1 = 1 ";
 
         if (isset($this->rehu['val']) && !empty($this->rehu['val']) && trim($this->rehu['val']) != '') {
-            $sql .= " AND N1.nombre COLLATE Latin1_General_CI_AI LIKE '%" . escape($this->rehu['val'], FALSE) . "%' ";
+            $sql .= " AND N1.nombre LIKE '%" . escape($this->rehu['val'], FALSE) . "%' ";
         }
         
         $sql .= " ORDER BY N1.nombre ASC";

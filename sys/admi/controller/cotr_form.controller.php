@@ -92,8 +92,7 @@ Class Cotr_form_Controller Extends Admi_Model {
         $this->data['success'] = TRUE;
         $this->admi['axn'] = 'guardar_transaccion';
         $this->admi['skEstatus'] = (!empty($this->admi['skEstatus']) ? $this->admi['skEstatus'] : 'VA');
-        
-        $stpCUD_transacciones = parent::stpCUD_transacciones();
+         $stpCUD_transacciones = parent::stpCUD_transacciones();
 
         if(!$stpCUD_transacciones || isset($stpCUD_transacciones['success']) && $stpCUD_transacciones['success'] != 1){
             $this->data['success'] = FALSE;

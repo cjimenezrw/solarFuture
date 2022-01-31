@@ -107,7 +107,10 @@ Class Cotr_inde_Controller Extends Admi_Model {
 
                 
             //REGLA DEL MENÚ EMERGENTE
-                $regla = [ ];
+                $regla = [ 
+                    "menuEmergente1" => $this->ME_editar($row),
+                    "menuEmergente2" => $this->ME_aplicarPago($row)
+                ];
 
                 $row['dFechaTransaccion'] = ($row['dFechaTransaccion']) ? date('d/m/Y', strtotime($row['dFechaTransaccion'])) : ''; 
                 $row['dFechaCreacion'] = ($row['dFechaCreacion']) ? date('d/m/Y  H:i:s', strtotime($row['dFechaCreacion'])) : ''; 
@@ -116,6 +119,31 @@ Class Cotr_inde_Controller Extends Admi_Model {
                 array_push($data['data'],$row);
         }
         return $data;
+    }
+
+     /* ME_editar
+    *
+    * @author Luis Alberto Valdez Alvarez <lvaldez >
+    * @param type $row
+    * @return int
+    */
+    public function ME_editar(&$row){
+        if((in_array($row['skEstatus'], ['AU'])) ){
+            return self::HABILITADO;
+        }
+        return self::DESHABILITADO;
+    }
+     /* ME_editar
+    *
+    * @author Luis Alberto Valdez Alvarez <lvaldez >
+    * @param type $row
+    * @return int
+    */
+    public function ME_aplicarPago(&$row){
+        if((in_array($row['skEstatus'], ['AU','PO'])) ){
+            return self::HABILITADO;
+        }
+        return self::DESHABILITADO;
     }
 
     //Función para generar excel

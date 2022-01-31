@@ -40,7 +40,9 @@ Class Cofa_inde_Controller Extends Admi_Model {
         ofa.fImpuestosTrasladados,
         ofa.fSubtotal,
         ofa.fTotal,
-        ofa.fSaldo,
+        ofa.fSaldo, 
+        IF(ofa.iNoFacturable IS NOT NULL, 'SI',NULL) AS iNoFacturable,
+        IF(ofa.skUUIDSAT IS NOT NULL, 'SI',NULL) AS skUUIDSAT,
         cef.sNombre AS facturacion,
         cerp.sNombre AS responsable,
         cu.sNombre AS usuarioCreacion,
@@ -82,7 +84,11 @@ Class Cofa_inde_Controller Extends Admi_Model {
 
                 
             //REGLA DEL MENÚ EMERGENTE
-                $regla = [ ];
+                $regla = [ 
+                    "menuEmergente1" => $this->ME_noFacturable($row),
+                    "menuEmergente2" => $this->ME_subirFactura($row),
+                    "menuEmergente3" => $this->ME_pagarEfectivo($row)
+                ];
 
                  $row['dFechaCreacion'] = ($row['dFechaCreacion']) ? date('d/m/Y  H:i:s', strtotime($row['dFechaCreacion'])) : ''; 
                  $row['fSubtotal'] = (!empty($row['fSubtotal']) ? '$'.number_format($row['fSubtotal'],2) : '$ 0.00'); 
@@ -94,6 +100,46 @@ Class Cofa_inde_Controller Extends Admi_Model {
         }
         return $data;
     }
+
+     /* ME_noFacturable
+    *
+    * @author Luis Alberto Valdez Alvarez <lvaldez >
+    * @param type $row
+    * @return int
+    */
+    public function ME_noFacturable(&$row){
+        if((in_array($row['skEstatus'], ['PE'])) ){
+            return self::HABILITADO;
+        }
+        return self::DESHABILITADO;
+    }
+
+     /* ME_subirFactura
+    *
+    * @author Luis Alberto Valdez Alvarez <lvaldez >
+    * @param type $row
+    * @return int
+    */
+    public function ME_subirFactura(&$row){
+        if((in_array($row['skEstatus'], ['PE'])) ){
+            return self::HABILITADO;
+        }
+        return self::DESHABILITADO;
+    }
+
+     /* ME_pagarEfectivo
+    *
+    * @author Luis Alberto Valdez Alvarez <lvaldez >
+    * @param type $row
+    * @return int
+    */
+    public function ME_pagarEfectivo(&$row){
+        if((in_array($row['skEstatusPago'], [NULL])) ){
+            return self::HABILITADO;
+        }
+        return self::DESHABILITADO;
+    }
+
 
     //Función para generar excel
     public function generarExcel(){
@@ -131,12 +177,46 @@ Class Cofa_inde_Controller Extends Admi_Model {
 
         $this->admi['axn'] = 'pagoEfectivo';
         $this->admi['skFactura'] = (isset($_POST['skFactura']) && !empty($_POST['skFactura'])) ? $_POST['skFactura'] : NULL;
+        $consultar_factura = parent::consultar_factura();
+
         $stpCUD_facturas = parent::stpCUD_facturas();
         if(!$stpCUD_facturas || isset($stpCUD_facturas['success']) && $stpCUD_facturas['success'] != 1){
             $this->data['success'] = FALSE;
             $this->data['message'] = 'HUBO UN ERROR AL GUARDAR LA FACTURA COMO PAGADA';
             return $this->data;
         }
+
+        $inputData = [
+             'skTipoTransaccion'=>'TRAN',
+            'skEmpresaSocioResponsable'=>isset($consultar_factura['skEmpresaSocioResponsable']) ? $consultar_factura['skEmpresaSocioResponsable'] : NULL,
+            'skDivisa'=>isset($consultar_factura['skDivisa']) ? $consultar_factura['skDivisa'] : NULL,
+            'fTipoCambio'=>isset($consultar_factura['fTipoCambio']) ? $consultar_factura['fTipoCambio'] : NULL,
+            /**/'skBancoEmisor'=>isset($consultar_factura['skBancoEmisor']) ? $consultar_factura['skBancoEmisor'] : NULL,
+            'sBancoCuentaEmisor'=>NULL,
+            'dFechaTransaccion'=>isset($consultar_factura['dFechaCreacion']) ? $consultar_factura['dFechaCreacion'] : NULL,
+            'sReferencia'=>' Pago en Efectivo de la pre-Factura con Folio: '.$consultar_factura['iFolioFactura'],
+            'fImporte'=>isset($consultar_factura['fImporteTotal']) ? $consultar_factura['fImporteTotal'] : NULL,
+            'skFormaPago'=>'196DBC4B-A55B-44E3-81CE-BFBBE5D8B430',
+             /**/'skBancoReceptor'=>'497D170C-4040-4A32-91A3-0E1C6A51E824',
+             /**/'skBancoCuentaReceptor'=>'18A48FE1-17FB-43BB-9D21-BC4815C02990',
+            'sObservaciones'=>'Factura Pagada en Efectivo',
+            'skEstatus'=>'VA',
+            'skFactura'=>isset($consultar_factura['skFactura']) ? $consultar_factura['skFactura'] : NULL
+
+      
+
+        ];
+
+        $guardarTransaccion = $this->sysAPI('admi', 'cotr_form', 'guardar', [
+            'POST' => $inputData
+         ]);
+
+         if(!$guardarTransaccion || isset($guardarTransaccion['success']) && $guardarTransaccion['success'] != 1){
+            $this->data['success'] = FALSE;
+            $this->data['message'] = 'HUBO UN ERROR AL GUARDAR LOS GENERALES DE FACTURAS.';
+            return $this->data;
+        }
+
 
         return $this->data;
     } 

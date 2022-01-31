@@ -128,11 +128,12 @@ Class Cofa_suba_Controller Extends Admi_Model {
             //$this->admi['sRFCCliente'] = (!empty($this->admi['sRFCCliente']) ? $this->admi['sRFCCliente'] : NULL);
 
             $carpeta="facturas";
+            $anioTimbrado =date('Y', strtotime($this->admi['dFechaTimbrado']));
+            $mesTimbrado =date('m', strtotime($this->admi['dFechaTimbrado']));
             
-            $anio = date('Y');
             $VARCFD = parent::getVariable('VARCFD');
             $VARCFD =  DIR_PROJECT.$VARCFD;
-            $VARCFD = $VARCFD.$carpeta."/".$anio."/";
+            $VARCFD = $VARCFD.$carpeta."/".$anioTimbrado."/".$mesTimbrado."/";
             $rutaCompleta= $VARCFD;
             $fileNameXML = $this->admi['skUUIDSAT'].'.xml';
             $fileNamePDF = $this->admi['skUUIDSAT'].'.pdf';

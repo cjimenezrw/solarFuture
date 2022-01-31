@@ -24,15 +24,17 @@ Class Cofa_deta_Controller Extends Admi_Model {
 
             $carpeta="facturas";
             
-            $anio = date('Y');
+            $anioTimbrado =(!empty($this->data['datos']['dFechaTimbrado']) ? date('Y', strtotime($this->data['datos']['dFechaTimbrado'])) : NULL);
+            $mesTimbrado =(!empty($this->data['datos']['dFechaTimbrado']) ? date('m', strtotime($this->data['datos']['dFechaTimbrado'])) : NULL);
+           // $anio = date('Y');
             $VARCFD = parent::getVariable('VARCFD');
             $VARCFD =  DIR_PROJECT.$VARCFD;
-            $VARCFD = $VARCFD.$carpeta."/".$anio."/";
+            $VARCFD = $VARCFD.$carpeta."/".$anioTimbrado."/".$mesTimbrado."/";
 
-            $rutaCompleta= $VARCFD;
-
+            $rutaCompleta= $VARCFD; 
             $fileNameXML = $this->data['datos']['skUUIDSAT'].'.xml';
             $fileNamePDF = $this->data['datos']['skUUIDSAT'].'.pdf';
+
             //SI UUID ES DIFERENTE DE VACIO, SE VA A CONSULTAR LA RUTA PARA VER SI EXISTEN LOS DOS DOCUMENTOS.
             if(!empty($this->data['datos']['skUUIDSAT'])){
               $filePDF = $rutaCompleta.$this->data['datos']['skUUIDSAT'].".pdf";

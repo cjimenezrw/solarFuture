@@ -141,7 +141,7 @@ td.text-right {
 
 <div class="col-md-12 clearfix" style="font-size:13px;">
     <div class="col-md-2"><b>RECEPTOR:</b></div> 
-    <div class="col-md-9"><?php echo (isset($data['datos']['cliente'])) ? ($data['datos']['cliente']) : '-'; ?></div>
+    <div class="col-md-9"><?php echo (isset($data['datos']['sNombreCliente'])) ? ($data['datos']['sNombreCliente']) : '-'; ?></div>
 </div>
 <div class="col-md-12" style="font-size:13px;color:#000000;">
     <div class="col-md-2"><b>DIRECCIÓN:</b></div> 

@@ -21,7 +21,6 @@ if (isset($data['datos'])) {
                         <div class="col-md-4 col-lg-4">
                             <div class="form-group">
                                 <h4 class="example-title"><span style="color:red;">* </span> TIPO DE EMPRESA:</h4>
-                                <!--<select id="skEmpresaTipo" name="skEmpresaTipo" class="form-control" data-plugin="select2" onchange="empr.emso_form.change_skEmpresaTipo(this);empr.emso_form.revalidarFormulario();">!-->
                                 <select id="skEmpresaTipo" name="skEmpresaTipo" class="form-control" data-plugin="select2" onchange="empr.emso_form.change_skEmpresaTipo(this);empr.emso_form.revalidarFormulario();">
                                     <option value="">Seleccionar</option>
                                     <?php

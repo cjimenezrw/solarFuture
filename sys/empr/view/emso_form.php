@@ -21,21 +21,21 @@ if (isset($data['datos'])) {
                         <div class="col-md-4 col-lg-4">
                             <div class="form-group">
                                 <h4 class="example-title"><span style="color:red;">* </span> TIPO DE EMPRESA:</h4>
-                                
-                                <select id="skEmpresaTipo" name="skEmpresaTipo" class="form-control selectpicker" data-live-search="true" data-plugin="selectpicker" onchange="empr.emso_form.change_skEmpresaTipo(this);empr.emso_form.revalidarFormulario();">
-                                <option value="">Seleccionar</option>
-                                <?php
-                                if ($data['empresasTipos']) {
-                                    foreach (  $data['empresasTipos'] as $row) {
-                                        utf8($row);
-                                        ?>
-                                        <option <?php echo(isset($result['skEmpresaTipo']) && $result['skEmpresaTipo'] == $row['skEmpresaTipo'] ? 'selected="selected"' : '') ?>
-                                            value="<?php echo $row['skEmpresaTipo']; ?>"> <?php echo $row['sNombre']; ?> </option>
+                                <!--<select id="skEmpresaTipo" name="skEmpresaTipo" class="form-control" data-plugin="select2" onchange="empr.emso_form.change_skEmpresaTipo(this);empr.emso_form.revalidarFormulario();">!-->
+                                <select id="skEmpresaTipo" name="skEmpresaTipo" class="form-control" data-plugin="select2" onchange="empr.emso_form.change_skEmpresaTipo(this);empr.emso_form.revalidarFormulario();">
+                                    <option value="">Seleccionar</option>
                                     <?php
-                                    }//ENDWHILE
-                                }//ENDIF
-                                ?>
-                            </select>
+                                        if ($data['empresasTipos']) {
+                                            foreach (  $data['empresasTipos'] as $row) {
+                                                utf8($row);
+                                                ?>
+                                                <option <?php echo(isset($result['skEmpresaTipo']) && $result['skEmpresaTipo'] == $row['skEmpresaTipo'] ? 'selected="selected"' : '') ?>
+                                                    value="<?php echo $row['skEmpresaTipo']; ?>"> <?php echo $row['sNombre']; ?> </option>
+                                            <?php
+                                            }//ENDWHILE
+                                        }//ENDIF
+                                    ?>
+                                </select>
                             </div>
                         </div>
                         <div class="col-md-12 clearfix"><hr></div>
@@ -313,39 +313,41 @@ if (isset($data['datos'])) {
         }//ENDIF
         ?> 
 
-    $("#skEmpresaTipo").selectpicker();
+        $("#skEmpresaTipo").select2({placeholder: "TIPO DE EMPRESA", allowClear: true });
 
+        $(".skEstatusDomicilio").select2({placeholder: "ESTATUS", allowClear: true });
+        core.autocomplete2('.skTipoDomicilio', 'get_tiposDomicilios', window.location.href, 'TIPOS DOMICILIO');
+        core.autocomplete2('.skPais', 'get_paises', window.location.href, 'PAISES');
+        core.autocomplete2('.skEstado', 'get_estados', window.location.href, 'ESTADOS',{ skPais: function() { return $('.skPais').val(); } });
 
-    $("#agregar-domicilio").click(function (event) {
-		$("#body-domicilios").append('<tr>' +
-		    '<td><select class="form-control skEstatusDomicilio" name="domicilios[skEstatus][]"><option value="AC" active>ACTIVO</option><option value="IN">INACTIVO</option></select></td>' +
-		    '<td><select name="domicilios[skTipoDomicilio][]" class="form-control skTipoDomicilio" data-plugin="select2" data-ajax--cache="true"></select></td>' +
-		    '<td><input class="form-control" name="domicilios[sNombre][]" value="" placeholder="NOMBRE" autocomplete="off" type="text"></td>' +
-		    '<td><select name="domicilios[skPais][]" class="form-control skPais" data-plugin="select2" data-ajax--cache="true"></select></td>' +
-		    '<td><select name="domicilios[skEstado][]" class="form-control skEstado" data-plugin="select2" data-ajax--cache="true"></select></td>' +
-		    '<td><input class="form-control" name="domicilios[skMunicipio][]" value="" placeholder="MUNICIPIO" autocomplete="off" type="text"></td>' +
-		    '<td><input class="form-control" name="domicilios[sColonia][]" value="" placeholder="COLONIA" autocomplete="off" type="text"></td>' +
-		    '<td><input class="form-control" name="domicilios[sCalle][]" value="" placeholder="CALLE" autocomplete="off" type="text"></td>' +
-		    '<td><input class="form-control" name="domicilios[sCodigoPostal][]" value="" placeholder="CP" autocomplete="off" type="text"></td>' +
-		    '<td><input class="form-control" name="domicilios[sNumeroExterior][]" value="" placeholder="NUMERO EXT." autocomplete="off" type="text"></td>' +
-		    '<td><input class="form-control" name="domicilios[sNumeroInterior][]" value="" placeholder="NUMERO INT." autocomplete="off" type="text"></td>' +
-		    '<td><button style="width:100%;" type="button" class="btn btn-outline btn-danger pull-right mercancia-eliminar text-center" onclick="removeColumna(this);"><i class="icon wb-trash" aria-hidden="true"></i> Eliminar</button></td>' +
-		    '<tr>');
+        $("#agregar-domicilio").click(function (event) {
+            $("#body-domicilios").append('<tr>' +
+                '<td><select class="form-control skEstatusDomicilio" name="domicilios[skEstatus][]"><option value="AC" active>ACTIVO</option><option value="IN">INACTIVO</option></select></td>' +
+                '<td><select name="domicilios[skTipoDomicilio][]" class="form-control skTipoDomicilio" data-plugin="select2" data-ajax--cache="true"></select></td>' +
+                '<td><input class="form-control" name="domicilios[sNombre][]" value="" placeholder="NOMBRE" autocomplete="off" type="text"></td>' +
+                '<td><select name="domicilios[skPais][]" class="form-control skPais" data-plugin="select2" data-ajax--cache="true"></select></td>' +
+                '<td><select name="domicilios[skEstado][]" class="form-control skEstado" data-plugin="select2" data-ajax--cache="true"></select></td>' +
+                '<td><input class="form-control" name="domicilios[skMunicipio][]" value="" placeholder="MUNICIPIO" autocomplete="off" type="text"></td>' +
+                '<td><input class="form-control" name="domicilios[sColonia][]" value="" placeholder="COLONIA" autocomplete="off" type="text"></td>' +
+                '<td><input class="form-control" name="domicilios[sCalle][]" value="" placeholder="CALLE" autocomplete="off" type="text"></td>' +
+                '<td><input class="form-control" name="domicilios[sCodigoPostal][]" value="" placeholder="CP" autocomplete="off" type="text"></td>' +
+                '<td><input class="form-control" name="domicilios[sNumeroExterior][]" value="" placeholder="NUMERO EXT." autocomplete="off" type="text"></td>' +
+                '<td><input class="form-control" name="domicilios[sNumeroInterior][]" value="" placeholder="NUMERO INT." autocomplete="off" type="text"></td>' +
+                '<td><button style="width:100%;" type="button" class="btn btn-outline btn-danger pull-right mercancia-eliminar text-center" onclick="removeColumna(this);"><i class="icon wb-trash" aria-hidden="true"></i> Eliminar</button></td>' +
+                '<tr>');
 
-		$(".skEstatusDomicilio").select2({placeholder: "ESTATUS", allowClear: true });
-		core.autocomplete2('.skTipoDomicilio', 'get_tiposDomicilios', window.location.href, 'TIPOS DOMICILIO');
-		core.autocomplete2('.skPais', 'get_paises', window.location.href, 'PAISES');
-		core.autocomplete2('.skEstado', 'get_estados', window.location.href, 'ESTADOS',{ skPais: function() { return $('.skPais').val(); } });
+            $(".skEstatusDomicilio").select2({placeholder: "ESTATUS", allowClear: true });
+            core.autocomplete2('.skTipoDomicilio', 'get_tiposDomicilios', window.location.href, 'TIPOS DOMICILIO');
+            core.autocomplete2('.skPais', 'get_paises', window.location.href, 'PAISES');
+            core.autocomplete2('.skEstado', 'get_estados', window.location.href, 'ESTADOS',{ skPais: function() { return $('.skPais').val(); } });
 
-	    });
+        });
 
 
     });
 
-    $(".skEstatusDomicilio").select2({placeholder: "ESTATUS", allowClear: true });
-    core.autocomplete2('.skTipoDomicilio', 'get_tiposDomicilios', window.location.href, 'TIPOS DOMICILIO');
-    core.autocomplete2('.skPais', 'get_paises', window.location.href, 'PAISES');
-    core.autocomplete2('.skEstado', 'get_estados', window.location.href, 'ESTADOS',{ skPais: function() { return $('.skPais').val(); } });
+    
+    
 
     function guardarEmpresas(obj){
         if (core.SYS_URL + "sys/come/docu-inde/documentos-empresas/" == core.lastUrl) {

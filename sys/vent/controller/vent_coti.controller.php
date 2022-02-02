@@ -100,7 +100,7 @@ Class Vent_coti_Controller Extends Vent_Model {
         $stpCUD_ventas = parent::stpCUD_ventas();
         if(!$stpCUD_ventas || isset($stpCUD_ventas['success']) && $stpCUD_ventas['success'] != 1){
             $this->data['success'] = FALSE;
-            $this->data['message'] = 'HUBO UN ERROR AL GUARDAR LOS DATOS DE LA COTIZACION';
+            $this->data['message'] = 'HUBO UN ERROR AL GUARDAR LOS DATOS DE LA COTIZACION (1)';
             return $this->data;
         }
 
@@ -140,7 +140,7 @@ Class Vent_coti_Controller Extends Vent_Model {
                         $stpCUD_serviciosInventario = parent::stpCUD_serviciosInventario();
                         if(!$stpCUD_serviciosInventario || isset($stpCUD_serviciosInventario['success']) && $stpCUD_serviciosInventario['success'] != 1){
                             $this->data['success'] = FALSE;
-                            $this->data['message'] = 'HUBO UN ERROR AL GUARDAR LOS DATOS DE LA COTIZACION';
+                            $this->data['message'] = 'HUBO UN ERROR AL GUARDAR LOS DATOS DE LA COTIZACION (2)';
                             return $this->data;
                         }
 
@@ -154,7 +154,7 @@ Class Vent_coti_Controller Extends Vent_Model {
                     $stpCUD_serviciosInventario = parent::stpCUD_serviciosInventario();
                     if(!$stpCUD_serviciosInventario || isset($stpCUD_serviciosInventario['success']) && $stpCUD_serviciosInventario['success'] != 1){
                         $this->data['success'] = FALSE;
-                        $this->data['message'] = 'HUBO UN ERROR AL GUARDAR LOS DATOS DE LA COTIZACION';
+                        $this->data['message'] = 'HUBO UN ERROR AL GUARDAR LOS DATOS DE LA COTIZACION (3)';
                         return $this->data;
                     }
                 }

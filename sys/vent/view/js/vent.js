@@ -21,8 +21,8 @@ vent.coti_inde.dataTableConf = {
     'columns': [
         {'title': 'E', 'data': 'estatus', 'dataType': 'string', 'tooltip': 'Estatus', 'filterT': 'Estatus'},
         {'title': 'Folio', 'data': 'iFolio', 'dataType': 'string','tooltip': 'Folio'},
-        {'title': 'Razón Social', 'data': 'cliente', 'dataType': 'string'},
         {'title': 'Nombre Comercial', 'data': 'sNombreCliente', 'dataType': 'string'},
+        {'title': 'Razón Social', 'data': 'cliente', 'dataType': 'string'},
         {'title': 'Usuario Creacion', 'data': 'usuarioCreacion', 'dataType': 'string'},
         {'title': 'Total', 'data': 'fImporteTotal', 'dataType': 'string'},
         {'title': 'F. Creacion', 'data': 'dFechaCreacion', 'dataType': 'date'}

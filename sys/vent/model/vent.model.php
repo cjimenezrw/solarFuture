@@ -681,7 +681,7 @@ Class Vent_Model Extends DLOREAN_Model {
             WHERE rci.skCotizacion = ".escape($this->vent['skCotizacion'])." AND cc.skServicio IS NOT NULL ";*/    
 
         $select = "SELECT DISTINCT
-            cip.skInformacionProductoServicio,cip.sNombre,cip.sDescripcionHoja1,cip.sDescripcionHoja2,cip.sDescripcionGarantia,cip.sImagen,c.fKwh,cc.fCantidad
+            cip.skInformacionProductoServicio,cip.sNombre,cip.sDescripcionHoja1,cip.sDescripcionHoja2,cip.sDescripcionGarantia,cip.sImagen
             FROM ope_cotizaciones coti 
             LEFT JOIN rel_cotizaciones_servicios cc ON cc.skCotizacion = coti.skCotizacion
             LEFT JOIN cat_servicios c ON c.skServicio = cc.skServicio

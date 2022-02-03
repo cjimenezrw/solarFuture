@@ -29,7 +29,7 @@ if (isset($data['datos'])) {
                                                 utf8($row);
                                                 ?>
                                                 <option <?php echo(isset($result['skEmpresaTipo']) && $result['skEmpresaTipo'] == $row['skEmpresaTipo'] ? 'selected="selected"' : '') ?>
-                                                    value="<?php echo $row['skEmpresaTipo']; ?>"> <?php echo $row['sNombre']; ?> </option>
+                                                    value="<?php echo $row['skEmpresaTipo']; ?>"><?php echo $row['sNombre']; ?></option>
                                             <?php
                                             }//ENDWHILE
                                         }//ENDIF

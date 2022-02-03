@@ -149,7 +149,7 @@ empr.emso_inde.dataTableConf = {
 empr.emso_form = {};
 
 empr.emso_form.getEmpresaSocio = function getEmpresaSocio(obj) {
-    $("#skEmpresa").val('');
+    /*$("#skEmpresa").val('');
     $("#skEmpresaTipo").val('');
     $.ajax({
         url: window.location.href,
@@ -166,14 +166,20 @@ empr.emso_form.getEmpresaSocio = function getEmpresaSocio(obj) {
             if (data.skEmpresa) {
                 $("#sNombre").val('');
                 $("#sNombreCorto").val('');
-                $("#skEmpresaTipo").val('');
+                //$("#skEmpresaTipo").val('');
 
                 $("#skEmpresa").val(data.skEmpresa);
                 $("#sNombre").val(data.sNombre);
                 $("#sNombreCorto").val(data.sNombreCorto);
             }
         }
-    });
+    });*/
+};
+
+empr.emso_form.revalidarFormulario = function revalidarFormulario() {
+    $('#core-guardar').formValidation('revalidateField', 'sRFC');
+    $('#core-guardar').formValidation('revalidateField', 'sTelefono');
+    $('#core-guardar').formValidation('revalidateField', 'sCorreo');
 };
 
 // Características EmpresasSocios //
@@ -332,12 +338,6 @@ empr.emso_form.validaciones = {
         }
     }
 
-};
-
-empr.emso_form.revalidarFormulario = function revalidarFormulario() {
-    $('#core-guardar').formValidation('revalidateField', 'sRFC');
-    $('#core-guardar').formValidation('revalidateField', 'sTelefono');
-    $('#core-guardar').formValidation('revalidateField', 'sCorreo');
 };
 
 empr.tipo_inde.dataTableConf = {

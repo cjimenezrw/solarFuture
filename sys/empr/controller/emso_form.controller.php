@@ -143,27 +143,29 @@ Class Emso_form_Controller Extends Empr_Model
         }
 
         $this->empr['axn'] = 'guardar_empresasSocios_domicilios';
-        if(isset($this->empresaSocio['domicilios']['skTipoDomicilio']) && is_array($this->empresaSocio['domicilios']['skTipoDomicilio'])){
-            for($i=0;$i<count($this->empresaSocio['domicilios']['skTipoDomicilio']);$i++){
-                $this->empr['skEmpresaSocioDomicilio'] = NULL;
-                $this->empr['skEmpresaSocio'] = $this->empresaSocio['skEmpresaSocio'];
-                $this->empr['skTipoDomicilio'] = $this->empresaSocio['domicilios']['skTipoDomicilio'][$i];
-                $this->empr['skEstatus'] = $this->empresaSocio['domicilios']['skEstatus'][$i];
-                $this->empr['skPais'] = $this->empresaSocio['domicilios']['skPais'][$i];
-                $this->empr['skEstado'] = $this->empresaSocio['domicilios']['skEstado'][$i];
-                $this->empr['skMunicipio'] = $this->empresaSocio['domicilios']['skMunicipio'][$i];
-                $this->empr['sColonia'] = $this->empresaSocio['domicilios']['sColonia'][$i];
-                $this->empr['sCalle'] = $this->empresaSocio['domicilios']['sCalle'][$i];
-                $this->empr['sCodigoPostal'] = $this->empresaSocio['domicilios']['sCodigoPostal'][$i];
-                $this->empr['sNumeroExterior'] = $this->empresaSocio['domicilios']['sNumeroExterior'][$i];
-                $this->empr['sNumeroInterior'] = $this->empresaSocio['domicilios']['sNumeroInterior'][$i];
-                $this->empr['sNombre'] = $this->empresaSocio['domicilios']['sNombre'][$i];
+        if(isset($this->empresaSocio['domicilios']) && is_array($this->empresaSocio['domicilios'])){
+            if(isset($this->empresaSocio['domicilios']['skTipoDomicilio']) && is_array($this->empresaSocio['domicilios']['skTipoDomicilio'])){
+                for($i=0;$i<count($this->empresaSocio['domicilios']['skTipoDomicilio']);$i++){
+                    $this->empr['skEmpresaSocioDomicilio'] = NULL;
+                    $this->empr['skEmpresaSocio'] = $this->empresaSocio['skEmpresaSocio'];
+                    $this->empr['skTipoDomicilio'] = $this->empresaSocio['domicilios']['skTipoDomicilio'][$i];
+                    $this->empr['skEstatus'] = $this->empresaSocio['domicilios']['skEstatus'][$i];
+                    $this->empr['skPais'] = $this->empresaSocio['domicilios']['skPais'][$i];
+                    $this->empr['skEstado'] = $this->empresaSocio['domicilios']['skEstado'][$i];
+                    $this->empr['skMunicipio'] = $this->empresaSocio['domicilios']['skMunicipio'][$i];
+                    $this->empr['sColonia'] = $this->empresaSocio['domicilios']['sColonia'][$i];
+                    $this->empr['sCalle'] = $this->empresaSocio['domicilios']['sCalle'][$i];
+                    $this->empr['sCodigoPostal'] = $this->empresaSocio['domicilios']['sCodigoPostal'][$i];
+                    $this->empr['sNumeroExterior'] = $this->empresaSocio['domicilios']['sNumeroExterior'][$i];
+                    $this->empr['sNumeroInterior'] = $this->empresaSocio['domicilios']['sNumeroInterior'][$i];
+                    $this->empr['sNombre'] = $this->empresaSocio['domicilios']['sNombre'][$i];
 
-                $stp_empresasSocios_domicilios = parent::stp_empresasSocios_domicilios();
-                if(!$stp_empresasSocios_domicilios || isset($stp_empresasSocios_domicilios['success']) && $stp_empresasSocios_domicilios['success'] != 1){
-                    $this->data['success'] = FALSE;
-                    $this->data['message'] = 'HUBO UN ERROR AL GUARDAR LOS DOMICILIOS';
-                    return $this->data;
+                    $stp_empresasSocios_domicilios = parent::stp_empresasSocios_domicilios();
+                    if(!$stp_empresasSocios_domicilios || isset($stp_empresasSocios_domicilios['success']) && $stp_empresasSocios_domicilios['success'] != 1){
+                        $this->data['success'] = FALSE;
+                        $this->data['message'] = 'HUBO UN ERROR AL GUARDAR LOS DOMICILIOS';
+                        return $this->data;
+                    }
                 }
             }
         }

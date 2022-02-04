@@ -614,7 +614,7 @@ function addCommas(amount) {
                              //actualizartotal();
                       };
 
-                      var cont = <?php echo isset($data['cotizacionesservicios'])?COUNT($data['cotizacionesservicios']):'0'; ?>;
+                      var cont = <?php echo isset($data['cotizacionesServicios'])?COUNT($data['cotizacionesServicios']):'0'; ?>;
 
                         //$("#skSubservicio").select2({ width: "100%" });
                     $("#concepto-agregar").click(function(event){

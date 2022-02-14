@@ -64,6 +64,65 @@ if (isset($data['datos'])) {
                                 <p><?php echo (!empty($result['fCostoRecibo'])) ? $result['fCostoRecibo'] : '';?> </p>
                             </div>
                         </div>
+
+
+                        <div class="row row-lg col-lg-12 clearfix"><hr></div>
+
+<div class="col-md-4 col-lg-4">
+    <div class="form-group">
+        <h4 class="example-title">MÉTODO DE PAGO</h4>
+        <select name="skMetodoPago" id="skMetodoPago"  class="form-control" data-plugin="select2" select2Simple>
+            <option value="">Seleccionar</option>
+            <?php
+            if ($data['metodoPago']) {
+                foreach ($data['metodoPago'] as $row) {
+                    utf8($row);
+                    ?>
+                    <option <?php echo(isset($data['datos']['skMetodoPago']) && $data['datos']['skMetodoPago'] == $row['sCodigo'] ? 'selected="selected"' : '') ?> value="<?php echo $row['sCodigo']; ?>"> <?php echo $row['sNombre']; ?> </option>
+                    <?php
+                }//ENDWHILE
+            }//ENDIF
+            ?>
+        </select>
+    </div>
+</div>
+<div class="col-md-4 col-lg-4">
+    <div class="form-group">
+        <h4 class="example-title">FORMA DE PAGO</h4>
+        <select name="skFormaPago" id="skFormaPago"  class="form-control" data-plugin="select2" select2Simple>
+            <option value="">Seleccionar</option>
+            <?php
+            if ($data['formaPago']) {
+                foreach ($data['formaPago'] as $row) {
+                    utf8($row);
+                    ?>
+                    <option <?php echo(isset($data['datos']['skFormaPago']) && $data['datos']['skFormaPago'] == $row['sCodigo'] ? 'selected="selected"' : '') ?> value="<?php echo $row['sCodigo']; ?>"> <?php echo $row['sNombre']; ?> </option>
+                    <?php
+                }//ENDWHILE
+            }//ENDIF
+            ?>
+        </select>
+    </div>
+</div>
+<div class="col-md-4 col-lg-4">
+    <div class="form-group">
+        <h4 class="example-title">USO DE CFDI</h4>
+        <select name="skUsoCFDI" id="skUsoCFDI"  class="form-control" data-plugin="select2" select2Simple>
+            <option value="">Seleccionar</option>
+            <?php
+            if ($data['usoCFDI']) {
+                foreach ($data['usoCFDI'] as $row) {
+                    utf8($row);
+                    ?>
+                    <option <?php echo(isset($data['datos']['skUsoCFDI']) && $data['datos']['skUsoCFDI'] == $row['sCodigo'] ? 'selected="selected"' : '') ?> value="<?php echo $row['sCodigo']; ?>"> <?php echo $row['sNombre']; ?> </option>
+                    <?php
+                }//ENDWHILE
+            }//ENDIF
+            ?>
+        </select>
+    </div>
+</div>
+
                 </div>
         </div>
       </div>

@@ -15,9 +15,12 @@ paceOptions = {
     }
 };
 
+// Variable global de deteccion de cambios en formulario
+core.form = [];
+core.form.change = false;
+
 /* Es para el contador de que estadistica mostrar (TEMPORAL) */
 core.pedi_inde = {};
-
 
 core.pedi_inde.moduloEstadisticas = 1;
 
@@ -140,13 +143,15 @@ $(document).ready(function () {
     core.ctrlPressed = false;
     $(window).keydown(function (evt) {
         evt.stopPropagation();
-        if (evt.which == 17) { // ctrl
+        var keys = [17,91]; // 17 (ctrl) , 91 (cmd Command)
+        if(keys.indexOf(evt.which) >= 0){
             core.ctrlPressed = true;
-        }
-    }).keyup(function (evt) {
-        if (evt.which == 17) { // ctrl
+        }else{
             core.ctrlPressed = false;
         }
+    }).keyup(function (evt) {
+        evt.stopPropagation();
+        core.ctrlPressed = false;
     });
 
     // Cerrar menu al hacer click en un dispositivo mobile
@@ -205,15 +210,15 @@ $(document).ready(function () {
                 return;
                 var str = this.getAttribute("onclick");
                 var params = str.split("core.menuLoadModule(")[1];
-                console.log(params);
+                ////console.log(params);
                 //params[params.length - 1] = params[params.length - 1].replace(");", "");
                 var param = params.replace(");", "");
                 var json = JSON.stringify(eval("(" + param + ")"));
-                console.log(json);
-                console.log(param);
+                ////console.log(json);
+                ////console.log(param);
                 //core.menuLoadModule(param);
 
-                //console.log(this.getAttribute("onclick").event);
+                ////console.log(this.getAttribute("onclick").event);
                 //eval(this.getAttribute("onclick"));
                 break;
             case 3:
@@ -227,10 +232,390 @@ $(document).ready(function () {
         lockButtons();
     });
 
+    $('#site-search').keyup(function (e) {
+        if (e.keyCode == 13) {
+            $('#search-users-header').removeClass('show');
+        }
+    });
+
+    $("#site-search").on("input", function () {
+        if($(this).val().length >= 3){
+            $('#search-users-header').addClass('show');
+
+            $.ajax({
+                type: "POST",
+                url: core.SYS_URL + "sys/pers/dire-inde/search/",
+                global: false,
+                data: {
+                    axn: 'fastDirectory',
+                    valor: $(this).val()
+                },
+                beforeSend: function () {
+                    $('#res-header-direcyory').html('');
+                    $('#loader-header-direcyory').show();
+                },
+                success: function (data) {
+
+                    var content = '<table class="table table-hover">\n' +
+                    '              <thead>\n' +
+                    '              <tr>\n' +
+                    '                <th>#</th>\n' +
+                    '                <th>Nombre</th>\n' +
+                    '                <th>Área</th>\n' +
+                    '                <th>Correo</th>\n' +
+                    '                <th>Extensión</th>\n' +
+                    '                <th>Celular</th\n' +
+                    '                </tr>\n' +
+                    '                </thead>\n' +
+                    '                <tbody>';
+                    $.each(data, function(i, item) {
+                        content += '<tr><td>' +  (i + 1) + '</td><td>' +  item.sNombre + '</td><td>' +  item.sArea + '</td><td>' +  item.sCorreo + '</td><td>' +  item.sExtension + '</td><td>' +  item.sCelularEmpresa + '</td></tr>';
+                    });
+                    content += '</tbody></table>';
+
+                    $('#loader-header-direcyory').hide();
+                    $('#res-header-direcyory').html(content);
+                }
+            });
+
+        }
+
+    });
+
+    /*//###if (core.getVisualNotify()) {
+        core.executeVisualNotify();
+    }*/
+
+    //core.getConsiderations();
+    lockButtons();
 });
 
+core.getConsiderations = function getConsiderations() {
+    var resp = false;
+    $.ajax({
+        type: "POST",
+        url: core.SYS_URL + "sys/inic/inic-serv/get/",
+        data: {
+            axn: 'getConsiderations',
+            module: core.module.skModulo
+        },
+        cache: false,
+        global: false,
+        async: false,
+        success: function (result) {
+            console.log(result);
+
+            if (result != []){
+
+                var actionConsideraciones = '<div class="site-action " data-plugin="actionBtn" style="right: 102px;">' +
+                    '<button type="button" class="site-action-toggle btn-raised btn btn-success btn-floating pull-left" onclick="$(\'.consideraciones\').toggle();" data-toggle="tooltip" title="Mostrar / Ocultar Consideraciones."> <i class="front-icon fa-info animation-scale-up" aria-hidden="true"></i> <i class="back-icon wb-close animation-scale-up" aria-hidden="true"></i> </button>' +
+                    '</div>';
+
+                $(".page-main").after(actionConsideraciones);
+
+                let considerations = '<div class="consideracionesModulo consideraciones row" hidden><div class="panel-bordered panel-primary panel-line col-lg-12 col-md-12 col-sm-12 col-xs-12">\n' +
+                    '    <div class="widget widget-shadow">\n' +
+                    '        <div class="panel-heading col-md-12">\n' +
+                    '            <div class="col-md-12">  <h3 class="panel-title">CONSIDERACIONES</h3> </div>\n' +
+                    '        </div>\n' +
+                    '        <div class="panel-body container-fluid">\n' +
+                    '            <div class="col-sm-12 col-xs-12 padding-horizontal-0">\n' +
+                    '                <blockquote class="testimonial-content">'+result.sConsideraciones+'</blockquote>\n' +
+                    '            </div>\n' +
+                    '        </div>\n' +
+                    '    </div>\n' +
+                    '</div></div>';
+
+                $(".page-content").append(considerations);
+
+            }
+
+        },
+        error: function (jqXHR, textStatus) {},
+    });
+
+    return resp;
+};
+
+core.setConsiderations = function setConsiderations() {
+
+    if (core.sConsideraciones.length !== 0){
+
+        $('.consideracionesModulo').remove();
+
+        var actionConsideraciones = '<div class="site-action " data-plugin="actionBtn" style="right: 102px;">' +
+            '<button type="button" class="site-action-toggle btn-raised btn btn-success btn-floating pull-left" onclick="$(\'.consideraciones\').toggle();" data-toggle="tooltip" title="Mostrar / Ocultar Consideraciones."> <i class="front-icon fa-info animation-scale-up" aria-hidden="true"></i> <i class="back-icon wb-close animation-scale-up" aria-hidden="true"></i> </button>' +
+            '</div>';
+
+        $(".page-main").after(actionConsideraciones);
+
+        let considerations = '<div class="consideracionesModulo consideraciones row" hidden><div class="panel-bordered panel-primary panel-line col-lg-12 col-md-12 col-sm-12 col-xs-12">\n' +
+            '    <div class="widget widget-shadow">\n' +
+            '        <div class="panel-heading col-md-12">\n' +
+            '            <div class="col-md-12">  <h3 class="panel-title">CONSIDERACIONES</h3> </div>\n' +
+            '        </div>\n' +
+            '        <div class="panel-body container-fluid">\n' +
+            '            <div class="col-sm-12 col-xs-12 padding-horizontal-0">\n' +
+            '                <blockquote class="testimonial-content">'+core.sConsideraciones.sConsideraciones+'</blockquote>\n' +
+            '            </div>\n' +
+            '        </div>\n' +
+            '    </div>\n' +
+            '</div></div>';
+
+        $(".page-content").append(considerations);
+    }
+};
+
+core.getVisualNotify = function getVisualNotify() {
+    var resp = false;
+    $.ajax({
+        type: "POST",
+        url: core.SYS_URL + "sys/noti/noti-serv/get/",
+        data: {
+            axn: 'getVisualNotify',
+            skModulo: core.module.skModulo
+        },
+        cache: false,
+        global: false,
+        async: false,
+        success: function (result) {
+            core.notiVisual = result.notifications;
+            if (core.notiVisual != []){
+                resp = true;
+            }
+            //###core.sConsideraciones = result.considerations;
+            //###core.setConsiderations();
+        },
+        error: function (jqXHR, textStatus) {},
+    });
+
+    return resp;
+};
+
+core.executeVisualNotify = function executeVisualNotify() {
+
+    if (!core.notiVisual.hasOwnProperty(core.module.skModulo)){
+        return ;
+    }
+
+    $.each(core.notiVisual[core.module.skModulo], function (index, c) {
+
+        let conf = [];
+
+        conf.skNotificacionVisual = c.skNotificacionVisual;
+        conf.sNombre = c.sNombre;
+        conf.iTiempo = c.iTiempo;
+        conf.sColor = c.sColor;
+        conf.sDescripcion = c.sDescripcion;
+        conf.sIcono = c.sIcono;
+        conf.sMensajeCorto = c.sMensajeCorto;
+        conf.sTextoLargo = c.sTextoLargo;
+        conf.sContenido = c.sContenido;
+        conf.skPosicion = c.skPosicion;
+        conf.iRetraso = c.iRetraso;
+        conf.skMedida = c.skMedida;
+        conf.skFondo = c.skFondo;
+        conf.sURL = c.sURL;
+        conf.skModuloPrincipal = c.skModuloPrincipal;
+        conf.skModuloVisual = c.skModuloVisual;
+        conf.skPublicacion = c.skPublicacion;
+
+        conf.skTipoNotificacion = c.skTipoNotificacion;
+        iziToast.destroy();
+        core.showVisualNotify(conf);
+
+    });
+};
+
+core.showVisualNotify = function showVisualNotify(conf) {
+    let gs = core.generateSerial(5);
+    let noti = $("#" + gs);
+
+    let time = conf.iTiempo + '000';
+    let retraso = conf.iRetraso + '000';
+    let medida = '600';
+    let bg = conf.skFondo === 'OS';
+
+    switch (conf.skMedida) {
+        case 'PE':
+            medida = 400;
+            break;
+        case 'ME':
+            medida = 600;
+            break;
+        case 'GR':
+            medida = 900;
+            break;
+        default:
+        // --
+    }
+
+    var configs = {
+        title: conf.sMensajeCorto,
+        icon: conf.sIcono,
+        headerColor: conf.sColor,
+        width: medida,
+        timeout: time,
+        timeoutProgressbar: true,
+        transitionIn: 'fadeInUp',
+        transitionOut: 'fadeOutDown',
+        overlay: bg,
+        zindex: 1601,
+        overlayClose: false,
+        loop: true,
+        pauseOnHover: true
+    };
+
+    switch (conf.skPosicion) {
+        case 'AR':
+            configs["top"] = 0;
+            break;
+        case 'CE':
+            break;
+        case 'AB':
+            configs["bottom"] = 0;
+            break;
+        default:
+    }
+
+    if (conf.skTipoNotificacion == 'MO' || conf.skTipoNotificacion == 'PU' || conf.skTipoNotificacion == 'FU') {
+
+        let configs = {
+            theme: 'dark',
+            //overlay: true,
+            toastOnce: true,
+            id: conf.skNotificacionVisual,
+            title: 'Notificación',
+            icon: conf.sIcono,
+            class: conf.skNotificacionVisual,
+            displayMode: 1,
+            backgroundColor: '',
+            message: conf.sMensajeCorto,
+            position: 'bottomRight',
+            timeout: 0,
+            //image: 'img/avatar.jpg',
+            balloon: false,
+            layout: 2
+        };
+
+        if (conf.skTipoNotificacion == 'FU'){
+            configs["buttons"] = [
+                ['<button>Abrir</button>', function (instance, toast) {
+                    instance.hide({transitionOut: 'fadeOutUp'}, toast);
+                    core.resetPassword(conf.skNotificacionVisual);
+                }, true]
+            ];
+        }else {
+            configs["buttons"] = [
+                ['<button>Abrir</button>', function (instance, toast) {
+                    instance.hide({transitionOut: 'fadeOutUp'}, toast);
+                    let sUrl = '';
+                    if (conf.skTipoNotificacion == 'PU') {
+                        sUrl = '/' + core.DIR_PATH + 'sys/foro/pbli-deta/detalles-publicacion/' + conf.skPublicacion + '/';
+                    } else {
+                        sUrl = '/' + core.DIR_PATH + 'sys/' + conf.skModuloPrincipal + '/' + conf.skModuloVisual + '/' + conf.sURL + '/';
+                    }
+                    core.menuLoadModule({ skModulo:  'Woodward', url:  sUrl, skComportamiento: 'MOWI' });
+                    core.notificationVisualView(conf.skNotificacionVisual);
+                }, true]
+            ];
+        }
+
+        if (time !== 0){
+            configs["timeout"] = 0;
+        }
+
+        setTimeout(function () {
+
+            iziToast.show(configs);
+
+        }, retraso);
+
+        return;
+
+    }
+
+    if (conf.skTipoNotificacion == 'TL' || conf.skTipoNotificacion == 'ER') {
+
+        let contenido = '';
+        switch (conf.skTipoNotificacion) {
+            case 'TL':
+                contenido = conf.sTextoLargo;
+                break;
+            case 'ER':
+                contenido = conf.sContenido;
+                break;
+        }
+
+        $('#mowi-noti-div').html('<div id="mowi-noti"></div>');
+        var mowi = $('#mowi-noti');
+
+        var configs2 = {
+            title: conf.sNombre,
+            subtitle: 'Nottificación Portal',
+            fullscreen: true,
+            padding: 25,
+            bodyOverflow: false,
+            radius: 10,
+            restoreDefaultContent: true,
+            onOpening: function (modal) {
+                $("#mowi-noti").iziModal('setContent', {
+                    content: contenido
+                });
+                core.notificationVisualView(conf.skNotificacionVisual);
+            },
+            onClosed: function () {
+                mowi.iziModal('resetContent');
+                $("#mowi-noti").remove();
+            }
+        };
+
+        let confs = configs;
+        var configs = $.extend({}, confs, configs2);
+
+    }
+
+    setTimeout(function () {
+        switch (conf.skTipoNotificacion) {
+            case 'MC':
+                noti.iziModal(configs);
+                noti.iziModal('open');
+                core.notificationVisualView(conf.skNotificacionVisual);
+                break;
+            case 'TL':
+            case 'ER':
+                mowi.iziModal(configs);
+                mowi.iziModal('open');
+                mowi.iziModal('setTop', 20);
+                mowi.iziModal('setBottom', 20);
+                break;
+            default:
+        }
+
+    }, retraso);
+
+
+};
+
+core.notificationVisualView = function notificationVisualView(skNotificacionVisual) {
+    $.ajax({
+        url: core.SYS_URL + 'sys/noti/noti-serv/read/',
+        type: "POST",
+        global: false,
+        data: {
+            axn: 'readVisualNotification',
+            skNotificacionVisual: skNotificacionVisual
+        },
+        success: function (result) {
+            if (result.success) {
+                //core.getVisualNotify();
+            }
+        }
+    });
+};
+
 function lockButtons() {
-    $(".core-button").on("click", function () {
+    $(".DLOREAN-BUTTONS").on("click", function () {
         if (core.buttonLock !== '') {
             return;
         }
@@ -277,7 +662,7 @@ function lockButtons() {
                     }
                     else {
 
-                        console.log("No hay peticiones pendientes");
+                        //console.log("No hay peticiones pendientes");
                         $(core.buttonLock).attr("onclick", core.buttonLock_action);
                         core.buttonLock = '';
                         core.buttonLock_action = '';
@@ -315,7 +700,7 @@ function openInNewTab(conf) {
                 $.each(v, function (key, val) {
                     var element = document.createElement("input");
                     element.setAttribute("type", "hidden");
-                    console.log(val);
+                    //console.log(val);
                     element.setAttribute("name", k+'['+i+']');
                     element.setAttribute("value", val);
                     form.appendChild(element);
@@ -374,7 +759,6 @@ core.loadModule = function loadModule(conf) {
     if (core.loadingModule) {
         core.loadingModule.abort();
     }
-
 
     core.previousModule = core.modulo;
 
@@ -438,10 +822,26 @@ core.abortAjaxDataTables = function abortAjaxDatatables() {
 
 core.menuLoadModule = function menuLoadModule(conf) {
 
-    core.abortAjaxDataTables();
+    //$.snowfall.stop();
+    //$('#snowfall-wrapper').remove();
+
+    if (core.form.change == true) {
+        var r = confirm("¿Está seguro que desea salir? Perderá los cambios");
+        if (r == true) {
+            core.form.change = false;
+            $(window).off('beforeunload');
+        } else {
+            //console.log('cancelar');
+            return;
+        }
+    }
+
+    //core.abortAjaxDataTables();
 
     $(window).unbind('beforeunload');
     core.module = eval(conf);
+
+    //core.getVisualNotify();
 
     if (!$( "#chatSide" ).closest( ".slidePanel" ).hasClass( "slidePanel-show" )){
         $.slidePanel.hide();
@@ -472,6 +872,8 @@ core.menuLoadModule = function menuLoadModule(conf) {
 
         conf.params = moduleParams;
 
+    core.form.change = false;
+    $(window).off('beforeunload');
     switch (conf.skComportamiento) {
         case 'VEMO':
             if (core.ctrlPressed) {
@@ -508,8 +910,8 @@ core.menuLoadModule = function menuLoadModule(conf) {
                             show: true
                         });
                         core.loadingModule = false;
-                        /*console.log('core.modulo : ', core.modulo);
-                        console.log('core.previousModule : ', core.previousModule);*/
+                        /*//console.log('core.modulo : ', core.modulo);
+                        //console.log('core.previousModule : ', core.previousModule);*/
                     }
                 });
             }
@@ -562,8 +964,8 @@ core.menuLoadModule = function menuLoadModule(conf) {
                         }
                         );
                         core.loadingModule = false;
-                        /*console.log('core.modulo : ', core.modulo);
-                        console.log('core.previousModule : ', core.previousModule);*/
+                        /*//console.log('core.modulo : ', core.modulo);
+                        //console.log('core.previousModule : ', core.previousModule);*/
                     }
                 });
             }
@@ -614,7 +1016,7 @@ core.menuLoadModule = function menuLoadModule(conf) {
                             bodyOverflow: false,
                             radius: 10,
                             restoreDefaultContent: true,
-                            zindex: 99997,
+                            zindex: 1601,
                             overlayClose: false,
                             onOpening: function (modal) {
                                 //$("#mowi .iziModal-content").html(data);
@@ -630,7 +1032,7 @@ core.menuLoadModule = function menuLoadModule(conf) {
                             },
                             onClosed: function () {
                                 //window.history.pushState('', '', core.lastUrl);
-                                //console.log('AQUI CAMBIO LA URL POR LA ANTERIOR',core.lastUrl);
+                                ////console.log('AQUI CAMBIO LA URL POR LA ANTERIOR',core.lastUrl);
                                 /*currentModule = core.modulo;
                                 core.modulo = core.previousModule;
                                 core.previousModule = currentModule;*/
@@ -645,8 +1047,8 @@ core.menuLoadModule = function menuLoadModule(conf) {
                         mowi.iziModal('setTop', 20);
                         mowi.iziModal('setBottom', 20);
                         core.loadingModule = false;
-                        /*console.log('core.modulo : ', core.modulo);
-                        console.log('core.previousModule : ', core.previousModule);*/
+                        /*//console.log('core.modulo : ', core.modulo);
+                        //console.log('core.previousModule : ', core.previousModule);*/
                     }
                 });
             }
@@ -692,13 +1094,27 @@ core.menuLoadModule = function menuLoadModule(conf) {
                         $('#filterContainer').html("");
                         core.loadingModule = false;
                         core.dataFastFilter = false;
-                        /*console.log('core.modulo : ', core.modulo);
-                        console.log('core.previousModule : ', core.previousModule);*/
+
+                        /*if ($('#core-guardar').length > 0) {
+                            core.formChage();
+                        }*/
+
+                        if ($("#optionsBreadcrumb").find(`[data-original-title='Guardar']`).length > 0) {
+                            let funct = $("#optionsBreadcrumb").find("[data-original-title='Guardar']").attr("onclick");
+                            let [before, after] = funct.split("(");
+
+                            if(before == 'core.guardar'){
+                                core.formChage();
+                            }
+
+                        }
+                        //###core.executeVisualNotify();
+                        //core.getConsiderations();
                     }
                 });
             }
     }
-
+    core.getVisualNotify();
     return true;
 };
 
@@ -715,10 +1131,13 @@ core.closePanelModule = function closePanelModule() {
  * Botón Guardar
  */
 core.guardar = function guardar(conf) {
-
+    
+    var result = true;
+    
     /*if (!core.validarFormulario(core.formValidaciones)) {
      return false;
      }*/
+
     validate = $('#core-guardar').data('formValidation').validate();
     if (!validate.isValid()) {
         return false;
@@ -736,46 +1155,33 @@ core.guardar = function guardar(conf) {
     var formdata = false;
     if (window.FormData) {
         formdata = new FormData($('#core-guardar')[0]);
-        formdata.append('axn', 'guardar');
+        if(typeof conf.axn === "undefined"){
+            formdata.append('axn', 'guardar');
+        }else{
+            formdata.append('axn', conf.axn);
+        }
         // SUMMERNOTE //
         var summernote = $('.core-summernote');
         $.each(summernote, function (k, v) {
             formdata.append($(v).attr('name'), $(v).code());
         });
     }
-
+    
     // ARCHIVOS DE DIGITALIZACIÓN -> MÚLTIPLE
-    if (typeof window.digiInputs !== "undefined" || window.digiInputs !== "object") {
-        $.each(window.digiInputs, function (id_digi, item_digi) {
-            if (typeof item_digi.getAcceptedFiles !== "undefined"){
-                var files = item_digi.getAcceptedFiles();
-                if (files.length > 0) {
-                    var i = 0;
-                    $.each(files, function (id, item) {
-                        formdata.append(id_digi+'[' + i + ']', item);
-                        i++;
-                    });
+        if (typeof window.digiInputs !== "undefined" || window.digiInputs !== "object") {
+            $.each(window.digiInputs, function (id_digi, item_digi) {
+                if (typeof item_digi.getAcceptedFiles !== "undefined"){
+                    var files = item_digi.getAcceptedFiles();
+                    if (files.length > 0) {
+                        var i = 0;
+                        $.each(files, function (id, item) {
+                            formdata.append(id_digi+'[' + i + ']', item);
+                            i++;
+                        });
+                    }
                 }
-            }
-        });
-    }
-
-    // ARCHIVOS DE DOCUMENTACIÓN -> MÚLTIPLE
-    if (typeof window.core_docu_documents !== "undefined" || window.core_docu_documents !== "object") {
-        $.each(window.core_docu_documents, function (id_digi, item_digi) {
-            formdata.append(id_digi, JSON.stringify(window.core_docu_documents[id_digi]['skDocumentos']));
-            if (typeof item_digi.getAcceptedFiles !== "undefined"){
-                var files = item_digi.getAcceptedFiles();
-                if (files.length > 0) {
-                    var i = 0;
-                    $.each(files, function (id, item) {
-                        formdata.append(id_digi+'[' + i + ']', item);
-                        i++;
-                    });
-                }
-            }
-        });
-    }
+            });
+        }
 
     $.ajax({
         url: window.location.href,
@@ -784,6 +1190,7 @@ core.guardar = function guardar(conf) {
         cache: false,
         contentType: false,
         processData: false,
+        async: false,
         beforeSend: function () {
             toastr.info('Guardando Datos. <i class="fa fa-spinner faa-spin animated"></i>', 'Notificación', {timeOut: false});
         },
@@ -793,13 +1200,25 @@ core.guardar = function guardar(conf) {
                 return false;
             }
             if (response.success) {
+                core.form.change = false;
+                $(window).off('beforeunload');
                 toastr.success(response.message, 'Notificación');
-                core.menuLoadModule(conf);
+                if(typeof conf.loadModule === "undefined"){
+                    core.menuLoadModule(conf);
+                }else{
+                    if(conf.loadModule == true){
+                        core.menuLoadModule(conf);
+                    }else{
+                        result = response;
+                    }
+                }
             } else {
                 toastr.error(response.message, 'Notificación');
+                result = response;
             }
         }
     });
+    return result;
 };
 
 /*
@@ -899,6 +1318,7 @@ core.dataTablePageLength = 25;
 core.dataTable = function dataTable() {
     core.dataTable.getFilters();
     core.dataTable.fastFilterLock = false;
+    core.dataTable.consideracionesLock = false;
     var size = $(document).height() - 500;
     if (size < 449) {
         size = 450;
@@ -913,10 +1333,27 @@ core.dataTable = function dataTable() {
     core.dataTableConf.scrollCollapse = false;
     core.dataTableConf.searching = false;
 
-    core.dataTableConf.initComplete = function () {
+/*    core.dataTableConf.fnDrawCallback = function (settings, json) {
+        //console.log(json);
+    };*/
+
+/*    someFunction = (function() {
+        var cached_function = someFunction;
+
+        return function(str) {
+            //console.log('New function before: ' + str);
+
+            cached_function.apply(this, arguments); // use .apply() to call it
+
+            //console.log('New function after: ' + str);
+        };
+    }());*/
+
+    core.dataTableConf.initComplete = function (settings, json) {
 
         //Evitar crear mas de un filtro rapido
         core.dataTable.fastFilterLock = true;
+        core.dataTable.consideracionesLock = true;
 
         core.dataTablePageLength = 25;
 
@@ -953,6 +1390,11 @@ core.dataTable = function dataTable() {
             $('#filtButt').addClass('btn-danger');
         }
 
+        let filterModulo = window[core.module.skModulo + 'filter'];
+        if (filterModulo !== false && filterModulo !== undefined){
+            $("#filtButt").prop("disabled", true);
+        }
+
         $('[data-toggle="tooltip"]').tooltip();
         $(".searchtable").keyup(function () {
             var filter = new RegExp($(this).val(), 'i');
@@ -984,8 +1426,13 @@ core.dataTable = function dataTable() {
                 "user-select": "none"
             });
         }
-
+        //###core.setConsiderations();
     };
+
+/*    core.dataTableConf.drawCallback = function () {
+        //console.log(jsonR);
+    }*/
+
     core.dataTableConf.language = {
         "sSearchPlaceholder": "Buscar...",
         "lengthMenu": "Mostrando _MENU_ por página",
@@ -995,7 +1442,19 @@ core.dataTable = function dataTable() {
             "next": '<i class="icon wb-chevron-right-mini"></i>'
         }
     };
-    core.DataTableId = $('#core-dataTable').DataTable(core.dataTableConf);
+    core.DataTableId = $('#core-dataTable').on('xhr.dt', function ( e, settings, json, xhr ) {
+        if (json.hasOwnProperty('success')) {
+            swal({
+                title: "¡Ha Ocurrido Un Error!",
+                text: json.message,
+                type: 'error',
+                showCancelButton: false,
+                closeOnConfirm: true,
+                animation: "slide-from-top",
+                confirmButtonText: "Cerrar"
+            });
+        }
+    } ).DataTable(core.dataTableConf);
 };
 core.dataTableOpenFilters = function dataTableOpenFilters (){
     $("#filtButt").ready(function(){
@@ -1040,14 +1499,14 @@ core.dataTable.selectDate = function selectDate(id) {
 
     if ($container.find("#" + id + "-2").val() == "BETWEEN") {
 
-        $container.find(".addFilterInput").replaceWith('<div class="col-sm-4 addFilterInput">' +
+        $container.find(".addFilterInput").replaceWith('<div class="col-sm-5 addFilterInput">' +
                 '<div class="input-daterange" data-plugin="datepicker"><div class="input-group">' +
                 '<span class="input-group-addon"><i class="icon wb-calendar" aria-hidden="true"></i></span>' +
                 '<input type="text" id="' + id + '-3" class="form-control modalDatePicker" name="start"></div>' +
                 '<div class="input-group"> <span class="input-group-addon">a</span>' +
                 '<input type="text" id="' + id + '-4" class="form-control modalDatePicker" name="end"></div> </div></div>');
     } else {
-        $container.find(".addFilterInput").replaceWith('<div class="col-sm-4 addFilterInput"><div class="input-group">' +
+        $container.find(".addFilterInput").replaceWith('<div class="col-sm-5 addFilterInput"><div class="input-group">' +
                 '<span class="input-group-addon"><i class="icon wb-calendar" aria-hidden="true"></i></span>' +
                 '<input type="text" id="' + id + '-3" class="form-control modalDatePicker" data-plugin="datepicker"></div></div>');
     }
@@ -1158,11 +1617,11 @@ core.dataTable.addFilter = function addFilter() {
 
     $filter.append('<div id="' + $idComp + '-containter" class="alert alert-mod alert-alt alert-primary alert-dismissible margin-top-5" role="alert">' +
             '<button type="button" class="close" data-dismiss="alert" aria-label="Close"> <span aria-hidden="true">×</span> </button>' +
-            '<div class="row"><div class="col-sm-4"> <div class="btn-group bootstrap-select">' +
+            '<div class="row"><div class="col-sm-3"> <div class="btn-group bootstrap-select">' +
             '<select title="Seleccione Columna" id="' + $idComp + '" class="filter-select" data-plugin="selectpicker" onchange="core.dataTable.addCondition(\'' + $idComp + '\')"><option data-hidden="true"></option></select>' +
             '</div></div>' +
             '<div class="col-sm-3 addSelectType"></div>' +
-            '<div class="col-sm-4 addFilterInput"></div>' +
+            '<div class="col-sm-5 addFilterInput"></div>' +
             '</div></div>');
 
     core.dataTable.dataListColumns($idComp);
@@ -1192,6 +1651,7 @@ core.dataTable.sendFilters = function sendFilters(param, param2) {
         core.dataFastFilter = false;
         $( "#filtButt" ).prop( "disabled", false );
         param = false;
+        window[core.module.skModulo + 'filter'] = false;
     }
 
     if (core.dataFastFilter){
@@ -1219,6 +1679,10 @@ core.dataTable.sendFilters = function sendFilters(param, param2) {
             return;
         }
 
+        window[core.module.skModulo + 'filter'] = val;
+        window[core.module.skModulo + 'filterColumn'] = indexColumn;
+        window[core.module.skModulo + 'filterColumnName'] = nameColumn;
+
         $( "#filtButt" ).prop( "disabled", true );
         core.dataFastFilter = true;
 
@@ -1230,7 +1694,6 @@ core.dataTable.sendFilters = function sendFilters(param, param2) {
         $('#core-dataTable').DataTable().ajax.reload();
         return;
     }
-
 
     // Detecta Filtro Predeterminado
     if ($(".filter-select2 :selected").val()) {
@@ -1288,6 +1751,39 @@ core.dataTable.sendFilters = function sendFilters(param, param2) {
     core.dataFilterSend = parameters;
     $('#core-dataTable').DataTable().ajax.reload();
 };
+/**
+ *
+ * Añade filtros rapidos a dataTables
+ *
+ * @author Jonathan Topete Figueroa <jtopete@woodward.com.mx>
+ *
+ * @param indx Indice de columna que será predeterminado.
+ * @param hiddeIndex Array de indices de columnas a ocultar.
+ * @param visibility true o false si se requiere que el componente sea visible por defecto.
+ */
+core.dataTable.consideraciones = function consideraciones(visibility) {
+
+    return;
+
+    if (core.dataTable.consideracionesLock){
+        return;
+    }
+
+
+var actionConsideraciones = '<div class="site-action " data-plugin="actionBtn" style="right: 102px;">' +
+'<button type="button" class="site-action-toggle btn-raised btn btn-success btn-floating pull-left" onclick="$(\'.consideraciones\').toggle();" data-toggle="tooltip" title="Mostrar / Ocultar Consideraciones."> <i class="front-icon fa-info animation-scale-up" aria-hidden="true"></i> <i class="back-icon wb-close animation-scale-up" aria-hidden="true"></i> </button>' +
+'</div>';
+
+    var consideracionesModulo = $('.consideracionesModulo').html();
+    $("#div-table").parent().parent().after('<div class="consideraciones row" style="display: none;">'+consideracionesModulo+'</div>');
+    $("#div-table").after(actionConsideraciones);
+
+    if (visibility == true){
+        $('.consideraciones').toggle();
+    }
+
+
+};
 
 /**
  *
@@ -1305,6 +1801,15 @@ core.dataTable.fastFilters = function fastFilters(indx, hiddeIndex, visibility) 
         return;
     }
 
+    let filterModulo = window[core.module.skModulo + 'filter'];
+    let filterColumn = window[core.module.skModulo + 'filterColumn'];
+
+    let tempVal = '';
+    if (filterModulo !== false && filterModulo !== undefined){
+        tempVal = filterModulo;
+        indx = filterColumn;
+    }
+
     var heading = '<div class="panel-heading"> <h3 class="panel-title">Filtro Rápido</h3></div>';
 
     var filterColumns = '<div class="row">' +
@@ -1315,7 +1820,7 @@ core.dataTable.fastFilters = function fastFilters(indx, hiddeIndex, visibility) 
         '</select>' +
         '</div>' +
         '</div>' +
-        '<div class="col-sm-4"><input id="fast-filter-input" type="text" class="form-control" placeholder="Introduzca Valor" autocomplete="off"></div>' +
+        '<div class="col-sm-4"><input id="fast-filter-input" type="text" class="form-control" placeholder="Introduzca Valor" autocomplete="off" value="' + tempVal + '"></div>' +
         '<div class="col-sm-4"><div class="btn-group btn-group-sm margin-top-5" aria-label="Small button group" role="group"> <button class="btn btn-primary btn-outline" type="button" onclick="core.dataTable.sendFilters(\'fast\');">Aplicar</button> <button class="btn btn-primary btn-outline" type="button" onclick="core.dataTable.sendFilters(3);">Ignorar</button> </div></div>' +
         '</div>';
 
@@ -1512,7 +2017,7 @@ core.dataTable.getFilters = function getFilters() {
             }
 
             jQuery(data).each(function (i, item) {
-                //console.log(item.sJsonFiltro, item.sNombre)
+                ////console.log(item.sJsonFiltro, item.sNombre)
                 var predeterminado = 'predeterminado="false"';
                 var sel = "";
                 if (item.iPredeterminado) {
@@ -1537,6 +2042,16 @@ core.dataTable.getFilters = function getFilters() {
                 core.dataFilterSend = $(".filter-select2 :selected").val();
                 $('#filtroPredeterminado').prop('checked', true);
                 $('#removeFilter').show();
+            }
+
+            let filterModulo = window[core.module.skModulo + 'filter'];
+            let filterModuloName = window[core.module.skModulo + 'filterColumnName'];
+            let params = [];
+            params.push(
+                {'column': filterModuloName, 'rule': '%LIKE%', 'value': filterModulo, 'type': 'string'}
+            );
+            if (filterModulo !== false && filterModulo !== undefined){
+                core.dataFilterSend = params;
             }
 
             if ($('.alert').length > 0) {
@@ -1659,7 +2174,7 @@ core.dataTable.contextMenuCore = function contextMenuCore(params) {
             e.stopPropagation();
             if (/iPhone|iPad|iPod/i.test(navigator.userAgent)) {
                 var data = table.row(this).data();
-                console.log(table.column(this.index));
+                //console.log(table.column(this.index));
                 bootbox.dialog({title: 'Seleccione una Opción', message: data.menuEmergente, closeButton: true});
             }
         });
@@ -1769,7 +2284,11 @@ core.download = function download(url, requestMethod, params) {
         },
         failCallback: function (response) {
             toastr.clear();
-            swal("¡Error!", response, "error");
+            if (response) {
+                swal("¡Error!", response, "error");
+            }else {
+                swal("¡Error!", 'No es posible realizar la descarga en este momento, contacte a un administrador.', "error");
+            }
         }
     };
 
@@ -1972,6 +2491,11 @@ core.autocomplete2 = function autocomplete2(target, axn, url, placeholder, extra
 
                 },
                 processResults: function (data) {
+                    if(target.indexOf("#") >= 0){
+                        if(!$(target).attr('multiple')){
+                            $(target).empty();
+                        }
+                    }
                     return {
                         results: $.map(data, function (item) {
                             var dat = [];
@@ -2050,7 +2574,7 @@ core.tableMultiple = function (obj, conf) {
     /*$('#core-multiple-data')*/
     obj.find('tbody').on('click', 'tr', function () {
         //var fnclick = $('#' + obj.attr('id') + '-addRow').attr('onclick');
-        //console.log($(this).closest("table").attr("id"));
+        ////console.log($(this).closest("table").attr("id"));
         window.indexID = $(this).attr("data-uniqueid");
         if ($(this).hasClass("no-records-found")) {
             return;
@@ -2109,7 +2633,7 @@ core.tableMultiple = function (obj, conf) {
 
             //var item = {};item ["name"] = name;item ["value"] = valu;jsonObj.push(item);
         });
-        //console.log(jsonObj);
+        ////console.log(jsonObj);
     });
 
     setTimeout(
@@ -2469,14 +2993,17 @@ core.chatList = function chatList() {
 
                 var message = emojione.shortnameToUnicode(object['mensaje']);
                 var output = emojione.shortnameToImage(object['mensaje']);
+                var placeholder = 'data:image/gif;base64,R0lGODdhAQABAPAAAMPDwwAAACwAAAAAAQABAAACAkQBADs=';
 
-                $('.contacts').append('<a class="list-group-item ' + nl + '" role="button" data-toggle="show-chat" onclick="openChat(' + json + '); $( this ).removeClass(\'' + nl + '\');"> <div class="media"><div class="media-left"> <div class="avatar avatar-sm avatar-' + status + '"><img src="' + object['sFoto'] + '" alt="..."><i></i></div></div><div class="media-body"><h4 class="media-heading">' + object
+
+                $('.contacts').append('<a class="list-group-item ' + nl + '" role="button" data-toggle="show-chat" onclick="openChat(' + json + '); $( this ).removeClass(\'' + nl + '\');"> <div class="media"><div class="media-left"> <div class="avatar avatar-sm avatar-' + status + '"><img class="lazyload" src="' + placeholder + '" data-src="' + object['sFoto'] + '" alt="..."><i></i></div></div><div class="media-body"><h4 class="media-heading">' + object
                     ['sNombre'] + ' ' + object['sApellidoPaterno'] + '</h4><small class="text-line">' + output + '</small></div></div></a>');
             }
             $("#connectedCount").html(' ( ' + $(".site-sidebar-tab-content .avatar-online").length + ' )');
+            lazyload();
         },
         error: function (error) {
-            //console.log(error);
+            ////console.log(error);
         }
     });
 };
@@ -2502,7 +3029,6 @@ core.loginRefresh = function loginRefresh() {
         animation: "slide-from-top",
         inputPlaceholder: "Contraseña",
         confirmButtonText: "Continuar"
-
     },
             function (inputValue) {
                 if (inputValue === false)
@@ -2546,6 +3072,104 @@ core.loginRefresh = function loginRefresh() {
             });
 };
 
+core.resetPassword = function resetPassword(skNotificacionVisual){
+
+    bootbox.dialog({
+        title: 'Cambio de Contraseña',
+        message: "<div class='alert alert-alt alert-danger alert-dismissible' role='alert'>\n" +
+            "                  <button type='button' class='close' data-dismiss='alert' aria-label='Close'>\n" +
+            "                    <span aria-hidden='true'>×</span>\n" +
+            "                  </button>\n" +
+            "                  <a class='alert-link' href='javascript:void(0)'><h4>Importate</h4></a>\n" +
+            "                  <ul>\n" +
+            "                    <li>La contraseña debe tener más de 8 caracteres</li>\n" +
+            "                    <li>La contraseña debe contener al menos un carácter en mayúscula</li>\n" +
+            "                    <li>La contraseña debe contener al menos un carácter en minúscula</li>\n" +
+            "                  </ul>\n" +
+            "                </div><form id='infos' action=''>\n    <input id='core-actualPass' type='password' class='form-control' name='actual' placeholder='Contraseña Actual' /><br/>\n    <input id='core-chagePass1' type='password' class='form-control' name='new1' placeholder='Contraseña Nueva' /><br/>\n    <input id='core-chagePass2' type='password' class='form-control' name='new2' placeholder='Repetir Contraseña Nueva' />\n    </form>",
+        //size: 'large',
+        buttons: {
+            cancel: {
+                label: "Cancelar",
+                className: 'btn-danger',
+                callback: function(){
+
+                }
+            },
+            noclose: {
+                label: "Confirmar",
+                className: 'btn-info',
+                callback: function(){
+                    let ap = $('#core-actualPass').val();
+                    let ps1 = $('#core-chagePass1').val();
+                    let ps2 = $('#core-chagePass2').val();
+
+                    if (ps1 != ps2){
+                        toastr.error('Las contraseñas no coinciden','Notificacion');
+                        return false;
+                    }
+
+                    if (ap == ps2){
+                        toastr.error('La contraseña nueva no puede ser igual a la actual');
+                        return false;
+                    }
+
+                    if (ps1.length < 8) {
+                        toastr.error('La contrase&ntilde;a debe tener m&aacute;s de 8 caracteres');
+                        return false;
+                    }
+
+                    // The password doesn't contain any uppercase character
+                    if (ps1 === ps1.toLowerCase()) {
+                        toastr.error('La contrase&ntilde;a debe contener al menos un carácter en may&uacute;scula');
+                        return false;
+                    }
+
+                    // The password doesn't contain any uppercase character
+                    if (ps1 === ps1.toUpperCase()) {
+                        toastr.error('La contrase&ntilde;a debe contener al menos un car&aacute;cter en min&uacute;scula');
+                        return false;
+                    }
+
+                    // The password doesn't contain any digit
+                    if (ps1.search(/[0-9]/) < 0) {
+                        toastr.error('La contrase&ntilde;a debe contener al menos un numero');
+                        return false;
+                    }
+
+                    $.ajax({
+                        url: core.SYS_URL + "sys/inic/inic-sesi/pass/",
+                        type: 'POST',
+                        data: {
+                            axn: 'changePass',
+                            ap: ap,
+                            ps1: ps1,
+                            ps2: ps2,
+                            skNotificacionVisual: skNotificacionVisual
+                        },
+                        cache: false,
+                        processData: true,
+                        beforeSend: function () {
+                            toastr.info('Guardando Datos. <i class="fa fa-spinner faa-spin animated"></i>', 'Notificación', {timeOut: false});
+                        },
+                        success: function (response) {
+                            toastr.clear();
+                            if (response.success === true || response.success === 1) {
+                                toastr.success(response.message, 'Notificación');
+                                core.getVisualNotify();
+                                bootbox.hideAll()
+                            } else {
+                                toastr.error(response.message, 'Notificación');
+                            }
+                        }
+                    });
+                    return false;
+                }
+            }
+        }
+    });
+
+}
 
 /**
  *
@@ -2578,21 +3202,15 @@ core.sessionOut = function sessionOut(data) {
  *
  */
 core.formChage = function formChage() {
-    $('input, select, textarea').change(function () {
-        $.ajaxSetup({
-            beforeSend: function (data) {
-            },
-            complete: function (data) {
-                if (typeof response == 'object' && !core.sessionOut(JSON.parse(data.responseText))) {
-                    return false;
-                }
-            }
-        });
+
+    $('form').on('keyup change paste', 'input, select, textarea', function(a){
+        core.form.change = true;
 
         $(window).bind('beforeunload', function () {
             return '¿Está seguro que desea salir? Perderá los cambios';
         });
     });
+
 };
 
 
@@ -2662,7 +3280,7 @@ core.digi.inputShow = function (obj) {
                         'data-allowed-file-extensions="' + that.allowedFiles + '" />'
                         )
                 );
-console.log(inputDom);
+
         $(that.domSelector).empty().append(inputDom);
 
         that.handlers();
@@ -2859,493 +3477,6 @@ console.log(inputDom);
 
     };
 
-};
-
-$.fn.core_docu_component = function (opt) {
-    if(typeof (window.core_docu_documents) === 'undefined'){
-        window.core_docu_documents = {};
-    }
-    
-    /**
-     * Opciones por default.
-     * @type Object
-     */
-    var settings = $.extend({
-        skTipoExpediente: 'EXGRAL',
-        skTipoDocumento: 'DOGRAL',
-        name: 'docu_file',
-        skDocumento: '',
-        caracteristicas: '',
-        readOnly: false,
-        allowDelete: true,
-        forceSingleFile: false,
-        deleteCallBack: function (obj) {}
-    }, opt);
-    
-    /**
-     * Establece mensaje de error en caso de no poder cargar componentes.
-     *
-     * @param {object} info
-     * @returns {undefined}
-     */
-    this.errorShow = function (info) {
-        console.error(info);
-        this.append('<blockquote class="blockquote blockquote-danger">\n\
-            <p>Hubo un error al inicializar el componente de Documentación</p>\n\
-            <footer><cite title="Source Title"> Intenta nuevamente </cite></footer></blockquote>');
-    };
-    
-    /**
-     * Crea una nueva instancia de Dropzone en el namespace window.digiInput
-     * y muestra los archivos que existan basados en el selector definido.
-     *
-     * @param {object} config
-     * @returns {undefined}
-     */
-    this.setDropzonetl = function (config) {
-        
-        //console.log('config_setDropzonetl: ', config);
-
-        var f = '';
-        for (var i in config.extensiones) {
-
-            f = f + '.' + config.extensiones[i];
-            if (parseInt(i) !== config.extensiones.length - 1) {
-                f = f + ',';
-            }
-        }
-        
-        var idName = config.skTipoExpediente + config.skTipoDocumento + settings.name;
-        this.append('<div class="dropzone clsbox " id="' + idName + '"></div>');
-        
-        var dcfig = typeof (opt.dropzoneConfig) === 'object' ? opt.dropzoneConfig : {};
-        var DropzoneConfig = $.extend({
-            url: core.SYS_URL + 'sys/docu/docu-serv/documentos-service/?axn=guardar',
-            maxFilesize: config.pesoMB,
-            dictFileTooBig: 'El archivo es demasiado grande, Peso Máximo: '+ config.pesoMB + 'MB',
-            addRemoveLinks: true,
-            //dictRemoveFileConfirmation: true,
-            replace: '<i class="icon fa-cloud-upload" aria-hidden="true"></i> Arrastre un archivo o haga clic en reemplazar <br> Solo se permiten '  + config.extensiones.join(','),
-            autoProcessQueue: false,
-            acceptedFiles: f,
-            dictInvalidFileType: 'Archivo NO Permitido, Extensiones Permitidas: ' + config.extensiones.join(','),
-            dictRemoveFile: (settings.allowDelete ? '<b><i class="icon fa-trash" aria-hidden="true"></i> Eliminar</b>' : '   '),
-            dictDefaultMessage: 'Expediente: <b>'+config.tipoExpediente+'</b> | Documento: <b>'+config.tipoDocumento+'</b><br>Peso Máximo: <b>'+config.pesoMB+'MB</b> | Extensiones Permitidas: <b>' + config.extensiones.join(',') + '</b><br><i class="icon fa-cloud-upload" aria-hidden="true"></i> Arrastre y suelte archivos o haga clic',
-            paramName: settings.name,
-            removedfile: function (file) {
-                if (!file.hasOwnProperty('skDocumento')) {
-                    //file.previewElement.remove();
-                    //return true;
-
-                    swal({
-                        title: '¡Notificación!',
-                        text: '¿Desea eliminar este documento?',
-                        type: 'warning',
-                        showCancelButton: true,
-                        confirmButtonColor: '#DD6B55',
-                        confirmButtonText: 'Aceptar',
-                        closeOnConfirm: false
-                    }, function () {
-                        file.previewElement.remove();
-                        swal.close();
-                    });
-                    return true;
-
-                }
-                swal({
-                    title: '¡Notificación!',
-                    text: '¿Desea eliminar este documento?',
-                    type: 'warning',
-                    showCancelButton: true,
-                    confirmButtonColor: '#DD6B55',
-                    confirmButtonText: 'Aceptar',
-                    closeOnConfirm: false
-                }, function () {
-                    var resp = false;
-                    $.ajax({
-                        url: core.SYS_URL + 'sys/docu/docu-serv/documentos-service/?axn=eliminar',
-                        type: 'POST',
-                        data: {
-                            skDocumento: file.skDocumento
-                        },
-                        dataType: 'json',
-                        async: true,
-                        success: function (r) {
-                            if (r.success === true) {
-                                file.previewElement.remove();
-                                settings.deleteCallBack({digiResponse: r, skDocumento: file.skDocumento});
-                                var deleteoIntenso = window.core_docu_documents[settings.name].skDocumentos.indexOf(file.skDocumento);
-                                if (deleteoIntenso > -1) {
-                                    window.core_docu_documents[settings.name].skDocumentos.splice(deleteoIntenso, 1);
-                                }
-                                swal("Documento eliminado con éxito", resp.message, "success");
-                            } else {
-                                settings.deleteCallBack({digiResponse: r, skDocumento: file.skDocumento});
-                                swal("Hubo un error al eliminar el documento", resp.message, "error");
-                            }
-                        }
-                    });
-                });
-
-            }
-        }, dcfig);
-        
-        
-        window.core_docu_documents[settings.name] = new Dropzone("#" + idName, DropzoneConfig);
-        window.core_docu_documents[settings.name].skDocumentos = [];
-        window.core_docu_documents[settings.name].DocumentList = {};
-        for (var ledoc in config.docs) {
-            var turboDoc = config.docs[ledoc];
-            var mockFile = {name: turboDoc.sUbicacion.split('/').pop(), skDocumento: turboDoc.skDocumento};
-            window.core_docu_documents[settings.name].emit("addedfile", mockFile);
-            window.core_docu_documents[settings.name].emit("thumbnail", mockFile, turboDoc.sUbicacionPublicaThumbnail);
-            window.core_docu_documents[settings.name].emit("complete", mockFile);
-            window.core_docu_documents[settings.name].skDocumentos.push(turboDoc.skDocumento);
-            window.core_docu_documents[settings.name].DocumentList[turboDoc.skDocumento] = config.docs[ledoc];
-        }
-        
-        var leSwag = 0;
-        $("#" + idName + ' div.dz-size').each(function () {
-            var buton = '<a href="' + config.docs[leSwag].sUbicacionPublica + '" target="_blank"> \n\
-                <button style="border-radius: 5px;" type="button" class="btn btn-outline btn-default project-button "> <b>VER</b> </button>\n\
-            </a>\n';
-            $(this).empty().append(buton);
-            leSwag = leSwag + 1;
-        });
-        $("#" + idName + ' div.dz-image>img').css('height', '95px');
-
-
-        window.core_docu_documents[settings.name].getInputFile = function () {
-            return window.core_docu_documents[settings.name].getAcceptedFiles();
-        };
-        
-    };
-    
-    
-    /**
-     * Llama la funcion de que crea el objeto dropify o el previsualizador de
-     * archivo si este posee un registro en digitalzacion.
-     * @param {object} config
-     * @returns {undefined}
-     */
-    this.setDropifytl = function (config) {
-        if (config.docs.length > 0) {
-            this.dropifaiFILEDOM(config);
-        } else {
-            this.dropifaitlDOM(config);
-        }
-    };
-    
-    /**
-     * Crea el DOM necesario para ejecutar Dropify.
-     *
-     * @param {object} config
-     * @returns {undefined}
-     */
-    this.dropifaitlDOM = function (config) {
-        
-        //console.log('config_dropifaitlDOM: ', config);
-
-        var le = '<div class="col-md-12"> \n\
-            <input class="dropify"  type="file" data-plugin="dropify" \n\
-            name="' + settings.name + '" data-max-file-size="' + config.pesoMB + 'M" \n\
-            data-allowed-file-extensions="' + config.extensiones.join(' ') + '" />\n\
-        </div>';
-        this.empty().append(le);
-        $('input[name="' + settings.name + '"]').dropify({
-            "messages": {
-                default: "Expediente: <b>"+config.tipoExpediente+"</b> | Documento: <b>"+config.tipoDocumento+"</b><br>Peso Máximo: <b>"+config.pesoMB+"MB</b> | Extensiones Permitidas: <b>" + config.extensiones.join(',') + "</b><br>Arrastre y suelte archivos o haga clic",
-                replace: "Expediente: <b>"+config.tipoExpediente+"</b> | Documento: <b>"+config.tipoDocumento+"</b><br>Peso Máximo: <b>"+config.pesoMB+"MB</b> | Extensiones Permitidas: <b>" + config.extensiones.join(',') + "</b><br>Arrastre y suelte archivos o haga clic",
-                remove: '<b><i class="icon fa-trash" aria-hidden="true"></i> Eliminar</b>',
-                error: 'Revise la Configuración del Componente de Documentación'
-            },
-            "error": {
-                fileSize: '<i class="icon fa-exclamation-triangle" aria-hidden="true"></i> El archivo es demasiado grande<br> Peso Máximo: '+ config.pesoMB + 'MB',
-                fileExtension: '<i class="icon fa-exclamation-triangle" aria-hidden="true"></i> Archivo NO Permitido<br> Extensiones Permitidas: ' + config.extensiones.join(','),
-            }
-        });
-
-        window.core_docu_documents[settings.name] = {};
-        window.core_docu_documents[settings.name].skDocumentos = [];
-        window.core_docu_documents[settings.name].getInputFile = function () {
-
-            if (typeof ($('input[name="' + settings.name + '"]').prop('files')[0]) === 'object') {
-                return  $('input[name="' + settings.name + '"]').prop('files')[0];
-            }
-
-            return false;
-        };
-
-
-    };
-    
-    /**
-     * Crea el DOM y los handlers para el visualizador de archivos.
-     * @param {object} config
-     * @returns {undefined}
-     */
-    this.dropifaiFILEDOM = function (config) {
-        var that = this;
-
-        window.core_docu_documents[settings.name] = {};
-        window.core_docu_documents[settings.name].getInputFile = function () {
-            return false;
-        };
-        window.core_docu_documents[settings.name].skDocumentos = [config.docs[0].skDocumento];
-
-        var deleteoIntenso = (settings.allowDelete == true) ? '<div class="btn-group">\n\
-            <button type="button" class="btn btn-icon btn-pure btn-default btnDeleteDigiDocument' + settings.name + config.skTipoExpediente + config.skTipoDocumento + '" title="Delete" data-digid="' + config.docs[0].skDocumento + '">\n\
-                <i class="icon wb-trash" aria-hidden="true"></i>\n\
-            </button> \n\
-        </div>' : '';
-
-        this.append('\
-        <div class="form-group col-md-12 projects-sort">\n\
-            <div class="col-md-10 app-projects projects-wrap" style="padding:15px; min-height: 215px;">\n\
-                <ul style="list-style: none;" id="' + config.skTipoExpediente + config.skTipoDocumento + 'ul' + '" data-plugin="animateList" data-child=">li">\n\
-                    <li>\n\
-                        <div class="panel">  \n\
-                            <figure class="overlay overlay-hover animation-hover">\n\
-                                <center><img class="caption-figure" style="width: 100px; height: 100px;" src="' + config.docs[0].sUbicacionPublicaThumbnail + '" ></center>\n\
-                                <figcaption class="overlay-panel overlay-background overlay-fade text-center vertical-align"> \n\
-                                    ' + deleteoIntenso + '\n\
-                                    <a href="' + config.docs[0].sUbicacionPublica + '" target="_blank">\n\
-                                        <button type="button" class="btn btn-outline btn-default project-button btnShowDigiDocument"  data-digiID="' + config.docs[0].skDocumento + '"> VER </button>\n\
-                                    </a>\n\
-                                <figure> \n\
-                            <figure>\n\
-                        </div>\n\
-                    </li>\n\
-                </ul>\n\
-            </div>\n\
-        </div>');
-
-        if (settings.allowDelete == true) {
-
-            $('.btnDeleteDigiDocument' + settings.name + config.skTipoExpediente + config.skTipoDocumento).click(function (e) {
-                var skdoc = $(this).data('digid');
-
-                swal({
-                    title: '¡Notificación!',
-                    text: '¿Desea eliminar este documento?',
-                    type: 'warning',
-                    showCancelButton: true,
-                    confirmButtonColor: '#DD6B55',
-                    confirmButtonText: 'Aceptar',
-                    closeOnConfirm: false
-                }, function () {
-                    var resp = false;
-                    $.ajax({
-                        url: core.SYS_URL + 'sys/docu/docu-serv/documentos-service/?axn=eliminar',
-                        type: 'POST',
-                        data: {
-                            skDocumento: skdoc
-                        },
-                        dataType: 'json',
-                        async: false,
-                        success: function (r) {
-                            if (r.success === true) {
-                                that.dropifaitlDOM(config);
-                                settings.deleteCallBack({digiResponse: r, skDocumento: skdoc});
-                                var deleteoIntenso = window.core_docu_documents[settings.name].skDocumentos.indexOf(skdoc);
-                                if (deleteoIntenso > -1) {
-                                    window.core_docu_documents[settings.name].skDocumentos.splice(deleteoIntenso, 1);
-                                }
-                                swal("Documento eliminado con éxito", resp.message, "success");
-                            } else {
-                                swal("Hubo un error al eliminar el documento", resp.message, "error");
-                            }
-                        }
-                    });
-                }
-                );
-                e.stopPropagation();
-            });
-        }
-    };
-    
-    /**
-     * readOnlyItem
-     *
-     * Crea los elementos a visualizar.
-     *
-     * @param {type} doc
-     * @returns {String}
-     */
-    this.readOnlyItem = function (doc) {
-        return '<div class="dz-preview dz-complete dz-image-preview">\n\
-                    <div class="dz-image">\n\
-                        <img data-dz-thumbnail="" alt="Factura comercial_PDOC_007.docx" \n\
-                            src="' + doc.sUbicacionPublicaThumbnail + '" \n\
-                            style="height: 95px;">\n\
-                    </div>\n\
-                    <div class="dz-details">\n\
-                        <div class="dz-size">\n\
-                            <a href="' + doc.sUbicacionPublica + '" target="_blank">\n\
-                                <button style="border-radius: 5px;" type="button" class="btn btn-outline btn-default project-button "> <b>VER</b> </button>\n\
-                            </a>\n\
-                        </div>\n\
-                        <div class="dz-filename"><span data-dz-name="">' + doc.sUbicacion.split('/').pop() + '</span>\n\
-                        </div>\n\
-                    </div>\n\
-                </div>';
-    };
-    
-    /**
-     * readOnlyDOM
-     *
-     * Crea el dom para almacenar los items.
-     *
-     * @param {type} data
-     * @returns {undefined}
-     */
-    this.readOnlyDOM = function (data) {
-        var that = this;
-
-        var idName = settings.skTipoExpediente + settings.skTipoDocumento + settings.name;
-
-        that.empty().append('<div class="dropzone " style="border:none; border-radius:0px; background:none; max-height: 240px; overflow-x: auto; " id="leHold' + idName + '"></div>');
-
-        for (var i in data) {
-            var intemtl = data[i];
-            $('#leHold' + idName).append(that.readOnlyItem(intemtl));
-        }
-
-    };
-    
-    this.loadComposer = function () {
-        var ledatinis = {};
-
-        if(settings.skDocumento != ''){
-            ledatinis['skDocumento'] = settings.skDocumento;
-        }else if(settings.caracteristicas != ''){
-            ledatinis['caracteristicas'] = settings.caracteristicas;
-        }else if(settings.skCodigo != ''){
-            ledatinis['skCodigo'] = settings.skCodigo;
-            ledatinis['skTipoExpediente'] = settings.skTipoExpediente;
-            ledatinis['skTipoDocumento'] = settings.skTipoDocumento;
-        }else{
-            ledatinis['skTipoExpediente'] = settings.skTipoExpediente;
-            ledatinis['skTipoDocumento'] = settings.skTipoDocumento;
-        }
-
-        // LISTAMOS LOS DOCUMENTOS RECIBIDOS DESDE LA VISTA //
-        if (!jQuery.isEmptyObject(settings.lidoDataSet)) {
-            that.empty();
-            var conf = {
-                skTipoExpediente: settings.skTipoExpediente,
-                tipoExpediente: settings.expeData.tipoExpediente,
-                skTipoDocumento: settings.skTipoDocumento,
-                tipoDocumento: settings.expeData.tipoDocumento,
-                pesoMB: settings.expeData.caracteristicas.SIZEDO.sValor,
-                extensiones: settings.expeData.extensiones,
-                docs: []
-            };
-
-            if (settings.readOnly) {
-                that.readOnlyDOM(settings.lidoDataSet.data);
-            } else {
-                if (typeof (settings.expeData.caracteristicas.MULTIP) != 'undefined') {
-                    if (settings.expeData.caracteristicas.MULTIP.sValor && !settings.forceSingleFile) {
-                        that.setDropzonetl(conf);
-                    } else {
-                        that.setDropifytl(conf);
-                    }
-                }else{
-                    that.setDropifytl(conf);
-                }
-            }
-
-            return;
-        }
-
-        // OBTENEMOS LOS DOCUMENTOS GUARDADOS PREVIAMENTE //
-        $.ajax({
-            url: core.SYS_URL + 'sys/docu/docu-serv/documentos-service/?axn=get_documentos',
-            type: 'POST',
-            data: ledatinis,
-            dataType: 'json',
-            async: true,
-            success: function (res) {
-                that.empty();
-                var conf = {
-                    skTipoExpediente: settings.skTipoExpediente,
-                    tipoExpediente: settings.expeData.tipoExpediente,
-                    skTipoDocumento: settings.skTipoDocumento,
-                    tipoDocumento: settings.expeData.tipoDocumento,
-                    extensiones: settings.expeData.extensiones,
-                    pesoMB: settings.expeData.caracteristicas.SIZEDO.sValor,
-                    docs: res.data
-                };
-
-                if (settings.readOnly) {
-                    that.readOnlyDOM(res.data);
-                } else {
-                    if (typeof (settings.expeData.caracteristicas.MULTIP) != 'undefined') {
-                        if (settings.expeData.caracteristicas.MULTIP.sValor && !settings.forceSingleFile) {
-                            that.setDropzonetl(conf);
-                        } else {
-                            that.setDropifytl(conf);
-                        }
-                    }else{
-                        that.setDropifytl(conf);
-                    }
-                }
-
-            },
-            error: function (jqXHR, textStatus, errorThrown) {
-                that.errorShow({
-                    paramAjaxInfo: {
-                        skTipoExpediente: settings.skTipoExpediente,
-                        skTipoDocumento: settings.skTipoDocumento
-                    },
-                    jqXHR: jqXHR,
-                    textStatus: textStatus,
-                    errorThrown: errorThrown
-                });
-            }
-        });
-        
-    };
-    
-    // OBTENEMOS LA CONFIGURACIÓN DEL DOCUMENTO //
-    this.getExpeData = function(){
-        var that = this;
-        $.ajax({
-            url: core.SYS_URL + 'sys/docu/docu-serv/documentos-service/?axn=configuracion_tipoExpediente_tipoDocumento',
-            type: 'POST',
-            data: {
-                skTipoExpediente: settings.skTipoExpediente,
-                skTipoDocumento: settings.skTipoDocumento
-            },
-            dataType: 'json',
-            async: true,
-            success: function (res) {
-                settings.expeData = res.data;
-                that.loadComposer();
-            },
-            error: function (jqXHR, textStatus, errorThrown) {
-                
-                that.errorShow({
-                    paramAjaxInfo: {
-                        skTipoExpediente: settings.skTipoExpediente,
-                        skTipoDocumento: settings.skTipoDocumento
-                    },
-                    jqXHR: jqXHR,
-                    textStatus: textStatus,
-                    errorThrown: errorThrown
-                });
-            }
-        });
-
-    };
-
-    var that = this;
-    this.empty();
-    this.getExpeData();
-
-    return this;
-    
 };
 
 /**
@@ -3854,6 +3985,7 @@ $.fn.CommentPool = function (opt) {
         sComentProssesingLink: window.location.href,
         sResponseProssesingLink: window.location.href,
         skIdentificador: '',
+        skUsuarioCreacion: '',
         skID: '',
         customCommentDom: function (d) {},
         customFormDom: function (d) {}
@@ -3942,6 +4074,7 @@ $.fn.CommentPool = function (opt) {
      *
      *
      * @param {string} skId Char36 identificador
+     * @param {string} skUsuarioCreacion Char36 skUsuarioCreacion
      * @param {string} comm Comentario a enviar
      * @param {function} leCallBack Funcion callback
      * @returns {undefined}
@@ -3958,8 +4091,11 @@ $.fn.CommentPool = function (opt) {
         } else {
             sendeable.skIdentificador = skId;
         }
+        if (settings.skUsuarioCreacion.length === 36) {
 
-        $.ajax({
+            sendeable.skUsuarioCreacion = settings.skUsuarioCreacion;
+        }
+         $.ajax({
             url: settings.sComentProssesingLink,// core.SYS_URL + core.digi.foroServ,
             type: 'POST',
             data: sendeable,
@@ -4002,8 +4138,10 @@ $.fn.CommentPool = function (opt) {
         } else {
             sendeable.skIdentificador = settings.skID;
         }
+        if (settings.skUsuarioCreacion.length === 36) {
+            sendeable.skUsuarioCreacion = settings.skUsuarioCreacion;
+        }
 
-        console.info(sendeable);
 
         $.ajax({
             url: settings.sResponseProssesingLink,
@@ -4150,9 +4288,9 @@ $.fn.CommentPool = function (opt) {
     this.setLoadInitDom = function () {
         var that = this;
 
-        if (!settings.allowNewComents) {
+        /*if (!settings.allowNewComents) {
             return;
-        }
+        }*/
 
         if (settings.skPublicacion.length === 36) {
             settings.skID = settings.skPublicacion;
@@ -4192,7 +4330,7 @@ $.fn.CommentPool = function (opt) {
                 <textarea class="form-control" id="replayTextArea' + settings.skID + '" rows="2" placeholder="Responde aquí"></textarea>\n\
             </div>\n\
             <div class="form-group">\n\
-                <button type="submit" class="btn btn-primary" data-skcom="' + skComm + '" id="saveReplay' + settings.skID + '">Responder</button>\n\
+                <button type="submit" class="btn btn-primary" data-skcom="' + skComm + '"  data-skUsuarioCreacion="' + settings.skUsuarioCreacion + '"  id="saveReplay' + settings.skID + '">Responder</button>\n\
                 <button type="button" id="leCerrarFormularioDeRespuesta' + settings.skID + '" class="btn btn-link blue-grey-500">Cerrar</button>\n\
             </div>\n\
         </div>');
@@ -4237,7 +4375,7 @@ $.fn.CommentPool = function (opt) {
                         <textarea class="form-control" id="comentText' + settings.skID + '" rows="2" placeholder="Comenta aquí."></textarea>\n\
                     </div>\n\
                     <div class="form-group">\n\
-                        <button type="button" class="btn btn-primary core-button" id="rootComentTrigger' + settings.skID + '" data-skidcom="' + settings.skID + '">Comentar</button>\n\
+                        <button type="button" class="btn btn-primary core-button DLOREAN-BUTTONS" id="rootComentTrigger' + settings.skID + '" data-skUsuarioCreacion="' + settings.skUsuarioCreacion + '" data-skidcom="' + settings.skID + '">Comentar</button>\n\
                     </div>\n\
                 </div>');
 
@@ -4366,13 +4504,13 @@ core.page_aside = function page_aside(data) {
  *
  */
 core.serviciosWidget = function serviciosWidget(conf){
-    
+
     $.each(conf.params, function (k, v) {
         conf.params[k] = $(v).val();
     });
-    
+
     conf.params.axn = 'serviciosWidget';
-    
+
     $.ajax({
         url: conf.url,
         type: "POST",
@@ -4525,7 +4663,7 @@ core.wss_reconnectLoop = function () {
         return true;
     }
     if(core.WSS_SHOW_LOGS){
-        console.log("Intentando conectar cada " + core.WSS_RECONNECT_TIMER + 's');
+        //console.log("Intentando conectar cada " + core.WSS_RECONNECT_TIMER + 's');
     }
     core.WSS_WATCHDOG_PID = window.setInterval(core.WSS_watchDog, core.WSS_RECONNECT_TIMER * 1000);
 };
@@ -4582,7 +4720,7 @@ core.socketInit = function () {
         core.WSS.onmessage = function (e) {
 
             if (core.WSS_LOG_STR_MSG) {
-                console.log('Mensaje recibido:', e);
+                //console.log('Mensaje recibido:', e);
             }
 
             var o = JSON.parse(e.data);
@@ -4649,3 +4787,1108 @@ core.socketInit = function () {
     };
 
 };
+
+core.formValue = function formValue(conf) {
+
+    let id = conf.id;
+    let action = conf.axn;
+    let val = conf.val;
+    let textS = conf.text;
+    let selected = conf.select;
+
+    let selector = $('#' + id);
+
+    if(selector.length == 0) {
+        return;
+    }
+
+    let type = selector.get(0).tagName;
+    let attr = selector.attr('type');
+    let plugin = selector.attr('data-plugin');
+
+    if (action === 'set') {
+        if (!Number.isInteger(val)) {
+            if (val) {
+                if (Object.prototype.toString.call(val) == '[object String]') {
+                    val = val.trim();
+                }
+                if (val == null || val === null || val == 'null' || val === undefined || val == '') {
+                    return;
+                }
+            } else {
+                return;
+            }
+        }
+    }
+
+
+    if (type == 'INPUT' || type == 'TEXTAREA') {
+
+        if (action === 'get') {
+
+            if (typeof attr !== typeof undefined && attr !== false) {
+                switch (attr) {
+                    case 'checkbox':
+                        return selector.is(':checked');
+                    case 'radio':
+                        let name = selector.attr('name');
+                        if (typeof name !== typeof undefined && name !== false) {
+                            return $('input[name=' + name + ']').val();
+                        } else {
+                            return selector.val();
+                        }
+                    default:
+                        return selector.val();
+                }
+            }
+            return selector.val();
+        }
+
+        if (action === 'set') {
+
+                if (typeof attr !== typeof undefined && attr !== false) {
+                switch (attr) {
+                    case 'checkbox':
+                    case 'radio':
+                        selector.prop('checked', val);
+                        break;
+                    default:
+                        selector.val(val);
+                        break;
+                }
+            } else {
+                selector.val(val);
+            }
+
+        }
+
+    }
+
+    if (type == 'SELECT') {
+
+        if (action === 'get') {
+            return selector.val();
+        }
+        if (action === 'text') {
+            return $("#" + id + " option:selected").text();
+        }
+
+        if (action === 'set') {
+
+            let multiple = selector.attr('multiple');
+
+            if (typeof plugin !== typeof undefined && plugin !== false) {
+                switch (plugin) {
+                    case 'select2':
+                        if (typeof multiple !== typeof undefined && multiple !== false) {
+
+                            if (typeof textS !== typeof undefined && textS !== false) {
+                                let select = (selected === true || selected === 1) ? 'selected="selected"' : '';
+                                selector.append('<option ' + select + ' value="' + val + '">' + textS + '</option>').trigger('change');
+                            }else {
+                                selector.val(val).trigger('change');
+                            }
+
+                        } else {
+                            if (typeof textS !== typeof undefined && textS !== false) {
+                                let select = (selected === true || selected === 1) ? true : false;
+                                let newOption = new Option(textS, val, false, select);
+                                selector.append(newOption).trigger('change');
+                            }else {
+                                selector.val(val).trigger('change');
+                            }
+
+                        }
+                        break;
+                    default:
+                        selector.val(val);
+                        selector.selectpicker('refresh');
+                        break;
+                }
+            }
+
+
+        }
+
+    }
+
+};
+
+core.copyText = function copyText(element) {
+    var $temp = $("<input>");
+    $("body").append($temp);
+    $temp.val($(element).text()).select();
+    document.execCommand("copy");
+    $temp.remove();
+    toastr.info('Texto Copiado', 'Notificación');
+};
+
+core.multipleInput = function multipleInput() {
+    var el = $('.multiInputDrag');
+    $(el).each(function (i,e) {
+        Sortable.create(e, {
+            onEnd: function (/**Event*/evt) {
+                //console.log('aa');
+            }
+        });
+    });
+};
+
+core.replaceButton = function replaceButton(button , text, icon) {
+    $("a[data-original-title|='"+button+"']").html('<i class="'+icon+'" aria-hidden="true"></i> ' + text)
+};
+
+core.widget_servicios = function widget_servicios(conf){
+        $(".panel-body").LoadingOverlay("show");
+        
+        if(Object.keys(conf.variables).length <= 0){
+            $.ajax({
+                url: core.SYS_URL + 'sys/comp/tari-serv/servicios/',
+                type: 'POST',
+                data: {
+                    axn: 'get_variables_servicios',
+                    skTipoReferencia: conf.skTipoReferencia,
+                    referencias: conf.referencias,
+                    procesos: conf.procesos,
+                    skCodigo: conf.skCodigo,
+                    detalles: conf.detalles
+                },
+                cache: false,
+                async: false,
+                beforeSend: function () {
+                    //toastr.info('CARGANDO... <i class="fa fa-spinner faa-spin animated"></i>', 'NOTIFICACIÓN', {timeOut: false});
+                },
+                success: function (response) {
+                    toastr.clear();
+                    if(!core.sessionOut(response)){
+                        return false;
+                    }
+                    if(response.success){
+                        if(conf.axn == 'init'){
+                            conf.variables = JSON.stringify(response.variables);
+                        }else if(conf.axn == 'get_variables_servicios'){
+                            conf.variables = response.variables;
+                        }
+                    }else{
+                        toastr.error(response.message, 'NOTIFICACIÓN');
+                    }
+                }
+            });
+            
+        }
+        
+        if(conf.axn == 'get_variables_servicios'){
+            core.widget_servicios.data.variables = conf.variables;
+            core.widget_servicios.print_variables(conf);
+            $(".panel-body").LoadingOverlay("hide", true);
+            return true;
+        }
+        
+        var formdata = false;
+        if(window.FormData){
+            formdata = new FormData();
+        }
+        
+        $.each(conf, function (k, v) {
+            if(Array.isArray(v)){
+                $.each(v, function (key, val) {
+                    formdata.append(k+'[]',val);
+                });
+            }else{
+                formdata.append(k,v);
+            }
+        });
+        $.ajax({
+            url: core.SYS_URL + 'sys/comp/tari-serv/servicios/',
+            type: 'POST',
+            data: formdata,
+            cache: false,
+            contentType: false,
+            processData: false,
+            async: false,
+            beforeSend: function () {
+                //toastr.info('CARGANDO... <i class="fa fa-spinner faa-spin animated"></i>', 'NOTIFICACIÓN', {timeOut: false});
+            },
+            success: function (response) {
+                toastr.clear();
+                if(!core.sessionOut(response)){
+                    return false;
+                }
+               
+                if(response.success){
+                    switch(conf.axn) {
+                        case 'init':
+                            core.widget_servicios.data = response;
+                            if(typeof conf.detalles !== "undefined" && conf.detalles == 1){
+                                console.log(response);
+                                core.widget_servicios.print_detalles(response);
+                            }else{
+                                core.widget_servicios.print(response);
+                            }
+                        break;
+                        case 'get_proveedor_servicios':
+                            core.widget_servicios.data.procesos[conf.skServicioProceso] = response.procesos[conf.skServicioProceso];
+                            core.widget_servicios.print(response);
+                        break;
+                        case 'get_calcular_servicio':
+                            if(conf.skTarifaServicio == 'OTRO'){
+                                var skTarifaServicio = response.procesos[conf.skServicioProceso]['servicios'][conf.skTarifaServicio]['skTarifaServicio'];
+                                response.procesos[conf.skServicioProceso]['servicios'][skTarifaServicio] = response.procesos[conf.skServicioProceso]['servicios'][conf.skTarifaServicio];
+                                delete response.procesos[conf.skServicioProceso]['servicios'][conf.skTarifaServicio];
+                                conf.skTarifaServicio = skTarifaServicio;
+                            }
+                            core.widget_servicios.data.procesos[conf.skServicioProceso] = response.procesos[conf.skServicioProceso];
+                            core.widget_servicios.print_calcular_servicio(response.procesos[conf.skServicioProceso].servicios[conf.skTarifaServicio]);
+                        break;
+                        default:
+                    }
+                    
+                }else{
+                    toastr.error(response.message, 'NOTIFICACIÓN');
+                }
+                
+            } 
+        });
+        
+        $(".panel-body").LoadingOverlay("hide", true);
+        
+    };
+    
+    core.widget_servicios.print_detalles = function print_detalles(conf){
+        
+        $("#widget-servicios").html(conf.view);
+        $("#btn-variables-servicios").hide();
+        $("#btn-recalcular-servicios").hide();
+        
+        $.each(conf.procesos, function (k_proceso, v_proceso) {
+            
+            if(typeof v_proceso.servicios === 'object' && Object.keys(v_proceso.servicios).length > 0){
+                var widget_servicios_detalles = '';
+                
+                widget_servicios_detalles = '<blockquote class="blockquote blockquote-default" style="font-family: Roboto,sans-serif; font-size: 14px;">'+
+                    '<table class="table table-hover table-striped table-servicios table-servicios-'+k_proceso+'" data-selectable="selectable" data-row-selectable="false">'+
+                        '<thead>'+
+                            '<tr>'+
+                                '<th colspan="6" style="text-align:left;background-color: #4776a5; color: #ffffff;font-weight: bold;">'+v_proceso.nombreProceso+'</th>'+
+                            '<tr>'+
+                            
+                            '<tr>'+
+                                '<th style="text-align:center;background-color: #2c3e50; color: #ffffff;font-weight: bold;">TARIFA / PROVEEDOR</th>'+
+                                '<th colspan="2">'+v_proceso.sEmpresaProveedor+'</th>'+
+                                '<th style="text-align:center;background-color: #2c3e50; color: #ffffff;font-weight: bold;">FACTURAR A</th>'+
+                                '<th colspan="2">'+v_proceso.sEmpresaFacturacion+'</th>'+
+                            '<tr>'+
+                            '</tr>'+
+                                '<th class="width-5" style="text-align:center;background-color: #2c3e50; color: #ffffff;font-weight: bold;">#</th>'+
+                                '<th style="text-align:left;background-color: #2c3e50; color: #ffffff;font-weight: bold;">SERVICIO</th>'+
+                                '<th style="text-align:left;background-color: #2c3e50; color: #ffffff;font-weight: bold;">UNIDAD</th>'+
+                                '<th style="text-align:left;background-color: #2c3e50; color: #ffffff;font-weight: bold;">CANTIDAD</th>'+
+                                '<th style="text-align:left;background-color: #2c3e50; color: #ffffff;font-weight: bold;">PRECIO UNITARIO</th>'+
+                                '<th style="text-align:left;background-color: #2c3e50; color: #ffffff;font-weight: bold;">IMPORTE</th>'+
+                            '</tr>'+
+                        '</thead>'+
+                        '<tbody id="tbody-servicios-'+k_proceso+'">';
+
+                var i = 1;
+                var bg = ['fbfdfd','e8f1f8'];
+                var bg_flag = 0;
+                var flag_servicios = false;
+                $.each(v_proceso.servicios, function (k_servicio, v_servicio){
+                    if(v_servicio.selected == 1){
+                        flag_servicios = true;
+                        widget_servicios_detalles += ''+
+                            '<tr style="background-color:#'+bg[bg_flag]+';">'+
+                                '<td style="text-align:center;">'+i+'</td>'+
+                                '<td class="col-md-4">'+v_servicio.nombreServicioEmpresa+'</td>'+
+                                '<td class="col-md-2"><span  id="'+k_servicio+'-skTipoMedida">'+(v_servicio.selected == 1 ? v_servicio.tipoMedida : '')+'</span></td>'+
+                                '<td class="col-md-2"><span class="'+k_servicio+'-visualizar-montos" id="'+k_servicio+'-fCantidad">'+(v_servicio.selected == 1 ? v_servicio.fCantidad : '')+'</span></td>'+
+                                '<td class="col-md-2"><span class="'+k_servicio+'-visualizar-montos" id="'+k_servicio+'-fPrecio">$'+(v_servicio.selected == 1 ? v_servicio.fPrecio : '')+'</span></td>'+
+                                '<td class="col-md-2"><span class="'+k_servicio+'-visualizar-montos" id="'+k_servicio+'-fImporte">$'+(v_servicio.selected == 1 ? v_servicio.fImporte : '')+'</span</td>'+
+                            '</tr>';
+                        i++;
+                        bg_flag = (bg_flag == 0 ? 1 : 0);
+                    }
+                });
+                
+                if(!flag_servicios){
+                    widget_servicios_detalles += '<tr><td colspan="6" style="background-color:#e8f1f8;text-align:center;font-size:16px;">- SIN SERVICIOS APLICADOS -</td></tr>';
+                }
+                
+                widget_servicios_detalles += '</tbody></table></blockquote>';
+                
+                $('#widget-servicios-detalles').append(widget_servicios_detalles);
+                
+                $('#input-filter-servicios-'+k_proceso).keyup(function () {
+                    var rex = new RegExp($(this).val(), 'i');
+                    $('#tbody-servicios-'+k_proceso+' tr').hide();
+                    $('#tbody-servicios-'+k_proceso+' tr').filter(function () {
+                        return rex.test($(this).text());
+                    }).show();
+                });
+            }
+        });
+        
+        core.widget_servicios.print_variables(conf);
+        return true;
+        
+        // VARIABLES
+        $.each(conf.variables, function (k, v) {
+            switch(v.skTipoVariable) {
+                case 'DE':
+                    var txt = '<div class="col-lg-3 col-md-3 col-xs-3"'+(v.iMostrar == 1 ? '' : ' hidden ')+'>'+ '<h5><b>'+v.sNombre+'</b></h5><input type="text" class="form-control" value="'+v.sValorVariableNombre+'" disabled /></div>';
+                    if(v.iContribucionPedimento == 1){
+                        $("#widget-servicios-contribucionesPedimento").append(txt);
+                    }else{
+                        $("#widget-servicios-variables").append(txt);
+                    }
+                    if(v.iMostrar != 1){
+                        $("#widget-servicios-variables-"+v.sClaveTarifaVariable).prop('disabled', true);
+                    }
+                break;
+                case 'LI':
+                    var txt = '<div class="col-lg-3 col-md-3 col-xs-3"'+(v.iMostrar == 1 ? '' : ' hidden ')+'>'+ '<h5><b>'+v.sNombre+'</b></h5><input type="text" class="form-control" value="'+v.sValorVariableNombre+'" disabled /></div>';
+                    if(v.iContribucionPedimento == 1){
+                        $("#widget-servicios-contribucionesPedimento").append(txt);
+                    }else{
+                        $("#widget-servicios-variables").append(txt);
+                    }
+                    if(v.iMostrar != 1){
+                        $("#widget-servicios-variables-"+v.sClaveTarifaVariable).prop('disabled', true);
+                    }
+                break;
+                case 'OP':
+                    var txt = '<div class="col-lg-3 col-md-3 col-xs-3"'+(v.iMostrar == 1 ? '' : ' hidden ')+'>'+ '<h5><b>'+v.sNombre+'</b></h5><input type="text" class="form-control" value="'+v.sValorVariableNombre+'" disabled /></div>';
+                    if(v.iContribucionPedimento == 1){
+                        $("#widget-servicios-contribucionesPedimento").append(txt);
+                    }else{
+                        $("#widget-servicios-variables").append(txt);
+                    }
+                    if(v.iMostrar != 1){
+                        $("#widget-servicios-variables-"+v.sClaveTarifaVariable).prop('disabled', true);
+                    }
+                break;
+                case 'MU':
+                    var txt = '<div class="col-lg-3 col-md-3 col-xs-3"'+(v.iMostrar == 1 ? '' : ' hidden ')+'>'+ '<h5><b>'+v.sNombre+'</b></h5><input type="text" class="form-control" value="'+v.sValorVariableNombre+'" disabled /></div>';
+                    if(v.iContribucionPedimento == 1){
+                        $("#widget-servicios-contribucionesPedimento").append(txt);
+                    }else{
+                        $("#widget-servicios-variables").append(txt);
+                    }
+                    if(v.iMostrar != 1){
+                        $("#widget-servicios-variables-"+v.sClaveTarifaVariable).prop('disabled', true);
+                    }
+                break;
+              default:
+            }
+        });
+        
+        
+        
+    };
+    
+    core.widget_servicios.print = function print(conf){
+    
+        // VISTA DEL WIDGET DE SERVICIOS
+            if(conf.axn == 'init'){
+                $("#widget-servicios").html(conf.view);
+            }
+        
+        // PROCESOS SERVICIOS //
+            var widget_servicios_procesos = '';
+            var active = true;
+            $.each(conf.procesos, function (k_proceso, v_proceso) {
+                
+                if(conf.axn == 'init'){
+                    
+                    widget_servicios_procesos = ''+
+                            '<li class="'+(active == true ? 'active' : '')+'" role="presentation">'+
+                                '<a data-toggle="tab" href="#TAB-'+k_proceso+'" aria-controls="TAB-'+k_proceso+'" role="tab" aria-expanded="true">'+
+                                    '<i class="icon fa-caret-right" aria-hidden="true"></i>'+v_proceso.nombreProceso+
+                                '</a>'+
+                            '</li>';
+                    
+                    $("#widget-servicios-procesos").append(widget_servicios_procesos);
+                    
+                    if(k_proceso == 'OTRO'){
+                        var widget_servicios_procesos_facturar = '';
+                        widget_servicios_procesos_facturar += ''+
+                            '<div class="tab-pane '+(active == true ? 'active' : '')+'" id="TAB-'+k_proceso+'" role="tabpanel">'+
+                                '<div class="col-lg-12 col-md-12 col-xs-12">'+
+                                    '<div class="example-wrap">'+
+                                        '<div class="col-lg-6 col-md-6 col-xs-12">'+
+                                            '<div class="form-group margin-bottom-30">'+
+                                                '<h4 class="example-title"><span style="color:red;"></span>TARIFA / PROVEEDOR:</h4>'+
+                                                '<select class="form-control widget-servicios-proveedor" disabled id="'+k_proceso+'-proveedor" name="'+k_proceso+'[skEmpresaSocioProveedor]" onchange="core.widget_servicios.chage_proveedor({skServicioProceso:\''+k_proceso+'\', skEmpresaSocioProveedor: this.value});">'+
+                                                    '<option value="GENERICO" selected>GENÉRICO</option>'+
+                                                '</select>'+
+                                            '</div>'+
+                                        '</div>'+
+                                        '<div class="col-lg-6 col-md-6 col-xs-12">'+
+                                            '<div class="form-group margin-bottom-30">'+
+                                                '<h4 class="example-title"><span style="color:red;"></span>FACTURAR A:</h4>'+
+                                                '<select class="form-control widget-servicios-facturar" id="'+k_proceso+'-facturar" name="'+k_proceso+'[skEmpresaSocioFacturacion]">'+
+                                                    (v_proceso.skEmpresaSocioFacturacion != null ? '<option value="'+v_proceso.skEmpresaSocioFacturacion+'" selected>'+v_proceso.sEmpresaFacturacion+'</option>' : '')+
+                                                '</select>'+
+                                            '</div>'+
+                                        '</div>'+
+                                        '<div class="well col-lg-12 col-md-12 col-xs-12">'+
+                                        '<div class="col-lg-4 col-md-4 col-xs-4">'+
+                                            '<div class="form-group margin-bottom-30">'+
+                                                '<h4 class="example-title"><span style="color:red;"></span>SERVICIO:</h4>'+
+                                                '<input type="text" id="'+k_proceso+'-servicio" name="'+k_proceso+'-servicio" class="form-control input-servicio" placeholder="SERVICIO" autocomplete="off" value="">'+
+                                            '</div>'+
+                                        '</div>'+
+                                        '<div class="col-lg-4 col-md-4 col-xs-4">'+
+                                            '<div class="form-group margin-bottom-30">'+
+                                                '<h4 class="example-title"><span style="color:red;"></span>CANTIDAD:</h4>'+
+                                                '<div class="input-group k_servicio-visualizar-montos">'+
+                                                    '<span class="input-group-addon">'+
+                                                        '<b>#</b>'+
+                                                    '</span>'+
+                                                    '<input type="text" id="'+k_proceso+'-fCantidad" name="'+k_proceso+'-fCantidad" class="form-control input-cantidad" placeholder="CANTIDAD" autocomplete="off" value="">'+
+                                                '</div>'+
+                                            '</div>'+
+                                        '</div>'+
+                                        '<div class="col-lg-4 col-md-4 col-xs-4">'+
+                                            '<div class="form-group margin-bottom-30">'+
+                                                '<h4 class="example-title"><span style="color:red;"></span>PRECIO UNITARIO:</h4>'+
+                                                '<div class="input-group k_servicio-visualizar-montos">'+
+                                                    '<span class="input-group-addon">'+
+                                                        '<b>$</b>'+
+                                                    '</span>'+
+                                                    '<input type="text" id="'+k_proceso+'-fPrecio" name="'+k_proceso+'-fPrecio" class="form-control input-precio" placeholder="PRECIO" autocomplete="off" value="">'+
+                                                '</div>'+
+                                            '</div>'+
+                                        '</div>'+
+                                        '<div class="col-lg-12 col-md-12 col-xs-12">'+ 
+                                            '<button type="button" class="btn btn-primary pull-right" onclick="core.widget_servicios.agregar_servicio({skServicioProceso:\''+k_proceso+'\'});""><i class="icon fa-plus" aria-hidden="true"></i> Agregar</button>'+
+                                        '</div>'+
+                                        '</div>'+
+                                        '<div class="col-lg-12 col-md-12 col-xs-12 example" id="widget-servicios-procesos-servicios-'+k_proceso+'">';
+                    }else{
+                        var widget_servicios_procesos_facturar = '';
+                        widget_servicios_procesos_facturar += ''+
+                            '<div class="tab-pane '+(active == true ? 'active' : '')+'" id="TAB-'+k_proceso+'" role="tabpanel">'+
+                                '<div class="col-lg-12 col-md-12 col-xs-12">'+
+                                    '<div class="example-wrap">'+
+                                        '<div class="col-lg-6 col-md-6 col-xs-12">'+
+                                            '<div class="form-group margin-bottom-30">'+
+                                                '<h4 class="example-title"><span style="color:red;"></span>TARIFA / PROVEEDOR:</h4>'+
+                                                '<select class="form-control widget-servicios-proveedor" id="'+k_proceso+'-proveedor" name="'+k_proceso+'[skEmpresaSocioProveedor]" onchange="core.widget_servicios.chage_proveedor({skServicioProceso:\''+k_proceso+'\', skEmpresaSocioProveedor: this.value});">'+
+                                                    (v_proceso.skEmpresaSocioProveedor != null ? '<option value="'+v_proceso.skEmpresaSocioProveedor+'" selected>'+v_proceso.sEmpresaProveedor+'</option>' : '')+
+                                                '</select>'+
+                                            '</div>'+
+                                        '</div>'+
+                                        '<div class="col-lg-6 col-md-6 col-xs-12">'+
+                                            '<div class="form-group margin-bottom-30">'+
+                                                '<h4 class="example-title"><span style="color:red;"></span>FACTURAR A:</h4>'+
+                                                '<select class="form-control widget-servicios-facturar" id="'+k_proceso+'-facturar" name="'+k_proceso+'[skEmpresaSocioFacturacion]">'+
+                                                    (v_proceso.skEmpresaSocioFacturacion != null ? '<option value="'+v_proceso.skEmpresaSocioFacturacion+'" selected>'+v_proceso.sEmpresaFacturacion+'</option>' : '')+
+                                                '</select>'+
+                                            '</div>'+
+                                        '</div>'+
+                                        '<div class="col-lg-12 col-md-12 col-xs-12 example" id="widget-servicios-procesos-servicios-'+k_proceso+'">';
+                    }
+                    
+                    active = false;
+                    widget_servicios_procesos_facturar += '</div></div></div></div>';
+                    $("#widget-servicios-procesos-facturar").append(widget_servicios_procesos_facturar);
+                    core.autocomplete2('.widget-servicios-proveedor', 'getEmpresas', core.SYS_URL + 'sys/comp/tari-serv/servicios/', 'PROVEEDOR / CLIENTE',{skEmpresaTipo: '["PROV","CLIE"]'});
+                    core.autocomplete2('.widget-servicios-facturar', 'getEmpresas', core.SYS_URL + 'sys/comp/tari-serv/servicios/', 'FACTURAR A',{skEmpresaTipo: '["CLIE"]'});
+                
+                }
+                
+                $("#widget-servicios-procesos-servicios-"+k_proceso).html("");
+                
+                if(typeof v_proceso.servicios === 'object' && Object.keys(v_proceso.servicios).length > 0){
+                    
+         
+                    var widget_servicios_procesos_servicios = ''+
+                        '<div class="input-group margin-top-20">'+ 
+                            '<span class="input-group-addon">FILTRAR</span>'+
+                            '<input id="input-filter-servicios-'+k_proceso+'" type="text" class="form-control" autocomplete="off" placeholder="ESCRIBE AQUÍ...">'+
+                            '<span class="input-group-btn">'+
+                                '<button type="button" class="btn btn-warning" id="btn-ocultar-servicios-'+k_proceso+'" style="display:block;" onclick="core.widget_servicios.ocultar_mostrar_servicios({skServicioProceso:\''+k_proceso+'\', ocultar: 1, obj: this});"><i class="icon fa-eye-slash" aria-hidden="true"></i> OCULTAR NO SELECCIONADOS</button>'+
+                                '<button type="button" class="btn btn-success" id="btn-mostrar-servicios-'+k_proceso+'" style="display:none;"  onclick="core.widget_servicios.ocultar_mostrar_servicios({skServicioProceso:\''+k_proceso+'\', ocultar: 0, obj: this});"><i class="icon fa-eye" aria-hidden="true"></i> MOSTRAR TODOS</button>'+
+                            '</span>'+
+                        '</div>'+
+                        '<table class="table table-hover table-servicios table-servicios-'+k_proceso+'" data-selectable="selectable" data-row-selectable="false">'+
+                            '<thead>'+
+                                '<tr>'+
+                                    '<th class="width-50">'+
+                                        '<span class="checkbox-custom checkbox-primary">'+
+                                            '<input class="selectable-all" type="checkbox">'+
+                                            '<label></label>'+
+                                        '</span>'+
+                                    '</th>'+
+                                    '<th>SERVICIO</th>'+
+                                    '<th>UNIDAD</th>'+
+                                    '<th>CANTIDAD</th>'+
+                                    '<th>PRECIO UNITARIO</th>'+
+                                    '<th>IMPORTE</th>'+
+                                '</tr>'+
+                            '</thead>'+
+                            '<tbody id="tbody-servicios-'+k_proceso+'">';
+                    
+                    $.each(v_proceso.servicios, function (k_servicio, v_servicio){
+                        
+                        widget_servicios_procesos_servicios += ''+
+                            '<tr>'+
+                                '<td>'+
+                                    '<span class="checkbox-custom checkbox-primary">'+
+                                        '<input class="selectable-item checkbox-servicio" type="checkbox" id="check-'+k_servicio+'" value="1" '+(v_servicio.selected == 1 ? 'checked' : '')+' onchange="core.widget_servicios.change_servicio({skServicioProceso:\''+k_proceso+'\', skTarifaServicio:\''+k_servicio+'\', skEmpresaSocioProveedor:\''+v_proceso.skEmpresaSocioProveedor+'\'});" skServicioProceso="'+k_proceso+'" skTarifaServicio="'+k_servicio+'">'+
+                                        '<label for="row-619"></label>'+
+                                    '</span>'+
+                                '</td>'+
+                                '<td class="col-md-4">'+v_servicio.nombreServicioEmpresa+'</td>'+
+                                '<td class="col-md-2"><span  id="'+k_servicio+'-skTipoMedida">'+(v_servicio.selected == 1 ? v_servicio.tipoMedida : '')+'</span></td>';
+                                
+                                // fCantidad
+                                    widget_servicios_procesos_servicios += '<td class="col-md-2">';
+                                    if(typeof v_servicio.variables === 'object'){
+                                        if(typeof v_servicio.variables.bEditarCantidad === "undefined" && k_proceso != 'OTRO'){
+                                            widget_servicios_procesos_servicios += '<span class="'+k_servicio+'-visualizar-montos" id="'+k_servicio+'-fCantidad">'+(v_servicio.selected == 1 ? v_servicio.fCantidad : '')+'</span>';
+                                        }else{
+                                            widget_servicios_procesos_servicios += ''+
+                                                '<div class="input-group '+k_servicio+'-visualizar-montos">'+
+                                                    '<span class="input-group-addon">'+
+                                                        '<b>#</b>'+
+                                                    '</span>'+
+                                                    '<input type="text" id="'+k_servicio+'-fCantidad" name="'+k_proceso+'[servicios]['+k_servicio+'][fCantidad]" class="form-control input-cantidad" placeholder="CANTIDAD" autocomplete="off" value="'+(v_servicio.selected == 1 ? v_servicio.fCantidad : '')+'" '+(v_servicio.selected == 1 ? '' : 'disabled')+' onchange="core.widget_servicios.change_servicio({skServicioProceso:\''+k_proceso+'\', skTarifaServicio:\''+k_servicio+'\', skEmpresaSocioProveedor:\''+v_proceso.skEmpresaSocioProveedor+'\'});">'+
+                                                '</div>'+
+                                            '</td>';
+                                        }
+                                    }else{
+                                        widget_servicios_procesos_servicios += '<span class="'+k_servicio+'-visualizar-montos" id="'+k_servicio+'-fCantidad">'+(v_servicio.selected == 1 ? v_servicio.fCantidad : '')+'</span>';
+                                    }
+                                    widget_servicios_procesos_servicios += '</td>';
+                                
+                                // fPrecio
+                                    widget_servicios_procesos_servicios += '<td class="col-md-2">';
+                                    if(typeof v_servicio.variables === 'object'){
+                                        if(typeof v_servicio.variables.bEditarPrecio === "undefined" && k_proceso != 'OTRO'){
+                                            widget_servicios_procesos_servicios += '<span class="'+k_servicio+'-visualizar-montos" id="'+k_servicio+'-fPrecio">'+(v_servicio.selected == 1 ? '$'+v_servicio.fPrecio : '')+'</span>';
+                                        }else{
+                                            widget_servicios_procesos_servicios += ''+
+                                                '<div class="input-group '+k_servicio+'-visualizar-montos">'+
+                                                    '<span class="input-group-addon">'+
+                                                        '<b>$</b>'+
+                                                    '</span>'+
+                                                    '<input type="text" id="'+k_servicio+'-fPrecio" name="'+k_proceso+'[servicios]['+k_servicio+'][fPrecio]" class="form-control input-precio" placeholder="PRECIO" autocomplete="off" value="'+(v_servicio.selected == 1 ? v_servicio.fPrecio : '')+'" '+(v_servicio.selected == 1 ? '' : 'disabled')+' onchange="core.widget_servicios.change_servicio({skServicioProceso:\''+k_proceso+'\', skTarifaServicio:\''+k_servicio+'\', skEmpresaSocioProveedor:\''+v_proceso.skEmpresaSocioProveedor+'\'});">'+
+                                                '</div>'+
+                                            '</td>';
+                                        }
+                                    }else{
+                                        widget_servicios_procesos_servicios += '<span class="'+k_servicio+'-visualizar-montos" id="'+k_servicio+'-fPrecio">'+(v_servicio.selected == 1 ? '$'+v_servicio.fPrecio : '')+'</span>';
+                                    }
+                                    widget_servicios_procesos_servicios += '</td>';
+                                
+                                // fImporte
+                                    widget_servicios_procesos_servicios += '<td class="col-md-2"><span class="'+k_servicio+'-visualizar-montos" id="'+k_servicio+'-fImporte">'+(v_servicio.selected == 1 ? '$'+v_servicio.fImporte : '')+'</span</td>';
+                        
+                        widget_servicios_procesos_servicios += '</tr>';
+                        
+                    });
+                    widget_servicios_procesos_servicios += '</tbody></table>';
+                    $("#widget-servicios-procesos-servicios-"+k_proceso).append(widget_servicios_procesos_servicios);
+                }else if(k_proceso == 'OTRO'){
+                    var widget_servicios_procesos_servicios = ''+
+                        '<div class="input-group margin-top-20">'+ 
+                            '<span class="input-group-addon">FILTRAR</span>'+
+                            '<input id="input-filter-servicios-'+k_proceso+'" type="text" class="form-control" autocomplete="off" placeholder="ESCRIBE AQUÍ...">'+
+                            '<span class="input-group-btn">'+
+                                '<button type="button" class="btn btn-warning" id="btn-ocultar-servicios-'+k_proceso+'" style="display:block;" onclick="core.widget_servicios.ocultar_mostrar_servicios({skServicioProceso:\''+k_proceso+'\', ocultar: 1, obj: this});"><i class="icon fa-eye-slash" aria-hidden="true"></i> OCULTAR NO SELECCIONADOS</button>'+
+                                '<button type="button" class="btn btn-success" id="btn-mostrar-servicios-'+k_proceso+'" style="display:none;"  onclick="core.widget_servicios.ocultar_mostrar_servicios({skServicioProceso:\''+k_proceso+'\', ocultar: 0, obj: this});"><i class="icon fa-eye" aria-hidden="true"></i> MOSTRAR TODOS</button>'+
+                            '</span>'+
+                        '</div>'+
+                        '<table class="table table-hover table-servicios table-servicios-'+k_proceso+'" data-selectable="selectable" data-row-selectable="false">'+
+                            '<thead>'+
+                                '<tr>'+
+                                    '<th class="width-50">'+
+                                        '<span class="checkbox-custom checkbox-primary">'+
+                                            '<input class="selectable-all" type="checkbox">'+
+                                            '<label></label>'+
+                                        '</span>'+
+                                    '</th>'+
+                                    '<th>SERVICIO</th>'+
+                                    '<th>UNIDAD</th>'+
+                                    '<th>CANTIDAD</th>'+
+                                    '<th>PRECIO UNITARIO</th>'+
+                                    '<th>IMPORTE</th>'+
+                                '</tr>'+
+                            '</thead>'+
+                            '<tbody id="tbody-servicios-'+k_proceso+'">';
+                    
+                    widget_servicios_procesos_servicios += '</tbody></table>';
+                    $("#widget-servicios-procesos-servicios-"+k_proceso).append(widget_servicios_procesos_servicios);
+                }
+                
+                $('#input-filter-servicios-'+k_proceso).keyup(function () {
+                    var rex = new RegExp($(this).val(), 'i');
+                    $('#tbody-servicios-'+k_proceso+' tr').hide();
+                    $('#tbody-servicios-'+k_proceso+' tr').filter(function () {
+                        return rex.test($(this).text());
+                    }).show();
+                });
+                
+            });
+            
+            if(conf.axn == 'init'){
+                core.widget_servicios.print_variables(conf);
+            }
+    };
+    
+    core.widget_servicios.print_variables = function print_variables(conf){
+        $("#widget-servicios-variables-secciones").html('');
+        $("#widget-servicios-variables").html('');
+        
+        var secciones = {};
+        var active = true;
+        $.each(conf.variables, function (k, v) {
+            
+            if(typeof conf.detalles !== "undefined" && conf.detalles == 1){
+                v.iEditar = '';
+            }
+            
+            if(typeof secciones[v.skSeccion] == "undefined"){
+                secciones[v.skSeccion] = {};
+                
+                // LISTADO DE SECCIONES
+                    var li_seccion = ''+
+                        '<li class="'+(active == true ? 'active' : '')+'" role="presentation">'+
+                            '<a data-toggle="tab" href="#TAB-variables-'+v.skSeccion+'" aria-controls="TAB-'+v.skSeccion+'" role="tab" aria-expanded="true">'+
+                                '<i class="icon fa-caret-right" aria-hidden="true"></i>'+v.seccion+
+                            '</a>'+
+                        '</li>';
+                    $("#widget-servicios-variables-secciones").append(li_seccion);
+                
+                // TAB DE SECCIONES
+                    var tab_seccion = '<div class="tab-pane col-lg-12 col-md-12 col-xs-12 well '+(active == true ? 'active' : '')+'" id="TAB-variables-'+v.skSeccion+'" role="tabpanel"></div>';
+                    $("#widget-servicios-variables").append(tab_seccion);
+            }
+            active = false;
+            secciones[v.skSeccion][v.sClaveTarifaVariable] = v;
+
+            switch(v.skTipoVariable) {
+                case 'DE':
+                    var li_variable = '<div class="col-lg-3 col-md-3 col-xs-3"'+(v.iMostrar == 1 ? '' : ' hidden ')+'><div class="form-group">'+ '<h5><b>'+v.sNombre+'</b></h5>'+(v.iEditar == 1 ? '<div class="checkbox-custom checkbox-primary clearfix">'+'<input '+(v.sValorVariable != '' ? 'checked' : '')+' id="widget-servicios-variables-'+v.sClaveTarifaVariable+'" name="variables['+v.sClaveTarifaVariable+']" class="form-check-input" type="checkbox" value="1" sClaveTarifaVariable="'+v.sClaveTarifaVariable+'" onchange="core.widget_servicios.change_variable(this);" />'+'<label for="widget-servicios-variables-'+v.sClaveTarifaVariable+'"><b><small>'+v.sNombre+'</small></b></label></div>' : '<input type="text" class="form-control" value="'+v.sValorVariableNombre+'" disabled />')+'</div></div>';
+                    $("#TAB-variables-"+v.skSeccion).append(li_variable);   
+                    if(v.iMostrar != 1){
+                        $("#widget-servicios-variables-"+v.sClaveTarifaVariable).prop('disabled', true);
+                    }
+                break;
+                case 'LI':
+                    var li_variable = '<div class="col-lg-3 col-md-3 col-xs-3"'+(v.iMostrar == 1 ? '' : ' hidden ')+'><div class="form-group">'+ '<h5><b>'+v.sNombre+'</b></h5>'+(v.iEditar == 1 ? '<input type="text" autocomplete="off" class="form-control" placeholder="'+v.sNombre+'" id="widget-servicios-variables-'+v.sClaveTarifaVariable+'" name="variables['+v.sClaveTarifaVariable+']" value = "'+v.sValorVariable+'" sClaveTarifaVariable="'+v.sClaveTarifaVariable+'" onchange="core.widget_servicios.change_variable(this);" />' : '<input type="text" class="form-control" value="'+v.sValorVariableNombre+'" disabled />')+'</div></div>';
+                    $("#TAB-variables-"+v.skSeccion).append(li_variable);   
+                    if(v.iMostrar != 1){
+                        $("#widget-servicios-variables-"+v.sClaveTarifaVariable).prop('disabled', true);
+                    }
+                break;
+                case 'OP':
+                    var li_variable = '<div class="col-lg-3 col-md-3 col-xs-3"'+(v.iMostrar == 1 ? '' : ' hidden ')+'><div class="form-group">'+ '<h5><b>'+v.sNombre+'</b></h5>'+(v.iEditar == 1 ? '<select id="widget-servicios-variables-'+v.sClaveTarifaVariable+'" name="variables['+v.sClaveTarifaVariable+']" sClaveTarifaVariable="'+v.sClaveTarifaVariable+'" onchange="core.widget_servicios.change_variable(this);" >'+
+                        '<option value="'+v.sValorVariable+'">'+v.sValorVariableNombre+'</option></select>' : '<input type="text" class="form-control" value="'+v.sValorVariableNombre+'" disabled />')+'</div></div>';
+                    $("#TAB-variables-"+v.skSeccion).append(li_variable);   
+                    if(v.iMostrar != 1){
+                        $("#widget-servicios-variables-"+v.sClaveTarifaVariable).prop('disabled', true);
+                    }
+                    core.autocomplete2('#widget-servicios-variables-'+v.sClaveTarifaVariable, 'getDatosVariable', core.SYS_URL + 'sys/comp/tari-serv/servicios/', v.sNombre, {sCatalogo: v.sCatalogo,sCatalogoKey:v.sCatalogoKey,sCatalogoNombre:v.sCatalogoNombre});
+                break;
+                case 'MU':
+                    var li_variable = '<div class="col-lg-3 col-md-3 col-xs-3"'+(v.iMostrar == 1 ? '' : ' hidden ')+'><div class="form-group">'+ '<h5><b>'+v.sNombre+'</b></h5>';
+                    if(v.iEditar == 1){
+                        li_variable += '<select id="widget-servicios-variables-'+v.sClaveTarifaVariable+'" name="variables['+v.sClaveTarifaVariable+']" multiple="multiple" data-plugin="select2" sClaveTarifaVariable="'+v.sClaveTarifaVariable+'" onchange="core.widget_servicios.change_variable(this);">';
+                        if(Array.isArray(v.sValorVariable) == true){
+                            $.each(v.sValorVariable, function (k2, v2) {
+                                li_variable += '<option selected value="'+v.sValorVariable[k2]+'">'+v.sValorVariableNombre[k2]+'</option>';
+                            });
+                        }else{
+                            li_variable += '<option selected value="'+v.sValorVariable+'">'+v.sValorVariableNombre+'</option>';
+                        }
+                         li_variable += '</select></div></div>';
+                    }else{
+                        li_variable += '<input type="text" class="form-control" value="'+v.sValorVariableNombre+'" disabled />'+'</div>';
+                    }
+                    $("#TAB-variables-"+v.skSeccion).append(li_variable);   
+                    if(v.iMostrar != 1){
+                        $("#widget-servicios-variables-"+v.sClaveTarifaVariable).prop('disabled', true);
+                    }
+                    core.autocomplete2('#widget-servicios-variables-'+v.sClaveTarifaVariable, 'getDatosVariable', core.SYS_URL + 'sys/comp/tari-serv/servicios/', v.sNombre, {sCatalogo: v.sCatalogo,sCatalogoKey:v.sCatalogoKey,sCatalogoNombre:v.sCatalogoNombre});
+                break;
+              default:
+            }
+        });
+    };
+    
+    core.widget_servicios.print_variables1 = function print_variables(conf){
+        
+        $("#widget-servicios-contribucionesPedimento").html('');
+        $("#widget-servicios-variables").html('');
+        $.each(conf.variables, function (k, v) {
+            switch(v.skTipoVariable) {
+                case 'DE':
+                    var txt = '<div class="col-lg-3 col-md-3 col-xs-3"'+(v.iMostrar == 1 ? '' : ' hidden ')+'><div class="form-group">'+ '<h5><b>'+v.sNombre+'</b></h5>'+(v.iEditar == 1 ? '<div class="checkbox-custom checkbox-primary clearfix">'+'<input '+(v.sValorVariable != '' ? 'checked' : '')+' id="widget-servicios-variables-'+v.sClaveTarifaVariable+'" name="variables['+v.sClaveTarifaVariable+']" class="form-check-input" type="checkbox" value="1" sClaveTarifaVariable="'+v.sClaveTarifaVariable+'" onchange="core.widget_servicios.change_variable(this);" />'+'<label for="widget-servicios-variables-'+v.sClaveTarifaVariable+'"><b><small>'+v.sNombre+'</small></b></label></div>' : '<input type="text" class="form-control" value="'+v.sValorVariableNombre+'" disabled />')+'</div></div>';
+                    if(v.iContribucionPedimento == 1){
+                        $("#widget-servicios-contribucionesPedimento").append(txt);
+                    }else{
+                        $("#widget-servicios-variables").append(txt);
+                    }
+                    if(v.iMostrar != 1){
+                        $("#widget-servicios-variables-"+v.sClaveTarifaVariable).prop('disabled', true);
+                    }
+                break;
+                case 'LI':
+                    var txt = '<div class="col-lg-3 col-md-3 col-xs-3"'+(v.iMostrar == 1 ? '' : ' hidden ')+'><div class="form-group">'+ '<h5><b>'+v.sNombre+'</b></h5>'+(v.iEditar == 1 ? '<input type="text" autocomplete="off" class="form-control" placeholder="'+v.sNombre+'" id="widget-servicios-variables-'+v.sClaveTarifaVariable+'" name="variables['+v.sClaveTarifaVariable+']" value = "'+v.sValorVariable+'" sClaveTarifaVariable="'+v.sClaveTarifaVariable+'" onchange="core.widget_servicios.change_variable(this);" />' : '<input type="text" class="form-control" value="'+v.sValorVariableNombre+'" disabled />')+'</div></div>';
+
+                    if(v.iContribucionPedimento == 1){
+                        $("#widget-servicios-contribucionesPedimento").append(txt);
+                    }else{
+                        $("#widget-servicios-variables").append(txt);
+                    }
+                    if(v.iMostrar != 1){
+                        $("#widget-servicios-variables-"+v.sClaveTarifaVariable).prop('disabled', true);
+                    }
+                break;
+                case 'OP':
+                    var txt = '<div class="col-lg-3 col-md-3 col-xs-3"'+(v.iMostrar == 1 ? '' : ' hidden ')+'><div class="form-group">'+ '<h5><b>'+v.sNombre+'</b></h5>'+(v.iEditar == 1 ? '<select id="widget-servicios-variables-'+v.sClaveTarifaVariable+'" name="variables['+v.sClaveTarifaVariable+']" sClaveTarifaVariable="'+v.sClaveTarifaVariable+'" onchange="core.widget_servicios.change_variable(this);" >'+
+                        '<option value="'+v.sValorVariable+'">'+v.sValorVariableNombre+'</option></select>' : '<input type="text" class="form-control" value="'+v.sValorVariableNombre+'" disabled />')+'</div></div>';
+
+
+                    if(v.iContribucionPedimento == 1){
+                        $("#widget-servicios-contribucionesPedimento").append(txt);
+                    }else{
+                        $("#widget-servicios-variables").append(txt);
+                    }
+                    core.autocomplete2('#widget-servicios-variables-'+v.sClaveTarifaVariable, 'getDatosVariable', core.SYS_URL + 'sys/comp/tari-serv/servicios/', v.sNombre, {sCatalogo: v.sCatalogo,sCatalogoKey:v.sCatalogoKey,sCatalogoNombre:v.sCatalogoNombre});
+                    if(v.iMostrar != 1){
+                        $("#widget-servicios-variables-"+v.sClaveTarifaVariable).prop('disabled', true);
+                    }
+
+                break;
+                case 'MU':
+
+
+                    var txt = '<div class="col-lg-3 col-md-3 col-xs-3"'+(v.iMostrar == 1 ? '' : ' hidden ')+'><div class="form-group">'+ '<h5><b>'+v.sNombre+'</b></h5>';
+                    if(v.iEditar == 1){
+                         txt += '<select id="widget-servicios-variables-'+v.sClaveTarifaVariable+'" name="variables['+v.sClaveTarifaVariable+']" multiple="multiple" data-plugin="select2" sClaveTarifaVariable="'+v.sClaveTarifaVariable+'" onchange="core.widget_servicios.change_variable(this);">';
+
+                        if(Array.isArray(v.sValorVariable) == true){
+                            $.each(v.sValorVariable, function (k2, v2) {
+                                txt += '<option selected value="'+v.sValorVariable[k2]+'">'+v.sValorVariableNombre[k2]+'</option>';
+                            });
+                        }else{
+                            txt += '<option selected value="'+v.sValorVariable+'">'+v.sValorVariableNombre+'</option>';
+                        }
+
+                         txt += '</select></div></div>';
+                    }else{
+                        txt += '<input type="text" class="form-control" value="'+v.sValorVariableNombre+'" disabled />'+'</div>';
+                    }
+
+
+                    if(v.iContribucionPedimento == 1){
+                        $("#widget-servicios-contribucionesPedimento").append(txt);
+                    }else{
+                        $("#widget-servicios-variables").append(txt);
+                    }
+
+                        core.autocomplete2('#widget-servicios-variables-'+v.sClaveTarifaVariable, 'getDatosVariable', core.SYS_URL + 'sys/comp/tari-serv/servicios/', v.sNombre, {sCatalogo: v.sCatalogo,sCatalogoKey:v.sCatalogoKey,sCatalogoNombre:v.sCatalogoNombre});
+
+                    if(v.iMostrar != 1){
+                        $("#widget-servicios-variables-"+v.sClaveTarifaVariable).prop('disabled', true);
+                    }
+
+                break;
+              default:
+
+            }
+        });
+        
+        
+        // RECALCULAR SERVICIOS
+            if(conf.axn == 'get_variables_servicios'){
+                core.widget_servicios.recalcular_servicios(conf);
+            }
+        
+    };
+    
+    core.widget_servicios.guardar = function guardar(conf){
+        console.log(conf);
+        var obj = {
+            axn: "guardar",
+            guardar: 1,
+            skCodigo: conf.skCodigo,
+            procesos: JSON.stringify(core.widget_servicios.data.procesos),
+            variables: JSON.stringify(core.widget_servicios.data.variables),
+            skTipoReferencia: core.widget_servicios.data.skTipoReferencia,
+            referencias: JSON.stringify(core.widget_servicios.data.referencias)
+        }; 
+        core.widget_servicios(obj);
+    };
+    
+    core.widget_servicios.agregar_servicio = function agregar_servicio(conf){
+        
+        conf.skTarifaServicio = 'OTRO';
+        
+        var obj = {
+            axn: "get_calcular_servicio",
+            skTipoReferencia: core.widget_servicios.data.skTipoReferencia,
+            referencias: JSON.stringify(core.widget_servicios.data.referencias),
+            skServicioProceso: conf.skServicioProceso,
+            procesos: {},
+            variables: JSON.stringify(core.widget_servicios.data.variables)
+        };
+        
+        if(Object.keys(core.widget_servicios.data.procesos[conf.skServicioProceso].servicios).length > 0){
+            var servicios = core.widget_servicios.data.procesos[conf.skServicioProceso].servicios;  
+        }else{
+            var servicios = {};
+        }
+        
+        servicios[conf.skTarifaServicio] = {
+            selected: 1,
+            nombreServicioEmpresa: $("#"+conf.skServicioProceso+"-servicio").val(),
+            fCantidad: $("#"+conf.skServicioProceso+"-fCantidad").val(),
+            fPrecio: $("#"+conf.skServicioProceso+"-fPrecio").val(),
+            skDivisa: 'MXN',
+            skServicio: null,
+            skTarifa: null,
+            skTarifaServicio: conf.skTarifaServicio,
+            skTipoResultado: 'MA',
+            cobros: {},
+            variables: {}
+        };
+        
+        core.widget_servicios.data.procesos[conf.skServicioProceso].servicios = servicios;
+        
+        obj.skTarifaServicio = conf.skTarifaServicio;
+                
+        // SE AGREGA PARA PRUEBAS DE BASE DE CALCULO DE HONORARIOS
+            obj.procesos = JSON.stringify(core.widget_servicios.data.procesos);
+            
+        core.widget_servicios(obj);
+    };
+    
+    core.widget_servicios.change_servicio = function change_servicio(conf){
+        
+        if(core.widget_servicios.data.procesos[conf.skServicioProceso]['servicios'][conf.skTarifaServicio]['bObligatorio'] == 1 && $('#check-'+conf.skTarifaServicio).is(':checked') == false){
+            toastr.error('EL SERVICIO "'+core.widget_servicios.data.procesos[conf.skServicioProceso]['servicios'][conf.skTarifaServicio]['nombreServicioEmpresa']+'" ES REQUERIDO', 'NOTIFICACIÓN');
+            $('#check-'+conf.skTarifaServicio).prop('checked',true);
+            return false;
+        }
+        
+        if($('#check-'+conf.skTarifaServicio).is(':checked')){
+            var obj = {
+                axn: "get_calcular_servicio",
+                skTipoReferencia: core.widget_servicios.data.skTipoReferencia,
+                referencias: JSON.stringify(core.widget_servicios.data.referencias),
+                skServicioProceso: conf.skServicioProceso, 
+                procesos: {},
+                variables: JSON.stringify(core.widget_servicios.data.variables)
+            };
+            
+            core.widget_servicios.data.procesos[conf.skServicioProceso].servicios[conf.skTarifaServicio].selected = 1;
+            
+            if(typeof $("input[id='"+conf.skTarifaServicio+"-fCantidad']") !== "undefined"){
+                core.widget_servicios.data.procesos[conf.skServicioProceso].servicios[conf.skTarifaServicio].fCantidad = $("input[id='"+conf.skTarifaServicio+"-fCantidad']").val();
+            }else{
+                core.widget_servicios.data.procesos[conf.skServicioProceso].servicios[conf.skTarifaServicio].fCantidad = null;
+            }
+             
+            /*if(typeof $("#"+conf.skTarifaServicio+"-fPrecio") !== "undefined"){
+                core.widget_servicios.data.procesos[conf.skServicioProceso].servicios[conf.skTarifaServicio].fPrecio = $("#"+conf.skTarifaServicio+"-fPrecio").val();
+            }*/
+            
+            /*if(typeof $("#"+conf.skTarifaServicio+"-fPrecio") !== "undefined"){
+                core.widget_servicios.data.procesos[conf.skServicioProceso].servicios[conf.skTarifaServicio].fPrecio = $("#"+conf.skTarifaServicio+"-fPrecio").val();
+            }else{
+                core.widget_servicios.data.procesos[conf.skServicioProceso].servicios[conf.skTarifaServicio].fPrecio = null;
+            }*/
+            
+            if(typeof $("input[id='"+conf.skTarifaServicio+"-fPrecio']") !== "undefined"){
+                core.widget_servicios.data.procesos[conf.skServicioProceso].servicios[conf.skTarifaServicio].fPrecio = $("input[id='"+conf.skTarifaServicio+"-fPrecio']").val();
+            }else{
+                core.widget_servicios.data.procesos[conf.skServicioProceso].servicios[conf.skTarifaServicio].fPrecio = null;
+            }
+            
+            obj.procesos[conf.skServicioProceso] = { 
+                skServicioProceso: conf.skServicioProceso,  
+                nombreProceso: core.widget_servicios.data.procesos[conf.skServicioProceso].nombreProceso, 
+                skEmpresaSocioProveedor: conf.skEmpresaSocioProveedor, 
+                skEmpresaSocioFacturacion: core.widget_servicios.data.procesos[conf.skServicioProceso].skEmpresaSocioFacturacion,
+                servicios: core.widget_servicios.data.procesos[conf.skServicioProceso].servicios
+
+            };
+            obj.skTarifaServicio = conf.skTarifaServicio;
+            obj.procesos = JSON.stringify(obj.procesos);
+            
+        // SE AGREGA PARA PRUEBAS DE BASE DE CALCULO DE HONORARIOS
+            obj.procesos = JSON.stringify(core.widget_servicios.data.procesos);
+            
+            core.widget_servicios(obj);
+            
+        }else{
+            core.widget_servicios.data.procesos[conf.skServicioProceso].servicios[conf.skTarifaServicio].selected = 0;
+            $("#"+conf.skTarifaServicio+"-fCantidad").prop("disabled",true);
+            $("#"+conf.skTarifaServicio+"-fPrecio").prop("disabled",true);
+            $("#"+conf.skTarifaServicio+"-fCantidad").val("");
+            $("#"+conf.skTarifaServicio+"-fPrecio").val("");
+            $("#"+conf.skTarifaServicio+"-fCantidad").text("");
+            $("#"+conf.skTarifaServicio+"-fPrecio").text("");
+            $("#"+conf.skTarifaServicio+"-skTipoMedida").text("");
+            $("#"+conf.skTarifaServicio+"-fImporte").text("");
+        }
+
+    
+    };
+    
+    core.widget_servicios.change_variable = function change_variable(conf){
+        var sClaveTarifaVariable = $("#"+conf.id).attr("sClaveTarifaVariable");
+        switch(core.widget_servicios.data.variables[sClaveTarifaVariable].skTipoVariable) {
+            case 'DE':
+                core.widget_servicios.data.variables[sClaveTarifaVariable].sValorVariable = ($("#widget-servicios-variables-"+sClaveTarifaVariable).prop("checked") == true ? 1 : '');
+                core.widget_servicios.data.variables[sClaveTarifaVariable].sValorVariableNombre = ($("#widget-servicios-variables-"+sClaveTarifaVariable).prop("checked") == true ? 1 : '');
+            break;
+            case 'LI':
+                core.widget_servicios.data.variables[sClaveTarifaVariable].sValorVariable = $("#widget-servicios-variables-"+sClaveTarifaVariable).val();
+                core.widget_servicios.data.variables[sClaveTarifaVariable].sValorVariableNombre = $("#widget-servicios-variables-"+sClaveTarifaVariable).val();
+            break;
+            case 'OP':
+                core.widget_servicios.data.variables[sClaveTarifaVariable].sValorVariable = $("#widget-servicios-variables-"+sClaveTarifaVariable).val();
+                core.widget_servicios.data.variables[sClaveTarifaVariable].sValorVariableNombre = $("#widget-servicios-variables-"+sClaveTarifaVariable).text();
+            break;
+            case 'MU':
+                var sValorVariable = [];
+                var sValorVariableNombre = [];
+                $("#widget-servicios-variables-"+sClaveTarifaVariable).select2('data').forEach(function (item) { 
+                    sValorVariable.push(item.id);
+                    sValorVariableNombre.push(item.text);
+                });
+                core.widget_servicios.data.variables[sClaveTarifaVariable].sValorVariable = sValorVariable;
+                core.widget_servicios.data.variables[sClaveTarifaVariable].sValorVariableNombre = sValorVariableNombre;
+            break;
+        }
+        
+        // RECALCULAR SERVICIOS
+            core.widget_servicios.recalcular_servicios(conf);
+    };
+    
+    core.widget_servicios.recalcular_servicios = function recalcular_servicios(conf){
+        var checkbox_servicio = $('.checkbox-servicio:checkbox:checked');
+        $.each(checkbox_servicio, function (k, v) {
+            core.widget_servicios.change_servicio({
+                skServicioProceso: $("#"+v.id).attr('skServicioProceso'), 
+                skTarifaServicio: $("#"+v.id).attr('skTarifaServicio'), 
+                skEmpresaSocioProveedor: core.widget_servicios.data.procesos[$("#"+v.id).attr('skServicioProceso')].skEmpresaSocioProveedor
+            });
+        });
+    };
+    
+    core.widget_servicios.get_variables_servicios = function get_variables_servicios(conf){
+        core.widget_servicios({
+            axn: 'get_variables_servicios',
+            procesos: JSON.stringify(core.widget_servicios.data.procesos),
+            variables: {},
+            referencias: core.widget_servicios.data.referencias,
+            skCodigo: '',
+            complementaria: core.widget_servicios.data.complementaria
+        });
+    };
+    
+    core.widget_servicios.ocultar_mostrar_servicios = function ocultar_mostrar_servicios(conf){
+        if(conf.ocultar == 0){
+            $('#tbody-servicios-'+conf.skServicioProceso+' > tr').show();
+            $(conf.obj).hide();
+            $('#btn-ocultar-servicios-'+conf.skServicioProceso).show();
+        }else{
+            $(conf.obj).hide();
+            $('#btn-mostrar-servicios-'+conf.skServicioProceso).show();
+            $('#tbody-servicios-'+conf.skServicioProceso+' > tr').each(function(k,v){ 
+                if($('td:eq(0)', v).find('input[type="checkbox"]').is(':checked')){
+                    $(v).show();
+                }else{
+                    $(v).hide();
+                }
+            });
+        }
+        
+    };
+    
+    core.widget_servicios.print_calcular_servicio = function print_calcular_servicio(conf){
+        
+        if($("#"+conf.skTarifaServicio+"-fCantidad").length > 0){
+            $("#"+conf.skTarifaServicio+"-fCantidad").prop("disabled",false);
+            $("#"+conf.skTarifaServicio+"-fCantidad").val(conf.fCantidad);
+            $("#"+conf.skTarifaServicio+"-fCantidad").html(conf.fCantidad);
+            $("#"+conf.skTarifaServicio+"-fPrecio").prop("disabled",false);
+            $("#"+conf.skTarifaServicio+"-fPrecio").val(conf.fPrecio);
+            $("#"+conf.skTarifaServicio+"-fPrecio").html('$'+conf.fPrecio);
+            $("#"+conf.skTarifaServicio+"-skTipoMedida").html(conf.tipoMedida); 
+            $("#"+conf.skTarifaServicio+"-fImporte").html('$'+conf.fImporte);
+        }else{
+            var widget_servicios_procesos_servicios = '';
+            widget_servicios_procesos_servicios += ''+
+                '<tr>'+
+                    '<td>'+
+                        '<span class="checkbox-custom checkbox-primary">'+
+                            '<input class="selectable-item checkbox-servicio" type="checkbox" id="check-'+conf.skTarifaServicio+'" value="1" '+(conf.selected == 1 ? 'checked' : '')+' onchange="core.widget_servicios.change_servicio({skServicioProceso:\''+conf.skServicioProceso+'\', skTarifaServicio:\''+conf.skTarifaServicio+'\', skEmpresaSocioProveedor:\'GENERICO\'});">'+
+                            '<label for="row-619"></label>'+
+                        '</span>'+
+                    '</td>'+
+                    '<td class="col-md-4">'+conf.nombreServicioEmpresa+'</td>'+
+                    '<td class="col-md-2"><span  id="'+conf.skTarifaServicio+'-skTipoMedida">'+(conf.selected == 1 ? conf.tipoMedida : '')+'</span></td>';
+
+            // fCantidad
+            widget_servicios_procesos_servicios += '<td class="col-md-2">'+    
+                    '<div class="input-group '+conf.skTarifaServicio+'-visualizar-montos">'+
+                        '<span class="input-group-addon">'+
+                            '<b>#</b>'+
+                        '</span>'+
+                        '<input type="text" id="'+conf.skTarifaServicio+'-fCantidad" name="'+conf.skServicioProceso+'[servicios]['+conf.skTarifaServicio+'][fCantidad]" class="form-control input-cantidad" placeholder="CANTIDAD" autocomplete="off" value="'+(conf.selected == 1 ? conf.fCantidad : '')+'" '+(conf.selected == 1 ? '' : 'disabled')+' onchange="core.widget_servicios.change_servicio({skServicioProceso:\''+conf.skServicioProceso+'\', skTarifaServicio:\''+conf.skTarifaServicio+'\', skEmpresaSocioProveedor:\'GENERICO\'});">'+
+                    '</div>'+
+                '</td>';
+                                        
+            // fPrecio
+            widget_servicios_procesos_servicios += '<td class="col-md-2">'+
+                    '<div class="input-group '+conf.skTarifaServicio+'-visualizar-montos">'+
+                        '<span class="input-group-addon">'+
+                            '<b>$</b>'+
+                        '</span>'+
+                        '<input type="text" id="'+conf.skTarifaServicio+'-fPrecio" name="'+conf.skServicioProceso+'[servicios]['+conf.skTarifaServicio+'][fPrecio]" class="form-control input-precio" placeholder="PRECIO" autocomplete="off" value="'+(conf.selected == 1 ? conf.fPrecio : '')+'" '+(conf.selected == 1 ? '' : 'disabled')+' onchange="core.widget_servicios.change_servicio({skServicioProceso:\''+conf.skServicioProceso+'\', skTarifaServicio:\''+conf.skTarifaServicio+'\', skEmpresaSocioProveedor:\'GENERICO\'});">'+
+                    '</div>'+
+                '</td>';
+        
+            // fImporte
+            widget_servicios_procesos_servicios += '<td class="col-md-2"><span class="'+conf.skTarifaServicio+'-visualizar-montos" id="'+conf.skTarifaServicio+'-fImporte">'+(conf.selected == 1 ? '$'+conf.fImporte : '')+'</span</td>';
+
+            widget_servicios_procesos_servicios += '</tr>';
+
+            $("#tbody-servicios-OTRO").append(widget_servicios_procesos_servicios);
+        }
+        
+        
+     };
+    
+    core.widget_servicios.chage_proveedor = function chage_proveedor(conf){
+        
+        var obj = {
+            axn: "get_proveedor_servicios",
+            skTipoReferencia: core.widget_servicios.data.skTipoReferencia,
+            referencias: JSON.stringify(core.widget_servicios.data.referencias),
+            skServicioProceso: conf.skServicioProceso, 
+            procesos: {},
+            variables: JSON.stringify(core.widget_servicios.data.variables)
+        };
+        
+        obj.procesos[conf.skServicioProceso] = { 
+            skServicioProceso: conf.skServicioProceso,  
+            nombreProceso: core.widget_servicios.data.procesos[conf.skServicioProceso].nombreProceso, 
+            skEmpresaSocioProveedor: conf.skEmpresaSocioProveedor, 
+            skEmpresaSocioFacturacion: core.widget_servicios.data.procesos[conf.skServicioProceso].skEmpresaSocioFacturacion,
+            servicios: core.widget_servicios.data.procesos[conf.skServicioProceso].servicios
+
+        };
+        obj.skTarifaServicio = conf.skTarifaServicio;
+        obj.procesos = JSON.stringify(obj.procesos);
+        
+        core.widget_servicios(obj);
+    };

@@ -137,29 +137,6 @@ if (isset($data['datos'])) {
 
 		    </div> 
 		    <div class="col-md-12 same-heigth">
-			<div class="col-md-4 col-lg-4">
-			    <div class="form-group">
-				<h4 class="example-title">BL:</h4>
-				<p><?php echo (isset($result['sBL'])) ? $result['sBL'] : 'N/D'; ?> </p>
-			    </div>
-			</div> 
-			<div class="col-md-4 col-lg-4">
-			    <div class="form-group">
-				<h4 class="example-title">Pedimento:</h4>
-				<p><?php echo (isset($result['sPedimento'])) ? $result['sPedimento'] : 'N/D'; ?> </p>
-			    </div>
-			</div>
-
-		    </div>
-		    <div class="col-md-12 same-heigth">
-			<div class="col-md-4 col-lg-4">
-			    <div class="form-group">
-				<h4 class="example-title">Contenedor:</h4>
-				<p><?php echo (!empty($result['sContenedor']) ? $result['sContenedor'] : 'N/D'); ?> </p>
-			    </div>
-			</div>
-		    </div>
-		    <div class="col-md-12 same-heigth">
 			<div class="col-md-6 col-lg-4">
 			    <div class="form-group">
 				<h4 class="example-title">Referencia:</h4>

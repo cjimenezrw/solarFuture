@@ -65,7 +65,7 @@ if (isset($data['cotizacionTerminosCondiciones'])) {
                     <div class="col-md-4 col-lg-4">
                         <div class="form-group">
                             <h4 class="example-title"><b class="text-danger"></b>DIRECCIÓN:</h4>
-                            <input class="form-control" onkeyup="this.value = this.value.toUpperCase();" name="sDireccion" value="<?php echo (isset($result['sDireccion'])) ? $result['sDireccion'] : ''; ?>" placeholder="DIRECCIÓN" autocomplete="off" type="text">
+                            <input class="form-control" onkeyup="this.value = this.value.toUpperCase();" name="sDireccion" id="sDireccion" value="<?php echo (isset($result['sDireccion'])) ? $result['sDireccion'] : ''; ?>" placeholder="DIRECCIÓN" autocomplete="off" type="text">
                         </div>
                     </div>
 
@@ -79,7 +79,7 @@ if (isset($data['cotizacionTerminosCondiciones'])) {
                     <div class="col-md-4 col-lg-4">
                         <div class="form-group">
                             <h4 class="example-title"><b class="text-danger"></b>TELÉFONO:</h4>
-                            <input class="form-control" onkeyup="this.value = this.value.toUpperCase();" name="sTelefono" value="<?php echo (isset($result['sTelefono'])) ? $result['sTelefono'] : ''; ?>" placeholder="TELÉFONO" autocomplete="off" type="text">
+                            <input class="form-control" onkeyup="this.value = this.value.toUpperCase();" name="sTelefono" id="sTelefono" value="<?php echo (isset($result['sTelefono'])) ? $result['sTelefono'] : ''; ?>" placeholder="TELÉFONO" autocomplete="off" type="text">
                         </div>
                     </div>
 
@@ -634,7 +634,16 @@ function addCommas(amount) {
                             core.autocomplete2('.skTipoMedida', 'get_medidas', window.location.href, 'Unidad');
                             core.autocomplete2('.skServicio', 'get_servicios', window.location.href, 'Concepto',{filter:'like'});
                         });
-                        core.autocomplete2('#skEmpresaSocioCliente', 'get_empresasProspectos', window.location.href, 'Cliente / Prospecto');
+                        core.autocomplete2('#skEmpresaSocioCliente', 'get_empresas', window.location.href, 'Cliente', { skEmpresaTipo: 'CLIE'});
+
+                        $("#skEmpresaSocioCliente").change(function(e){
+                            var data_array = $("#skEmpresaSocioCliente").select2('data')[0];
+                            console.log(data_array);
+                            $("#sNombreCliente").val(data_array.data.sNombreEmpresa);
+                            $("#sDireccion").val(data_array.data.domicilio);
+                            $("#sTelefono").val(data_array.data.sTelefono);
+                            $("#sCorreos").tagsinput("add", data_array.data.sCorreo);
+                        });
 
                         core.autocomplete2('.skTipoMedida', 'get_medidas', window.location.href, 'Unidad');
                         core.autocomplete2('.skServicio', 'get_servicios', window.location.href, 'Concepto',{filter:'like'});

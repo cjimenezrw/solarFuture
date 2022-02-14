@@ -359,9 +359,12 @@ Class Vent_Model Extends DLOREAN_Model {
         $sql = "SELECT N1.* FROM (
             SELECT
             es.skEmpresaSocio AS id, CONCAT(e.sNombre,' (',e.sRFC,') - ',et.sNombre) AS nombre, es.skEmpresaTipo
+            ,e.sNombre AS sNombreEmpresa,e.sCorreo,e.sTelefono
+            ,CONCAT(dom.sColonia,', ',dom.sCalle,' #',dom.sNumeroExterior,', ',dom.skMunicipio) AS domicilio
             FROM rel_empresasSocios es
             INNER JOIN cat_empresas e ON e.skEmpresa = es.skEmpresa
             INNER JOIN cat_empresasTipos et ON et.skEmpresaTipo = es.skEmpresaTipo
+            LEFT JOIN rel_empresasSocios_domicilios dom ON dom.skEmpresaSocio = es.skEmpresaSocio
             WHERE es.skEstatus = 'AC' AND e.skEstatus = 'AC' AND es.skEmpresaSocioPropietario = " . escape($_SESSION['usuario']['skEmpresaSocioPropietario']);
 
         if (isset($this->vent['skEmpresaTipo']) && !empty($this->vent['skEmpresaTipo'])) {
@@ -372,14 +375,14 @@ Class Vent_Model Extends DLOREAN_Model {
             }
         }
 
-        $sql .= " ) AS N1 ";
+        $sql .= " ) AS N1 WHERE 1=1 ";
 
         if (isset($this->vent['sNombre']) && !empty(trim($this->vent['sNombre']))) {
-            $sql .= " WHERE N1.nombre LIKE '%" . trim($this->vent['sNombre']) . "%' ";
+            $sql .= " AND N1.nombre LIKE '%" . trim($this->vent['sNombre']) . "%' ";
         }
 
         if (isset($this->vent['skEmpresaSocio']) && !empty($this->vent['skEmpresaSocio'])) {
-            $sql .= " WHERE N1.id = " . escape($this->vent['skEmpresaSocio']);
+            $sql .= " AND N1.id = " . escape($this->vent['skEmpresaSocio']);
         }
 
         $sql .= " ORDER BY N1.nombre ASC ";
@@ -392,14 +395,7 @@ Class Vent_Model Extends DLOREAN_Model {
         utf8($records);
         return $records;
     }
-    /**
-     * get_empresasProspectos
-     *
-     * Consulta Empresas Socios
-     *
-     * @author Luis Valdez <lvaldez@softlab.com.mx>
-     * @return Array Datos | False
-     */
+
     public function get_empresasProspectos() {
 
         $sql = "SELECT N1.* FROM (
@@ -434,14 +430,6 @@ Class Vent_Model Extends DLOREAN_Model {
         return $records;
     }
 
-     /**
-     * get_empresas
-     *
-     * Consulta Empresas Socios
-     *
-     * @author Luis Valdez <lvaldez@softlab.com.mx>
-     * @return Array Datos | False
-     */
     public function get_prospectos() {
 
         $sql = "SELECT N1.* FROM (

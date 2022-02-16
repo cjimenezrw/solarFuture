@@ -14,6 +14,15 @@ if (isset($data['datos'])) {
         <div class="panel panel-bordered panel-primary panel-line" style="display: block;">
           <div class="panel-heading">
             <h3 class="panel-title">DATOS GENERALES</h3>
+            <ul class="panel-actions panel-actions-keep">
+                <li >
+                    <h4 class="example-title">NO FACTURABLE:</h4>
+                    <input type="checkbox" class="js-switch-large" data-plugin="switchery" data-color="#4d94ff" 
+                    <?php echo !empty($data['datos']['iNoFacturable']) ? 'checked' : ''; ?>
+                    name="iNoFacturable" id="iNoFacturable" value="1"/>
+                </li>
+
+            </ul>
             <?php
 							if(isset($result['iFolio'])){
 					?>
@@ -25,7 +34,7 @@ if (isset($data['datos'])) {
           </div>
 
           <div class="panel-body container-fluid" >
-          <div class="col-md-12 same-heigth">
+          <div class="row row-lg col-lg-12">
                     <div class="col-md-4 col-lg-4">
                         <div class="form-group">
                             <h4 class="example-title">MONEDA :</h4>
@@ -64,7 +73,6 @@ if (isset($data['datos'])) {
                                 <p><?php echo (!empty($result['fCostoRecibo'])) ? $result['fCostoRecibo'] : '';?> </p>
                             </div>
                         </div>
-
 
                         <div class="row row-lg col-lg-12 clearfix"><hr></div>
 
@@ -123,7 +131,7 @@ if (isset($data['datos'])) {
     </div>
 </div>
 
-                </div>
+</div>        
         </div>
       </div>
 
@@ -208,7 +216,17 @@ if (isset($data['datos'])) {
   
     $(document).ready(function () {
       $('#core-guardar').formValidation(core.formValidaciones);
-         
+      $("#skMetodoPago").select2({placeholder: "MÉTODO DE PAGO", allowClear: true});
+      $("#skFormaPago").select2({placeholder: "FORMA DE PAGO", allowClear: true});
+      $("#skUsoCFDI").select2({placeholder: "USO DE CFDI", allowClear: true});
+      $('[data-plugin="switchery"]').each(function () {
+            new Switchery(this, {
+                color: $(this).data('color'),
+                size: $(this).data('size')
+            });
+        });
+
+        $('.help-text').webuiPopover();      
     });
 
 </script>

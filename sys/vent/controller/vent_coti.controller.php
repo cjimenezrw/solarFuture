@@ -316,6 +316,10 @@ Class Vent_coti_Controller Extends Vent_Model {
     public function getDatos() {
         $this->data = ['success' => TRUE, 'message' => NULL, 'datos' => NULL];
         $this->vent['skCotizacion'] = (isset($_GET['p1']) && !empty($_GET['p1'])) ? $_GET['p1'] : NULL;
+
+        $this->data['formaPago'] = parent::consultar_formasPago();
+        $this->data['metodoPago'] = parent::consultar_metodosPago();
+        $this->data['usoCFDI'] = parent::consultar_usosCFDI(); 
  
         if (!empty($this->vent['skCotizacion'])) {
             

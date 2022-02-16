@@ -1131,13 +1131,10 @@ core.closePanelModule = function closePanelModule() {
  * Botón Guardar
  */
 core.guardar = function guardar(conf) {
-    
-    var result = true;
-    
+
     /*if (!core.validarFormulario(core.formValidaciones)) {
      return false;
      }*/
-
     validate = $('#core-guardar').data('formValidation').validate();
     if (!validate.isValid()) {
         return false;
@@ -1155,33 +1152,46 @@ core.guardar = function guardar(conf) {
     var formdata = false;
     if (window.FormData) {
         formdata = new FormData($('#core-guardar')[0]);
-        if(typeof conf.axn === "undefined"){
-            formdata.append('axn', 'guardar');
-        }else{
-            formdata.append('axn', conf.axn);
-        }
+        formdata.append('axn', 'guardar');
         // SUMMERNOTE //
         var summernote = $('.core-summernote');
         $.each(summernote, function (k, v) {
             formdata.append($(v).attr('name'), $(v).code());
         });
     }
-    
+
     // ARCHIVOS DE DIGITALIZACIÓN -> MÚLTIPLE
-        if (typeof window.digiInputs !== "undefined" || window.digiInputs !== "object") {
-            $.each(window.digiInputs, function (id_digi, item_digi) {
-                if (typeof item_digi.getAcceptedFiles !== "undefined"){
-                    var files = item_digi.getAcceptedFiles();
-                    if (files.length > 0) {
-                        var i = 0;
-                        $.each(files, function (id, item) {
-                            formdata.append(id_digi+'[' + i + ']', item);
-                            i++;
-                        });
-                    }
+    if (typeof window.digiInputs !== "undefined" || window.digiInputs !== "object") {
+        $.each(window.digiInputs, function (id_digi, item_digi) {
+            if (typeof item_digi.getAcceptedFiles !== "undefined"){
+                var files = item_digi.getAcceptedFiles();
+                if (files.length > 0) {
+                    var i = 0;
+                    $.each(files, function (id, item) {
+                        formdata.append(id_digi+'[' + i + ']', item);
+                        i++;
+                    });
                 }
-            });
-        }
+            }
+        });
+    }
+
+    // ARCHIVOS DE DOCUMENTACIÓN -> MÚLTIPLE
+    if (typeof window.core_docu_documents !== "undefined" || window.core_docu_documents !== "object") {
+        $.each(window.core_docu_documents, function (id_digi, item_digi) {
+            formdata.append(id_digi, JSON.stringify(window.core_docu_documents[id_digi]['skDocumentos']));
+            if (typeof item_digi.getAcceptedFiles !== "undefined"){
+                var files = item_digi.getAcceptedFiles();
+                if (files.length > 0) {
+                    var i = 0;
+                    $.each(files, function (id, item) {
+                        formdata.append(id_digi+'[' + i + ']', item);
+                        i++;
+                    });
+                }
+            }
+        });
+    }
 
     $.ajax({
         url: window.location.href,
@@ -1190,7 +1200,6 @@ core.guardar = function guardar(conf) {
         cache: false,
         contentType: false,
         processData: false,
-        async: false,
         beforeSend: function () {
             toastr.info('Guardando Datos. <i class="fa fa-spinner faa-spin animated"></i>', 'Notificación', {timeOut: false});
         },
@@ -1200,25 +1209,13 @@ core.guardar = function guardar(conf) {
                 return false;
             }
             if (response.success) {
-                core.form.change = false;
-                $(window).off('beforeunload');
                 toastr.success(response.message, 'Notificación');
-                if(typeof conf.loadModule === "undefined"){
-                    core.menuLoadModule(conf);
-                }else{
-                    if(conf.loadModule == true){
-                        core.menuLoadModule(conf);
-                    }else{
-                        result = response;
-                    }
-                }
+                core.menuLoadModule(conf);
             } else {
                 toastr.error(response.message, 'Notificación');
-                result = response;
             }
         }
     });
-    return result;
 };
 
 /*
@@ -3477,6 +3474,493 @@ core.digi.inputShow = function (obj) {
 
     };
 
+};
+
+$.fn.core_docu_component = function (opt) {
+    if(typeof (window.core_docu_documents) === 'undefined'){
+        window.core_docu_documents = {};
+    }
+    
+    /**
+     * Opciones por default.
+     * @type Object
+     */
+    var settings = $.extend({
+        skTipoExpediente: 'EXGRAL',
+        skTipoDocumento: 'DOGRAL',
+        name: 'docu_file',
+        skDocumento: '',
+        caracteristicas: '',
+        readOnly: false,
+        allowDelete: true,
+        forceSingleFile: false,
+        deleteCallBack: function (obj) {}
+    }, opt);
+    
+    /**
+     * Establece mensaje de error en caso de no poder cargar componentes.
+     *
+     * @param {object} info
+     * @returns {undefined}
+     */
+    this.errorShow = function (info) {
+        console.error(info);
+        this.append('<blockquote class="blockquote blockquote-danger">\n\
+            <p>Hubo un error al inicializar el componente de Documentación</p>\n\
+            <footer><cite title="Source Title"> Intenta nuevamente </cite></footer></blockquote>');
+    };
+    
+    /**
+     * Crea una nueva instancia de Dropzone en el namespace window.digiInput
+     * y muestra los archivos que existan basados en el selector definido.
+     *
+     * @param {object} config
+     * @returns {undefined}
+     */
+    this.setDropzonetl = function (config) {
+        
+        //console.log('config_setDropzonetl: ', config);
+
+        var f = '';
+        for (var i in config.extensiones) {
+
+            f = f + '.' + config.extensiones[i];
+            if (parseInt(i) !== config.extensiones.length - 1) {
+                f = f + ',';
+            }
+        }
+        
+        var idName = config.skTipoExpediente + config.skTipoDocumento + settings.name;
+        this.append('<div class="dropzone clsbox " id="' + idName + '"></div>');
+        
+        var dcfig = typeof (opt.dropzoneConfig) === 'object' ? opt.dropzoneConfig : {};
+        var DropzoneConfig = $.extend({
+            url: core.SYS_URL + 'sys/docu/docu-serv/documentos-service/?axn=guardar',
+            maxFilesize: config.pesoMB,
+            dictFileTooBig: 'El archivo es demasiado grande, Peso Máximo: '+ config.pesoMB + 'MB',
+            addRemoveLinks: true,
+            //dictRemoveFileConfirmation: true,
+            replace: '<i class="icon fa-cloud-upload" aria-hidden="true"></i> Arrastre un archivo o haga clic en reemplazar <br> Solo se permiten '  + config.extensiones.join(','),
+            autoProcessQueue: false,
+            acceptedFiles: f,
+            dictInvalidFileType: 'Archivo NO Permitido, Extensiones Permitidas: ' + config.extensiones.join(','),
+            dictRemoveFile: (settings.allowDelete ? '<b><i class="icon fa-trash" aria-hidden="true"></i> Eliminar</b>' : '   '),
+            dictDefaultMessage: 'Expediente: <b>'+config.tipoExpediente+'</b> | Documento: <b>'+config.tipoDocumento+'</b><br>Peso Máximo: <b>'+config.pesoMB+'MB</b> | Extensiones Permitidas: <b>' + config.extensiones.join(',') + '</b><br><i class="icon fa-cloud-upload" aria-hidden="true"></i> Arrastre y suelte archivos o haga clic',
+            paramName: settings.name,
+            removedfile: function (file) {
+                if (!file.hasOwnProperty('skDocumento')) {
+                    //file.previewElement.remove();
+                    //return true;
+
+                    swal({
+                        title: '¡Notificación!',
+                        text: '¿Desea eliminar este documento?',
+                        type: 'warning',
+                        showCancelButton: true,
+                        confirmButtonColor: '#DD6B55',
+                        confirmButtonText: 'Aceptar',
+                        closeOnConfirm: false
+                    }, function () {
+                        file.previewElement.remove();
+                        swal.close();
+                    });
+                    return true;
+
+                }
+                swal({
+                    title: '¡Notificación!',
+                    text: '¿Desea eliminar este documento?',
+                    type: 'warning',
+                    showCancelButton: true,
+                    confirmButtonColor: '#DD6B55',
+                    confirmButtonText: 'Aceptar',
+                    closeOnConfirm: false
+                }, function () {
+                    var resp = false;
+                    $.ajax({
+                        url: core.SYS_URL + 'sys/docu/docu-serv/documentos-service/?axn=eliminar',
+                        type: 'POST',
+                        data: {
+                            skDocumento: file.skDocumento
+                        },
+                        dataType: 'json',
+                        async: true,
+                        success: function (r) {
+                            if (r.success === true) {
+                                file.previewElement.remove();
+                                settings.deleteCallBack({digiResponse: r, skDocumento: file.skDocumento});
+                                var deleteoIntenso = window.core_docu_documents[settings.name].skDocumentos.indexOf(file.skDocumento);
+                                if (deleteoIntenso > -1) {
+                                    window.core_docu_documents[settings.name].skDocumentos.splice(deleteoIntenso, 1);
+                                }
+                                swal("Documento eliminado con éxito", resp.message, "success");
+                            } else {
+                                settings.deleteCallBack({digiResponse: r, skDocumento: file.skDocumento});
+                                swal("Hubo un error al eliminar el documento", resp.message, "error");
+                            }
+                        }
+                    });
+                });
+
+            }
+        }, dcfig);
+        
+        
+        window.core_docu_documents[settings.name] = new Dropzone("#" + idName, DropzoneConfig);
+        window.core_docu_documents[settings.name].skDocumentos = [];
+        window.core_docu_documents[settings.name].DocumentList = {};
+        for (var ledoc in config.docs) {
+            var turboDoc = config.docs[ledoc];
+            var mockFile = {name: turboDoc.sUbicacion.split('/').pop(), skDocumento: turboDoc.skDocumento};
+            window.core_docu_documents[settings.name].emit("addedfile", mockFile);
+            window.core_docu_documents[settings.name].emit("thumbnail", mockFile, turboDoc.sUbicacionPublicaThumbnail);
+            window.core_docu_documents[settings.name].emit("complete", mockFile);
+            window.core_docu_documents[settings.name].skDocumentos.push(turboDoc.skDocumento);
+            window.core_docu_documents[settings.name].DocumentList[turboDoc.skDocumento] = config.docs[ledoc];
+        }
+        
+        var leSwag = 0;
+        $("#" + idName + ' div.dz-size').each(function () {
+            var buton = '<a href="' + config.docs[leSwag].sUbicacionPublica + '" target="_blank"> \n\
+                <button style="border-radius: 5px;" type="button" class="btn btn-outline btn-default project-button "> <b>VER</b> </button>\n\
+            </a>\n';
+            $(this).empty().append(buton);
+            leSwag = leSwag + 1;
+        });
+        $("#" + idName + ' div.dz-image>img').css('height', '95px');
+
+
+        window.core_docu_documents[settings.name].getInputFile = function () {
+            return window.core_docu_documents[settings.name].getAcceptedFiles();
+        };
+        
+    };
+    
+    
+    /**
+     * Llama la funcion de que crea el objeto dropify o el previsualizador de
+     * archivo si este posee un registro en digitalzacion.
+     * @param {object} config
+     * @returns {undefined}
+     */
+    this.setDropifytl = function (config) {
+        if (config.docs.length > 0) {
+            this.dropifaiFILEDOM(config);
+        } else {
+            this.dropifaitlDOM(config);
+        }
+    };
+    
+    /**
+     * Crea el DOM necesario para ejecutar Dropify.
+     *
+     * @param {object} config
+     * @returns {undefined}
+     */
+    this.dropifaitlDOM = function (config) {
+        
+        //console.log('config_dropifaitlDOM: ', config);
+
+        var le = '<div class="col-md-12"> \n\
+            <input class="dropify"  type="file" data-plugin="dropify" \n\
+            name="' + settings.name + '" data-max-file-size="' + config.pesoMB + 'M" \n\
+            data-allowed-file-extensions="' + config.extensiones.join(' ') + '" />\n\
+        </div>';
+        this.empty().append(le);
+        $('input[name="' + settings.name + '"]').dropify({
+            "messages": {
+                default: "Expediente: <b>"+config.tipoExpediente+"</b> | Documento: <b>"+config.tipoDocumento+"</b><br>Peso Máximo: <b>"+config.pesoMB+"MB</b> | Extensiones Permitidas: <b>" + config.extensiones.join(',') + "</b><br>Arrastre y suelte archivos o haga clic",
+                replace: "Expediente: <b>"+config.tipoExpediente+"</b> | Documento: <b>"+config.tipoDocumento+"</b><br>Peso Máximo: <b>"+config.pesoMB+"MB</b> | Extensiones Permitidas: <b>" + config.extensiones.join(',') + "</b><br>Arrastre y suelte archivos o haga clic",
+                remove: '<b><i class="icon fa-trash" aria-hidden="true"></i> Eliminar</b>',
+                error: 'Revise la Configuración del Componente de Documentación'
+            },
+            "error": {
+                fileSize: '<i class="icon fa-exclamation-triangle" aria-hidden="true"></i> El archivo es demasiado grande<br> Peso Máximo: '+ config.pesoMB + 'MB',
+                fileExtension: '<i class="icon fa-exclamation-triangle" aria-hidden="true"></i> Archivo NO Permitido<br> Extensiones Permitidas: ' + config.extensiones.join(','),
+            }
+        });
+
+        window.core_docu_documents[settings.name] = {};
+        window.core_docu_documents[settings.name].skDocumentos = [];
+        window.core_docu_documents[settings.name].getInputFile = function () {
+
+            if (typeof ($('input[name="' + settings.name + '"]').prop('files')[0]) === 'object') {
+                return  $('input[name="' + settings.name + '"]').prop('files')[0];
+            }
+
+            return false;
+        };
+
+
+    };
+    
+    /**
+     * Crea el DOM y los handlers para el visualizador de archivos.
+     * @param {object} config
+     * @returns {undefined}
+     */
+    this.dropifaiFILEDOM = function (config) {
+        var that = this;
+
+        window.core_docu_documents[settings.name] = {};
+        window.core_docu_documents[settings.name].getInputFile = function () {
+            return false;
+        };
+        window.core_docu_documents[settings.name].skDocumentos = [config.docs[0].skDocumento];
+
+        var deleteoIntenso = (settings.allowDelete == true) ? '<div class="btn-group">\n\
+            <button type="button" class="btn btn-icon btn-pure btn-default btnDeleteDigiDocument' + settings.name + config.skTipoExpediente + config.skTipoDocumento + '" title="Delete" data-digid="' + config.docs[0].skDocumento + '">\n\
+                <i class="icon wb-trash" aria-hidden="true"></i>\n\
+            </button> \n\
+        </div>' : '';
+
+        this.append('\
+        <div class="form-group col-md-12 projects-sort">\n\
+            <div class="col-md-10 app-projects projects-wrap" style="padding:15px; min-height: 215px;">\n\
+                <ul style="list-style: none;" id="' + config.skTipoExpediente + config.skTipoDocumento + 'ul' + '" data-plugin="animateList" data-child=">li">\n\
+                    <li>\n\
+                        <div class="panel">  \n\
+                            <figure class="overlay overlay-hover animation-hover">\n\
+                                <center><img class="caption-figure" style="width: 100px; height: 100px;" src="' + config.docs[0].sUbicacionPublicaThumbnail + '" ></center>\n\
+                                <figcaption class="overlay-panel overlay-background overlay-fade text-center vertical-align"> \n\
+                                    ' + deleteoIntenso + '\n\
+                                    <a href="' + config.docs[0].sUbicacionPublica + '" target="_blank">\n\
+                                        <button type="button" class="btn btn-outline btn-default project-button btnShowDigiDocument"  data-digiID="' + config.docs[0].skDocumento + '"> VER </button>\n\
+                                    </a>\n\
+                                <figure> \n\
+                            <figure>\n\
+                        </div>\n\
+                    </li>\n\
+                </ul>\n\
+            </div>\n\
+        </div>');
+
+        if (settings.allowDelete == true) {
+
+            $('.btnDeleteDigiDocument' + settings.name + config.skTipoExpediente + config.skTipoDocumento).click(function (e) {
+                var skdoc = $(this).data('digid');
+
+                swal({
+                    title: '¡Notificación!',
+                    text: '¿Desea eliminar este documento?',
+                    type: 'warning',
+                    showCancelButton: true,
+                    confirmButtonColor: '#DD6B55',
+                    confirmButtonText: 'Aceptar',
+                    closeOnConfirm: false
+                }, function () {
+                    var resp = false;
+                    $.ajax({
+                        url: core.SYS_URL + 'sys/docu/docu-serv/documentos-service/?axn=eliminar',
+                        type: 'POST',
+                        data: {
+                            skDocumento: skdoc
+                        },
+                        dataType: 'json',
+                        async: false,
+                        success: function (r) {
+                            if (r.success === true) {
+                                that.dropifaitlDOM(config);
+                                settings.deleteCallBack({digiResponse: r, skDocumento: skdoc});
+                                var deleteoIntenso = window.core_docu_documents[settings.name].skDocumentos.indexOf(skdoc);
+                                if (deleteoIntenso > -1) {
+                                    window.core_docu_documents[settings.name].skDocumentos.splice(deleteoIntenso, 1);
+                                }
+                                swal("Documento eliminado con éxito", resp.message, "success");
+                            } else {
+                                swal("Hubo un error al eliminar el documento", resp.message, "error");
+                            }
+                        }
+                    });
+                }
+                );
+                e.stopPropagation();
+            });
+        }
+    };
+    
+    /**
+     * readOnlyItem
+     *
+     * Crea los elementos a visualizar.
+     *
+     * @param {type} doc
+     * @returns {String}
+     */
+    this.readOnlyItem = function (doc) {
+        return '<div class="dz-preview dz-complete dz-image-preview">\n\
+                    <div class="dz-image">\n\
+                        <img data-dz-thumbnail="" alt="Factura comercial_PDOC_007.docx" \n\
+                            src="' + doc.sUbicacionPublicaThumbnail + '" \n\
+                            style="height: 95px;">\n\
+                    </div>\n\
+                    <div class="dz-details">\n\
+                        <div class="dz-size">\n\
+                            <a href="' + doc.sUbicacionPublica + '" target="_blank">\n\
+                                <button style="border-radius: 5px;" type="button" class="btn btn-outline btn-default project-button "> <b>VER</b> </button>\n\
+                            </a>\n\
+                        </div>\n\
+                        <div class="dz-filename"><span data-dz-name="">' + doc.sUbicacion.split('/').pop() + '</span>\n\
+                        </div>\n\
+                    </div>\n\
+                </div>';
+    };
+    
+    /**
+     * readOnlyDOM
+     *
+     * Crea el dom para almacenar los items.
+     *
+     * @param {type} data
+     * @returns {undefined}
+     */
+    this.readOnlyDOM = function (data) {
+        var that = this;
+
+        var idName = settings.skTipoExpediente + settings.skTipoDocumento + settings.name;
+
+        that.empty().append('<div class="dropzone " style="border:none; border-radius:0px; background:none; max-height: 240px; overflow-x: auto; " id="leHold' + idName + '"></div>');
+
+        for (var i in data) {
+            var intemtl = data[i];
+            $('#leHold' + idName).append(that.readOnlyItem(intemtl));
+        }
+
+    };
+    
+    this.loadComposer = function () {
+        var ledatinis = {};
+
+        if(settings.skDocumento != ''){
+            ledatinis['skDocumento'] = settings.skDocumento;
+        }else if(settings.caracteristicas != ''){
+            ledatinis['caracteristicas'] = settings.caracteristicas;
+        }else if(settings.skCodigo != ''){
+            ledatinis['skCodigo'] = settings.skCodigo;
+            ledatinis['skTipoExpediente'] = settings.skTipoExpediente;
+            ledatinis['skTipoDocumento'] = settings.skTipoDocumento;
+        }else{
+            ledatinis['skTipoExpediente'] = settings.skTipoExpediente;
+            ledatinis['skTipoDocumento'] = settings.skTipoDocumento;
+        }
+
+        // LISTAMOS LOS DOCUMENTOS RECIBIDOS DESDE LA VISTA //
+        if (!jQuery.isEmptyObject(settings.lidoDataSet)) {
+            that.empty();
+            var conf = {
+                skTipoExpediente: settings.skTipoExpediente,
+                tipoExpediente: settings.expeData.tipoExpediente,
+                skTipoDocumento: settings.skTipoDocumento,
+                tipoDocumento: settings.expeData.tipoDocumento,
+                pesoMB: settings.expeData.caracteristicas.SIZEDO.sValor,
+                extensiones: settings.expeData.extensiones,
+                docs: []
+            };
+
+            if (settings.readOnly) {
+                that.readOnlyDOM(settings.lidoDataSet.data);
+            } else {
+                if (typeof (settings.expeData.caracteristicas.MULTIP) != 'undefined') {
+                    if (settings.expeData.caracteristicas.MULTIP.sValor && !settings.forceSingleFile) {
+                        that.setDropzonetl(conf);
+                    } else {
+                        that.setDropifytl(conf);
+                    }
+                }else{
+                    that.setDropifytl(conf);
+                }
+            }
+
+            return;
+        }
+
+        // OBTENEMOS LOS DOCUMENTOS GUARDADOS PREVIAMENTE //
+        $.ajax({
+            url: core.SYS_URL + 'sys/docu/docu-serv/documentos-service/?axn=get_documentos',
+            type: 'POST',
+            data: ledatinis,
+            dataType: 'json',
+            async: true,
+            success: function (res) {
+                that.empty();
+                var conf = {
+                    skTipoExpediente: settings.skTipoExpediente,
+                    tipoExpediente: settings.expeData.tipoExpediente,
+                    skTipoDocumento: settings.skTipoDocumento,
+                    tipoDocumento: settings.expeData.tipoDocumento,
+                    extensiones: settings.expeData.extensiones,
+                    pesoMB: settings.expeData.caracteristicas.SIZEDO.sValor,
+                    docs: res.data
+                };
+
+                if (settings.readOnly) {
+                    that.readOnlyDOM(res.data);
+                } else {
+                    if (typeof (settings.expeData.caracteristicas.MULTIP) != 'undefined') {
+                        if (settings.expeData.caracteristicas.MULTIP.sValor && !settings.forceSingleFile) {
+                            that.setDropzonetl(conf);
+                        } else {
+                            that.setDropifytl(conf);
+                        }
+                    }else{
+                        that.setDropifytl(conf);
+                    }
+                }
+
+            },
+            error: function (jqXHR, textStatus, errorThrown) {
+                that.errorShow({
+                    paramAjaxInfo: {
+                        skTipoExpediente: settings.skTipoExpediente,
+                        skTipoDocumento: settings.skTipoDocumento
+                    },
+                    jqXHR: jqXHR,
+                    textStatus: textStatus,
+                    errorThrown: errorThrown
+                });
+            }
+        });
+        
+    };
+    
+    // OBTENEMOS LA CONFIGURACIÓN DEL DOCUMENTO //
+    this.getExpeData = function(){
+        var that = this;
+        $.ajax({
+            url: core.SYS_URL + 'sys/docu/docu-serv/documentos-service/?axn=configuracion_tipoExpediente_tipoDocumento',
+            type: 'POST',
+            data: {
+                skTipoExpediente: settings.skTipoExpediente,
+                skTipoDocumento: settings.skTipoDocumento
+            },
+            dataType: 'json',
+            async: true,
+            success: function (res) {
+                settings.expeData = res.data;
+                that.loadComposer();
+            },
+            error: function (jqXHR, textStatus, errorThrown) {
+                
+                that.errorShow({
+                    paramAjaxInfo: {
+                        skTipoExpediente: settings.skTipoExpediente,
+                        skTipoDocumento: settings.skTipoDocumento
+                    },
+                    jqXHR: jqXHR,
+                    textStatus: textStatus,
+                    errorThrown: errorThrown
+                });
+            }
+        });
+
+    };
+
+    var that = this;
+    this.empty();
+    this.getExpeData();
+
+    return this;
+    
 };
 
 /**

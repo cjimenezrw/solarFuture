@@ -669,7 +669,7 @@ Class Vent_Model Extends DLOREAN_Model {
             WHERE rci.skCotizacion = ".escape($this->vent['skCotizacion'])." AND cc.skServicio IS NOT NULL ";*/    
 
         $select = "SELECT DISTINCT
-            cip.skInformacionProductoServicio,cip.sNombre,cip.sDescripcionHoja1,cip.sDescripcionHoja2,cip.sDescripcionGarantia,cip.sImagen
+            cip.skInformacionProductoServicio,cip.sNombre,cip.sDescripcionHoja1,cip.sDescripcionHoja2,cip.sDescripcionGarantia,cip.sImagen,c.fKwh,cc.fCantidad
             FROM ope_cotizaciones coti 
             LEFT JOIN rel_cotizaciones_servicios cc ON cc.skCotizacion = coti.skCotizacion
             LEFT JOIN cat_servicios c ON c.skServicio = cc.skServicio
@@ -819,6 +819,35 @@ Class Vent_Model Extends DLOREAN_Model {
         return $record; 
     }
 
+    public function consultar_formasPago() {
+        $sql = "SELECT CONCAT('(',cf.sCodigo,') ',cf.sNombre)  AS sNombre,cf.sCodigo FROM cat_formasPago cf  WHERE cf.skEstatus = 'AC'  ORDER BY cf.sNombre ASC   ";
+
+        $result = Conn::query($sql);
+        if (!$result) {
+            return FALSE;
+        }
+        return Conn::fetch_assoc_all($result);
+    }
+    public function consultar_metodosPago() {
+        $sql = "SELECT  CONCAT('(',cm.sCodigo,') ',cm.sNombre) AS sNombre,cm.sCodigo FROM cat_metodosPago cm WHERE cm.skEstatus = 'AC'  ORDER BY cm.sNombre ASC   ";
+
+        $result = Conn::query($sql);
+        if (!$result) {
+            return FALSE;
+        }
+        return Conn::fetch_assoc_all($result);
+    }
+
+    public function consultar_usosCFDI() {
+
+        $sql = "SELECT CONCAT('(',cu.sClave,') ',cu.sNombre) AS sNombre,cu.sClave AS sCodigo FROM cat_usosCFDI cu where cu.skEstatus = 'AC' ORDER BY cu.sNombre ASC  ";
+
+        $result = Conn::query($sql);
+        if (!$result) {
+            return FALSE;
+        }
+        return Conn::fetch_assoc_all($result);
+    }
 
       
 

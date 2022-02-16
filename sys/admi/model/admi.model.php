@@ -261,7 +261,7 @@ Class Admi_Model Extends DLOREAN_Model {
         LEFT JOIN cat_usosCFDI uso ON uso.sClave = oos.skUsoCFDI
         WHERE 1 = 1  AND  oos.skOrdenServicio =  " . escape($this->admi['skOrdenServicio']);
         
-        exit('<pre>'.print_r($sql,1).'</pre>');
+        
         $result = Conn::query($sql);
         if (!$result) {
             return FALSE;

@@ -28,16 +28,24 @@ Class Emso_form_Controller Extends Empr_Model
     */
     public function validarEmpresaSocio(){
         //$sRFC = isset($_POST['sRFC']) ?  ( ($_POST['sRFC'] === 'XAXX010101000') ?  NULL : $_POST['sRFC'] )    : NULL;
-        $sRFC = isset($_POST['sRFC']) ?  ( ($_POST['sRFC'] === 'XAXX010101000') ?  NULL : ( ($_POST['sRFC'] === 'XEXX010101000') ?  NULL : $_POST['sRFC'] )   )    : NULL;
+        //$sRFC = isset($_POST['sRFC']) ?  ( ($_POST['sRFC'] === 'XAXX010101000') ?  NULL : ( ($_POST['sRFC'] === 'XEXX010101000') ?  NULL : $_POST['sRFC'] )   )    : NULL;
+        $sRFC = (!empty($_POST['sRFC']) ? $_POST['sRFC'] : NULL);
         $sCorreo = (!empty($_POST['sCorreo']) ? $_POST['sCorreo'] : NULL);
         $sTelefono = (!empty($_POST['sTelefono']) ? $_POST['sTelefono'] : NULL);
         $skEmpresaTipo = (!empty($_POST['skEmpresaTipo']) ? $_POST['skEmpresaTipo'] : NULL);
         $skEmpresaSocio = (!empty($_GET['p1']) ? $_GET['p1'] : NULL);
+
+        if($sRFC == 'XAXX010101000'){
+            $data['valid'] = TRUE;
+            return $data;
+        }
+
         $data = parent::validar_empresaSocio($sRFC,$skEmpresaTipo,$sTelefono,$sCorreo,$skEmpresaSocio);
         $data['valid'] = TRUE;
         if(isset($data['skEmpresaSocio']) && !is_null($data['skEmpresaSocio'])){
             $data['valid'] = FALSE;
         }
+
         return $data;
     }
 

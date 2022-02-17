@@ -42,7 +42,8 @@ if (isset($data['datos'])) {
                         <div class="col-md-4 col-lg-4 " >
                             <div class="form-group">
                                 <h4 class="example-title">RFC :</h4>
-                                <input class="form-control" maxlength="13" <?php if (isset($result['sRFC'])) { ?>disabled="disabled"<?php }//ENDIF  ?> id="sRFC"  name="sRFC" value="<?php echo (isset($result['sRFC'])) ? utf8_encode($result['sRFC']) : ''; ?>" placeholder="RFC" autocomplete="off" type="text" onblur="empr.emso_form.getEmpresaSocio(this);" onchange="empr.emso_form.revalidarFormulario();">
+                                <input class="form-control" maxlength="13" id="sRFC" name="sRFC" value="<?php echo (isset($result['sRFC'])) ? utf8_encode($result['sRFC']) : ''; ?>" placeholder="RFC" autocomplete="off" type="text" onblur="empr.emso_form.getEmpresaSocio(this);" onchange="empr.emso_form.revalidarFormulario();">
+                                <span class="help-block">RFC Genérico (XAXX010101000)</span>
                             </div>
                         </div>
                         <div class="col-md-4 col-lg-4 " >

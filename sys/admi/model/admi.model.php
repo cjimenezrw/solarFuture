@@ -443,6 +443,11 @@ Class Admi_Model Extends DLOREAN_Model {
         if (isset($this->admi['skEmpresaSocioResponsable']) && !empty($this->admi['skEmpresaSocioResponsable'])) {
             $sql .= " AND bc.skEmpresaSocioPropietario = ".escape($this->admi['skEmpresaSocioResponsable']);
         }
+
+        if (isset($this->admi['EFECTIVO']) && !empty($this->admi['EFECTIVO'])) {
+            $sql .= " AND b.sNombre != ".escape($this->admi['EFECTIVO']);
+        }
+
         //exit('<pre>'.print_r($sql,1).'</pre>');
         $result = Conn::query($sql);
         if (!$result) {
@@ -502,6 +507,10 @@ Class Admi_Model Extends DLOREAN_Model {
 
         if (isset($this->admi['skBanco']) && !empty($this->admi['skBanco'])) {
             $sql .= " AND ban.skBanco = ".escape($this->admi['skBanco']);
+        }
+
+        if (isset($this->admi['EFECTIVO']) && !empty($this->admi['EFECTIVO'])) {
+            $sql .= " AND ban.sNombre != ".escape($this->admi['EFECTIVO']);
         }
 
         $sql .= " ORDER BY ban.sNombre ASC ";

@@ -214,6 +214,8 @@ Class Cotr_form_Controller Extends Admi_Model {
         $this->admi['skDivisa'] = ['MXN','USD'];
         $this->data['get_divisas'] = parent::_get_divisas();
         
+        // OBTGENER BANCOS
+        $this->admi['EFECTIVO'] = 'EFECTIVO';
         $this->admi['skEmpresaSocioResponsable'] = $_SESSION['usuario']['skEmpresaSocio'];
         $getBancosCuentasResponsable = $this->getBancosCuentasResponsable();
         $this->data['get_bancosReceptor'] = isset($getBancosCuentasResponsable['datos']['bancos']) ? $getBancosCuentasResponsable['datos']['bancos']: [];

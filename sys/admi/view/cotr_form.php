@@ -179,8 +179,9 @@
                                 if ($data['get_bancosReceptor']) {
                                     foreach ($data['get_bancosReceptor'] as $row) {
                             ?>
-                                    <option <?php echo(isset($result['skBancoReceptor']) && $result['skBancoReceptor'] == $row['skBanco'] ? 'selected="selected"' : '') ?>
-                                        value="<?php echo $row['skBanco']; ?>"><?php echo $row['banco']; ?> </option>
+                                    <option
+                                        <?php echo(isset($result['skBancoReceptor']) && $result['skBancoReceptor'] == $row['skBanco'] ? 'selected="selected"' : (count($data['get_bancosReceptor']) == 1 ? 'selected="selected"' : '')); ?>
+                                        value="<?php echo $row['skBanco']; ?>"><?php echo $row['banco']; ?></option>
                             <?php
                                     }//ENDFOREACH
                                 }//ENDIF
@@ -192,16 +193,20 @@
                 <div class="col-md-6 col-lg-4">
                     <div class="form-group">
                         <h4 class="example-title"><span style="color:red;">* </span> CUENTA BANCARIA RECEPTORA:</h4>
-                        <select name="skBancoCuentaReceptor" id="skBancoCuenta_receptor" class="form-control selectpicker" data-live-search="true" data-plugin="selectpicker" <?php echo isset($result['skBancoCuentaReceptor']) ? '': 'disabled';?>>
+                        <select name="skBancoCuentaReceptor" id="skBancoCuenta_receptor" 
+                            <?php echo (isset($result['skBancoCuentaReceptor']) ? '' : (isset($data['get_bancosCuentasReceptor']) && count($data['get_bancosCuentasReceptor']) > 1 ? 'disabled' : '')); ?>
+                            class="form-control selectpicker" data-live-search="true" data-plugin="selectpicker">
                             <option value="" disabled="" selected="selected">CUENTA BANCARIA RECEPTORA</option>
                             <?php
                                 if ($data['get_bancosCuentasReceptor']) {
                                     foreach ($data['get_bancosCuentasReceptor'] as $cuenta) {
                                         foreach($cuenta as $row){
                             ?>
-                                    <option <?php echo(isset($result['skBancoCuentaReceptor']) && $result['skBancoCuentaReceptor'] == $row['skBancoCuenta'] ? 'selected="selected"' : '') ?>
+                                    <option 
+                                        <?php echo(isset($result['skBancoCuentaReceptor']) && $result['skBancoCuentaReceptor'] == $row['skBancoCuenta'] ? 'selected="selected"' : '') ?>
+                                        <?php echo(count($data['get_bancosCuentasReceptor']) == 1 ? 'selected="selected"' : ''); ?>
                                         class="option_banco_receptor banco_receptor_<?php echo $row['skBanco']; ?>" 
-                                        <?php echo ((isset($result['skBancoReceptor']) && $result['skBancoReceptor'] == $row['skBanco']) ? 'style="display:block;"': 'style="display:none;"'); ?>
+                                        <?php echo ((isset($result['skBancoReceptor']) && $result['skBancoReceptor'] == $row['skBanco']) ? 'style="display:block;"': (isset($data['get_bancosCuentasReceptor']) && count($data['get_bancosCuentasReceptor']) > 1 ? 'style="display:none;"' : 'style="display:block;"')); ?>
                                         value="<?php echo $row['skBancoCuenta']; ?>"><?php echo $row['sTitular'].' ('.$row['sNumeroCuenta'].') - '.$row['skDivisa']; ?> </option>
                             <?php
                                     }//ENDFOREACH

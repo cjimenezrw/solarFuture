@@ -46,8 +46,8 @@ Class Orse_inde_Controller Extends Admi_Model {
         cu.sNombre AS usoCFDI,
         (SELECT  
         CASE
-            WHEN rosp.skServicioProceso = 'VENT' THEN CONCAT('RM-', LPAD(osv.iFolio, 4, 0))   
-            WHEN rosp.skServicioProceso = 'CITA' THEN CONCAT('CIT-', LPAD(oci.iFolio, 4, 0))   
+            WHEN rosp.skServicioProceso = 'VENT' THEN CONCAT('SMF', LPAD(osv.iFolio, 4, 0))   
+            WHEN rosp.skServicioProceso = 'CITA' THEN CONCAT('CIT', LPAD(oci.iFolio, 4, 0))   
             ELSE NULL END AS folioServicio
         FROM rel_ordenesServicios_procesos rosp
         LEFT JOIN ope_cotizaciones osv ON osv.skCotizacion = rosp.skCodigo  

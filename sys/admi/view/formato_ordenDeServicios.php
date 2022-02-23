@@ -98,6 +98,7 @@
 
 <div class="col-md-12 clearfix"></div>
 
+<?php if(empty($data['datos']['iNoFacturable'])){ ?>
 <div class="col-md-12 clearfix">
     <table style="font-size:10px;" class="col-md-12">
         <tr>
@@ -118,6 +119,7 @@
         </tr>
     </table>
 </div>
+<?php }//ENDIF ?>
 
 <div class="col-md-12 clearfix"></div>
 
@@ -127,7 +129,7 @@
 <div class="col-md-12">
     <table style="font-size:9px;" class="col-md-12">
         <tr>
-            <th class="col-md-12" colspan="9" style="font-size:12px;text-align:center;text-transform:uppercase;background-color: #4776a5; color: #ffffff;font-weight: bold;">PRODUCTOS / SERVICIOS</th>
+            <th class="col-md-12" colspan="<?php echo (empty($data['datos']['iNoFacturable']) ? 9 : 7 ); ?>" style="font-size:12px;text-align:center;text-transform:uppercase;background-color: #4776a5; color: #ffffff;font-weight: bold;">PRODUCTOS / SERVICIOS</th>
         </tr>
         <tr>
             <th class="col-md-1" style="text-align:center;background-color: #2c3e50; color: #ffffff;font-weight: bold;">#</th>
@@ -135,8 +137,10 @@
             <th class="col-md-4" style="text-align:center;background-color: #2c3e50; color: #ffffff;font-weight: bold;">PRODUCTO / SERVICIO</th>
             <th class="col-md-1" style="text-align:center;background-color: #2c3e50; color: #ffffff;font-weight: bold;">CANTIDAD</th>
             <th class="col-md-1" style="text-align:center;background-color: #2c3e50; color: #ffffff;font-weight: bold;">P. UNITARIO</th>
+            <?php if(empty($data['datos']['iNoFacturable'])){ ?>
             <th class="col-md-1" style="text-align:center;background-color: #2c3e50; color: #ffffff;font-weight: bold;">IVA</th>
             <th class="col-md-1" style="text-align:center;background-color: #2c3e50; color: #ffffff;font-weight: bold;">RET IVA</th>
+            <?php }//ENDIF ?>
             <th class="col-md-1" style="text-align:center;background-color: #2c3e50; color: #ffffff;font-weight: bold;">IMPORTE</th>
             <th class="col-md-1" style="text-align:center;background-color: #2c3e50; color: #ffffff;font-weight: bold;">DESCUENTO</th>
         </tr>
@@ -152,8 +156,10 @@
             <td style="text-align:left;text-transform:uppercase;background-color:#<?php echo $bg[$bg_flag]; ?>;"><?php echo (!empty($row['sDescripcion']) ? $row['sDescripcion'] : $row['servicio']); ?></td>
             <td style="text-align:right;text-transform:uppercase;background-color:#<?php echo $bg[$bg_flag]; ?>;"><?php echo (isset($row['fCantidad']) ? number_format($row['fCantidad'],2) : '0.00');?></td>
             <td style="text-align:right;text-transform:uppercase;background-color:#<?php echo $bg[$bg_flag]; ?>;">$<?php echo (isset($row['fPrecioUnitario']) ? number_format($row['fPrecioUnitario'],2) : '0.00');?></td>
+            <?php if(empty($data['datos']['iNoFacturable'])){ ?>
             <td style="text-align:right;text-transform:uppercase;background-color:#<?php echo $bg[$bg_flag]; ?>;">$<?php echo (isset($row['fImpuestosTrasladados']) ? number_format($row['fImpuestosTrasladados'],2) : '0.00');?></td>
             <td style="text-align:right;text-transform:uppercase;background-color:#<?php echo $bg[$bg_flag]; ?>;">$<?php echo (isset($row['fImpuestosRetenidos']) ? number_format($row['fImpuestosRetenidos'],2) : '0.00');?></td>
+            <?php }//ENDIF ?>
             <td style="text-align:right;text-transform:uppercase;background-color:#<?php echo $bg[$bg_flag]; ?>;">$<?php echo (isset($row['fImporteTotal']) ? number_format($row['fImporteTotal'],2) : '0.00');?></td>
             <td style="text-align:right;text-transform:uppercase;background-color:#<?php echo $bg[$bg_flag]; ?>;">$<?php echo (isset($row['fDescuento']) ? number_format($row['fDescuento'],2) : '0.00');?></td>
         </tr>
@@ -196,6 +202,7 @@
                 $<?php echo (!empty($data['datos']['fDescuento']) ? number_format($data['datos']['fDescuento'],2) : '0.00'); ?>
             </th>
         </tr>
+        <?php if(empty($data['datos']['iNoFacturable'])){ ?>
         <tr>
             <th style="text-align:center;background-color: #<?php echo $bg[1]; ?>; color: #000000;font-weight: normal;">IVA</th>
             <th style="text-align:right; color: #000000;font-weight: normal;background-color:#<?php echo $bg[1]; ?>;">
@@ -208,23 +215,34 @@
                 $<?php echo (!empty($data['datos']['fImpuestosRetenidos']) ? number_format($data['datos']['fImpuestosRetenidos'],2) : '0.00'); ?>
             </th>
         </tr>
+        <?php }//ENDIF ?>
+        <?php if(!empty($data['datos']['iNoFacturable'])){ ?>
         <tr>
-            <th style="text-align:center;background-color: #<?php echo $bg[1]; ?>; color: #000000;font-weight: bold;">TOTAL SIN IVA</th>
+            <th style="text-align:center;background-color: #4776a5; color: #FFFFFF;font-weight: bold;">TOTAL SIN IVA</th>
             <th style="text-align:right; color: #f96868;font-weight: bold;background-color:#<?php echo $bg[1]; ?>;">
                 <!--$<?php echo (!empty($data['datos']['fImporteTotalSinIVA']) ? number_format($data['datos']['fImporteTotalSinIVA'],2) : '0.00'); ?>!-->
                 $<?php echo (!empty($data['datos']['fImporteTotalSinIva']) ? number_format($data['datos']['fImporteTotalSinIva'],2) : '0.00'); ?>
             </th>
         </tr>
+        <?php }//ENDIF ?>
+        <?php if(empty($data['datos']['iNoFacturable'])){ ?>
         <tr>
             <th style="text-align:center;background-color: #4776a5; color: #FFFFFF;font-weight: bold;">TOTAL IVA INCLUIDO</th>
             <th style="text-align:right; color: #f96868;font-weight: bold;background-color:#<?php echo $bg[1]; ?>;">
                 $<?php echo (!empty($data['datos']['fImporteTotal']) ? number_format($data['datos']['fImporteTotal'],2) : '0.00'); ?>
             </th>
         </tr>
+        <?php }//ENDIF ?>
     </table>
 </div>
 <div class="col-md-12 pull-right" style="font-size:10px;text-align: right;text-transform:uppercase;">
-    <?php echo !empty($data['datos']['fImporteTotal']) ? strtolower(NumeroALetras::convertir($data['datos']['fImporteTotal'], 'PESOS', 'CENTAVOS',true)).' '.(substr((explode('.',number_format($data['datos']['fImporteTotal'],2))[1]),0,2)).'/100 M.N.' : ''; ?>
+    <?php 
+        if(empty($data['datos']['iNoFacturable'])){
+            echo !empty($data['datos']['fImporteTotal']) ? strtolower(NumeroALetras::convertir($data['datos']['fImporteTotal'], 'PESOS', 'CENTAVOS',true)).' '.(substr((explode('.',number_format($data['datos']['fImporteTotal'],2))[1]),0,2)).'/100 M.N.' : ''; 
+        }else{
+            echo !empty($data['datos']['fImporteTotalSinIva']) ? strtolower(NumeroALetras::convertir($data['datos']['fImporteTotalSinIva'], 'PESOS', 'CENTAVOS',true)).' '.(substr((explode('.',number_format($data['datos']['fImporteTotalSinIva'],2))[1]),0,2)).'/100 M.N.' : ''; 
+        }
+    ?>
 </div> 
 
 <div class="col-md-12 clearfix">
@@ -272,6 +290,9 @@
             if(!empty($data['get_bancosCuentasReceptor']) && is_array($data['get_bancosCuentasReceptor'])){
                 foreach($data['get_bancosCuentasReceptor'] AS $k_bancoCuenta=>$v_bancoCuenta){
                     foreach($v_bancoCuenta AS $k_cuenta=>$v_cuenta){
+                        if($v_cuenta['bancoAlias'] == 'EFECTIVO'){
+                            continue;
+                        }
         ?>
         <tr>
             <td class="col-md-4" style="text-align:center;background-color:#<?php echo $bg[1]; ?>;"><?php echo $v_cuenta['bancoAlias'].' ('.$v_cuenta['skDivisa'].')'; ?></td>

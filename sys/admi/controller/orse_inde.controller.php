@@ -46,11 +46,11 @@ Class Orse_inde_Controller Extends Admi_Model {
         cu.sNombre AS usoCFDI,
         (SELECT  
         CASE
-            WHEN rosp.skServicioProceso = 'VENT' THEN CONCAT('SFM', LPAD(osv.iFolio, 4, 0))   
+            WHEN rosp.skServicioProceso = 'VENT' THEN CONCAT('RM-', LPAD(osv.iFolio, 4, 0))   
             WHEN rosp.skServicioProceso = 'CITA' THEN CONCAT('CIT-', LPAD(oci.iFolio, 4, 0))   
             ELSE NULL END AS folioServicio
         FROM rel_ordenesServicios_procesos rosp
-        LEFT JOIN ope_cotizaciones osv ON osv.skCotizacion = rosp.skCodigo
+        LEFT JOIN ope_cotizaciones osv ON osv.skCotizacion = rosp.skCodigo  
         LEFT JOIN ope_citas oci ON oci.skCita = rosp.skCodigo  
         WHERE rosp.skOrdenServicio = oos.skOrdenServicio LIMIT 1) AS folioServicio,
         cuc.sNombre AS usuarioCreacion,
@@ -95,9 +95,12 @@ Class Orse_inde_Controller Extends Admi_Model {
                     "menuEmergente4" => $this->ME_enviar($row)
                     
                 ];
-                $row['fImporteTotal'] = ($row['fImporteTotal']) ? '$ '.number_format($row['fImporteTotal'],2) : '$ 0.00'; 
 
-                $row['dFechaCreacion'] = ($row['dFechaCreacion']) ? date('d/m/Y  H:i:s', strtotime($row['dFechaCreacion'])) : ''; 
+                $row['fImporteTotal'] = ($row['fImporteTotal']) ? '$'.number_format($row['fImporteTotal'],2) : '$0.00'; 
+                $row['fImporteSubtotal'] = ($row['fImporteSubtotal']) ? '$'.number_format($row['fImporteSubtotal'],2) : '$0.00'; 
+                $row['fImpuestosRetenidos'] = ($row['fImpuestosRetenidos']) ? '$'.number_format($row['fImpuestosRetenidos'],2) : '$0.00'; 
+                $row['fImpuestosTrasladados'] = ($row['fImpuestosTrasladados']) ? '$'.number_format($row['fImpuestosTrasladados'],2) : '$0.00';
+                $row['dFechaCreacion'] = ($row['dFechaCreacion']) ? date('d/m/Y H:i:s', strtotime($row['dFechaCreacion'])) : ''; 
                  
                $row['menuEmergente'] = parent::menuEmergente($regla, $row['skOrdenServicio']);
                 array_push($data['data'],$row);

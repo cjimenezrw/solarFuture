@@ -65,24 +65,20 @@ admi.orse_inde.dataTableConf = {
         }
     },
     'axn': 'consulta',
-    'order': [[4, "desc"]],
+    'order': [[11, "desc"]],
     'columns': [
         {'title': 'E', 'data': 'estatus', 'dataType': 'string', 'tooltip': 'Estatus', 'filterT': 'Estatus'},
-         {'title': 'NF', 'filterT': 'No Facturable','tooltip': 'No Facturable','data': 'iNoFacturable', 'dataType': 'string'},
-         {'title': 'Folio F.', 'filterT': 'Folio Factura','tooltip': 'Folio Factura','data': 'iFolioFactura', 'dataType': 'string'},
-        {'title': 'Folio OS', 'data': 'iFolio','tooltip': 'Folio Orden de Servicio', 'dataType': 'string'},
-        {'title': 'F. Creacion', 'data': 'dFechaCreacion', 'dataType': 'date'},
-        {'title': 'Folio SE.', 'data': 'folioServicio','tooltip': 'Folio del Servicio', 'dataType': 'string'},
-
-        {'title': 'Usuario Creacion', 'data': 'usuarioCreacion', 'dataType': 'string'},
-
+        {'title': 'NF', 'filterT': 'No Facturable','tooltip': 'No Facturable','data': 'iNoFacturable', 'dataType': 'string'},
+        {'title': 'Folio FAC', 'filterT': 'Folio Factura','tooltip': 'Folio de Factura','data': 'iFolioFactura', 'dataType': 'string'},
+        {'title': 'Folio ORD', 'data': 'iFolio','tooltip': 'Folio Orden de Servicio', 'dataType': 'string'},
+        {'title': 'Folio SER', 'data': 'folioServicio','tooltip': 'Folio de Servicio', 'dataType': 'string'},
         {'title': 'Total', 'data': 'fImporteTotal', 'dataType': 'int'},
-         {'title': 'Moneda', 'data': 'skDivisa', 'dataType': 'string'},
+        {'title': 'Divisa', 'data': 'skDivisa', 'dataType': 'string'},
+        {'title': 'Cliente', 'data': 'cliente', 'dataType': 'string'},
         {'title': 'Facturar A', 'data': 'facturacion', 'dataType': 'string'},
-         {'title': 'Responsable', 'data': 'responsable', 'dataType': 'string'},
-        {'title': 'Cliente', 'data': 'cliente', 'dataType': 'string'}
-
-        
+        {'title': 'Responsable', 'data': 'responsable', 'dataType': 'string'},
+        {'title': 'U. Creación', 'data': 'usuarioCreacion', 'filterT': 'Usuario Creación', 'tooltip': 'Usuario Creación', 'dataType': 'string'},
+        {'title': 'F. Creación', 'data': 'dFechaCreacion', 'dataType': 'date', 'tooltip': 'Fecha de Creación', 'filterT': 'Fecha de Creación'}
     ],
 
     "drawCallback": function () {
@@ -107,9 +103,9 @@ admi.orse_inde.dataTableConf = {
             "width": '1px',
             "createdCell": function (td, cellData, rowData, row, col) {
                 if(rowData.iNoFacturable == 'SI'){
-                         $(td).html('<i class="fa fa-ban"></i>');
-                         $(td).addClass('text-center text-danger');
-                         $(td).find('i').attr({"title": 'El servicio no se Facturara' ,"data-toggle": "tooltip","data-placement": "rigth"});
+                    $(td).html('<i class="fa fa-exclamation-circle"></i>');
+                    $(td).addClass('text-center text-danger');
+                    $(td).find('i').attr({"title": 'NO FACTURABLE' ,"data-toggle": "tooltip","data-placement": "rigth"});
                 }
   
             }
@@ -147,7 +143,7 @@ admi.cotr_inde.dataTableConf = {
         }
     },
     'axn': 'consulta',
-    'order': [[2, "desc"]],
+    'order': [[9, "desc"]],
     'columns': [
         {'title': 'E', 'filterT': 'Estatus', 'tooltip': 'Estatus', 'data': 'estatus', 'dataType': 'string'},
         {'title': 'TP', 'filterT': 'Tipo Transacción', 'tooltip': 'Tipo Transacción', 'data': 'tipoTransaccion', 'dataType': 'string'},
@@ -156,11 +152,9 @@ admi.cotr_inde.dataTableConf = {
         {'title': 'Importe', 'data': 'fImporte', 'dataType': 'int'},
         {'title': 'Saldo', 'data': 'fSaldo', 'dataType': 'int'},
         {'title': 'Empresa Responsable', 'data': 'empresaResponsable', 'dataType': 'string'},
-         {'title': 'F. Transferencia', 'data': 'dFechaTransaccion', 'dataType': 'date', 'tooltip': 'Fecha de Transacción', 'filterT': 'Fecha de Transacción'},
+        {'title': 'F. Transferencia', 'data': 'dFechaTransaccion', 'dataType': 'date', 'tooltip': 'Fecha de Transacción', 'filterT': 'Fecha de Transacción'},
         {'title': 'U. Creación', 'data': 'usuarioCreacion', 'filterT': 'Usuario Creación', 'tooltip': 'Usuario Creación', 'dataType': 'string'},
-        {'title': 'F. Creación', 'data': 'dFechaCreacion', 'dataType': 'date', 'tooltip': 'Fecha de Creación', 'filterT': 'Fecha de Creación'}
-    
-        
+        {'title': 'F. Creación', 'data': 'dFechaCreacion', 'dataType': 'date', 'tooltip': 'Fecha de Creación', 'filterT': 'Fecha de Creación'}    
     ],
 
     "drawCallback": function () {
@@ -233,7 +227,6 @@ admi.appa_inde.dataTableConf = {
         {'title': 'Empresa Responsable', 'data': 'empresaResponsable', 'dataType': 'string'},
         {'title': 'Cliente', 'data': 'empresaCliente', 'dataType': 'string'},
         {'title': 'Usuario Creación', 'data': 'usuarioCreacion','dataType': 'string'}
-        
     ],
 
     "drawCallback": function () {
@@ -736,24 +729,22 @@ admi.cofa_inde.dataTableConf = {
         }
     },
     'axn': 'consulta',
-    'order': [[5, "desc"]],
+    'order': [[13, "desc"]],
     'columns': [
         {'title': 'E', 'data': 'estatus', 'dataType': 'string', 'tooltip': 'Estatus', 'filterT': 'Estatus'},
-        {'title': 'E.P', 'data': 'estatusPago', 'dataType': 'string', 'tooltip': 'Estatus Pago', 'filterT': 'Estatus Pago'},
+        {'title': 'EP', 'data': 'estatusPago', 'dataType': 'string', 'tooltip': 'Estatus Pago', 'filterT': 'Estatus Pago'},
         {'title': 'NF', 'filterT': 'No Facturable','tooltip': 'No Facturable','data': 'iNoFacturable', 'dataType': 'string'},
-        {'title': 'D.F', 'filterT': 'Documento Factura','tooltip': 'Documento Factura','data': 'skUUIDSAT', 'dataType': 'string'},
+        {'title': 'DOC', 'filterT': 'Documento Factura','tooltip': 'Documento Factura','data': 'skUUIDSAT', 'dataType': 'string'},
         {'title': 'Folio ', 'filterT': 'Folio ','tooltip': 'Folio ','data': 'iFolio', 'dataType': 'string'},
-         {'title': 'F. Creación', 'data': 'dFechaCreacion', 'dataType': 'date'},
-        {'title': 'Usuario Creación', 'data': 'usuarioCreacion', 'dataType': 'string'},
         {'title': 'SubTotal', 'data': 'fSubtotal', 'dataType': 'int'},
         {'title': 'Total', 'data': 'fTotal', 'dataType': 'int'},
         {'title': 'Saldo', 'data': 'fSaldo', 'dataType': 'int'},
-         {'title': 'Moneda', 'data': 'skDivisa', 'dataType': 'string'},
+        {'title': 'Divisa', 'data': 'skDivisa', 'dataType': 'string'},
+        {'title': 'Cliente', 'data': 'cliente', 'dataType': 'string'},
         {'title': 'Facturar A', 'data': 'facturacion', 'dataType': 'string'},
-        {'title': 'Responsable', 'data': 'responsable', 'dataType': 'string'}
-        
- 
-        
+        {'title': 'Responsable', 'data': 'responsable', 'dataType': 'string'},
+        {'title': 'U. Creación', 'data': 'usuarioCreacion', 'filterT': 'Usuario Creación', 'tooltip': 'Usuario Creación', 'dataType': 'string'},
+        {'title': 'F. Creación', 'data': 'dFechaCreacion', 'dataType': 'date', 'tooltip': 'Fecha de Creación', 'filterT': 'Fecha de Creación'}        
     ],
 
     "drawCallback": function () {
@@ -787,9 +778,9 @@ admi.cofa_inde.dataTableConf = {
             "width": '1px',
             "createdCell": function (td, cellData, rowData, row, col) {
                 if(rowData.iNoFacturable == 'SI'){
-                         $(td).html('<i class="fa fa-ban"></i>');
-                         $(td).addClass('text-center text-danger');
-                         $(td).find('i').attr({"title": 'El servicio no se Facturara' ,"data-toggle": "tooltip","data-placement": "rigth"});
+                    $(td).html('<i class="fa fa-exclamation-circle"></i>');
+                    $(td).addClass('text-center text-danger');
+                    $(td).find('i').attr({"title": 'NO FACTURABLE' ,"data-toggle": "tooltip","data-placement": "rigth"});
                 }
   
             }
@@ -807,12 +798,7 @@ admi.cofa_inde.dataTableConf = {
             }
         },
         {
-            "targets": [4],
-            "width": '30px'
-            
-        },
-        {
-            "targets": [5],
+            "targets": [4,5,6,7,8],
             "width": '30px'
             
         }

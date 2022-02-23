@@ -44,6 +44,7 @@ Class Cofa_inde_Controller Extends Admi_Model {
         IF(ofa.iNoFacturable IS NOT NULL, 'SI',NULL) AS iNoFacturable,
         IF(ofa.skUUIDSAT IS NOT NULL, 'SI',NULL) AS skUUIDSAT,
         cef.sNombre AS facturacion,
+        cec.sNombre AS cliente,
         cerp.sNombre AS responsable,
         cu.sNombre AS usuarioCreacion,
         ce.sNombre AS estatus,
@@ -58,6 +59,8 @@ Class Cofa_inde_Controller Extends Admi_Model {
         LEFT JOIN core_estatus cep ON cep.skEstatus = ofa.skEstatusPago
         LEFT JOIN rel_empresasSocios resf ON resf.skEmpresaSocio = ofa.skEmpresaSocioFacturacion
         LEFT JOIN cat_empresas cef ON cef.skEmpresa = resf.skEmpresa
+        LEFT JOIN rel_empresasSocios resc ON resc.skEmpresaSocio = ofa.skEmpresaSocioCliente
+        LEFT JOIN cat_empresas cec ON cec.skEmpresa = resc.skEmpresa
         LEFT JOIN rel_empresasSocios resp ON resp.skEmpresaSocio = ofa.skEmpresaSocioResponsable
         LEFT JOIN cat_empresas cerp ON cerp.skEmpresa = resp.skEmpresa
         LEFT JOIN cat_usuarios cu ON cu.skUsuario = ofa.skUsuarioCreacion
@@ -90,12 +93,12 @@ Class Cofa_inde_Controller Extends Admi_Model {
                     "menuEmergente3" => $this->ME_pagarEfectivo($row)
                 ];
 
-                 $row['dFechaCreacion'] = ($row['dFechaCreacion']) ? date('d/m/Y  H:i:s', strtotime($row['dFechaCreacion'])) : ''; 
-                 $row['fSubtotal'] = (!empty($row['fSubtotal']) ? '$'.number_format($row['fSubtotal'],2) : '$ 0.00'); 
-                 $row['fTotal'] = (!empty($row['fTotal']) ? '$'.number_format($row['fTotal'],2) : '$ 0.00'); 
-                 $row['fSaldo'] = (!empty($row['fSaldo']) ? '$'.number_format($row['fSaldo'],2) : '$ 0.00'); 
+                $row['fSubtotal'] = (!empty($row['fSubtotal']) ? '$'.number_format($row['fSubtotal'],2) : '$0.00'); 
+                $row['fTotal'] = (!empty($row['fTotal']) ? '$'.number_format($row['fTotal'],2) : '$0.00'); 
+                $row['fSaldo'] = (!empty($row['fSaldo']) ? '$'.number_format($row['fSaldo'],2) : '$0.00'); 
+                $row['dFechaCreacion'] = ($row['dFechaCreacion']) ? date('d/m/Y H:i:s', strtotime($row['dFechaCreacion'])) : '';
                  
-               $row['menuEmergente'] = parent::menuEmergente($regla, $row['skFactura']);
+                $row['menuEmergente'] = parent::menuEmergente($regla, $row['skFactura']);
                 array_push($data['data'],$row);
         }
         return $data;
@@ -134,7 +137,7 @@ Class Cofa_inde_Controller Extends Admi_Model {
     * @return int
     */
     public function ME_pagarEfectivo(&$row){
-        if((in_array($row['skEstatusPago'], [NULL])) ){
+        if((in_array($row['skEstatusPago'], [NULL]) && $row['skEstatus'] != 'CA') ){
             return self::HABILITADO;
         }
         return self::DESHABILITADO;

@@ -37,7 +37,7 @@ Class Appa_inde_Controller Extends Admi_Model {
        ,occ.iFolio AS folioFactura
        ,occ.skDivisa
        ,cd.sNombre AS nombreDivisa
-       ,RIGHT('TRA-' + RIGHT('000000'+ CAST(opt.iFolio AS VARCHAR(6)),6),10) AS folioTransaccion
+       ,CONCAT('TRA-', LPAD(opt.iFolio, 5, 0))  AS folioTransaccion
        ,ce.sNombre AS estatus
        ,ce.sIcono AS estatusIcono
        ,ce.sColor AS estatusColor
@@ -84,7 +84,11 @@ Class Appa_inde_Controller Extends Admi_Model {
             //REGLA DEL MENÚ EMERGENTE
                 $regla = [ ];
 
-                $row['fechaPago'] = ($row['fechaPago']) ? date('d/m/Y  H:i:s', strtotime($row['fechaPago'])) : ''; 
+                $row['totalFactura'] = ($row['totalFactura']) ? '$'.number_format($row['totalFactura'],2) : '$0.00';
+                $row['fSaldoAnteriorFactura'] = ($row['fSaldoAnteriorFactura']) ? '$'.number_format($row['fSaldoAnteriorFactura'],2) : '$0.00';
+                $row['importeFactura'] = ($row['importeFactura']) ? '$'.number_format($row['importeFactura'],2) : '$0.00';
+                $row['fSaldoRestanteFactura'] = ($row['fSaldoRestanteFactura']) ? '$'.number_format($row['fSaldoRestanteFactura'],2) : '$0.00';
+                $row['fechaPago'] = ($row['fechaPago']) ? date('d/m/Y H:i:s', strtotime($row['fechaPago'])) : ''; 
                  
                $row['menuEmergente'] = parent::menuEmergente($regla, $row['skTransaccionPago']);
                 array_push($data['data'],$row);

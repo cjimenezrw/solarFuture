@@ -261,7 +261,7 @@ Class Admi_Model Extends DLOREAN_Model {
         LEFT JOIN cat_usosCFDI uso ON uso.sClave = oos.skUsoCFDI
         WHERE 1 = 1  AND  oos.skOrdenServicio =  " . escape($this->admi['skOrdenServicio']);
         
-        
+        //exit('<pre>'.print_r($sql,1).'</pre>');
         $result = Conn::query($sql);
         if (!$result) {
             return FALSE;
@@ -391,7 +391,7 @@ Class Admi_Model Extends DLOREAN_Model {
     public function get_empresas() {
         $sql = "SELECT N1.* FROM (
             SELECT
-            es.skEmpresaSocio AS id, CONCAT(e.sNombre,' (',e.sRFC,') - ',et.sNombre) AS nombre, es.skEmpresaTipo
+            es.skEmpresaSocio AS id, CONCAT(e.sNombre,' (',IF(e.sRFC IS NULL, 'XAXX010101000',e.sRFC),') - ',et.sNombre) AS nombre, es.skEmpresaTipo
             FROM rel_empresasSocios es
             INNER JOIN cat_empresas e ON e.skEmpresa = es.skEmpresa
             INNER JOIN cat_empresasTipos et ON et.skEmpresaTipo = es.skEmpresaTipo
@@ -416,7 +416,6 @@ Class Admi_Model Extends DLOREAN_Model {
         }
 
         $sql .= " ORDER BY N1.nombre ASC ";
-    
         $result = Conn::query($sql);
         if (!$result) {
             return FALSE;

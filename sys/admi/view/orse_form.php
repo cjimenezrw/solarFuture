@@ -146,7 +146,7 @@ if (isset($data['datos'])) {
                      <div class="col-md-4 col-lg-3">
                          <div class="form-group">
                              <h4 class="example-title">Nombre Cliente  </h4>
-                             <input class="form-control" name="sNombreCliente" id="sNombreCliente" value="<?php echo (isset($result['sNombreCliente'])) ? $result['sNombreCliente'] : $result['responsable']; ?>" placeholder="Nombre Cliente" autocomplete="off" type="text" >
+                             <input class="form-control" name="sNombreCliente" id="sNombreCliente" value="<?php echo (isset($result['sNombreCliente'])) ? $result['sNombreCliente'] : ''; ?>" placeholder="Nombre Cliente" autocomplete="off" type="text" >
                          </div>
                       </div>
                       <div class="col-md-4 col-lg-3">

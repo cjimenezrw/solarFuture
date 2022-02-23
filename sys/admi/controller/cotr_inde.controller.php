@@ -27,7 +27,7 @@ Class Cotr_inde_Controller Extends Admi_Model {
         //$configuraciones['log'] = TRUE;
         $configuraciones['query'] = "SELECT tra.skTransaccion
         ,tra.skEstatus
-        ,tra.iFolio AS iFolio
+        ,CONCAT('TRA-', LPAD(tra.iFolio, 5, 0))  AS iFolio
         ,tra.skEmpresaSocioPropietario
         ,tra.skEmpresaSocioResponsable
         ,tra.skEmpresaSocioCliente
@@ -112,8 +112,10 @@ Class Cotr_inde_Controller Extends Admi_Model {
                     "menuEmergente2" => $this->ME_aplicarPago($row)
                 ];
 
+                $row['fImporte'] = "$".(!empty($row['fImporte']) ? number_format($row['fImporte'],2) : '0.00');
+                $row['fSaldo'] = "$".(!empty($row['fSaldo']) ? number_format($row['fSaldo'],2) : '0.00');
                 $row['dFechaTransaccion'] = ($row['dFechaTransaccion']) ? date('d/m/Y', strtotime($row['dFechaTransaccion'])) : ''; 
-                $row['dFechaCreacion'] = ($row['dFechaCreacion']) ? date('d/m/Y  H:i:s', strtotime($row['dFechaCreacion'])) : ''; 
+                $row['dFechaCreacion'] = ($row['dFechaCreacion']) ? date('d/m/Y H:i:s', strtotime($row['dFechaCreacion'])) : ''; 
                  
                $row['menuEmergente'] = parent::menuEmergente($regla, $row['skTransaccion']);
                 array_push($data['data'],$row);
@@ -128,7 +130,7 @@ Class Cotr_inde_Controller Extends Admi_Model {
     * @return int
     */
     public function ME_editar(&$row){
-        if((in_array($row['skEstatus'], ['AU'])) ){
+        if((in_array($row['skEstatus'], ['AU','VA'])) ){
             return self::HABILITADO;
         }
         return self::DESHABILITADO;
@@ -140,7 +142,7 @@ Class Cotr_inde_Controller Extends Admi_Model {
     * @return int
     */
     public function ME_aplicarPago(&$row){
-        if((in_array($row['skEstatus'], ['AU','PO'])) ){
+        if((in_array($row['skEstatus'], ['VA','AU','PO'])) ){
             return self::HABILITADO;
         }
         return self::DESHABILITADO;

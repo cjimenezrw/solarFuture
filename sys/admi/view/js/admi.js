@@ -143,7 +143,7 @@ admi.cotr_inde.dataTableConf = {
         }
     },
     'axn': 'consulta',
-    'order': [[9, "desc"]],
+    'order': [[11, "desc"]],
     'columns': [
         {'title': 'E', 'filterT': 'Estatus', 'tooltip': 'Estatus', 'data': 'estatus', 'dataType': 'string'},
         {'title': 'TP', 'filterT': 'Tipo Transacción', 'tooltip': 'Tipo Transacción', 'data': 'tipoTransaccion', 'dataType': 'string'},
@@ -153,6 +153,8 @@ admi.cotr_inde.dataTableConf = {
         {'title': 'Saldo', 'data': 'fSaldo', 'dataType': 'int'},
         {'title': 'Empresa Responsable', 'data': 'empresaResponsable', 'dataType': 'string'},
         {'title': 'F. Transferencia', 'data': 'dFechaTransaccion', 'dataType': 'date', 'tooltip': 'Fecha de Transacción', 'filterT': 'Fecha de Transacción'},
+        {'title': 'Banco', 'data': 'bancoReceptor', 'dataType': 'string'},
+        {'title': 'Cuenta Bancaria', 'data': 'sNumeroCuentaReceptor', 'dataType': 'string'},
         {'title': 'U. Creación', 'data': 'usuarioCreacion', 'filterT': 'Usuario Creación', 'tooltip': 'Usuario Creación', 'dataType': 'string'},
         {'title': 'F. Creación', 'data': 'dFechaCreacion', 'dataType': 'date', 'tooltip': 'Fecha de Creación', 'filterT': 'Fecha de Creación'}    
     ],
@@ -900,6 +902,51 @@ admi.cofa_inde.noAplica = function noAplica(obj) {
 
                 toastr.success('Factura finalizada con exito# '+core.rowDataTable.iFolio, 'Notificación');
                 swal("¡Notificación!", 'Factura finalizada con exirto# '+core.rowDataTable.iFolio, "success");
+                core.dataTable.sendFilters(true);
+                 return true;
+            }
+        });
+    });
+   
+};
+
+admi.cofa_inde.cancelarFactura = function cancelarFactura(obj) {
+    swal({
+        title: "¿Esta seguro que desea cancelar la Factura?",
+        text: "Factura " ,
+        type: "warning",
+        confirmButtonClass: "btn-warning",
+        confirmButtonText: "SI",
+        showCancelButton: true,
+        closeOnConfirm: false,
+        showLoaderOnConfirm: true,
+        animation: "slide-from-top"
+    },
+    function () {
+        $.ajax({
+            url: window.location.href,
+            type: 'POST',
+            data: {
+                axn: 'cancelarFactura',
+                skFactura: core.rowDataTable.skFactura
+            },
+            cache: false,
+            processData: true,
+            beforeSend: function () {
+                toastr.info('Guardar factura # '+core.rowDataTable.iFolio, 'Notificación');
+            },
+            success: function (response) {
+                toastr.clear();
+
+                if(!response.success){
+                    toastr.error(response.message+ " Folio:" +core.rowDataTable.iFolio, 'Notificación');
+                    swal.close();
+                    core.dataTable.sendFilters(true);
+                    return false;
+                }
+
+                toastr.success('Factura Cancelada con exito# '+core.rowDataTable.iFolio, 'Notificación');
+                swal("¡Notificación!", 'Factura Cancelada con exito# '+core.rowDataTable.iFolio, "success");
                 core.dataTable.sendFilters(true);
                  return true;
             }

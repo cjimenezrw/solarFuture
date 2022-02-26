@@ -90,7 +90,9 @@ Class Cofa_inde_Controller Extends Admi_Model {
                 $regla = [ 
                     "menuEmergente1" => $this->ME_noFacturable($row),
                     "menuEmergente2" => $this->ME_subirFactura($row),
-                    "menuEmergente3" => $this->ME_pagarEfectivo($row)
+                    "menuEmergente3" => $this->ME_pagarEfectivo($row),
+                    "menuEmergente4" => $this->ME_cancelarFactura($row),
+                    
                 ];
 
                 $row['fSubtotal'] = (!empty($row['fSubtotal']) ? '$'.number_format($row['fSubtotal'],2) : '$0.00'); 
@@ -112,6 +114,19 @@ Class Cofa_inde_Controller Extends Admi_Model {
     */
     public function ME_noFacturable(&$row){
         if((in_array($row['skEstatus'], ['PE'])) ){
+            return self::HABILITADO;
+        }
+        return self::DESHABILITADO;
+    }
+
+     /* ME_cancelarFactura
+    *
+    * @author Luis Alberto Valdez Alvarez <lvaldez >
+    * @param type $row
+    * @return int
+    */
+    public function ME_cancelarFactura(&$row){
+        if(in_array($row['skEstatus'], ['PE']) || empty($row['skEstatusPago'])){
             return self::HABILITADO;
         }
         return self::DESHABILITADO;
@@ -224,6 +239,21 @@ Class Cofa_inde_Controller Extends Admi_Model {
         return $this->data;
     } 
 
+    public function cancelarFactura(){
+        $this->data = ['success' => TRUE, 'message' => NULL, 'datos' => NULL];
+
+        $this->admi['axn'] = 'cancelarFactura';
+        $this->admi['skFactura'] = (isset($_POST['skFactura']) && !empty($_POST['skFactura'])) ? $_POST['skFactura'] : NULL;
+        
+        $stpCUD_facturas = parent::stpCUD_facturas();
+        if(!$stpCUD_facturas || isset($stpCUD_facturas['success']) && $stpCUD_facturas['success'] != 1){
+            $this->data['success'] = FALSE;
+            $this->data['message'] = 'HUBO UN ERROR AL GUARDAR LOS FINALIZAR LA FACTURA.';
+            return $this->data;
+        }
+
+        return $this->data;
+    } 
     
 
      

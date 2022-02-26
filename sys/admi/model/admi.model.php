@@ -1067,8 +1067,8 @@ Class Admi_Model Extends DLOREAN_Model {
         cef.sNombre AS empresaFacturar,
         cef.sRFC AS empresaFacturarRFC
         FROM ope_facturas occ
-        INNER JOIN rel_empresasSocios rese ON rese.skEmpresaSocio = occ.skEmpresaSocioEmisor
-        INNER JOIN cat_empresas cee ON cee.skEmpresa = rese.skEmpresa
+        LEFT JOIN rel_empresasSocios rese ON rese.skEmpresaSocio = occ.skEmpresaSocioEmisor
+        LEFT JOIN cat_empresas cee ON cee.skEmpresa = rese.skEmpresa
         INNER JOIN rel_empresasSocios resr ON resr.skEmpresaSocio = occ.skEmpresaSocioResponsable
         INNER JOIN cat_empresas cer ON cer.skEmpresa = resr.skEmpresa
         INNER JOIN rel_empresasSocios resf ON resf.skEmpresaSocio = occ.skEmpresaSocioFacturacion
@@ -1112,8 +1112,8 @@ Class Admi_Model Extends DLOREAN_Model {
             RIGHT('000000'+ CAST(occ.iFolio AS VARCHAR(6)),6) AS iFolio, occ.skFactura, occ.fSaldo, occ.dFechaCreacion,
             mp.sCodigo AS codigoMetodoPago, mp.sNombre AS metodoPago, fp.sCodigo AS codigoFormaPago, fp.sNombre AS formaPago
             FROM ope_facturas occ
-            INNER JOIN cat_metodosPago mp ON mp.sCodigo = occ.skMetodoPago
-            INNER JOIN cat_formasPago fp ON fp.sCodigo = occ.skFormaPago
+            LEFT JOIN cat_metodosPago mp ON mp.sCodigo = occ.skMetodoPago
+            LEFT JOIN cat_formasPago fp ON fp.sCodigo = occ.skFormaPago
             WHERE occ.skFactura IN (". mssql_where_in($this->admi['facturas']).")";
         $result = Conn::query($sql);
         if (!$result) {
@@ -1608,8 +1608,7 @@ Class Admi_Model Extends DLOREAN_Model {
             " .escape(isset($this->admi['axn']) ? $this->admi['axn'] : NULL) . ",
             '" . $_SESSION['usuario']['skUsuario'] . "',
             '" . $this->sysController . "' )";
-          
-       
+         
         $result = Conn::query($sql);
         //$codigo = Conn::fetch_assoc($result);
         if (!$result) {

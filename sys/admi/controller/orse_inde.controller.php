@@ -46,7 +46,7 @@ Class Orse_inde_Controller Extends Admi_Model {
         cu.sNombre AS usoCFDI,
         (SELECT  
         CASE
-            WHEN rosp.skServicioProceso = 'VENT' THEN CONCAT('SMF', LPAD(osv.iFolio, 4, 0))   
+            WHEN rosp.skServicioProceso = 'VENT' THEN CONCAT('SFM', LPAD(osv.iFolio, 4, 0))   
             WHEN rosp.skServicioProceso = 'CITA' THEN CONCAT('CIT', LPAD(oci.iFolio, 4, 0))   
             ELSE NULL END AS folioServicio
         FROM rel_ordenesServicios_procesos rosp
@@ -270,6 +270,7 @@ Class Orse_inde_Controller Extends Admi_Model {
          if(!$guardarFactura || isset($guardarFactura['success']) && $guardarFactura['success'] != 1){
             $this->data['success'] = FALSE;
             $this->data['message'] = 'HUBO UN ERROR AL GUARDAR LOS GENERALES DE FACTURAS.';
+            $this->data['messageSQL'] = (isset($guardarFactura['messageSQL']) ? $guardarFactura['messageSQL'] : NULL);
             return $this->data;
         }
 

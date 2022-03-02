@@ -221,7 +221,55 @@ cont.cont_inde.dataTableConf = {
 };
 
 cont.cont_form.validaciones = {
-
+    skEmpresaSocioCliente: {
+        validators: {
+            notEmpty: {
+                message: 'CAMPO REQUERIDO'
+            }
+        }
+    },
+    dFechaInstalacion: {
+        validators: {
+            notEmpty: {
+                message: 'CAMPO REQUERIDO'
+            }
+        }
+    },
+    iFrecuenciaMantenimientoMensual: {
+        validators: {
+            notEmpty: {
+                message: 'CAMPO REQUERIDO'
+            }
+        }
+    },
+    iDiaMantenimiento: {
+        validators: {
+            notEmpty: {
+                message: 'CAMPO REQUERIDO'
+            }
+        }
+    },
+    sTelefono: {
+        validators: {
+            notEmpty: {
+                message: 'CAMPO REQUERIDO'
+            }
+        }
+    },
+    sCorreo: {
+        validators: {
+            notEmpty: {
+                message: 'CAMPO REQUERIDO'
+            }
+        }
+    },
+    sDomicilio: {
+        validators: {
+            notEmpty: {
+                message: 'CAMPO REQUERIDO'
+            }
+        }
+    }
 };
 
 cont.cont_inde.cancelarContrato = function cancelarContrato(obj) {

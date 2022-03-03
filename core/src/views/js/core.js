@@ -825,7 +825,7 @@ core.menuLoadModule = function menuLoadModule(conf) {
     //$.snowfall.stop();
     //$('#snowfall-wrapper').remove();
 
-    if (core.form.change == true) {
+    /*if (core.form.change == true) {
         var r = confirm("¿Está seguro que desea salir? Perderá los cambios");
         if (r == true) {
             core.form.change = false;
@@ -834,7 +834,7 @@ core.menuLoadModule = function menuLoadModule(conf) {
             //console.log('cancelar');
             return;
         }
-    }
+    }*/
 
     //core.abortAjaxDataTables();
 
@@ -3203,9 +3203,9 @@ core.formChage = function formChage() {
     $('form').on('keyup change paste', 'input, select, textarea', function(a){
         core.form.change = true;
 
-        $(window).bind('beforeunload', function () {
+        /*$(window).bind('beforeunload', function () {
             return '¿Está seguro que desea salir? Perderá los cambios';
-        });
+        });*/
     });
 
 };

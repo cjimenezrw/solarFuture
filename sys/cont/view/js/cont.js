@@ -249,24 +249,17 @@ cont.cont_form.validaciones = {
             }
         }
     },
-    sTelefono: {
-        validators: {
-            notEmpty: {
-                message: 'CAMPO REQUERIDO'
-            }
-        }
-    },
     sCorreo: {
         validators: {
-            notEmpty: {
-                message: 'CAMPO REQUERIDO'
-            }
-        }
-    },
-    sDomicilio: {
-        validators: {
-            notEmpty: {
-                message: 'CAMPO REQUERIDO'
+            callback: {
+                message: 'CORREO NO VALIDO',
+                callback: function (input) {
+                    var RegExp = /^(?:[^<>()[\].,;:\s@"]+(\.[^<>()[\].,;:\s@"]+)*|"[^\n"]+")@(?:[^<>()[\].,;:\s@"]+\.)+[^<>()[\]\.,;:\s@"]{2,63}$/i;
+                    if (input != '' && !RegExp.exec(input)) {
+                        return false;
+                    }
+                    return true;
+                }
             }
         }
     }

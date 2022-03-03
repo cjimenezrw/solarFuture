@@ -22,46 +22,50 @@ Class Cont_inde_Controller Extends Cont_Model {
     }
     //AQUÍ VAN LAS FUNCIONES//
     public function consulta(){
-        
         $configuraciones = [];
-
         //$configuraciones['log'] = TRUE;
         $configuraciones['query'] = "SELECT 
-                CONCAT('CON-', LPAD(oca.iFolio, 5, 0))  AS iFolio,
-                oca.skContrato,
-                oca.skEstatus,
-                oca.skEstatusContrato,
-                oca.dFechaCreacion,
-                oca.dFechaInicioCobro,
-                oca.dFechaInicioContrato,
-                oca.sCorreo,
-                
-                ce.sNombre AS estatus,
-                ce.sColor AS estatusColor,
-                ce.sIcono AS estatusIcono,  
+             oca.skContrato
+            ,CONCAT('CON-', LPAD(oca.iFolio, 5, 0))  AS iFolio
+            ,oca.skEstatus
+            ,oca.skEmpresaSocioCliente
+            ,oca.dFechaInstalacion
+            ,oca.iFrecuenciaMantenimientoMensual
+            ,oca.iDiaMantenimiento
+            ,oca.sTelefono
+            ,oca.sCorreo
+            ,oca.sDomicilio
+            ,oca.sObservaciones
+            ,oca.sObservacionesCancelacion
+            ,oca.skUsuarioCancelacion
+            ,oca.skEmpresaSocioPropietario
+            ,oca.dFechaCreacion
+            ,oca.skUsuarioCreacion
+            ,oca.dFechaModificacion
+            ,oca.skUsuarioModificacion
 
-                ceco.sNombre AS estatusContrato,
-                ceco.sColor AS estatusContratoColor,
-                ceco.sIcono AS estatusContratoIcono,
-                
-                cec.sNombre AS cliente,
-                cuc.sNombre AS usuarioCreacion,
-                ctp.sNombre AS tipoPeriodo
-                FROM ope_contratos oca
-                LEFT JOIN core_estatus ce ON ce.skEstatus = oca.skEstatus
-                LEFT JOIN cat_usuarios cuc ON cuc.skUsuario = oca.skUsuarioCreacion 
-                LEFT JOIN rel_empresasSocios res ON res.skEmpresaSocio = oca.skEmpresaSocioCliente
-                LEFT JOIN cat_empresas cec ON cec.skEmpresa = res.skEmpresa
-                LEFT JOIN core_estatus ceco ON ceco.skEstatus = oca.skEstatusContrato
-                LEFT JOIN cat_tiposPeriodos ctp ON ctp.skTipoPeriodo = oca.skTipoPeriodo
-                WHERE 1 = 1   ";
+            ,est.sNombre AS estatus
+            ,est.sColor AS estatusColor
+            ,est.sIcono AS estatusIcono
+            
+            ,e.sNombre AS cliente
+            
+            ,CONCAT(uCre.sNombre,' ',uCre.sApellidoPaterno,' ',uCre.sApellidoMaterno) AS usuarioCreacion
+            ,CONCAT(uMod.sNombre,' ',uMod.sApellidoPaterno,' ',uMod.sApellidoMaterno) AS usuarioModificacion
+        
+            FROM ope_contratos oca
+            INNER JOIN core_estatus est ON est.skEstatus = oca.skEstatus
+            INNER JOIN rel_empresasSocios es ON es.skEmpresaSocio = oca.skEmpresaSocioCliente
+            INNER JOIN cat_empresas e ON e.skEmpresa = es.skEmpresa
+            INNER JOIN cat_usuarios uCre ON uCre.skUsuario = oca.skUsuarioCreacion 
+            INNER JOIN cat_usuarios uMod ON uMod.skUsuario = oca.skUsuarioModificacion
+            WHERE 1 = 1";
          
         if(!isset($_POST['filters'])){
             $configuraciones['query'] .= "  ";
         }
 
-        // SE EJECUTA LA CONSULTA //
-        $data = parent::crear_consulta($configuraciones);
+        $data = parent::crear_consulta($configuraciones);        
         
         // Retorna el Resultado del Query para la Generación de Excel y Reportes Automáticos //
             if (isset($_POST['generarExcel']) || isset($_POST['envioAutomatico']) || $data['filters']) {
@@ -71,108 +75,67 @@ Class Cont_inde_Controller Extends Cont_Model {
         // FORMATEAMOS LOS DATOS DE LA CONSULTA //
             $result = $data['data'];
             $data['data'] = [];
-            foreach (Conn::fetch_assoc_all($result) AS $row) {
-                utf8($row);
+        foreach (Conn::fetch_assoc_all($result) AS $row) {
+            utf8($row);
 
-              
-                
-                //REGLA DEL MENÚ EMERGENTE
-                $regla = [ 
-                    "menuEmergente1" => $this->ME_editar($row),
-                    "menuEmergente2" => $this->ME_remplazar($row),
-                    "menuEmergente3" => $this->ME_activar($row),
-                    "menuEmergente4" => $this->ME_generarOrden($row),
-                    "menuEmergente5" => $this->ME_cancelar($row)
-                    
-                ];
+            // REGLA DEL MENÚ EMERGENTE
+            $regla = [ 
+                "menuEmergente1" => $this->ME_editar($row),
+                "menuEmergente4" => $this->ME_generarOrden($row),
+                "menuEmergente5" => $this->ME_cancelar($row)
+            ];
 
-                $row['fCostoServicio'] = (!empty($row['fCostoServicio']) ? '$'.number_format($row['fCostoServicio'],2) : '$0.00');
-                $row['dFechaInicioContrato'] = (!empty($row['dFechaInicioContrato']) ? date('d/m/Y', strtotime($row['dFechaInicioContrato'])) : ''); 
-                $row['dFechaCreacion'] = ($row['dFechaCreacion']) ? date('d/m/Y H:i:s', strtotime($row['dFechaCreacion'])) : ''; 
-                 
-               $row['menuEmergente'] = parent::menuEmergente($regla, $row['skContrato']);
-                array_push($data['data'],$row);
+            $row['dFechaInstalacion'] = (!empty($row['dFechaInstalacion']) ? date('d/m/Y', strtotime($row['dFechaInstalacion'])) : ''); 
+            $row['dFechaCreacion'] = ($row['dFechaCreacion']) ? date('d/m/Y H:i:s', strtotime($row['dFechaCreacion'])) : ''; 
+
+            $row['menuEmergente'] = parent::menuEmergente($regla, $row['skContrato']);
+            array_push($data['data'],$row);
         }
         return $data;
     }
 
-        /* ME_editar
-        *
-        * @author Luis Alberto Valdez Alvarez <lvaldez>
-        * @param type $row
-        * @return int
-        */
-        public function ME_editar(&$row){
-            if((in_array($row['skEstatus'], ['AC'])) ){
-                return self::HABILITADO;
-            }
-            return self::DESHABILITADO;
-        }
-        /* ME_remplazar
-        *
-        * @author Luis Alberto Valdez Alvarez <lvaldez>
-        * @param type $row
-        * @return int
-        */
-        public function ME_remplazar(&$row){
-            if((in_array($row['skEstatusContrato'], ['CA'])) ){
-                return self::HABILITADO;
-            }
-            return self::OCULTO;
-        }
-        /* ME_activar
-        *
-        * @author Luis Alberto Valdez Alvarez <lvaldez>
-        * @param type $row
-        * @return int
-        */
-        public function ME_activar(&$row){
-            if((in_array($row['skEstatusContrato'], ['CA'])) ){
-                return self::HABILITADO;
-            }
-            return self::OCULTO;
-        }
-        /* ME_generarOrden
-        *
-        * @author Luis Alberto Valdez Alvarez <lvaldez>
-        * @param type $row
-        * @return int
-        */
-        public function ME_generarOrden(&$row){
-            if((in_array($row['skEstatusContrato'], ['AC'])) ){
-                return self::HABILITADO;
-            }
-            return self::OCULTO;
-        }
-        /* ME_cancelar
-        *
-        * @author Luis Alberto Valdez Alvarez <lvaldez>
-        * @param type $row
-        * @return int
-        */
-        public function ME_cancelar(&$row){
-            if((in_array($row['skEstatusContrato'], ['AC'])) ){
-                return self::HABILITADO;
-            }
-            return self::OCULTO;
-        }
-  
+    public function generarExcel(){ parent::generar_excel($_POST['title'], $_POST['headers'], $this->consulta()); }
+    
+    public function generarPDF(){ parent::generar_pdf($_POST['title'], $_POST['headers'], $this->consulta()); }
 
-    //Función para generar excel
-    public function generarExcel(){
-        $data = $this->consulta();
-        parent::generar_excel($_POST['title'], $_POST['headers'] , $data );
+    /* ME_editar
+    *
+    * @author Luis Alberto Valdez Alvarez <lvaldez>
+    * @param type $row
+    * @return int
+    */
+    public function ME_editar(&$row){
+        if((in_array($row['skEstatus'], ['AC'])) ){
+            return self::HABILITADO;
+        }
+        return self::DESHABILITADO;
     }
-
-    //Función para generar PDF
-    public function generarPDF() {
-        return parent::generar_pdf(
-           $_POST['title'], 
-           $_POST['headers'], 
-           $this->consulta()
-        );
+    
+    /* ME_generarOrden
+    *
+    * @author Luis Alberto Valdez Alvarez <lvaldez>
+    * @param type $row
+    * @return int
+    */
+    public function ME_generarOrden(&$row){
+        if((in_array($row['skEstatusContrato'], ['AC'])) ){
+            return self::HABILITADO;
+        }
+        return self::OCULTO;
     }
- 
+    /* ME_cancelar
+    *
+    * @author Luis Alberto Valdez Alvarez <lvaldez>
+    * @param type $row
+    * @return int
+    */
+    public function ME_cancelar(&$row){
+        if((in_array($row['skEstatusContrato'], ['AC'])) ){
+            return self::HABILITADO;
+        }
+        return self::OCULTO;
+    }
+   
     public function cancelar(){
         $this->data = ['success' => TRUE, 'message' => NULL, 'datos' => NULL];
 
@@ -183,21 +146,6 @@ Class Cont_inde_Controller Extends Cont_Model {
         if(!$stpCUD_contratos || isset($stpCUD_contratos['success']) && $stpCUD_contratos['success'] != 1){
             $this->data['success'] = FALSE;
             $this->data['message'] = 'HUBO UN ERROR AL CANCELAR EL CONTRATO. ';
-            return $this->data;
-        }
-
-        return $this->data;
-    } 
-    public function activar(){
-        $this->data = ['success' => TRUE, 'message' => NULL, 'datos' => NULL];
-
-        $this->cont['axn'] = 'activar';
-        $this->cont['skContrato'] = (isset($_POST['skContrato']) && !empty($_POST['skContrato'])) ? $_POST['skContrato'] : NULL;
-
-        $stpCUD_contratos = parent::stpCUD_contratos();  
-        if(!$stpCUD_contratos || isset($stpCUD_contratos['success']) && $stpCUD_contratos['success'] != 1){
-            $this->data['success'] = FALSE;
-            $this->data['message'] = 'HUBO UN ERROR AL ACTIVAR EL CONTRATO. ';
             return $this->data;
         }
 
@@ -289,13 +237,7 @@ Class Cont_inde_Controller Extends Cont_Model {
                     
                 }
             }
-       
-        
-         
-
-        
-
-        return $this->data;
+               return $this->data;
     } 
 
  

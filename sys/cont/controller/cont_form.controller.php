@@ -4,8 +4,8 @@ Class Cont_form_Controller Extends Cont_Model {
     // PUBLIC VARIABLES //
     // PROTECTED VARIABLES //
     // PRIVATE VARIABLES //
-    private $data = array();
-    private $idTran = 'solicitud'; //Mi procedimiento
+    private $data = [];
+    private $idTran = 'Cont_form_Controller';
 
     public function __construct() {
         parent::init();
@@ -14,24 +14,15 @@ Class Cont_form_Controller Extends Cont_Model {
     public function __destruct() {
 
     }
-    /**
-       * guardar
-       *
-       * Guardar Comprobante de Egresos
-       *
-       * @author Luis Alberto Valdez Alvarez <lvaldez>
-       * @return Array ['success'=>NULL,'message'=>NULL,'datos'=>NULL]
-       */
-    public function guardar() {
-        //exit(print_r($_POST));
 
+    public function guardar() {
         $this->data = ['success' => TRUE, 'message' => NULL, 'datos' => NULL];
         Conn::begin($this->idTran);
 
         // Obtener datos de entrada de información
             $getInputData = $this->getInputData();
             if(!$getInputData['success']){
-                //Conn::rollback($this->idTran);
+                Conn::rollback($this->idTran);
                 return $this->data;
             }
 
@@ -41,7 +32,6 @@ Class Cont_form_Controller Extends Cont_Model {
                 Conn::rollback($this->idTran);
                 return $this->data;
             }
-            
 
             $this->cont['skContrato'] = (isset($_POST['skContrato']) ? $_POST['skContrato'] : NULL);  
         
@@ -52,191 +42,139 @@ Class Cont_form_Controller Extends Cont_Model {
                 return $this->data;
             }
 
-             
-        //Conn::commit($this->idTran);
         Conn::commit($this->idTran);
         $this->data['datos'] = $this->cont;
         $this->data['success'] = TRUE;
-        $this->data['message'] = 'Registro guardado con éxito.';
+        $this->data['message'] = 'REGISTRO GUARDADO CON ÉXITO';
        
         return $this->data;
     }
     
-   
+    public function guardar_contrato(){
+        $this->data = ['success' => TRUE, 'message' => NULL, 'datos' => NULL];
 
-    
- 
-
-    /**
-       * guardar_contrato
-       *
-       * Guardar Contrato
-       *
-       * @author Luis Alberto Valdez Alvarez <lvaldez>
-       * @return Array ['success'=>NULL,'message'=>NULL,'datos'=>NULL]
-       */
-      public function guardar_contrato(){
-          $this->data['success'] = TRUE;
-          $this->cont['axn'] = 'guardar';
-          $this->cont['skEstatus'] = 'AC';
-          $this->cont['skEstatusContrato'] = 'AC';
-   
-          $stpCUD_contratos = parent::stpCUD_contratos();
-           
-          if(!$stpCUD_contratos || isset($stpCUD_contratos['success']) && $stpCUD_contratos['success'] != 1){
-              $this->data['success'] = FALSE;
-              $this->data['message'] = 'HUBO UN ERROR AL GUARDAR LOS DATOS GENERALES DEL CONTRATO';
-              return $this->data;
-          }
-
-          $this->cont['skContrato'] = $stpCUD_contratos['skContrato'];
-
-          $this->data['success'] = TRUE;
-          $this->data['message'] = 'DATOS DE CONTRATO GUARDADO CON EXITO';
-          return $this->data;
-      }
-
-
-       
-
-   
-       
-       
-    /**
-       * validar_datos_entrada
-       *
-       * Valida los datos del la entrada
-       *
-       * @author Luis Alberto Valdez Alvarez <lvaldez>
-       * @return Array ['success'=>NULL,'message'=>NULL,'datos'=>NULL]
-       */
-      private function validar_datos_entrada(){
         $this->data['success'] = TRUE;
-        $this->data['message'] = "";
+        $this->cont['axn'] = 'guardar';
+        $this->cont['skEstatus'] = 'AC';
 
+        $stpCUD_contratos = parent::stpCUD_contratos();
+        
+        if(!$stpCUD_contratos || isset($stpCUD_contratos['success']) && $stpCUD_contratos['success'] != 1){
+            $this->data['success'] = FALSE;
+            $this->data['message'] = 'HUBO UN ERROR AL GUARDAR LOS DATOS GENERALES DEL CONTRATO';
+            return $this->data;
+        }
 
-          $validations = [ 
-            'skEmpresaSocioCliente'=>['message'=>'CLIENTE'],
-            'skEmpresaSocioFacturacion'=>['message'=>'FACTURACION'],
-            'dFechaInicioContrato'=>['message'=>'CLIENTE','validations'=>['date']],
-            'dFechaInicioCobro'=>['message'=>'CLIENTE','validations'=>['date']]
-          ];
+        $this->cont['skContrato'] = $stpCUD_contratos['skContrato'];
 
-          foreach($validations AS $k=>$v){
-              if(!isset($this->cont[$k]) || empty(trim($this->cont[$k]))){
-                  $this->data['success'] = FALSE;
-                  $this->data['message'] = $v['message'].' REQUERIDO';
-                  return $this->data;
-              }
-              if(isset($v['validations'])){
-                  foreach($v['validations'] AS $valid){
-                      switch ($valid) {
-                          case 'integer':
-                              $this->cont[$k] = str_replace(',','',$this->cont[$k]);
-                              if(!preg_match('/^[0-9]+$/', $this->cont[$k])){
-                                  $this->data['success'] = FALSE;
-                                  $this->data['message'] = $v['message'].' - INGRESAR NÚMEROS ENTEROS';
-                                  return $this->data;
-                              }
-                          break;
-                          case 'decimal':
-                              $this->cont[$k] = str_replace(',','',$this->cont[$k]);
-                              if(!preg_match('/^[0-9.]+$/', $this->cont[$k])){
-                                  $this->data['success'] = FALSE;
-                                  $this->data['message'] = $v['message'].' - INGRESAR NÚMEROS ENTEROS / DECIMALES';
-                                  return $this->data;
-                              }
-                          break;
-                          case 'date':
-                              $this->cont[$k] = date('Y-m-d', strtotime(str_replace('/', '-', $this->cont[$k])));
-                              if(!preg_match('/^[0-9\/-]+$/', $this->cont[$k])){
-                                  $this->data['success'] = FALSE;
-                                  $this->data['message'] = $v['message'].' - FECHA NO VALIDA';
-                                  return $this->data;
-                              }
-                          break;
-                      }
-                  }
-              }
-          }
+        $this->data['success'] = TRUE;
+        $this->data['message'] = 'DATOS DE CONTRATO GUARDADO CON EXITO';
+        return $this->data;
+    }
+
+    private function validar_datos_entrada(){
+        $this->data = ['success' => TRUE, 'message' => NULL, 'datos' => NULL];
+        
+        $validations = [
+
+        ];
+
+        foreach($validations AS $k=>$v){
+            
+            if(!isset($this->cont[$k]) || empty(trim($this->cont[$k]))){
+                $this->data['success'] = FALSE;
+                $this->data['message'] = $v['message'].' REQUERIDO';
+                return $this->data;
+            }
+
+            if(isset($v['validations'])){
+                foreach($v['validations'] AS $valid){
+                    switch ($valid) {
+                        case 'integer':
+                            $this->cont[$k] = str_replace(',','',$this->cont[$k]);
+                            if(!preg_match('/^[0-9]+$/', $this->cont[$k])){
+                                $this->data['success'] = FALSE;
+                                $this->data['message'] = $v['message'].' - INGRESAR NÚMEROS ENTEROS';
+                                return $this->data;
+                            }
+                        break;
+                        case 'decimal':
+                            $this->cont[$k] = str_replace(',','',$this->cont[$k]);
+                            if(!preg_match('/^[0-9.]+$/', $this->cont[$k])){
+                                $this->data['success'] = FALSE;
+                                $this->data['message'] = $v['message'].' - INGRESAR NÚMEROS ENTEROS / DECIMALES';
+                                return $this->data;
+                            }
+                        break;
+                        case 'date':
+                            $this->cont[$k] = date('Y-m-d', strtotime(str_replace('/', '-', $this->cont[$k])));
+                            if(!preg_match('/^[0-9\/-]+$/', $this->cont[$k])){
+                                $this->data['success'] = FALSE;
+                                $this->data['message'] = $v['message'].' - FECHA NO VALIDA';
+                                return $this->data;
+                            }
+                        break;
+                    }
+                }
+            }
+        }
  
+        return $this->data;
 
-          return $this->data;
       }
 
-    /**
-       * getInputData
-       *
-       * Obtener datos de entrada de información
-       *
-       * @author LUIS ALBERTO VALDEZ ALVAREZ <lvaldez>
-       * @return Boolean TRUE | FALSE
-       */
-      private function getInputData(){
+    private function getInputData(){
 
-          $this->data['success'] = TRUE;
+        $this->data['success'] = TRUE;
 
-          if(!$_POST && !$_GET){
-              $this->data['success'] = FALSE;
-              $this->data['message'] = 'NO SE RECIBIERON DATOS';
-              return $this->data;
-          }
+        if(!$_POST && !$_GET){
+            $this->data['success'] = FALSE;
+            $this->data['message'] = 'NO SE RECIBIERON DATOS';
+            return $this->data;
+        }
 
-          if($_POST){
-              foreach($_POST AS $key=>$val){
-                  if(!is_array($val)){
-                      $this->cont[$key] = $val;
-                      continue;
-                  }else{
-                      $this->cont[$key] = $val;
-                      continue;
-                  }
-              }
-          }
+        if($_POST){
+            foreach($_POST AS $key=>$val){
+                if(!is_array($val)){
+                    $this->cont[$key] = $val;
+                    continue;
+                }else{
+                    $this->cont[$key] = $val;
+                    continue;
+                }
+            }
+        }
 
-          if($_GET){
-              foreach($_GET AS $key=>$val){
-                  if(!is_array($val)){
-                      $this->cont[$key] = $val;
-                      continue;
-                  }else{
-                      $this->cont[$key] = $val;
-                      continue;
-                  }
-              }
-          }
+        if($_GET){
+            foreach($_GET AS $key=>$val){
+                if(!is_array($val)){
+                    $this->cont[$key] = $val;
+                    continue;
+                }else{
+                    $this->cont[$key] = $val;
+                    continue;
+                }
+            }
+        }
 
-          return $this->data;
-      }
-
-   
+        return $this->data;
+    }
 
     public function getDatos() {
         $this->data = ['success' => TRUE, 'message' => NULL, 'datos' => NULL];
         $this->cont['skContrato'] = (isset($_GET['p1']) && !empty($_GET['p1'])) ? $_GET['p1'] : NULL;
-           
         
         $this->data['tipoPeriodo'] = parent::_getTiposPeriodos();
         $this->data['formaPago'] = parent::consultar_formasPago();
         $this->data['metodoPago'] = parent::consultar_metodosPago();
         $this->data['usoCFDI'] = parent::consultar_usosCFDI(); 
         
-
-        if (!empty($this->cont['skContrato'])) {
+        if(!empty($this->cont['skContrato'])){
             $this->data['datos'] = parent::_get_contratos();
-           
         }
-         return $this->data;
+        return $this->data;
     }
- 
-    /**
-     * get_empresas
-     *
-     * Obtener Empresas
-     *
-     * @author Luis Valdez <lvaldez>
-     * @return Array EmpresasSocios
-     */
+
     public function get_empresas(){
         $this->cont['sNombre'] = (isset($_POST['val']) ? $_POST['val'] : NULL);
         if(isset($_POST['skEmpresaTipo']) && !empty($_POST['skEmpresaTipo'])){
@@ -249,19 +187,4 @@ Class Cont_form_Controller Extends Cont_Model {
         return parent::get_empresas();
     }
 
-    /**
-     * get_servicios
-     *
-     * Obtener Empresas
-     *
-     * @author Luis Valdez <lvaldez>
-     * @return Array EmpresasSocios
-     */
-    public function get_servicios(){
-        $this->cont['sNombre'] = (isset($_POST['val']) ? $_POST['val'] : NULL);
-        return parent::get_servicios();
-    }
-    
-
-     
 }

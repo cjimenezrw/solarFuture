@@ -44,8 +44,7 @@ Class Cont_Controller Extends Cont_Model {
                 $data = $cont_inde->cobros_contratos();
                 header('Content-Type: application/json');
                 echo json_encode($data);
-            break; 
-            
+            break;
             case 'generarExcel':
                 $cont_inde->generarExcel();
                 break;

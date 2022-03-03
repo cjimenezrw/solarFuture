@@ -7,6 +7,13 @@
             <div class="panel panel-bordered panel-primary panel-line">
                 <div class="panel-heading">
                     <h3 class="panel-title">DATOS GENERALES</h3>
+                    <?php
+                        if (!empty($data['datos']['iFolio'])) {
+                    ?>
+                            <div class="alert alert-primary alert-dismissible" role="alert">
+                            <b class="red-600 font-size-20"><?php echo $data['datos']['iFolio']; ?></b>
+                            </div>
+                    <?php }//ENDIF  ?>
                 </div>
                 <div class="panel-body container-fluid">
                     <div class="row row-lg">
@@ -46,7 +53,7 @@
                                         <i class="fa-phone" aria-hidden="true"></i>
                                     </span>
                                     <input id="sTelefonoRecepcionEntrega" name="sTelefonoRecepcionEntrega" placeholder="TELÉFONO" type="text" class="form-control" autocomplete="off"   
-                                    value = "<?php echo isset($data['datos']['sTelefonoRecepcionEntrega']) ? $data['datos']['sTelefonoRecepcionEntrega'] : $data['datos']['sTelefonoRecepcionEntrega']; ?>">
+                                    value = "<?php echo isset($data['datos']['sTelefonoRecepcionEntrega']) ? $data['datos']['sTelefonoRecepcionEntrega'] : $data['datos']['sTelefono']; ?>">
                                 </div>
                             </div>
                         </div>

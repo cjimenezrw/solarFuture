@@ -2,7 +2,7 @@
 if (isset($data['datos'])) {
     $result = $data['datos'];
     utf8($result);
-} 
+}
 ?>
 <form class="form-horizontal" id="core-guardar" method="post" enctype="multipart/form-data">
     <input value="<?php echo (!empty($result['skContrato']) ? $result['skContrato'] : '');?>" name="skContrato"
@@ -15,10 +15,10 @@ if (isset($data['datos'])) {
         <div class="panel-body container-fluid">
             <div class="row row-lg col-lg-12">
 
-                <div class="col-md-12 col-lg-12">
+                <div class="col-md-6 col-lg-6">
                     <div class="form-group">
                         <h4 class="example-title"><b class="text-danger">*</b> CLIENTE:</h4>
-                        <select name="skEmpresaSocioCliente" id="skEmpresaSocioCliente" class="form-control"
+                        <select name="skEmpresaSocioCliente" id="skEmpresaSocioCliente" class="form-control" onchange="change_empresa(this);"
                             data-plugin="select2" data-ajax--cache="true">
                             <?php
                                     if (!empty($result['skEmpresaSocioCliente'])) {
@@ -28,6 +28,25 @@ if (isset($data['datos'])) {
                             <?php
                                     }//ENDIF
                                     ?>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="col-md-6 col-lg-6">
+                    <div class="form-group">
+                        <h4 class="example-title"><b class="text-danger">*</b> TIPO DE CONTRATO:</h4>
+                        <select id="skTipoContrato" name="skTipoContrato" class="form-control" data-plugin="select2" select2Simple>
+                            <option value="">- SELECCIONAR -</option>
+                            <?php
+                                if (!empty($data['TIPCON'])) {
+                                    foreach ($data['TIPCON'] AS $row) {
+                            ?>
+                                <option <?php echo(isset($data['datos']['skTipoContrato']) && $data['datos']['skTipoContrato'] == $row['skClave'] ? 'selected="selected"' : ''); ?>
+                                value="<?php echo $row['skClave']; ?>"> <?php echo $row['sNombre']; ?> </option>
+                            <?php
+                                    }//ENDWHILE
+                                }//ENDIF
+                            ?>
                         </select>
                     </div>
                 </div>
@@ -58,18 +77,15 @@ if (isset($data['datos'])) {
                             class="form-control" data-plugin="select2" select2Simple>
                             <option value="">- SELECCIONAR -</option>
                             <?php
-                                 if ($data['tipoPeriodo']) {
-                                    foreach ( $data['tipoPeriodo'] as $row) {
-                                     utf8($row);
-                                     ?>
+                                for($i=1;$i<=12;$i++){
+                            ?>
                             <option
-                                <?php echo(isset($result['skTipoPeriodo']) && $result['skTipoPeriodo'] == $row['skTipoPeriodo'] ? 'selected="selected"' : ""); ?>
-                                value="<?php echo $row['skTipoPeriodo']; ?>"> <?php echo $row['sNombre']; ?>
+                                <?php echo(isset($result['iFrecuenciaMantenimientoMensual']) && $result['iFrecuenciaMantenimientoMensual'] == $i ? 'selected="selected"' : ""); ?>
+                                value="<?php echo $i; ?>"><?php echo $i.($i==1 ? ' MES' : ' MESES'); ?>
                             </option>
                             <?php
-                                     }//ENDWHILE
-                                 }//ENDIF
-                                 ?>
+                                }//ENDFOR
+                            ?>
                         </select>
                     </div>
                 </div>
@@ -107,7 +123,7 @@ if (isset($data['datos'])) {
                     <div class="form-group">
                         <h4 class="example-title">DOMICILIO:</h4>
                         <input class="form-control" name="sDomicilio" id="sDomicilio"
-                            value="<?php echo (isset($result['sDireccion'])) ? $result['sDireccion'] : ''; ?>"
+                            value="<?php echo (isset($result['sDomicilio'])) ? $result['sDomicilio'] : ''; ?>"
                             placeholder="DOMICILIO" autocomplete="off" type="text">
                     </div>
                 </div>
@@ -140,6 +156,13 @@ if (isset($data['datos'])) {
 
 core.formValidaciones.fields = cont.cont_form.validaciones;
 
+function change_empresa(obj){
+    var data = $("#skEmpresaSocioCliente").select2('data')[0].data;
+    $("#sTelefono").val(data.sTelefono);
+    $("#sCorreo").val(data.sCorreo);
+    //$("#sDomicilio").val(data.sDomicilio);
+}
+
 $(document).ready(function() {
 
     $('#core-guardar').formValidation(core.formValidaciones);
@@ -156,20 +179,7 @@ $(document).ready(function() {
     core.autocomplete2('#skEmpresaSocioCliente', 'get_empresas', window.location.href, 'CLIENTE');
     core.autocomplete2('#skEmpresaSocioFacturacion', 'get_empresas', window.location.href, 'FACTURACIÓN');
 
-    $("#skFormaPago").select2({
-        placeholder: "Forma de Pago",
-        allowClear: true
-    });
-
-    $("#skMetodoPago").select2({
-        placeholder: "Metodo de Pago",
-        allowClear: true
-    });
-
-    $("#skUsoCFDI").select2({
-        placeholder: "Uso de CFDI",
-        allowClear: true
-    });
+    $("#skTipoContrato").select2({placeholder: "TIPO DE CONTRATO", allowClear: true });
 
     $(".input-datepicker").datepicker({
         format: "dd/mm/yyyy"

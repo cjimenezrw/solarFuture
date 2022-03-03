@@ -20,8 +20,8 @@ Class Cont_Model Extends DLOREAN_Model {
             " .escape(isset($this->cont['skContrato']) ? $this->cont['skContrato'] : NULL) . ",
             " .escape(isset($this->cont['skEstatus']) ? $this->cont['skEstatus'] : NULL) . ",
             " .escape(isset($this->cont['skEmpresaSocioCliente']) ? $this->cont['skEmpresaSocioCliente'] : NULL) . ",
+            " .escape(isset($this->cont['skTipoContrato']) ? $this->cont['skTipoContrato'] : NULL) . ",
             " .escape(isset($this->cont['dFechaInstalacion']) ? $this->cont['dFechaInstalacion'] : NULL) . ",
-
             " .escape(isset($this->cont['iFrecuenciaMantenimientoMensual']) ? $this->cont['iFrecuenciaMantenimientoMensual'] : NULL) . ",
             " .escape(isset($this->cont['iDiaMantenimiento']) ? $this->cont['iDiaMantenimiento'] : NULL) . ",
             " .escape(isset($this->cont['sTelefono']) ? $this->cont['sTelefono'] : NULL) . ",
@@ -52,6 +52,7 @@ Class Cont_Model Extends DLOREAN_Model {
             ,CONCAT('CON-', LPAD(oca.iFolio, 5, 0))  AS iFolio
             ,oca.skEstatus
             ,oca.skEmpresaSocioCliente
+            ,oca.skTipoContrato
             ,oca.dFechaInstalacion
             ,oca.iFrecuenciaMantenimientoMensual
             ,oca.iDiaMantenimiento
@@ -59,29 +60,35 @@ Class Cont_Model Extends DLOREAN_Model {
             ,oca.sCorreo
             ,oca.sDomicilio
             ,oca.sObservaciones
-            ,oca.sObservacionesCancelacion
-            ,oca.skUsuarioCancelacion
             ,oca.skEmpresaSocioPropietario
+            ,oca.sObservacionesCancelacion
+            ,oca.dFechaCancelacion
+            ,oca.skUsuarioCancelacion
             ,oca.dFechaCreacion
             ,oca.skUsuarioCreacion
             ,oca.dFechaModificacion
             ,oca.skUsuarioModificacion
-
+            
             ,est.sNombre AS estatus
             ,est.sColor AS estatusColor
             ,est.sIcono AS estatusIcono
-            
+
             ,e.sNombre AS cliente
-            
+
             ,CONCAT(uCre.sNombre,' ',uCre.sApellidoPaterno,' ',uCre.sApellidoMaterno) AS usuarioCreacion
             ,CONCAT(uMod.sNombre,' ',uMod.sApellidoPaterno,' ',uMod.sApellidoMaterno) AS usuarioModificacion
+            ,CONCAT(uCan.sNombre,' ',uCan.sApellidoPaterno,' ',uCan.sApellidoMaterno) AS usuarioCancelacion
+
+            ,TIPCON.sNombre AS tipoContrato
         
             FROM ope_contratos oca
             INNER JOIN core_estatus est ON est.skEstatus = oca.skEstatus
             INNER JOIN rel_empresasSocios es ON es.skEmpresaSocio = oca.skEmpresaSocioCliente
             INNER JOIN cat_empresas e ON e.skEmpresa = es.skEmpresa
             INNER JOIN cat_usuarios uCre ON uCre.skUsuario = oca.skUsuarioCreacion 
-            INNER JOIN cat_usuarios uMod ON uMod.skUsuario = oca.skUsuarioModificacion
+            LEFT JOIN cat_usuarios uMod ON uMod.skUsuario = oca.skUsuarioModificacion
+            LEFT JOIN cat_usuarios uCan ON uCan.skUsuario = oca.skUsuarioCancelacion
+            INNER JOIN rel_catalogosSistemasOpciones TIPCON ON TIPCON.skCatalogoSistema = 'TIPCON' AND TIPCON.skClave = oca.skTipoContrato
             WHERE 1 = 1 ";
 
         if(isset($this->cont['skContrato']) && !empty($this->cont['skContrato'])){
@@ -170,7 +177,11 @@ Class Cont_Model Extends DLOREAN_Model {
     public function get_empresas() {
         $sql = "SELECT N1.* FROM (
             SELECT
-            es.skEmpresaSocio AS id, CONCAT(e.sNombre,' (', IF(e.sRFC IS NOT NULL,e.sRFC,IF(e.sTelefono IS NOT NULL,e.sTelefono,IF(e.sCorreo IS NOT NULL,e.sCorreo,NULL))),') - ',et.sNombre) AS nombre, es.skEmpresaTipo
+            es.skEmpresaSocio AS id
+            ,CONCAT(e.sNombre,' (', IF(e.sRFC IS NOT NULL,e.sRFC,IF(e.sTelefono IS NOT NULL,e.sTelefono,IF(e.sCorreo IS NOT NULL,e.sCorreo,NULL))),') - ',et.sNombre) AS nombre
+            ,es.skEmpresaTipo
+            ,e.sTelefono
+            ,e.sCorreo
             FROM rel_empresasSocios es
             INNER JOIN cat_empresas e ON e.skEmpresa = es.skEmpresa
             INNER JOIN cat_empresasTipos et ON et.skEmpresaTipo = es.skEmpresaTipo

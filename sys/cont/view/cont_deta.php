@@ -6,181 +6,161 @@ if (isset($data['datos'])) {
     $cobros_contratos = (isset($data['cobros_contratos'])) ? $data['cobros_contratos'] : ''; 
     utf8($result);
 }
-
 ?>
+<form class="form-horizontal" id="core-guardar" method="post" enctype="multipart/form-data">
+    <input value="<?php echo (!empty($data['datos']['skContrato']) ? $data['datos']['skContrato'] : '');?>" name="skContrato"
+        id="skContrato" type="hidden">
 
-<div class="row">
-   <div class="col-md-12 page-invoice ">
-
-  <div class="panel panel-bordered panel-primary panel-line" >
-      <div class="panel-heading">
-        <h3 class="panel-title">DATOS GENERALES</h3>
-        <?php
-		    if (isset($result['sFolio'])) {
-			?>
-    		    <div class="alert alert-primary alert-dismissible" role="alert">
-    			<b class="red-600 font-size-20"><?php echo (isset($result['sFolio'])) ? ($result['sFolio']) : ''; ?></b>
-    		    </div>
-		    <?php }//ENDIF  ?>
-      </div>
-
-    <div class="panel-body container-fluid"  >
-        
-          <div class="col-md-12 same-heigth">
-          <div class="col-md-3 col-lg-3">
-              <div class="form-group">
-                <h4 class="example-title">CLIENTE:</h4>
-                <p><?php echo (!empty($result['cliente'])) ? $result['cliente'] : '';?> </p>
-              </div>
-            </div>
-            <div class="col-md-3 col-lg-3">
-            <div class="form-group">
-              <h4 class="example-title">FECHA INICIO CONTRATO </h4>
-              <p><?php echo (!empty($result['dFechaInicioContrato'])) ? date('d/m/Y', strtotime($result['dFechaInicioContrato'])) : ''; ?></p>
-            </div>
-          </div>
-            <div class="col-md-3 col-lg-3">
-            <div class="form-group">
-              <h4 class="example-title">FECHA INICIO COBRO </h4>
-              <p><?php echo (!empty($result['dFechaInicioCobro'])) ? date('d/m/Y', strtotime($result['dFechaInicioCobro'])) : ''; ?></p>
-            </div>
-          </div>
-          <div class="col-md-3 col-lg-3">
-              <div class="form-group">
-                <h4 class="example-title">DIA DE COBRO:</h4>
-                <p><?php echo (!empty($result['iDiaCorte'])) ? $result['iDiaCorte'] : '';?> </p>
-              </div>
-            </div>
-           
-           
-           
-            
+    <div class="panel panel-bordered panel-primary panel-line">
+        <div class="panel-heading">
+            <h3 class="panel-title">DATOS GENERALES</h3>
         </div>
-        <div class="col-md-12 same-heigth">
-          <div class="col-md-3 col-lg-3">
-              <div class="form-group">
-                <h4 class="example-title">FACTURACION:</h4>
-                <p><?php echo (!empty($result['facturacion'])) ? $result['facturacion'] : '';?> </p>
-              </div>
+        <div class="panel-body container-fluid">
+            <div class="row row-lg col-lg-12">
+
+                <div class="col-md-4 col-lg-4">
+                    <div class="form-group">
+                        <h4 class="example-title">ESTATUS:</h4>
+                        <span><i><span class="<?php echo (!empty($data['datos']['estatusColor']) ? $data['datos']['estatusColor'] : '');?> <?php echo (!empty($data['datos']['estatusIcono']) ? $data['datos']['estatusIcono'] : '');?>"> <?php echo (!empty($data['datos']['estatus']) ? $data['datos']['estatus'] : '');?></span></i></span>
+                    </div>
+                </div>
+
+                <div class="col-md-4 col-lg-4">
+                    <div class="form-group">
+                        <h4 class="example-title">FECHA DE CREACIÓN:</h4>
+                        <span><?php echo (!empty($data['datos']['dFechaCreacion']) ? date('d/m/Y', strtotime($data['datos']['dFechaCreacion'])) : '-');?></span>
+                    </div>
+                </div>
+
+                <div class="col-md-4 col-lg-4">
+                    <div class="form-group">
+                        <h4 class="example-title">USUARIO DE CREACIÓN:</h4>
+                        <span><?php echo (!empty($data['datos']['usuarioCreacion']) ? $data['datos']['usuarioCreacion'] : '-');?></span>
+                    </div>
+                </div>
+
+                <div class="row row-lg col-md-12 col-lg-12">
+                    <hr>
+                </div>
+
+                <div class="col-md-6 col-lg-6">
+                    <div class="form-group">
+                        <h4 class="example-title">CLIENTE:</h4>
+                        <span><?php echo (!empty($data['datos']['cliente']) ? $data['datos']['cliente'] : '-');?></span>
+                    </div>
+                </div>
+
+                <div class="col-md-6 col-lg-6">
+                    <div class="form-group">
+                        <h4 class="example-title">TIPO DE CONTRATO:</h4>
+                        <span><?php echo (!empty($data['datos']['tipoContrato']) ? $data['datos']['tipoContrato'] : '-');?></span>
+                    </div>
+                </div>
+
+                <div class="row row-lg col-md-12 col-lg-12">
+                    <hr>
+                </div>
+
+                <div class="col-md-4 col-lg-4">
+                    <div class="form-group">
+                        <h4 class="example-title">FECHA DE INSTALACIÓN:</h4>
+                        <span><?php echo (!empty($data['datos']['dFechaInstalacion']) ? date('d/m/Y', strtotime($data['datos']['dFechaInstalacion'])) : '-');?></span>
+                    </div>
+                </div>
+
+                <div class="col-md-4 col-lg-4">
+                    <div class="form-group">
+                        <h4 class="example-title">FRECUENCIA DE MANTENIMIENTO MENSUAL:
+                        </h4>
+                        <span><?php echo (!empty($data['datos']['iFrecuenciaMantenimientoMensual']) ? $data['datos']['iFrecuenciaMantenimientoMensual'] : '-');?></span>
+                    </div>
+                </div>
+
+                <div class="col-md-4 col-lg-4">
+                    <div class="form-group">
+                        <h4 class="example-title">DÍA DE MANTENIMIENTO:</h4>
+                        <span><?php echo (!empty($data['datos']['iDiaMantenimiento']) ? $data['datos']['iDiaMantenimiento'] : '-');?></span>
+                    </div>
+                </div>
+
+                <div class="row row-lg col-md-12 col-lg-12">
+                    <hr>
+                </div>
+
+                <div class="col-md-4 col-lg-4">
+                    <div class="form-group">
+                        <h4 class="example-title">TELÉFONO:</h4>
+                        <span><?php echo (!empty($data['datos']['sTelefono']) ? $data['datos']['sTelefono'] : '-');?></span>
+                    </div>
+                </div>
+                <div class="col-md-4 col-lg-4">
+                    <div class="form-group">
+                        <h4 class="example-title">CORREO:</h4>
+                        <span><?php echo (!empty($data['datos']['sCorreo']) ? $data['datos']['sCorreo'] : '-');?></span>
+                    </div>
+                </div>
+                <div class="col-md-4 col-lg-4">
+                    <div class="form-group">
+                        <h4 class="example-title">DOMICILIO:</h4>
+                        <span><?php echo (!empty($data['datos']['sDomicilio']) ? $data['datos']['sDomicilio'] : '-');?></span>
+                    </div>
+                </div>
+
+                <div class="row row-lg col-md-12 col-lg-12">
+                    <hr>
+                </div>
+
+                <div class="col-md-12 col-lg-12">
+                    <div class="form-group">
+                        <h4 class="example-title">
+                            OBSERVACIONES:
+                            <i class="icon wb-help-circle help-text" data-content="OBSERVACIONES" aria-hidden="true"
+                                data-trigger="hover"></i>
+                        </h4>
+                        <span><?php echo (!empty($data['datos']['sObservaciones']) ? nl2br($data['datos']['sObservaciones']) : '-');?></span>
+                    </div>
+                </div>
+
+                <div class="row row-lg col-md-12 col-lg-12">
+                    <hr>
+                </div>
+
+                <div class="col-md-6 col-lg-6">
+                    <div class="form-group">
+                        <h4 class="example-title">FECHA DE MODIFICACIÓN:</h4>
+                        <span><?php echo (!empty($data['datos']['dFechaModificacion']) ? date('d/m/Y', strtotime($data['datos']['dFechaModificacion'])) : '-');?></span>
+                    </div>
+                </div>
+
+                <div class="col-md-6 col-lg-6">
+                    <div class="form-group">
+                        <h4 class="example-title">USUARIO DE MODIFICACIÓN:</h4>
+                        <span><?php echo (!empty($data['datos']['usuarioModificacion']) ? $data['datos']['usuarioModificacion'] : '-');?></span>
+                    </div>
+                </div>
+
+                <div class="col-md-6 col-lg-6">
+                    <div class="form-group">
+                        <h4 class="example-title">FECHA DE CANCELACIÓN:</h4>
+                        <span><?php echo (!empty($data['datos']['dFechaCancelacion']) ? date('d/m/Y', strtotime($data['datos']['dFechaCancelacion'])) : '-');?></span>
+                    </div>
+                </div>
+
+                <div class="col-md-6 col-lg-6">
+                    <div class="form-group">
+                        <h4 class="example-title">USUARIO DE CANCELACIÓN:</h4>
+                        <span><?php echo (!empty($data['datos']['usuarioCancelacion']) ? $data['datos']['usuarioCancelacion'] : '-');?></span>
+                    </div>
+                </div>
+
             </div>
-            <div class="col-md-3 col-lg-3">
-              <div class="form-group">
-                <h4 class="example-title">USO DE CFDI:</h4>
-                <p><?php echo (!empty($result['skUsoCFDI'])) ? $result['skUsoCFDI'] : '';?> </p>
-              </div>
-            </div>
-            <div class="col-md-3 col-lg-3">
-              <div class="form-group">
-                <h4 class="example-title">METODO DE PAGO:</h4>
-                <p><?php echo (!empty($result['skMetodoPago'])) ? $result['skMetodoPago'] : '';?> </p>
-              </div>
-            </div>
-            <div class="col-md-3 col-lg-3">
-              <div class="form-group">
-                <h4 class="example-title">FORMA DE PAGO:</h4>
-                <p><?php echo (!empty($result['skFormaPago'])) ? $result['skFormaPago'] : '';?> </p>
-              </div>
-            </div>
         </div>
-        <div class="col-md-12 same-heigth">
-        <div class="col-md-3 col-lg-3">
-              <div class="form-group">
-                <h4 class="example-title">FACTURABLE:</h4>
-                <p><?php echo (!empty($result['iNoFacturable'])) ? 'NO': 'SI';?> </p>
-              </div>
-            </div>
-        </div>
-        <div class="col-md-12 col-lg-12"><hr></div>
-        <div class="col-md-12 same-heigth">
-
-        <div class="col-md-3 col-lg-3">
-              <div class="form-group">
-                <h4 class="example-title">TORRE:</h4>
-                <p><?php echo (!empty($result['torre'])) ? $result['torre'] : '';?> </p>
-              </div>
-            </div> 
-
-          <div class="col-md-3 col-lg-3">
-              <div class="form-group">
-                <h4 class="example-title">ACCESS POINT:</h4>
-                <p><?php echo (!empty($result['accessPoint'])) ? $result['accessPoint'] : '';?> </p>
-              </div>
-            </div> 
-            
-            <div class="col-md-3 col-lg-3">
-              <div class="form-group">
-                <h4 class="example-title">MAC:</h4>
-                <p><?php echo (!empty($result['sMAC'])) ? $result['sMAC'] : '';?> </p>
-              </div>
-            </div> 
-            <div class="col-md-3 col-lg-3">
-              <div class="form-group">
-                <h4 class="example-title">TIPO DE PERIODO:</h4>
-                <p><?php echo (!empty($result['tipoPeriodo'])) ? $result['tipoPeriodo'] : '';?> </p>
-              </div>
-            </div> 
-
-        </div>
-        <div class="col-md-12 col-lg-12"><hr></div>
-        <div class="col-md-12 same-heigth">
-          
-          <div class="col-md-3 col-lg-3">
-              <div class="form-group">
-                <h4 class="example-title">SERVICIO:</h4>
-                <p><?php echo (!empty($result['servicio'])) ? $result['servicio'] : '';?> </p>
-              </div>
-            </div> 
-            <div class="col-md-3 col-lg-3">
-              <div class="form-group">
-                <h4 class="example-title">COSTO SERVICIO:</h4>
-                <p><?php echo (!empty($result['fCostoServicio'])) ? "$ ".number_format($result['fCostoServicio'],2) : '';?> </p>
-              </div>
-            </div> 
-            <div class="col-md-6 col-lg-6">
-              <div class="form-group">
-                <h4 class="example-title">DETALLES DEL SERVICIO:</h4>
-                <p><?php echo (!empty($result['sDetallesServicio'])) ? $result['sDetallesServicio'] : '';?> </p>
-              </div>
-            </div> 
-
-        </div>
-        <div class="col-md-12 col-lg-12"><hr></div>
-        <div class="col-md-12 same-heigth">
-          
-          <div class="col-md-3 col-lg-3">
-              <div class="form-group">
-                <h4 class="example-title">TELEFONO:</h4>
-                <p><?php echo (!empty($result['sTelefono'])) ? $result['sTelefono'] : '';?> </p>
-              </div>
-            </div> 
-            <div class="col-md-3 col-lg-3">
-              <div class="form-group">
-                <h4 class="example-title">CORREO:</h4>
-                <p><?php echo (!empty($result['sCorreo'])) ? $result['sCorreo']  : '';?> </p>
-              </div>
-            </div> 
-            <div class="col-md-6 col-lg-6">
-              <div class="form-group">
-                <h4 class="example-title">DIRECCION:</h4>
-                <p><?php echo (!empty($result['sDireccion'])) ? $result['sDireccion'] : '';?> </p>
-              </div>
-            </div> 
-
-        </div>
-
-        <div class="col-md-12 col-lg-12"><hr></div>
-        <div class="col-md-12 same-heigth">
-          
-          <div class="col-md-12 col-lg-12">
-              <div class="form-group">
-                <h4 class="example-title">REPORTE DE INSTALACION:</h4>
-                <p><?php echo (!empty($result['sReporteInstalacion'])) ? $result['sReporteInstalacion'] : '';?> </p>
-              </div>
-            </div>  
-
-        </div>
-      </div>
     </div>
+
+</form>
+
+
+
 
     <div class="panel panel-bordered panel-primary panel-line ">
           <div class="panel-heading">

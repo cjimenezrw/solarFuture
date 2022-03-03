@@ -29,6 +29,7 @@ Class Cont_inde_Controller Extends Cont_Model {
             ,CONCAT('CON-', LPAD(oca.iFolio, 5, 0))  AS iFolio
             ,oca.skEstatus
             ,oca.skEmpresaSocioCliente
+            ,oca.skTipoContrato
             ,oca.dFechaInstalacion
             ,oca.iFrecuenciaMantenimientoMensual
             ,oca.iDiaMantenimiento
@@ -36,29 +37,35 @@ Class Cont_inde_Controller Extends Cont_Model {
             ,oca.sCorreo
             ,oca.sDomicilio
             ,oca.sObservaciones
-            ,oca.sObservacionesCancelacion
-            ,oca.skUsuarioCancelacion
             ,oca.skEmpresaSocioPropietario
+            ,oca.sObservacionesCancelacion
+            ,oca.dFechaCancelacion
+            ,oca.skUsuarioCancelacion
             ,oca.dFechaCreacion
             ,oca.skUsuarioCreacion
             ,oca.dFechaModificacion
             ,oca.skUsuarioModificacion
-
+            
             ,est.sNombre AS estatus
             ,est.sColor AS estatusColor
             ,est.sIcono AS estatusIcono
-            
+
             ,e.sNombre AS cliente
-            
+
             ,CONCAT(uCre.sNombre,' ',uCre.sApellidoPaterno,' ',uCre.sApellidoMaterno) AS usuarioCreacion
             ,CONCAT(uMod.sNombre,' ',uMod.sApellidoPaterno,' ',uMod.sApellidoMaterno) AS usuarioModificacion
-        
+            ,CONCAT(uCan.sNombre,' ',uCan.sApellidoPaterno,' ',uCan.sApellidoMaterno) AS usuarioCancelacion
+
+            ,TIPCON.sNombre AS tipoContrato
+
             FROM ope_contratos oca
             INNER JOIN core_estatus est ON est.skEstatus = oca.skEstatus
             INNER JOIN rel_empresasSocios es ON es.skEmpresaSocio = oca.skEmpresaSocioCliente
             INNER JOIN cat_empresas e ON e.skEmpresa = es.skEmpresa
             INNER JOIN cat_usuarios uCre ON uCre.skUsuario = oca.skUsuarioCreacion 
-            INNER JOIN cat_usuarios uMod ON uMod.skUsuario = oca.skUsuarioModificacion
+            LEFT JOIN cat_usuarios uMod ON uMod.skUsuario = oca.skUsuarioModificacion
+            LEFT JOIN cat_usuarios uCan ON uCan.skUsuario = oca.skUsuarioCancelacion
+            INNER JOIN rel_catalogosSistemasOpciones TIPCON ON TIPCON.skCatalogoSistema = 'TIPCON' AND TIPCON.skClave = oca.skTipoContrato
             WHERE 1 = 1";
          
         if(!isset($_POST['filters'])){
@@ -81,8 +88,9 @@ Class Cont_inde_Controller Extends Cont_Model {
             // REGLA DEL MENÚ EMERGENTE
             $regla = [ 
                 "menuEmergente1" => $this->ME_editar($row),
-                "menuEmergente4" => $this->ME_generarOrden($row),
-                "menuEmergente5" => $this->ME_cancelar($row)
+                "menuEmergente2" => $this->ME_generarOrden($row),
+                "menuEmergente3" => $this->ME_cancelar($row),
+                "menuEmergente4" => self::HABILITADO
             ];
 
             $row['dFechaInstalacion'] = (!empty($row['dFechaInstalacion']) ? date('d/m/Y', strtotime($row['dFechaInstalacion'])) : ''); 
@@ -118,7 +126,7 @@ Class Cont_inde_Controller Extends Cont_Model {
     * @return int
     */
     public function ME_generarOrden(&$row){
-        if((in_array($row['skEstatusContrato'], ['AC'])) ){
+        if((in_array($row['skEstatus'], ['AC'])) ){
             return self::HABILITADO;
         }
         return self::OCULTO;
@@ -130,7 +138,7 @@ Class Cont_inde_Controller Extends Cont_Model {
     * @return int
     */
     public function ME_cancelar(&$row){
-        if((in_array($row['skEstatusContrato'], ['AC'])) ){
+        if((in_array($row['skEstatus'], ['AC'])) ){
             return self::HABILITADO;
         }
         return self::OCULTO;
@@ -194,7 +202,7 @@ Class Cont_inde_Controller Extends Cont_Model {
         rco.skContratoCobro
         FROM ope_contratos oca
         LEFT JOIN rel_contratos_cobros rco ON  rco.skContrato = oca.skContrato AND rco.iAnio = YEAR(NOW())  AND rco.iMes = MONTH(NOW()) AND rco.iDia = oca.iDiaCorte  AND rco.skTipoPeriodo = oca.skTipoPeriodo
-        WHERE oca.skEstatusContrato ='AC'
+        WHERE oca.skEstatus ='AC'
         AND dFechaInicioCobro <= DATE(NOW()) AND iDiaCorte <= DAY(NOW()) AND rco.skContratoCobro IS NULL ";
         
                 $result = Conn::query($sql);

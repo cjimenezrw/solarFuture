@@ -76,7 +76,7 @@ Class Cont_form_Controller Extends Cont_Model {
         $this->data = ['success' => TRUE, 'message' => NULL, 'datos' => NULL];
         
         $validations = [
-
+            'dFechaInstalacion'=>['validations'=>['date']]
         ];
 
         foreach($validations AS $k=>$v){
@@ -164,10 +164,12 @@ Class Cont_form_Controller Extends Cont_Model {
         $this->data = ['success' => TRUE, 'message' => NULL, 'datos' => NULL];
         $this->cont['skContrato'] = (isset($_GET['p1']) && !empty($_GET['p1'])) ? $_GET['p1'] : NULL;
         
-        $this->data['tipoPeriodo'] = parent::_getTiposPeriodos();
-        $this->data['formaPago'] = parent::consultar_formasPago();
-        $this->data['metodoPago'] = parent::consultar_metodosPago();
-        $this->data['usoCFDI'] = parent::consultar_usosCFDI(); 
+        // OBTENEMOS LAS CATEGORÍAS DE PRECIOS
+            $TIPCON = parent::getCatalogoSistema(['skCatalogoSistema'=>'TIPCON']);
+            $this->data['TIPCON'] = [];
+            foreach($TIPCON AS $k=>$v){
+                $this->data['TIPCON'][$v['skCatalogoSistemaOpciones']] = $v;
+            } 
         
         if(!empty($this->cont['skContrato'])){
             $this->data['datos'] = parent::_get_contratos();
@@ -184,7 +186,11 @@ Class Cont_form_Controller Extends Cont_Model {
             }
             $this->cont['skEmpresaTipo'] = $skEmpresaTipo;
         }
-        return parent::get_empresas();
+        $get_empresas = parent::get_empresas();
+        foreach($get_empresas AS $k=>&$v){
+            $v['data'] = $v;
+        }
+        return $get_empresas;
     }
 
 }

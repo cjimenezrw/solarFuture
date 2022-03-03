@@ -178,17 +178,17 @@ cont.cont_inde.dataTableConf = {
     'order': [[6, "desc"]],
     'columns': [
         {'title': 'E', 'data': 'estatus', 'dataType': 'string', 'tooltip': 'Estatus', 'filterT': 'Estatus'},
-        {'title': 'E.C.', 'data': 'estatusContrato', 'dataType': 'string', 'tooltip': 'Estatus Contrato', 'filterT': 'Estatus Contrato'},
         {'title': 'Folio', 'data': 'iFolio', 'dataType': 'int','tooltip': 'Folio'},
+        {'title': 'T.C.', 'data': 'tipoContrato', 'dataType': 'string', 'tooltip': 'Tipo de Contrato', 'filterT': 'Tipo de Contrato'},
         {'title': 'Cliente', 'data': 'cliente', 'dataType': 'string'},
-        {'title': 'F. Contrato', 'data': 'dFechaInicioContrato', 'dataType': 'string'},
-        {'title': 'U. Creación', 'data': 'usuarioCreacion', 'filterT': 'Usuario Creación', 'tooltip': 'Usuario Creación', 'dataType': 'string'},
+        {'title': 'F. Instalación', 'data': 'dFechaInstalacion', 'dataType': 'date', 'tooltip': 'Fecha de Instalación', 'filterT': 'Fecha de Instalación'},
+        {'title': 'U. Creación', 'data': 'usuarioCreacion', 'filterT': 'Usuario de Creación', 'tooltip': 'Usuario de Creación', 'dataType': 'string'},
         {'title': 'F. Creación', 'data': 'dFechaCreacion', 'dataType': 'date', 'tooltip': 'Fecha de Creación', 'filterT': 'Fecha de Creación'}
     ],
 
     "drawCallback": function () {
         core.dataTable.contextMenuCore(true);
-        core.dataTable.changeColumnColor(2, 'success');
+        core.dataTable.changeColumnColor(1, 'success');
         core.dataTable.fastFilters(3, [], true);
         $('[data-toggle="tooltip"]').tooltip();
     },
@@ -202,18 +202,9 @@ cont.cont_inde.dataTableConf = {
                 ((rowData.estatusIcono) ? $(td).find('i').attr({"title": cellData, "data-toggle": "tooltip", "data-placement": "rigth"}) : '');
 
             }
-        },{
-            "targets": [1],
-            "width": '20px',
-            "createdCell": function (td, cellData, rowData, row, col) {
-                ((rowData.estatusContratoIcono) ? $(td).html('<i class="' + rowData.estatusContratoIcono + '"></i>') : $(td).html(cellData));
-                $(td).addClass('text-center ' + ((rowData.estatusContratoColor) ? rowData.estatusContratoColor : 'text-primary'));
-                ((rowData.estatusContratoIcono) ? $(td).find('i').attr({"title": cellData, "data-toggle": "tooltip", "data-placement": "rigth"}) : '');
-
-            }
         },
         {
-            "targets": [2,3],
+            "targets": [1,2],
             "width": '20px'
             
         }

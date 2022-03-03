@@ -391,7 +391,11 @@ Class Admi_Model Extends DLOREAN_Model {
     public function get_empresas() {
         $sql = "SELECT N1.* FROM (
             SELECT
-            es.skEmpresaSocio AS id, CONCAT(e.sNombre,' (',IF(e.sRFC IS NULL, 'XAXX010101000',e.sRFC),') - ',et.sNombre) AS nombre, es.skEmpresaTipo
+            es.skEmpresaSocio AS id
+            ,CONCAT(e.sNombre,' (', IF(e.sRFC IS NOT NULL,e.sRFC,IF(e.sTelefono IS NOT NULL,e.sTelefono,IF(e.sCorreo IS NOT NULL,e.sCorreo,NULL))),') - ',et.sNombre) AS nombre
+            ,es.skEmpresaTipo
+            ,e.sTelefono
+            ,e.sCorreo
             FROM rel_empresasSocios es
             INNER JOIN cat_empresas e ON e.skEmpresa = es.skEmpresa
             INNER JOIN cat_empresasTipos et ON et.skEmpresaTipo = es.skEmpresaTipo

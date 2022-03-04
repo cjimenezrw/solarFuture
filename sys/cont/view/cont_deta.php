@@ -161,52 +161,52 @@ if (isset($data['datos'])) {
 
 
 
+<!--
+<div class="panel panel-bordered panel-primary panel-line ">
+        <div class="panel-heading">
+            <h3 class="panel-title text-center">COBROS REALIZADOS</h3>
+        </div>
+        <div class="widget ">
+            <div class="widget-content padding-35 bg-white clearfix" id="divTablaCobros">
 
-    <div class="panel panel-bordered panel-primary panel-line ">
-          <div class="panel-heading">
-              <h3 class="panel-title text-center">COBROS REALIZADOS</h3>
-          </div>
-          <div class="widget ">
-              <div class="widget-content padding-35 bg-white clearfix" id="divTablaCobros">
+            <table class="table table-hover table-bordered" id="core-dataTableCobros">
+            <thead>
+            <th class="text-center"><label data-toggle="tooltip"  title="FECHA"><b style="font-size: 14px;">Nº</b></label></th>
+            <th class="text-center"><label data-toggle="tooltip"  title="FECHA"><b style="font-size: 14px;">FECHA CREACIÓN</b></label></th>
+            <th class="text-center"><label data-toggle="tooltip"  title="ANIO"><b style="font-size: 14px;">AÑO</b></label></th>
+            <th class="text-center"><label data-toggle="tooltip"  title="MES"><b style="font-size: 14px;">MES</b></label></th>
+            <th class="text-center"><label data-toggle="tooltip"  title="DIA"><b style="font-size: 14px;">DIA</b></label></th>
+            <th class="text-center"><label data-toggle="tooltip"  title="PERIODO"><b style="font-size: 14px;">PERIODO</b></label></th>
+            <th class="text-center"><label data-toggle="tooltip"  title="ORDEN DE SERVICIO"><b style="font-size: 14px;">FOLIO DE ORDEN DE COBRO</b></label></th>
+            <th class="text-center"><label data-toggle="tooltip"  title="TOTAL"><b style="font-size: 14px;">TOTAL</b></label></th>
+            </thead>
+            <tbody id="tabla_cobros" >
+            <?php if (!empty($cobros_contratos)) { ?>
+            <?php $i = 1; foreach ($cobros_contratos AS $cont) { ?>
+                <th class="text-center" style="font-size: 14px;"><?php echo $i; ?></th>
+                <th class="text-center" style="font-size: 14px;"><?php echo (!empty($cont['dFechaCreacion']) ? date('d/m/Y', strtotime($cont['dFechaCreacion'])) : ''); ?></th>
+                <th class="text-center" style="font-size: 14px;"><?php echo (!empty($cont['iAnio']) ?$cont['iAnio'] : ''); ?></th> 
+                <th class="text-center" style="font-size: 14px;"><?php echo (!empty($cont['iMes']) ?$cont['iMes'] : ''); ?></th>
+                <th class="text-center" style="font-size: 14px;"><?php echo (!empty($cont['iDia']) ?$cont['iDia'] : ''); ?></th>
+                <th class="text-center" style="font-size: 14px;"><?php echo (!empty($cont['tipoPeriodo']) ?$cont['tipoPeriodo'] : ''); ?></th>
+                <th class="text-center" style="font-size: 14px;"><?php echo (!empty($cont['iFolio']) ?$cont['iFolio'] : ''); ?></th>
+                <th class="text-center" style="font-size: 14px;"><?php echo (!empty($cont['fImporteTotal']) ? "$ ".number_format($cont['fImporteTotal'],2) : ''); ?></th>
+            </tr>
 
-              <table class="table table-hover table-bordered" id="core-dataTableCobros">
-                <thead>
-                <th class="text-center"><label data-toggle="tooltip"  title="FECHA"><b style="font-size: 14px;">Nº</b></label></th>
-                <th class="text-center"><label data-toggle="tooltip"  title="FECHA"><b style="font-size: 14px;">FECHA CREACIÓN</b></label></th>
-                <th class="text-center"><label data-toggle="tooltip"  title="ANIO"><b style="font-size: 14px;">AÑO</b></label></th>
-                <th class="text-center"><label data-toggle="tooltip"  title="MES"><b style="font-size: 14px;">MES</b></label></th>
-                <th class="text-center"><label data-toggle="tooltip"  title="DIA"><b style="font-size: 14px;">DIA</b></label></th>
-                <th class="text-center"><label data-toggle="tooltip"  title="PERIODO"><b style="font-size: 14px;">PERIODO</b></label></th>
-                <th class="text-center"><label data-toggle="tooltip"  title="ORDEN DE SERVICIO"><b style="font-size: 14px;">FOLIO DE ORDEN DE COBRO</b></label></th>
-                <th class="text-center"><label data-toggle="tooltip"  title="TOTAL"><b style="font-size: 14px;">TOTAL</b></label></th>
-                </thead>
-                <tbody id="tabla_cobros" >
-                <?php if (!empty($cobros_contratos)) { ?>
-                <?php $i = 1; foreach ($cobros_contratos AS $cont) { ?>
-                  <th class="text-center" style="font-size: 14px;"><?php echo $i; ?></th>
-                  <th class="text-center" style="font-size: 14px;"><?php echo (!empty($cont['dFechaCreacion']) ? date('d/m/Y', strtotime($cont['dFechaCreacion'])) : ''); ?></th>
-                  <th class="text-center" style="font-size: 14px;"><?php echo (!empty($cont['iAnio']) ?$cont['iAnio'] : ''); ?></th> 
-                  <th class="text-center" style="font-size: 14px;"><?php echo (!empty($cont['iMes']) ?$cont['iMes'] : ''); ?></th>
-                  <th class="text-center" style="font-size: 14px;"><?php echo (!empty($cont['iDia']) ?$cont['iDia'] : ''); ?></th>
-                  <th class="text-center" style="font-size: 14px;"><?php echo (!empty($cont['tipoPeriodo']) ?$cont['tipoPeriodo'] : ''); ?></th>
-                  <th class="text-center" style="font-size: 14px;"><?php echo (!empty($cont['iFolio']) ?$cont['iFolio'] : ''); ?></th>
-                  <th class="text-center" style="font-size: 14px;"><?php echo (!empty($cont['fImporteTotal']) ? "$ ".number_format($cont['fImporteTotal'],2) : ''); ?></th>
-              </tr>
+            <?php $i++;} ?>
+            <?php } ?>
 
-                <?php $i++;} ?>
-                <?php } ?>
-
-                </tbody>
-            </table>
-            </div>
-              
-          </div>
-
+            </tbody>
+        </table>
+        </div>
+            
         </div>
 
+    </div>
 
-  </div>  
-</div> 
+
+</div>  
+!-->
 
  
 

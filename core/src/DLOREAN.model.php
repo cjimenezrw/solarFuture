@@ -1260,27 +1260,29 @@ Class DLOREAN_Model extends Conn {
         $this->load_class($model, 'model', $model);
         $this->load_class($controller, 'controller',$model);
 
-        $_get  = $_GET;
-        $_post = $_POST;
-
-        $_GET = (array_key_exists('GET', $params)) ? $params['GET'] : $_GET;
-        $_POST = (array_key_exists('POST', $params)) ? $params['POST'] : $_POST;
-            
         $cname = ucfirst($controller).'_Controller';
         $ModuleInstance = new $cname();
 
         if (!method_exists($ModuleInstance, $callable)) {
-            $_GET  = $_get;
-            $_POST = $_post;
             return [ 'success' => false,  'message' => "NO EXISTE EL MÉTODO ($callable) DEL CONTROLADOR ($controller)"];
         }
 
+        $_get  = $_GET;
+        $_post = $_POST;
+        $_files = $_FILES;
+
+        $_GET = (array_key_exists('GET', $params)) ? $params['GET'] : $_GET;
+        $_POST = (array_key_exists('POST', $params)) ? $params['POST'] : $_POST;
+        $_FILES = (array_key_exists('FILES', $params)) ? $params['FILES'] : $_FILES;
+
         unset($params['GET']);
         unset($params['POST']);
-        
+        unset($params['FILES']);
+
+
         // ASIGNAMOS LOS VALORES DEL CONTROLLER A EJECUTAR
             $skModulo = str_replace('_', '-', $controller);
-            
+                
             $ModuleInstance->sysProject = SYS_PROJECT;
             $ModuleInstance->sysModule = $_SESSION['modulos'][$skModulo]['skModuloPrincipal'];
             $ModuleInstance->sysController = $skModulo;
@@ -1289,10 +1291,11 @@ Class DLOREAN_Model extends Conn {
             $ModuleInstance->sysUrl = SERVER_PROTOCOL . SERVER_NAME . SERVER_PORT .'/'. DIR_PATH . $ModuleInstance->sysProject .'/'. $ModuleInstance->sysModule .'/'. $ModuleInstance->sysController .'/'. $ModuleInstance->sysName . '/';
 
         $response = call_user_func_array([$ModuleInstance, $callable], array_values($params));
-        
+
         // REGRESAMOS LOS VALORES DEL MÓDULO ORIGINAL DE DONDE SE ESTÁ EJECUTANDO sysAPI
             $_GET  = $_get;
             $_POST = $_post;
+            $_FILES = $_files;
 
         return $response;
 

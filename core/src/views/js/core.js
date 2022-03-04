@@ -3544,7 +3544,7 @@ $.fn.core_docu_component = function (opt) {
             autoProcessQueue: false,
             acceptedFiles: f,
             dictInvalidFileType: 'Archivo NO Permitido, Extensiones Permitidas: ' + config.extensiones.join(','),
-            dictRemoveFile: (settings.allowDelete ? '<b><i class="icon fa-trash" aria-hidden="true"></i> Eliminar</b>' : '   '),
+            dictRemoveFile: (settings.allowDelete ? 'Eliminar' : '   '),
             dictDefaultMessage: 'Expediente: <b>'+config.tipoExpediente+'</b> | Documento: <b>'+config.tipoDocumento+'</b><br>Peso Máximo: <b>'+config.pesoMB+'MB</b> | Extensiones Permitidas: <b>' + config.extensiones.join(',') + '</b><br><i class="icon fa-cloud-upload" aria-hidden="true"></i> Arrastre y suelte archivos o haga clic',
             paramName: settings.name,
             removedfile: function (file) {
@@ -3671,7 +3671,7 @@ $.fn.core_docu_component = function (opt) {
             "messages": {
                 default: "Expediente: <b>"+config.tipoExpediente+"</b> | Documento: <b>"+config.tipoDocumento+"</b><br>Peso Máximo: <b>"+config.pesoMB+"MB</b> | Extensiones Permitidas: <b>" + config.extensiones.join(',') + "</b><br>Arrastre y suelte archivos o haga clic",
                 replace: "Expediente: <b>"+config.tipoExpediente+"</b> | Documento: <b>"+config.tipoDocumento+"</b><br>Peso Máximo: <b>"+config.pesoMB+"MB</b> | Extensiones Permitidas: <b>" + config.extensiones.join(',') + "</b><br>Arrastre y suelte archivos o haga clic",
-                remove: '<b><i class="icon fa-trash" aria-hidden="true"></i> Eliminar</b>',
+                remove: '<b><i class="icon fa-trash" aria-hidden="true"></i> Eliminar$$$</b>',
                 error: 'Revise la Configuración del Componente de Documentación'
             },
             "error": {

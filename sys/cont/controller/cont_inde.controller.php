@@ -126,10 +126,11 @@ Class Cont_inde_Controller Extends Cont_Model {
     * @return int
     */
     public function ME_generarOrden(&$row){
+        return self::OCULTO;
         if((in_array($row['skEstatus'], ['AC'])) ){
             return self::HABILITADO;
         }
-        return self::OCULTO;
+        return self::DESHABILITADO;
     }
     /* ME_cancelar
     *
@@ -141,7 +142,7 @@ Class Cont_inde_Controller Extends Cont_Model {
         if((in_array($row['skEstatus'], ['AC'])) ){
             return self::HABILITADO;
         }
-        return self::OCULTO;
+        return self::DESHABILITADO;
     }
    
     public function cancelar(){

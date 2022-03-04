@@ -175,12 +175,13 @@ cont.cont_inde.dataTableConf = {
         }
     },
     'axn': 'consulta',
-    'order': [[6, "desc"]],
+    'order': [[7, "desc"]],
     'columns': [
         {'title': 'E', 'data': 'estatus', 'dataType': 'string', 'tooltip': 'Estatus', 'filterT': 'Estatus'},
         {'title': 'Folio', 'data': 'iFolio', 'dataType': 'int','tooltip': 'Folio'},
         {'title': 'T.C.', 'data': 'tipoContrato', 'dataType': 'string', 'tooltip': 'Tipo de Contrato', 'filterT': 'Tipo de Contrato'},
         {'title': 'Cliente', 'data': 'cliente', 'dataType': 'string'},
+        {'title': 'Domicilio', 'data': 'sDomicilio', 'dataType': 'string'},
         {'title': 'F. Instalación', 'data': 'dFechaInstalacion', 'dataType': 'date', 'tooltip': 'Fecha de Instalación', 'filterT': 'Fecha de Instalación'},
         {'title': 'U. Creación', 'data': 'usuarioCreacion', 'filterT': 'Usuario de Creación', 'tooltip': 'Usuario de Creación', 'dataType': 'string'},
         {'title': 'F. Creación', 'data': 'dFechaCreacion', 'dataType': 'date', 'tooltip': 'Fecha de Creación', 'filterT': 'Fecha de Creación'}

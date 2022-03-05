@@ -45,14 +45,14 @@ if (isset($data['datos'])) {
 
                 <div class="col-md-6 col-lg-6">
                     <div class="form-group">
-                        <h4 class="example-title">CLIENTE:</h4>
+                        <h4 class="example-title"><i><span class="text-default fa fa-building"></span></i> CLIENTE:</h4>
                         <span><?php echo (!empty($data['datos']['cliente']) ? $data['datos']['cliente'] : '-');?></span>
                     </div>
                 </div>
 
                 <div class="col-md-6 col-lg-6">
                     <div class="form-group">
-                        <h4 class="example-title">TIPO DE CONTRATO:</h4>
+                        <h4 class="example-title"><i><span class="text-default fa fa-folder-open"></span></i> TIPO DE CONTRATO:</h4>
                         <span><?php echo (!empty($data['datos']['tipoContrato']) ? $data['datos']['tipoContrato'] : '-');?></span>
                     </div>
                 </div>
@@ -113,7 +113,7 @@ if (isset($data['datos'])) {
                 <div class="col-md-12 col-lg-12">
                     <div class="form-group">
                         <h4 class="example-title">
-                            OBSERVACIONES:
+                            <i><span class="text-default fa fa-pencil-square"></span></i> OBSERVACIONES:
                             <i class="icon wb-help-circle help-text" data-content="OBSERVACIONES" aria-hidden="true"
                                 data-trigger="hover"></i>
                         </h4>
@@ -159,7 +159,7 @@ if (isset($data['datos'])) {
             
                 <div class="col-lg-12 col-md-12">
                     <div class="form-group">
-                        <h4 class="example-title">DOCUMENTOS:</h4>
+                        <h4 class="example-title"><i><span class="text-default fa fa-file"></span></i> DOCUMENTOS:</h4>
                         <div class="col-md-12" id="docu_CONTRA_DOCGEN"></div>
                     </div>
                 </div>
@@ -170,7 +170,7 @@ if (isset($data['datos'])) {
 
                 <div class="col-lg-12 col-md-12">
                     <div class="form-group">
-                        <h4 class="example-title">FOTOGRAFÍAS:</h4>
+                        <h4 class="example-title"><i><span class="text-default fa fa-photo"></span></i> FOTOGRAFÍAS:</h4>
                         <div class="col-md-12" id="docu_CONTRA_FOTOGR"></div>
                     </div>
                 </div>
@@ -243,7 +243,7 @@ if (isset($data['datos'])) {
         $('[data-toggle="tooltip"]').tooltip();
 
         $('.ajax-popup-link').magnificPopup({
-                    type: 'iframe'
+            type: 'iframe'
         });
 
         $('#docu_CONTRA_DOCGEN').core_docu_component({

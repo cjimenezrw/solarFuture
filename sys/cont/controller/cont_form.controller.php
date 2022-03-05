@@ -42,6 +42,20 @@ Class Cont_form_Controller Extends Cont_Model {
                 return $this->data;
             }
 
+            // Guardar Documentos CONTRA_DOCGEN
+            $guardar_documentos_CONTRA_DOCGEN = $this->guardar_documentos_CONTRA_DOCGEN();
+            if(!$guardar_documentos_CONTRA_DOCGEN['success']){
+                Conn::rollback($this->idTran);
+                return $this->data;
+            }
+
+            // Guardar Documentos CONTRA_FOTOG
+            $guardar_documentos_CONTRA_FOTOGR = $this->guardar_documentos_CONTRA_FOTOGR();
+            if(!$guardar_documentos_CONTRA_FOTOGR['success']){
+                Conn::rollback($this->idTran);
+                return $this->data;
+            }
+
         Conn::commit($this->idTran);
         $this->data['datos'] = $this->cont;
         $this->data['success'] = TRUE;
@@ -69,6 +83,70 @@ Class Cont_form_Controller Extends Cont_Model {
 
         $this->data['success'] = TRUE;
         $this->data['message'] = 'DATOS DE CONTRATO GUARDADO CON EXITO';
+        return $this->data;
+    }
+
+    public function guardar_documentos_CONTRA_DOCGEN(){
+        $this->data['success'] = TRUE;
+        $this->cont['axn'] = 'guardar_documentos';
+        if(
+            isset($_FILES['docu_file_CONTRA_DOCGEN']['name']) 
+            && !empty($_FILES['docu_file_CONTRA_DOCGEN']['name'])
+        ){
+            $guardar_documento = $this->sysAPI('docu', 'docu_serv', 'guardar', [
+                'POST'=>[
+                    'skTipoExpediente'=>'CONTRA',
+                    'skTipoDocumento'=>'DOCGEN',
+                    'skCodigo'=>$this->cont['skContrato']
+                ],
+                'FILES'=>[
+                    'docu_file'=>$_FILES['docu_file_CONTRA_DOCGEN']
+                ]
+            ]);
+            
+            if(!$guardar_documento || isset($guardar_documento['success']) && $guardar_documento['success'] != 1){
+                $this->data['success'] = FALSE;
+                $this->data['message'] = $guardar_documento['message'];
+                return $this->data;
+            }
+
+            $this->cont['skDocumento'] = $guardar_documento['data']['skDocumento'];
+        }
+
+        $this->data['success'] = TRUE;
+        $this->data['message'] = 'DOCUMENTOS GUARDADOS';
+        return $this->data;
+    }
+
+    public function guardar_documentos_CONTRA_FOTOGR(){
+        $this->data['success'] = TRUE;
+        $this->cont['axn'] = 'guardar_documentos';
+        if(
+            isset($_FILES['docu_file_CONTRA_FOTOGR']['name']) 
+            && !empty($_FILES['docu_file_CONTRA_FOTOGR']['name'])
+        ){
+            $guardar_documento = $this->sysAPI('docu', 'docu_serv', 'guardar', [
+                'POST'=>[
+                    'skTipoExpediente'=>'CONTRA',
+                    'skTipoDocumento'=>'FOTOGR',
+                    'skCodigo'=>$this->cont['skContrato']
+                ],
+                'FILES'=>[
+                    'docu_file'=>$_FILES['docu_file_CONTRA_FOTOGR']
+                ]
+            ]);
+            
+            if(!$guardar_documento || isset($guardar_documento['success']) && $guardar_documento['success'] != 1){
+                $this->data['success'] = FALSE;
+                $this->data['message'] = $guardar_documento['message'];
+                return $this->data;
+            }
+
+            $this->cont['skDocumento'] = $guardar_documento['data']['skDocumento'];
+        }
+
+        $this->data['success'] = TRUE;
+        $this->data['message'] = 'FOTOGRAFÍAS GUARDADAS';
         return $this->data;
     }
 

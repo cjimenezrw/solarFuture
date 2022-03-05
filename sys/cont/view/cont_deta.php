@@ -27,14 +27,14 @@ if (isset($data['datos'])) {
 
                 <div class="col-md-4 col-lg-4">
                     <div class="form-group">
-                        <h4 class="example-title">FECHA DE CREACIÓN:</h4>
+                        <h4 class="example-title"><i><span class="text-default fa fa-calendar"></span></i> FECHA DE CREACIÓN:</h4>
                         <span><?php echo (!empty($data['datos']['dFechaCreacion']) ? date('d/m/Y', strtotime($data['datos']['dFechaCreacion'])) : '-');?></span>
                     </div>
                 </div>
 
                 <div class="col-md-4 col-lg-4">
                     <div class="form-group">
-                        <h4 class="example-title">USUARIO DE CREACIÓN:</h4>
+                        <h4 class="example-title"><i><span class="text-default fa fa-user"></span></i> USUARIO DE CREACIÓN:</h4>
                         <span><?php echo (!empty($data['datos']['usuarioCreacion']) ? $data['datos']['usuarioCreacion'] : '-');?></span>
                     </div>
                 </div>
@@ -63,14 +63,14 @@ if (isset($data['datos'])) {
 
                 <div class="col-md-4 col-lg-4">
                     <div class="form-group">
-                        <h4 class="example-title">FECHA DE INSTALACIÓN:</h4>
+                        <h4 class="example-title"><i><span class="text-default fa fa-calendar"></span></i> FECHA DE INSTALACIÓN:</h4>
                         <span><?php echo (!empty($data['datos']['dFechaInstalacion']) ? date('d/m/Y', strtotime($data['datos']['dFechaInstalacion'])) : '-');?></span>
                     </div>
                 </div>
 
                 <div class="col-md-4 col-lg-4">
                     <div class="form-group">
-                        <h4 class="example-title">FRECUENCIA DE MANTENIMIENTO MENSUAL:
+                        <h4 class="example-title"><i><span class="text-default fa fa-calendar"></span></i> FRECUENCIA DE MANTENIMIENTO MENSUAL:
                         </h4>
                         <span><?php echo (!empty($data['datos']['iFrecuenciaMantenimientoMensual']) ? $data['datos']['iFrecuenciaMantenimientoMensual'] : '-');?></span>
                     </div>
@@ -78,7 +78,7 @@ if (isset($data['datos'])) {
 
                 <div class="col-md-4 col-lg-4">
                     <div class="form-group">
-                        <h4 class="example-title">DÍA DE MANTENIMIENTO:</h4>
+                        <h4 class="example-title"><i><span class="text-default fa fa-list-ol"></span></i> DÍA DE MANTENIMIENTO:</h4>
                         <span><?php echo (!empty($data['datos']['iDiaMantenimiento']) ? $data['datos']['iDiaMantenimiento'] : '-');?></span>
                     </div>
                 </div>
@@ -89,19 +89,19 @@ if (isset($data['datos'])) {
 
                 <div class="col-md-4 col-lg-4">
                     <div class="form-group">
-                        <h4 class="example-title">TELÉFONO:</h4>
+                        <h4 class="example-title"><i><span class="text-default fa fa-mobile-phone"></span></i> TELÉFONO:</h4>
                         <span><?php echo (!empty($data['datos']['sTelefono']) ? $data['datos']['sTelefono'] : '-');?></span>
                     </div>
                 </div>
                 <div class="col-md-4 col-lg-4">
                     <div class="form-group">
-                        <h4 class="example-title">CORREO:</h4>
+                        <h4 class="example-title"><i><span class="text-default fa fa-envelope"></span></i> CORREO:</h4>
                         <span><?php echo (!empty($data['datos']['sCorreo']) ? $data['datos']['sCorreo'] : '-');?></span>
                     </div>
                 </div>
                 <div class="col-md-4 col-lg-4">
                     <div class="form-group">
-                        <h4 class="example-title">DOMICILIO:</h4>
+                        <h4 class="example-title"><i><span class="text-default fa fa-building"></span></i> DOMICILIO:</h4>
                         <span><?php echo (!empty($data['datos']['sDomicilio']) ? $data['datos']['sDomicilio'] : '-');?></span>
                     </div>
                 </div>
@@ -127,29 +127,51 @@ if (isset($data['datos'])) {
 
                 <div class="col-md-6 col-lg-6">
                     <div class="form-group">
-                        <h4 class="example-title">FECHA DE MODIFICACIÓN:</h4>
+                        <h4 class="example-title"><i><span class="text-default fa fa-calendar"></span></i> FECHA DE MODIFICACIÓN:</h4>
                         <span><?php echo (!empty($data['datos']['dFechaModificacion']) ? date('d/m/Y', strtotime($data['datos']['dFechaModificacion'])) : '-');?></span>
                     </div>
                 </div>
 
                 <div class="col-md-6 col-lg-6">
                     <div class="form-group">
-                        <h4 class="example-title">USUARIO DE MODIFICACIÓN:</h4>
+                        <h4 class="example-title"><i><span class="text-default fa fa-user"></span></i> USUARIO DE MODIFICACIÓN:</h4>
                         <span><?php echo (!empty($data['datos']['usuarioModificacion']) ? $data['datos']['usuarioModificacion'] : '-');?></span>
                     </div>
                 </div>
 
                 <div class="col-md-6 col-lg-6">
                     <div class="form-group">
-                        <h4 class="example-title">FECHA DE CANCELACIÓN:</h4>
+                        <h4 class="example-title"><i><span class="text-default fa fa-calendar"></span></i> FECHA DE CANCELACIÓN:</h4>
                         <span><?php echo (!empty($data['datos']['dFechaCancelacion']) ? date('d/m/Y', strtotime($data['datos']['dFechaCancelacion'])) : '-');?></span>
                     </div>
                 </div>
 
                 <div class="col-md-6 col-lg-6">
                     <div class="form-group">
-                        <h4 class="example-title">USUARIO DE CANCELACIÓN:</h4>
+                        <h4 class="example-title"><i><span class="text-default fa fa-user"></span></i> USUARIO DE CANCELACIÓN:</h4>
                         <span><?php echo (!empty($data['datos']['usuarioCancelacion']) ? $data['datos']['usuarioCancelacion'] : '-');?></span>
+                    </div>
+                </div>
+
+                <div class="row row-lg col-md-12 col-lg-12">
+                    <hr>
+                </div>
+            
+                <div class="col-lg-12 col-md-12">
+                    <div class="form-group">
+                        <h4 class="example-title">DOCUMENTOS:</h4>
+                        <div class="col-md-12" id="docu_CONTRA_DOCGEN"></div>
+                    </div>
+                </div>
+
+                <div class="row row-lg col-md-12 col-lg-12">
+                <hr>
+                </div>
+
+                <div class="col-lg-12 col-md-12">
+                    <div class="form-group">
+                        <h4 class="example-title">FOTOGRAFÍAS:</h4>
+                        <div class="col-md-12" id="docu_CONTRA_FOTOGR"></div>
                     </div>
                 </div>
 
@@ -219,13 +241,33 @@ if (isset($data['datos'])) {
         $('#mowi').iziModal('setBackground', '#f1f4f5');
         
         $('[data-toggle="tooltip"]').tooltip();
-        $('.ajax-popup-link').magnificPopup({
-					type: 'iframe'
-      });
-      
-      
-           
 
+        $('.ajax-popup-link').magnificPopup({
+                    type: 'iframe'
+        });
+
+        $('#docu_CONTRA_DOCGEN').core_docu_component({
+            skTipoExpediente: 'CONTRA',
+            skTipoDocumento: 'DOCGEN',
+            skCodigo: '<?php echo isset($data['datos']['skContrato']) ? $data['datos']['skContrato'] : ''; ?>',
+            name: 'docu_file_CONTRA_DOCGEN',
+            readOnly: true,
+            deleteCallBack: function (e) {
+                
+            }
+        });
+
+        $('#docu_CONTRA_FOTOGR').core_docu_component({
+            skTipoExpediente: 'CONTRA',
+            skTipoDocumento: 'FOTOGR',
+            skCodigo: '<?php echo isset($data['datos']['skContrato']) ? $data['datos']['skContrato'] : ''; ?>',
+            name: 'docu_file_CONTRA_FOTOGR',
+            readOnly: true,
+            deleteCallBack: function (e) {
+                
+            }
+        });
+      
     });
 
 </script>

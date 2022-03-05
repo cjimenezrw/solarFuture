@@ -3545,7 +3545,7 @@ $.fn.core_docu_component = function (opt) {
             acceptedFiles: f,
             dictInvalidFileType: 'Archivo NO Permitido, Extensiones Permitidas: ' + config.extensiones.join(','),
             dictRemoveFile: (settings.allowDelete ? 'Eliminar' : '   '),
-            dictDefaultMessage: 'Expediente: <b>'+config.tipoExpediente+'</b> | Documento: <b>'+config.tipoDocumento+'</b><br>Peso Máximo: <b>'+config.pesoMB+'MB</b> | Extensiones Permitidas: <b>' + config.extensiones.join(',') + '</b><br><i class="icon fa-cloud-upload" aria-hidden="true"></i> Arrastre y suelte archivos o haga clic aquí',
+            dictDefaultMessage: 'Expediente: <b>'+config.tipoExpediente+'</b> | Documento: <b>'+config.tipoDocumento+'</b><br>Peso Máximo: <b>'+config.pesoMB+'MB</b> | Extensiones Permitidas: <b>' + config.extensiones.join(',') + '</b><br><i class="icon fa-cloud-upload" aria-hidden="true"></i> Arrastre y suelte archivos o haga clic',
             paramName: settings.name,
             removedfile: function (file) {
                 if (!file.hasOwnProperty('skDocumento')) {
@@ -3611,7 +3611,7 @@ $.fn.core_docu_component = function (opt) {
         window.core_docu_documents[settings.name].DocumentList = {};
         for (var ledoc in config.docs) {
             var turboDoc = config.docs[ledoc];
-            var mockFile = {name: turboDoc.sNombreOriginal, skDocumento: turboDoc.skDocumento};
+            var mockFile = {name: turboDoc.sUbicacion.split('/').pop(), skDocumento: turboDoc.skDocumento};
             window.core_docu_documents[settings.name].emit("addedfile", mockFile);
             window.core_docu_documents[settings.name].emit("thumbnail", mockFile, turboDoc.sUbicacionPublicaThumbnail);
             window.core_docu_documents[settings.name].emit("complete", mockFile);
@@ -3622,7 +3622,7 @@ $.fn.core_docu_component = function (opt) {
         var leSwag = 0;
         $("#" + idName + ' div.dz-size').each(function () {
             var buton = '<a href="' + config.docs[leSwag].sUbicacionPublica + '" target="_blank"> \n\
-                <button style="border-radius: 5px;" type="button" class="btn btn-outline btn-default project-button "><i><span class="text-default fa fa-eye"></span></i> <b>VER</b> </button>\n\
+                <button style="border-radius: 5px;" type="button" class="btn btn-outline btn-default project-button "> <b>VER</b> </button>\n\
             </a>\n';
             $(this).empty().append(buton);
             leSwag = leSwag + 1;
@@ -3721,16 +3721,14 @@ $.fn.core_docu_component = function (opt) {
                     <li>\n\
                         <div class="panel">  \n\
                             <figure class="overlay overlay-hover animation-hover">\n\
-                                <center><img class="caption-figure" style="width: 120px; height: 120px; border-radius: 20px;" src="' + config.docs[0].sUbicacionPublicaThumbnail + '" ></center>\n\
+                                <center><img class="caption-figure" style="width: 100px; height: 100px;" src="' + config.docs[0].sUbicacionPublicaThumbnail + '" ></center>\n\
                                 <figcaption class="overlay-panel overlay-background overlay-fade text-center vertical-align"> \n\
                                     ' + deleteoIntenso + '\n\
                                     <a href="' + config.docs[0].sUbicacionPublica + '" target="_blank">\n\
-                                        <button type="button" class="btn btn-outline btn-default project-button btnShowDigiDocument"  data-digiID="' + config.docs[0].skDocumento + '"><i><span class="text-default fa fa-eye"></span></i> VER</button>\n\
+                                        <button type="button" class="btn btn-outline btn-default project-button btnShowDigiDocument"  data-digiID="' + config.docs[0].skDocumento + '"> VER </button>\n\
                                     </a>\n\
-                                <figcaption>\n\
-                                <h5>'+config.docs[0].sNombreOriginal+'</h5>\n\
+                                <figure> \n\
                             <figure>\n\
-                            <div class="dz-filename"><span data-dz-name="">' + config.docs[0].sNombreOriginal + '</span>\n\
                         </div>\n\
                     </li>\n\
                 </ul>\n\
@@ -3790,20 +3788,19 @@ $.fn.core_docu_component = function (opt) {
      * @returns {String}
      */
     this.readOnlyItem = function (doc) {
-        console.log(doc.sNombreOriginal);
         return '<div class="dz-preview dz-complete dz-image-preview">\n\
                     <div class="dz-image">\n\
-                        <img data-dz-thumbnail="" alt="'+doc.sNombreOriginal+'" \n\
+                        <img data-dz-thumbnail="" alt="Factura comercial_PDOC_007.docx" \n\
                             src="' + doc.sUbicacionPublicaThumbnail + '" \n\
                             style="height: 95px;">\n\
                     </div>\n\
                     <div class="dz-details">\n\
                         <div class="dz-size">\n\
                             <a href="' + doc.sUbicacionPublica + '" target="_blank">\n\
-                                <button style="border-radius: 5px;" type="button" class="btn btn-outline btn-default project-button "><i><span class="text-default fa fa-eye"></span></i> <b>VER</b></button>\n\
+                                <button style="border-radius: 5px;" type="button" class="btn btn-outline btn-default project-button "> <b>VER</b> </button>\n\
                             </a>\n\
                         </div>\n\
-                        <div class="dz-filename"><span data-dz-name="">' + doc.sNombreOriginal + '</span>\n\
+                        <div class="dz-filename"><span data-dz-name="">' + doc.sUbicacion.split('/').pop() + '</span>\n\
                         </div>\n\
                     </div>\n\
                 </div>';

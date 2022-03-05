@@ -24,6 +24,7 @@ Class Cont_Model Extends DLOREAN_Model {
             " .escape(isset($this->cont['dFechaInstalacion']) ? $this->cont['dFechaInstalacion'] : NULL) . ",
             " .escape(isset($this->cont['iFrecuenciaMantenimientoMensual']) ? $this->cont['iFrecuenciaMantenimientoMensual'] : NULL) . ",
             " .escape(isset($this->cont['iDiaMantenimiento']) ? $this->cont['iDiaMantenimiento'] : NULL) . ",
+            " .escape(isset($this->cont['dFechaProximoMantenimiento']) ? $this->cont['dFechaProximoMantenimiento'] : NULL) . ",
             " .escape(isset($this->cont['sTelefono']) ? $this->cont['sTelefono'] : NULL) . ",
             " .escape(isset($this->cont['sCorreo']) ? $this->cont['sCorreo'] : NULL) . ",
             " .escape(isset($this->cont['sDomicilio']) ? $this->cont['sDomicilio'] : NULL) . ",
@@ -56,6 +57,7 @@ Class Cont_Model Extends DLOREAN_Model {
             ,oca.dFechaInstalacion
             ,oca.iFrecuenciaMantenimientoMensual
             ,oca.iDiaMantenimiento
+            ,oca.dFechaProximoMantenimiento
             ,oca.sTelefono
             ,oca.sCorreo
             ,oca.sDomicilio

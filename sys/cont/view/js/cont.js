@@ -175,7 +175,7 @@ cont.cont_inde.dataTableConf = {
         }
     },
     'axn': 'consulta',
-    'order': [[7, "desc"]],
+    'order': [[8, "desc"]],
     'columns': [
         {'title': 'E', 'data': 'estatus', 'dataType': 'string', 'tooltip': 'Estatus', 'filterT': 'Estatus'},
         {'title': 'Folio', 'data': 'iFolio', 'dataType': 'int','tooltip': 'Folio'},
@@ -183,6 +183,7 @@ cont.cont_inde.dataTableConf = {
         {'title': 'Cliente', 'data': 'cliente', 'dataType': 'string'},
         {'title': 'Domicilio', 'data': 'sDomicilio', 'dataType': 'string'},
         {'title': 'F. Instalación', 'data': 'dFechaInstalacion', 'dataType': 'date', 'tooltip': 'Fecha de Instalación', 'filterT': 'Fecha de Instalación'},
+        {'title': 'F. Mantenimiento', 'data': 'dFechaProximoMantenimiento', 'dataType': 'date', 'tooltip': 'Fecha de Mantenimiento', 'filterT': 'Fecha de Mantenimiento'},
         {'title': 'U. Creación', 'data': 'usuarioCreacion', 'filterT': 'Usuario de Creación', 'tooltip': 'Usuario de Creación', 'dataType': 'string'},
         {'title': 'F. Creación', 'data': 'dFechaCreacion', 'dataType': 'date', 'tooltip': 'Fecha de Creación', 'filterT': 'Fecha de Creación'}
     ],

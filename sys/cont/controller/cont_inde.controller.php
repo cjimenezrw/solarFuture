@@ -33,6 +33,7 @@ Class Cont_inde_Controller Extends Cont_Model {
             ,oca.dFechaInstalacion
             ,oca.iFrecuenciaMantenimientoMensual
             ,oca.iDiaMantenimiento
+            ,oca.dFechaProximoMantenimiento
             ,oca.sTelefono
             ,oca.sCorreo
             ,oca.sDomicilio
@@ -94,6 +95,7 @@ Class Cont_inde_Controller Extends Cont_Model {
             ];
 
             $row['dFechaInstalacion'] = (!empty($row['dFechaInstalacion']) ? date('d/m/Y', strtotime($row['dFechaInstalacion'])) : ''); 
+            $row['dFechaProximoMantenimiento'] = (!empty($row['dFechaProximoMantenimiento']) ? date('d/m/Y', strtotime($row['dFechaProximoMantenimiento'])) : '');
             $row['dFechaCreacion'] = ($row['dFechaCreacion']) ? date('d/m/Y H:i:s', strtotime($row['dFechaCreacion'])) : ''; 
 
             $row['menuEmergente'] = parent::menuEmergente($regla, $row['skContrato']);

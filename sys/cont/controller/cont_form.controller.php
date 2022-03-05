@@ -154,7 +154,8 @@ Class Cont_form_Controller Extends Cont_Model {
         $this->data = ['success' => TRUE, 'message' => NULL, 'datos' => NULL];
         
         $validations = [
-            'dFechaInstalacion'=>['validations'=>['date']]
+            'dFechaInstalacion'=>['validations'=>['date']],
+            'dFechaProximoMantenimiento'=>['validations'=>['date']],
         ];
 
         foreach($validations AS $k=>$v){

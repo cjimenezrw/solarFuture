@@ -1,168 +1,12 @@
 var cont = {};
 
 // DEFINICIÓN DE VARIABLES DE MÓDULO //
-cont.torr_inde = {};
-cont.torr_form = {};
-
-cont.acpo_inde = {};
-cont.acpo_form = {};
-
 cont.cont_inde = {};
 cont.cont_form = {};
 
 // FUNCIONES //
 
-// cont.torr_inde //
-cont.torr_inde.dataTableConf = {
-    'serverSide': true,
-    'ajax': {
-        'url': window.location.href,
-        'type': 'POST',
-        'data': function (data) {
-            data.axn = 'consultar';
-            data.filters = core.dataFilterSend;
-            data.generarExcel = core.generarExcel;
-        }
-    },
-    'axn': 'consultar',
-    'order': [[4, "desc"]],
-    'columns': [
-        {'title': 'E', 'data': 'estatus', 'dataType': 'string', 'tooltip': 'Estatus', 'filterT': 'Estatus'},
-        {'title': 'MAC', 'data': 'sMAC', 'dataType': 'string'},
-        {'title': 'Nombre', 'data': 'sNombre', 'dataType': 'string'},
-        {'title': 'U. Creación', 'data': 'usuarioCreacion', 'dataType': 'string', 'tooltip': 'Usuario Creación', 'filterT': 'Usuario Creación'},
-        {'title': 'F. Creación', 'data': 'dFechaCreacion', 'dataType': 'date', 'tooltip': 'Fecha Creación', 'filterT': 'Fecha Creación'}
-    ],
-
-    "drawCallback": function () {
-        core.dataTable.contextMenuCore(true);
-        core.dataTable.changeColumnColor(2, 'success');
-        core.dataTable.fastFilters(1, [], true);
-        $('[data-toggle="tooltip"]').tooltip();
-    },
-    "columnDefs": [
-        {
-            "targets": [0],
-            "width": '10px',
-            "createdCell": function (td, cellData, rowData, row, col) {
-                ((rowData.estatusIcono) ? $(td).html('<i class="' + rowData.estatusIcono + '"></i>') : $(td).html(cellData));
-                $(td).addClass('text-center ' + ((rowData.estatusColor) ? rowData.estatusColor : 'text-primary'));
-                ((rowData.estatusIcono) ? $(td).find('i').attr({"title": cellData, "data-toggle": "tooltip", "data-placement": "rigth"}) : '');
-            }
-        },
-        {
-            "targets": [1],
-            "width": '10px'
-        }
-    ]
-};
-
-// cont.torr_form //
-cont.torr_form.validaciones = {
-    sMAC: {
-        validators: {
-            notEmpty: {
-                message: 'CAMPO REQUERIDO'
-            },
-            remote:{
-                url: window.location.href,
-                data: {
-                    axn: 'validar_MAC'
-                },
-                message: 'LA MAC YA HA SIDO REGISTRADA',
-                type: 'POST'
-            }
-        }
-    },
-    sNombre: {
-        validators: {
-            notEmpty: {
-                message: 'CAMPO REQUERIDO'
-            }
-        }
-    }
-};
-
-// cont.acpo_inde //
-cont.acpo_inde.dataTableConf = {
-    'serverSide': true,
-    'ajax': {
-        'url': window.location.href,
-        'type': 'POST',
-        'data': function (data) {
-            data.axn = 'consultar';
-            data.filters = core.dataFilterSend;
-            data.generarExcel = core.generarExcel;
-        }
-    },
-    'axn': 'consultar',
-    'order': [[6, "desc"]],
-    'columns': [
-        {'title': 'E', 'data': 'estatus', 'dataType': 'string', 'tooltip': 'Estatus', 'filterT': 'Estatus'},
-        {'title': 'MAC', 'data': 'sMAC', 'dataType': 'string'},
-        {'title': 'Nombre', 'data': 'sNombre', 'dataType': 'string'},
-        {'title': 'Torre', 'data': 'nombreTorre', 'dataType': 'string'},
-        {'title': 'MAC Torre', 'data': 'MACtorre', 'dataType': 'string'},
-        {'title': 'U. Creación', 'data': 'usuarioCreacion', 'dataType': 'string', 'tooltip': 'Usuario Creación', 'filterT': 'Usuario Creación'},
-        {'title': 'F. Creación', 'data': 'dFechaCreacion', 'dataType': 'date', 'tooltip': 'Fecha Creación', 'filterT': 'Fecha Creación'}
-    ],
-
-    "drawCallback": function () {
-        core.dataTable.contextMenuCore(true);
-        core.dataTable.changeColumnColor(2, 'success');
-        core.dataTable.fastFilters(1, [], true);
-        $('[data-toggle="tooltip"]').tooltip();
-    },
-    "columnDefs": [
-        {
-            "targets": [0],
-            "width": '10px',
-            "createdCell": function (td, cellData, rowData, row, col) {
-                ((rowData.estatusIcono) ? $(td).html('<i class="' + rowData.estatusIcono + '"></i>') : $(td).html(cellData));
-                $(td).addClass('text-center ' + ((rowData.estatusColor) ? rowData.estatusColor : 'text-primary'));
-                ((rowData.estatusIcono) ? $(td).find('i').attr({"title": cellData, "data-toggle": "tooltip", "data-placement": "rigth"}) : '');
-            }
-        },
-        {
-            "targets": [1],
-            "width": '10px'
-        }
-    ]
-};
-
-// cont.acpo_form //
-cont.acpo_form.validaciones = {
-    sMAC: {
-        validators: {
-            notEmpty: {
-                message: 'CAMPO REQUERIDO'
-            },
-            remote:{
-                url: window.location.href,
-                data: {
-                    axn: 'validar_MAC'
-                },
-                message: 'LA MAC YA HA SIDO REGISTRADA',
-                type: 'POST'
-            }
-        }
-    },
-    skTorre: {
-        validators: {
-            notEmpty: {
-                message: 'CAMPO REQUERIDO'
-            }
-        }
-    },
-    sNombre: {
-        validators: {
-            notEmpty: {
-                message: 'CAMPO REQUERIDO'
-            }
-        }
-    }
-};
-
+// cont.cont_inde //
 cont.cont_inde.dataTableConf = {
     'serverSide': true,
     'ajax': {
@@ -302,6 +146,7 @@ cont.cont_inde.cancelarContrato = function cancelarContrato(obj) {
     });
    
 };
+
 cont.cont_inde.activarContrato = function activarContrato(obj) {
     swal({
         title: "¿Desea activar el Contrato?",

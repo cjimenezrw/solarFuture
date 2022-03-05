@@ -99,6 +99,20 @@ if (isset($data['datos'])) {
                     </div>
                 </div>
 
+                <div class="col-md-4 col-lg-4">
+                    <div class="form-group">
+                        <h4 class="example-title"><b class="text-danger">*</b> FECHA DE PRÓXIMO MANTENIMIENTO:</h4>
+                        <div class="input-group">
+                            <span class="input-group-addon">
+                                <i class="wb-calendar" aria-hidden="true"></i>
+                            </span>
+                            <input class="form-control input-datepicker" id="dFechaProximoMantenimiento" name="dFechaProximoMantenimiento"
+                                value="<?php echo (!empty($result['dFechaProximoMantenimiento'])) ? date('d/m/Y', strtotime($result['dFechaProximoMantenimiento'])) : ''; ?>"
+                                placeholder="DD/MM/YYYY" autocomplete="off" type="text" data-plugin="datepicker">
+                        </div>
+                    </div>
+                </div>
+
                 <div class="row row-lg col-md-12 col-lg-12">
                     <hr>
                 </div>

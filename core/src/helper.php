@@ -195,6 +195,10 @@ function create_thumbnail($source, $destination = NULL, $width = NULL, $height =
     /* get image type */
     $info = getimagesize($source);
 
+    if(!$info){
+        return true;
+    }
+
     /* read the source image */
     switch ($info['mime']) {
         case 'image/jpeg':

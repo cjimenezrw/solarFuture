@@ -145,6 +145,28 @@ if (isset($data['datos'])) {
                     </div>
                 </div>
 
+                <div class="row row-lg col-md-12 col-lg-12">
+                    <hr>
+                </div>
+            
+                <div class="col-lg-12 col-md-12">
+                    <div class="form-group">
+                        <h4 class="example-title">DOCUMENTOS:</h4>
+                        <div class="col-md-12" id="docu_CONTRA_DOCGEN"></div>
+                    </div>
+                </div>
+
+                <div class="row row-lg col-md-12 col-lg-12">
+                <hr>
+                </div>
+
+                <div class="col-lg-12 col-md-12">
+                    <div class="form-group">
+                        <h4 class="example-title">FOTOGRAFÍAS:</h4>
+                        <div class="col-md-12" id="docu_CONTRA_FOTOGR"></div>
+                    </div>
+                </div>
+
             </div>
         </div>
     </div>
@@ -188,6 +210,27 @@ $(document).ready(function() {
     $("#iFrecuenciaMantenimientoMensual").select2({
         placeholder: "FRECUENCIA DE MANTENIMIENTO MENSUAL",
         allowClear: true
+    });
+
+
+    $('#docu_CONTRA_DOCGEN').core_docu_component({
+        skTipoExpediente: 'CONTRA',
+        skTipoDocumento: 'DOCGEN',
+        skCodigo: '<?php echo isset($data['datos']['skContrato']) ? $data['datos']['skContrato'] : ''; ?>',
+        name: 'docu_file_CONTRA_DOCGEN',
+        deleteCallBack: function (e) {
+            
+        }
+    });
+
+    $('#docu_CONTRA_FOTOGR').core_docu_component({
+        skTipoExpediente: 'CONTRA',
+        skTipoDocumento: 'FOTOGR',
+        skCodigo: '<?php echo isset($data['datos']['skContrato']) ? $data['datos']['skContrato'] : ''; ?>',
+        name: 'docu_file_CONTRA_FOTOGR',
+        deleteCallBack: function (e) {
+            
+        }
     });
 
 });

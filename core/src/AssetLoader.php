@@ -171,12 +171,16 @@ class AssetLoader
                     ASSETS_PATH_CDN . ASSETS_VERSION . '/tpl/examples/js/apps/media.js',
                     ASSETS_PATH_CDN . ASSETS_VERSION . '/tpl/examples/js/apps/projects.js',
                     ASSETS_PATH_CDN . ASSETS_VERSION . '/tpl/global/vendor/isotope/isotope.pkgd.min.js',
+                    ASSETS_PATH_CDN . ASSETS_VERSION . '/tpl/global/vendor/jquery-labelauty/jquery-labelauty.js',
                     ASSETS_PATH_CDN . ASSETS_VERSION . '/tpl/global/vendor/magnific-popup/jquery.magnific-popup.min.js',
                     ASSETS_PATH_CDN . ASSETS_VERSION . '/tpl/global/js/components/matchheight.js',
                     ASSETS_PATH_CDN . ASSETS_VERSION . '/tpl/global/vendor/matchheight/jquery.matchHeight-min.js',
                     /*FIN Imagenes de previos*/
                     ASSETS_PATH_CDN . ASSETS_VERSION . '/tpl/global/vendor/bootbox/bootbox.js',
                     ASSETS_PATH_CDN . ASSETS_VERSION . '/tpl/global/js/components/bootbox.min.js',
+
+
+                    ASSETS_PATH_CDN . ASSETS_VERSION . '/tpl/global/js/components/jquery-labelauty.js',
 
                     ASSETS_PATH . ASSETS_VERSION . '/custom/iziToast/iziToast.min.js',
 
@@ -193,6 +197,7 @@ class AssetLoader
                     ASSETS_PATH . ASSETS_VERSION . '/custom/js/dragscroll.js',
 
                     ASSETS_PATH . ASSETS_VERSION . '/custom/organigrama/diagram.js',
+
 
 
                     ASSETS_PATH_CDN . ASSETS_VERSION . '/tpl/global/vendor/webui-popover/jquery.webui-popover.min.js',
@@ -214,6 +219,7 @@ class AssetLoader
 
                     ASSETS_PATH . ASSETS_VERSION . '/custom/js/pusher.min.js',
                     ASSETS_PATH_CDN . ASSETS_VERSION . '/tpl/global/vendor/owl-carousel/owl.carousel.js'
+
 
 
                 ),
@@ -359,6 +365,7 @@ class AssetLoader
                     ASSETS_PATH_CDN . ASSETS_VERSION . '/tpl/global/vendor/slidepanel/slidePanel.css',
                     ASSETS_PATH_CDN . ASSETS_VERSION . '/tpl/global/vendor/flag-icon-css/flag-icon.css',
                     ASSETS_PATH_CDN . ASSETS_VERSION . '/tpl/global/vendor/gauge-js/gauge.css',
+                    ASSETS_PATH_CDN . ASSETS_VERSION . '/tpl/global/vendor/jquery-labelauty/jquery-labelauty.css',
 
 
                     /* SE DEJAN CON ASSETS_PATH POR MOTIVOS DE CORS */
@@ -409,7 +416,7 @@ class AssetLoader
                     ASSETS_PATH_CDN . ASSETS_VERSION . '/tpl/global/vendor/highlight/highlight.css',
                     ASSETS_PATH_CDN . ASSETS_VERSION . '/tpl/examples/css/advanced/highlight.css',
 
-                    ASSETS_PATH . ASSETS_VERSION . '/custom/css/general.css',
+                    ASSETS_PATH_CDN . ASSETS_VERSION . '/custom/css/general.css',
                     ASSETS_PATH . ASSETS_VERSION . '/custom/css/styleUpdate.css',
                     ASSETS_PATH_CDN . ASSETS_VERSION . '/tpl/global/vendor/select2/select2.min.css',
                     ASSETS_PATH_CDN . ASSETS_VERSION . '/tpl/global/vendor/bootstrap-select/bootstrap-select.css',

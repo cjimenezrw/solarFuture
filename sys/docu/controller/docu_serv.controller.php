@@ -210,37 +210,42 @@ Class Docu_serv_Controller Extends Docu_Model {
             // CARACTERÍSTICA GENERAR THUMBNAIL (THUMBN) //
                 if(isset($this->data['configuraciones']['caracteristicas']['THUMBN'])){
 
-                    if(!is_dir($THUMBNAIL)) {
-                        if(!mkdir($THUMBNAIL, 0777, TRUE)) {
+                    // SE AGREGÓ POR EL MOMENTO EN LO QUE SE DESARROLLA LA CREACIÓN DE THUMBNAILS DE PDF //
+                    if(getimagesize($EXPEDIENTE.$this->docu['sNombre'])){
+
+                        if(!is_dir($THUMBNAIL)) {
+                            if(!mkdir($THUMBNAIL, 0777, TRUE)) {
+                                $this->data['success'] = FALSE;
+                                $this->data['message'] = 'NO SE PUDO CREAR EL DIRECTORIO DEL EXPEDIENTE';
+                                return $this->data;
+                            }
+                        }
+
+                        $skCaracteristica = $this->data['configuraciones']['caracteristicas']['THUMBN']['skCaracteristica'];
+                        if(!method_exists($this, $skCaracteristica)){
                             $this->data['success'] = FALSE;
-                            $this->data['message'] = 'NO SE PUDO CREAR EL DIRECTORIO DEL EXPEDIENTE';
+                            $this->data['message'] = 'NO SE ENCONTRÓ EL MÉTODO DE LA CARACTERÍSTICA ('.$this->data['configuraciones']['caracteristicas']['THUMBN']['sNombre'].')';
                             return $this->data;
                         }
-                    }
 
-                    $skCaracteristica = $this->data['configuraciones']['caracteristicas']['THUMBN']['skCaracteristica'];
-                    if(!method_exists($this, $skCaracteristica)){
-                        $this->data['success'] = FALSE;
-                        $this->data['message'] = 'NO SE ENCONTRÓ EL MÉTODO DE LA CARACTERÍSTICA ('.$this->data['configuraciones']['caracteristicas']['THUMBN']['sNombre'].')';
-                        return $this->data;
-                    }
+                        $caracteristica = $this->$skCaracteristica([
+                            'caracteristica'=>$this->data['configuraciones']['caracteristicas']['THUMBN'],
+                            'directory'=>$THUMBNAIL,
+                            'source'=>$EXPEDIENTE.$this->docu['sNombre'],
+                            'destination'=>$THUMBNAIL.$this->docu['sNombre'],
+                            'width'=>NULL,
+                            'height'=>NULL
+                        ]);
+                        
+                        if(!$caracteristica || isset($caracteristica['success']) && $caracteristica['success'] != 1){
+                            $this->data['success'] = FALSE;
+                            $this->data['message'] = $caracteristica['message'];
+                            return $this->data;
+                        }
 
-                    $caracteristica = $this->$skCaracteristica([
-                        'caracteristica'=>$this->data['configuraciones']['caracteristicas']['THUMBN'],
-                        'directory'=>$THUMBNAIL,
-                        'source'=>$EXPEDIENTE.$this->docu['sNombre'],
-                        'destination'=>$THUMBNAIL.$this->docu['sNombre'],
-                        'width'=>NULL,
-                        'height'=>NULL
-                    ]);
-                    
-                    if(!$caracteristica || isset($caracteristica['success']) && $caracteristica['success'] != 1){
-                        $this->data['success'] = FALSE;
-                        $this->data['message'] = $caracteristica['message'];
-                        return $this->data;
-                    }
+                        $this->docu['sUbicacionThumbnail'] = 'thumbnails/'.$this->docu['skTipoExpediente'].'/'.date('Y').'/'.$this->docu['skCodigo'].'/'.$this->docu['sNombre'];
 
-                    $this->docu['sUbicacionThumbnail'] = 'thumbnails/'.$this->docu['skTipoExpediente'].'/'.date('Y').'/'.$this->docu['skCodigo'].'/'.$this->docu['sNombre'];
+                    }
                 }
             
             // ACTUALIZAMOS LA UBICACIÓN DEL DOCUMENTO

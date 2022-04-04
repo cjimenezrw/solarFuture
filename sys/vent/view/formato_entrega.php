@@ -145,11 +145,12 @@ td.text-right {
     <div class="col-md-2"><b>CLIENTE:</b></div> 
     <div class="col-md-9"><?php echo (isset($data['datos']['sNombreCliente'])) ? ($data['datos']['sNombreCliente']) : '-'; ?></div>
 </div>
-<!--
+
 <div class="col-md-12" style="font-size:13px;color:#000000;">
     <div class="col-md-2"><b>DIRECCIÓN:</b></div> 
     <div class="col-md-9"><?php echo (isset($data['datos']['sDireccion'])) ? ($data['datos']['sDireccion']) : '-'; ?></div>
 </div>
+<!--
 <div class="col-md-12" style="font-size:13px;color:#000000;">
     <div class="col-md-2"><b>RPU:</b></div> 
     <div class="col-md-9"><?php echo (isset($data['datos']['sRPU'])) ? ($data['datos']['sRPU']) : '-'; ?></div>

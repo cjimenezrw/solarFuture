@@ -487,7 +487,16 @@ Class Coti_form_Controller Extends Admi_Model {
             }
             $this->vent['skEmpresaTipo'] = $skEmpresaTipo;
         }
-        return parent::get_empresas();
+        $get_empresas = parent::get_empresas();
+        $datos = [];
+        foreach($get_empresas AS $k=>$v){
+            array_push($datos,[
+                'id'=>$v['id'],
+                'nombre'=>$v['nombre'],
+                'data'=>$v
+            ]);
+        }
+        return $datos;
     }
     /**
      * get_prospectos

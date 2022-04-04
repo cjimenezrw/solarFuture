@@ -266,10 +266,15 @@ Class Cont_form_Controller Extends Cont_Model {
             $this->cont['skEmpresaTipo'] = $skEmpresaTipo;
         }
         $get_empresas = parent::get_empresas();
-        foreach($get_empresas AS $k=>&$v){
-            $v['data'] = $v;
+        $datos = [];
+        foreach($get_empresas AS $k=>$v){
+            array_push($datos,[
+                'id'=>$v['id'],
+                'nombre'=>$v['nombre'],
+                'data'=>$v
+            ]);
         }
-        return $get_empresas;
+        return $datos;
     }
 
 }

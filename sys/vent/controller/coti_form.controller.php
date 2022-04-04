@@ -481,15 +481,15 @@ Class Coti_form_Controller Extends Vent_Model {
             $this->vent['skEmpresaTipo'] = $skEmpresaTipo;
         }
         $get_empresas = parent::get_empresas();
-        $data = [];
+        $datos = [];
         foreach($get_empresas AS $k=>$v){
-            array_push($data,[
+            array_push($datos,[
                 'id'=>$v['id'],
                 'nombre'=>$v['nombre'],
                 'data'=>$v
             ]);
         }
-        return $data;
+        return $datos;
     }
     /**
      * get_prospectos

@@ -196,7 +196,7 @@ function change_empresa(obj){
     var data = $("#skEmpresaSocioCliente").select2('data')[0].data;
     $("#sTelefono").val(data.sTelefono);
     $("#sCorreo").val(data.sCorreo);
-    //$("#sDomicilio").val(data.sDomicilio);
+    $("#sDomicilio").val(data.sDomicilio);
 }
 
 $(document).ready(function() {

@@ -33,7 +33,9 @@ Class Cont_form_Controller Extends Cont_Model {
                 return $this->data;
             }
 
-            $this->cont['skContrato'] = (isset($_POST['skContrato']) ? $_POST['skContrato'] : NULL);  
+            $this->cont['skContrato'] = (isset($_POST['skContrato']) ? $_POST['skContrato'] : NULL); 
+            
+            $this->cont['dFechaProximoMantenimiento'] = (!empty($this->cont['dFechaProximoMantenimiento']) ? date('Ymd', strtotime(str_replace('/', '-', $this->cont['dFechaProximoMantenimiento']))) : NULL);
         
             // Guardar contrato
             $guardar_contrato = $this->guardar_contrato();
@@ -110,7 +112,7 @@ Class Cont_form_Controller Extends Cont_Model {
                 return $this->data;
             }
 
-            $this->cont['skDocumento'] = $guardar_documento['data']['skDocumento'];
+            $this->cont['CONTRA_DOCGEN'] = $guardar_documento['data']['skDocumento'];
         }
 
         $this->data['success'] = TRUE;
@@ -142,7 +144,7 @@ Class Cont_form_Controller Extends Cont_Model {
                 return $this->data;
             }
 
-            $this->cont['skDocumento'] = $guardar_documento['data']['skDocumento'];
+            $this->cont['CONTRA_FOTOGR'] = $guardar_documento['data']['skDocumento'];
         }
 
         $this->data['success'] = TRUE;
@@ -154,8 +156,7 @@ Class Cont_form_Controller Extends Cont_Model {
         $this->data = ['success' => TRUE, 'message' => NULL, 'datos' => NULL];
         
         $validations = [
-            'dFechaInstalacion'=>['validations'=>['date']],
-            'dFechaProximoMantenimiento'=>['validations'=>['date']],
+            'dFechaInstalacion'=>['message'=>'FECHA DE INSTALACIÓN','validations'=>['date']]
         ];
 
         foreach($validations AS $k=>$v){

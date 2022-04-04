@@ -101,7 +101,12 @@ if (isset($data['datos'])) {
 
                 <div class="col-md-4 col-lg-4">
                     <div class="form-group">
-                        <h4 class="example-title"><b class="text-danger">*</b> FECHA DE PRÓXIMO MANTENIMIENTO:</h4>
+                        <h4 class="example-title">
+                            FECHA DE PRÓXIMO MANTENIMIENTO:
+                            <i class="icon wb-help-circle help-text" 
+                            data-content="<span style='color:red;'>FECHA DE PRÓXIMO MANTENIMIENTO</span> <b>=</b> FECHA DE INSTALACIÓN <b>+</b> FRECUENCIA DE MANTENIMIENTO MENSUAL<hr>EL DIA DE MANTENIMIENTO ES EL DÍA DEL MES" 
+                            aria-hidden="true" data-trigger="hover"></i>
+                        </h4>
                         <div class="input-group">
                             <span class="input-group-addon">
                                 <i class="wb-calendar" aria-hidden="true"></i>

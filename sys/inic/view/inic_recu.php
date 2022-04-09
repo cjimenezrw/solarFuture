@@ -1,14 +1,6 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: Jonathan
- * Date: 21/10/2016
- * Time: 11:23 AM
- */
-
 require_once(CORE_PATH . '/src/AssetLoader.php');
 $load = new AssetLoader();
-
 ?>
 
 <!DOCTYPE html>
@@ -78,24 +70,24 @@ $load = new AssetLoader();
                         class="btn btn-primary btn-block">Restablecer Contraseña
                 </button>
             </div>
-            <a class="pull-center" href="<?php echo SYS_URL; ?>">Regresar</a>
+            <a class="pull-center" href="<?php echo SYS_URL.'sys/inic/inic-sesi/iniciar-session/'; ?>">Regresar</a>
         </form>
 
         <footer class="page-copyright">
-            <p>Creado Por <?php echo COMPANY; ?></p>
+            <p>Creado Por <a href="https://softlab.mx/" target="_blank" style="color:#fff;"><?php echo DEVELOPER; ?></a></p>
 
-            <p>© <?php echo date("Y"); ?>. Todos los derechos reservados.</p>
+            <p>&copy; <?php echo date("Y")?> Derechos Reservados</p>
 
             <div class="social">
-                <a href="javascript:void(0)">
+                <!--<a href="javascript:void(0)">
                     <i class="icon bd-twitter" aria-hidden="true"></i>
-                </a>
-                <a href="javascript:void(0)">
+                </a>!-->
+                <a href="https://www.facebook.com/softlabmx/" target="_blank">
                     <i class="icon bd-facebook" aria-hidden="true"></i>
                 </a>
-                <a href="javascript:void(0)">
+                <!--<a href="javascript:void(0)">
                     <i class="icon bd-dribbble" aria-hidden="true"></i>
-                </a>
+                </a>!-->
             </div>
         </footer>
     </div>

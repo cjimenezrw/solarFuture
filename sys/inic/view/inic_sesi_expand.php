@@ -186,11 +186,13 @@ function randomPrint(){
 <script src="<?php echo ASSETS_PATH . 'tpl/'; ?>global/js/components/switchery.js"></script>
 <script src="<?php echo ASSETS_PATH . 'tpl/'; ?>global/js/components/jquery-placeholder.js"></script>
 
-<script src="<?php echo SYS_URL; ?><?php echo $this->sysProject; ?>/<?php echo $this->sysModule; ?>/view/js/<?php echo VERSION; ?>/inic.js"></script>
-
 <script>
     Breakpoints();
+    var inic_sesi_view = 'inic_sesi_expand';
 </script>
+
+<script src="<?php echo SYS_URL; ?><?php echo $this->sysProject; ?>/<?php echo $this->sysModule; ?>/view/js/<?php echo VERSION; ?>/inic.js"></script>
+
 <script>
 
     (function (document, window, $) {

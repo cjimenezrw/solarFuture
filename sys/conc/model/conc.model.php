@@ -352,11 +352,24 @@ Class Conc_Model Extends DLOREAN_Model {
     public function get_empresas() {
         $sql = "SELECT N1.* FROM (
             SELECT
-            es.skEmpresaSocio AS id
-            ,CONCAT(e.sNombre,' (', IF(e.sRFC IS NOT NULL,e.sRFC,IF(e.sTelefono IS NOT NULL,e.sTelefono,IF(e.sCorreo IS NOT NULL,e.sCorreo,NULL))),') - ',et.sNombre) AS nombre
+             es.skEmpresaSocio AS id
+            ,CONCAT(e.sNombre,' (',e.sRFC,') - ',et.sNombre) AS nombre
             ,es.skEmpresaTipo
-            ,e.sTelefono
+            ,e.sNombre AS sNombreEmpresa
             ,e.sCorreo
+            ,e.sTelefono
+            ,(SELECT
+                CONCAT(
+                     IF(dom.sCalle IS NOT NULL,dom.sCalle,'')
+                    ,IF(dom.sNumeroExterior IS NOT NULL,CONCAT(' #',dom.sNumeroExterior),'')
+                    ,IF(dom.sNumeroInterior IS NOT NULL,CONCAT(' Int #',dom.sNumeroInterior),'')
+                    ,IF(dom.sColonia IS NOT NULL,CONCAT(', ',dom.sColonia),'')
+                    ,IF(dom.skMunicipio IS NOT NULL,CONCAT(', ',dom.skMunicipio),'')
+                ) AS sDomicilio
+                FROM rel_empresasSocios_domicilios dom 
+                WHERE dom.skEmpresaSocio = es.skEmpresaSocio AND dom.skEstatus = 'AC' 
+                LIMIT 1
+            ) AS sDomicilio
             FROM rel_empresasSocios es
             INNER JOIN cat_empresas e ON e.skEmpresa = es.skEmpresa
             INNER JOIN cat_empresasTipos et ON et.skEmpresaTipo = es.skEmpresaTipo

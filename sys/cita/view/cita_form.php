@@ -54,14 +54,14 @@
                         <div class="col-md-4 col-lg-4">
                             <div class="form-group">
                                 <h4 class="example-title"><b class="text-danger"></b>TELÉFONO:</h4>
-                                <input class="form-control" onkeyup="this.value = this.value.toUpperCase();" name="sTelefono" value="<?php echo (isset($data['datos']['sTelefono'])) ? $data['datos']['sTelefono'] : ''; ?>" placeholder="TELÉFONO" autocomplete="off" type="text">
+                                <input class="form-control" onkeyup="this.value = this.value.toUpperCase();" name="sTelefono" id="sTelefono" value="<?php echo (isset($data['datos']['sTelefono'])) ? $data['datos']['sTelefono'] : ''; ?>" placeholder="TELÉFONO" autocomplete="off" type="text">
                             </div>
                         </div>
 
                         <div class="col-md-4 col-lg-4">
                             <div class="form-group">
                                 <h4 class="example-title"><b class="text-danger"></b>DOMICILIO:</h4>
-                                <input class="form-control" onkeyup="this.value = this.value.toUpperCase();" name="sDomicilio" value="<?php echo (isset($data['datos']['sDomicilio'])) ? $data['datos']['sDomicilio'] : ''; ?>" placeholder="DOMICILIO" autocomplete="off" type="text">
+                                <input class="form-control" onkeyup="this.value = this.value.toUpperCase();" name="sDomicilio" id="sDomicilio" value="<?php echo (isset($data['datos']['sDomicilio'])) ? $data['datos']['sDomicilio'] : ''; ?>" placeholder="DOMICILIO" autocomplete="off" type="text">
                             </div>
                         </div>
 
@@ -232,6 +232,14 @@
         $("#skCategoriaCita").select2({placeholder: "CATEGORIA", allowClear: true });
         $("#skEstadoMX").select2({placeholder: "ESTADO", allowClear: true });
         $("#skMunicipioMX").select2({placeholder: "MUNICIPIO", allowClear: true });
+
+        $("#skEmpresaSocioCliente").change(function(e){
+            var data_array = $("#skEmpresaSocioCliente").select2('data')[0];
+            $("#sNombreCliente").val(data_array.data.sNombreEmpresa);
+            $("#sDomicilio").val(data_array.data.sDomicilio);
+            $("#sTelefono").val(data_array.data.sTelefono);
+            $("#sCorreos").tagsinput("add", data_array.data.sCorreo);
+        });
 
         $('.help-text').webuiPopover();
 

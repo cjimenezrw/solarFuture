@@ -50,7 +50,8 @@ Class Inic_Controller Extends Inic_Model {
                 if (isset($_SESSION['usuario'])) {
                     header('Location: ' . SYS_URL . SYS_PROJECT . '/inic/inic-dash/inicio/');
                 } else {
-                    $this->load_view('inic_sesi', array(), NULL, FALSE);
+                    //$this->load_view('inic_sesi_expand', array(), NULL, FALSE);
+                    $this->load_view('inic_sesi_compact', array(), NULL, FALSE);
                 }
                 break;
         }

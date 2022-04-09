@@ -22,7 +22,7 @@ inic.inic_sesi.send = function send() {
         formdata.append("axn", "verificarSession");
 
     }
-
+    
     toastr.clear();
     toastr.info('Procesando Información. <i class="fa fa-spinner faa-spin animated"></i>', 'Notificación', {timeOut: false});
 
@@ -72,11 +72,13 @@ inic.inic_sesi.iniciar = function iniciar(e) {
     toastr.clear();
     //toastr.info('Iniciando Sesión. <i class="fa fa-spinner faa-spin animated"></i>', 'Notificación', {timeOut: false});
 
-    inic.inic_sesi.showLoad();
+    //inic.inic_sesi.showLoad();
 
     var idEmpresa = $(e).attr("id");
     var password = $('#inputPassword').val();
     var skUsuario = $('#skUsuario').val();
+
+    inic.inic_sesi.showLoad();
 
     $.ajax({
         type: "POST",
@@ -122,20 +124,46 @@ function capLock(e) {
 }
 
 inic.inic_sesi.showLoad = function showLoad() {
-    $('<div class="load_bg_anim" hidden><div class="textLoad"> Conectando</div><div><div class="textLoad"> Conectando</div><div class="box"> <div class="comp"></div><div class="loader_login"></div><div class="con"></div><div class="byte"></div><div class="server"></div></div>').insertBefore(".page-content");
 
-    $('.page-content').fadeOut("slow");
-    //$('.load_bg_anim').slideDown(1200);
-    $('.load_bg_anim').fadeIn(1000);
+    if(typeof inic_sesi_view != "undefined"){
 
-    $(function () {
-        var count = 0;
-        var wordsArray = ["Configurando Portal", "Espere un momento", "Configurando Perfil", "Configurando Entorno", "Casi terminamos"];
-        setInterval(function () {
-            count++;
-            $(".textLoad").fadeOut(500, function () {
-                $(this).text(wordsArray[count % wordsArray.length]).fadeIn(500);
-            });
-        }, 3500);
-    });
+        if(inic_sesi_view == 'inic_sesi_compact'){
+            $('#message').hide();
+            loading();
+            return true;
+        }
+
+        $('<div class="load_bg_anim" hidden><div class="textLoad"> Conectando</div><div><div class="textLoad"> Conectando</div><div class="box"> <div class="comp"></div><div class="loader_login"></div><div class="con"></div><div class="byte"></div><div class="server"></div></div>').insertBefore(".page-content");
+        $('.page-content').fadeOut("slow");
+        $('.load_bg_anim').fadeIn(1000);
+        $(function () {
+            var count = 0;
+            var wordsArray = ["Configurando Portal", "Espere un momento", "Configurando Perfil", "Configurando Entorno", "Casi terminamos"];
+            setInterval(function () {
+                count++;
+                $(".textLoad").fadeOut(500, function () {
+                    $(this).text(wordsArray[count % wordsArray.length]).fadeIn(500);
+                });
+            }, 3500);
+        });
+        return true;
+
+    }else{
+
+        $('<div class="load_bg_anim" hidden><div class="textLoad"> Conectando</div><div><div class="textLoad"> Conectando</div><div class="box"> <div class="comp"></div><div class="loader_login"></div><div class="con"></div><div class="byte"></div><div class="server"></div></div>').insertBefore(".page-content");
+        $('.page-content').fadeOut("slow");
+        $('.load_bg_anim').fadeIn(1000);
+        $(function () {
+            var count = 0;
+            var wordsArray = ["Configurando Portal", "Espere un momento", "Configurando Perfil", "Configurando Entorno", "Casi terminamos"];
+            setInterval(function () {
+                count++;
+                $(".textLoad").fadeOut(500, function () {
+                    $(this).text(wordsArray[count % wordsArray.length]).fadeIn(500);
+                });
+            }, 3500);
+        });
+        return true;
+    }
+    
 };

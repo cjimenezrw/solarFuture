@@ -638,9 +638,8 @@ function addCommas(amount) {
 
                         $("#skEmpresaSocioCliente").change(function(e){
                             var data_array = $("#skEmpresaSocioCliente").select2('data')[0];
-                            console.log(data_array);
                             $("#sNombreCliente").val(data_array.data.sNombreEmpresa);
-                            $("#sDireccion").val(data_array.data.domicilio);
+                            $("#sDireccion").val(data_array.data.sDomicilio);
                             $("#sTelefono").val(data_array.data.sTelefono);
                             $("#sCorreos").tagsinput("add", data_array.data.sCorreo);
                         });

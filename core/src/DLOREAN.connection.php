@@ -451,25 +451,33 @@ class Conn {
      */
     public static function begingTransAs($tid) {
 
-        $dsn = Conn::$trsLoc[$tid]['dsn'];
-        $dbTarget = null;
+        try {
+            
+            $dsn = Conn::$trsLoc[$tid]['dsn'];
+            $dbTarget = null;
 
-        if (!Conn::$trsLoc[$tid]['dbName']) {
-            $dbTarget = &Conn::$base;
-        } else {
-            $dbTarget = &Conn::$others[Conn::$trsLoc[$tid]['dbName']];
-        }
+            if (!Conn::$trsLoc[$tid]['dbName']) {
+                $dbTarget = &Conn::$base;
+            } else {
+                $dbTarget = &Conn::$others[Conn::$trsLoc[$tid]['dbName']];
+            }
 
-        switch ($dsn) {
-            case 'dblib':
-                $stmt = $dbTarget->prepare("BEGIN TRAN [$tid];");
-                return $stmt->execute();
-                break;
-            case 'mysql':
-                return $dbTarget->beginTransaction();
-                break;
-            default:
-                return false;
+            switch ($dsn) {
+                case 'dblib':
+                    $stmt = $dbTarget->prepare("BEGIN TRAN [$tid];");
+                    return $stmt->execute();
+                    break;
+                case 'mysql':
+                    return $dbTarget->beginTransaction();
+                    break;
+                default:
+                    return false;
+            }
+
+                
+        } catch (PDOException $e) {
+            error_log(date('Y-m-d h:i:s'). " - Error de BeginTran - " . $e->getMessage(). "\n",3, ERROR_LOGFILE);
+            return FALSE;
         }
     }
 
@@ -480,26 +488,36 @@ class Conn {
      * @return boolean
      */
     public static function commit($tid) {
-        $dsn = Conn::$trsLoc[$tid]['dsn'];
-        $dbTarget = null;
+        
+        try {
+            
+            $dsn = Conn::$trsLoc[$tid]['dsn'];
+            $dbTarget = null;
 
-        if (!Conn::$trsLoc[$tid]['dbName']) {
-            $dbTarget = &Conn::$base;
-        } else {
-            $dbTarget = &Conn::$others[Conn::$trsLoc[$tid]['dbName']];
+            if (!Conn::$trsLoc[$tid]['dbName']) {
+                $dbTarget = &Conn::$base;
+            } else {
+                $dbTarget = &Conn::$others[Conn::$trsLoc[$tid]['dbName']];
+            }
+
+            switch ($dsn) {
+                case 'dblib':
+                    $stmt = $dbTarget->prepare("COMMIT TRAN [$tid];");
+                    return $stmt->execute();
+                    break;
+                case 'mysql':
+                    return $dbTarget->commit();
+                    break;
+                default:
+                    return false;
+            }
+
+                
+        } catch (PDOException $e) {
+            error_log(date('Y-m-d h:i:s'). " - Error de Commit - " . $e->getMessage(). "\n",3, ERROR_LOGFILE);
+            return FALSE;
         }
 
-        switch ($dsn) {
-            case 'dblib':
-                $stmt = $dbTarget->prepare("COMMIT TRAN [$tid];");
-                return $stmt->execute();
-                break;
-            case 'mysql':
-                return $dbTarget->commit();
-                break;
-            default:
-                return false;
-        }
     }
 
     /**
@@ -509,27 +527,37 @@ class Conn {
      * @return boolean
      */
     public static function rollback($tid) {
-        $dsn = Conn::$trsLoc[$tid]['dsn'];
-        $dbTarget = null;
+        
+        try {
+            
+            $dsn = Conn::$trsLoc[$tid]['dsn'];
+            $dbTarget = null;
 
-        if (!Conn::$trsLoc[$tid]['dbName']) {
-            $dbTarget = &Conn::$base;
-        } else {
-            $dbTarget = &Conn::$others[Conn::$trsLoc[$tid]['dbName']];
-        }
+            if (!Conn::$trsLoc[$tid]['dbName']) {
+                $dbTarget = &Conn::$base;
+            } else {
+                $dbTarget = &Conn::$others[Conn::$trsLoc[$tid]['dbName']];
+            }
 
-        switch ($dsn) {
-            case 'dblib':
-                // echo "<br> Roleando pa traz la transaccion $tid";
-                $stmt = $dbTarget->prepare("ROLLBACK TRAN [$tid];");
-                return $stmt->execute();
-                break;
-            case 'mysql':
-                return $dbTarget->rollBack();
-                break;
-            default:
-                return false;
+            switch ($dsn) {
+                case 'dblib':
+                    // echo "<br> Roleando pa traz la transaccion $tid";
+                    $stmt = $dbTarget->prepare("ROLLBACK TRAN [$tid];");
+                    return $stmt->execute();
+                    break;
+                case 'mysql':
+                    return $dbTarget->rollBack();
+                    break;
+                default:
+                    return false;
+            }
+                
+                
+        } catch (PDOException $e) {
+            error_log(date('Y-m-d h:i:s'). " - Error de Rollback - " . $e->getMessage(). "\n",3, ERROR_LOGFILE);
+            return FALSE;
         }
+        
     }
 
     /**

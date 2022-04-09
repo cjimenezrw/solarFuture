@@ -74,7 +74,7 @@ $load = new AssetLoader();
         </form>
 
         <footer class="page-copyright">
-            <p>Creado Por <a href="https://softlab.mx/" target="_blank" style="color:#fff;"><?php echo DEVELOPER; ?></a></p>
+            <p>Creado Por <a href="https://softlab.mx/" target="_blank"><?php echo DEVELOPER; ?></a></p>
 
             <p>&copy; <?php echo date("Y")?> Derechos Reservados</p>
 

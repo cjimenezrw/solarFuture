@@ -404,7 +404,7 @@ Class Cita_Model Extends DLOREAN_Model {
             return FALSE;
         }
         $records = Conn::fetch_assoc_all($result);
-        utf8($records);
+        utf8($records,FALSE);
         return $records;
     }
 
@@ -715,6 +715,11 @@ Class Cita_Model Extends DLOREAN_Model {
         if (isset($this->cita['skEmpresaSocioResponsable']) && !empty($this->cita['skEmpresaSocioResponsable'])) {
             $sql .= " AND bc.skEmpresaSocioPropietario = ".escape($this->cita['skEmpresaSocioResponsable']);
         }
+
+        if (isset($this->cita['EFECTIVO']) && !empty($this->cita['EFECTIVO'])) {
+            $sql .= " AND b.sNombre != ".escape($this->cita['EFECTIVO']);
+        }
+
         //exit('<pre>'.print_r($sql,1).'</pre>');
         $result = Conn::query($sql);
         if (!$result) {

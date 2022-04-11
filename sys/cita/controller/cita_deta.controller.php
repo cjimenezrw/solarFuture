@@ -40,7 +40,8 @@ Class Cita_deta_Controller Extends Cita_Model {
             $this->data['fTipoCambio'] = parent::getVariable('TIPOCA');
 
         // BANCOS Y CUENTAS BANCARIAS
-            $this->vent['skEmpresaSocioResponsable'] = $_SESSION['usuario']['skEmpresaSocio'];
+            $this->cita['EFECTIVO'] = 'EFECTIVO';
+            $this->cita['skEmpresaSocioResponsable'] = $_SESSION['usuario']['skEmpresaSocio'];
             $getBancosCuentasResponsable = $this->getBancosCuentasResponsable();
             $this->data['get_bancosReceptor'] = isset($getBancosCuentasResponsable['datos']['bancos']) ? $getBancosCuentasResponsable['datos']['bancos']: [];
             $this->data['get_bancosCuentasReceptor'] = isset($getBancosCuentasResponsable['datos']['cuentasBancarias']) ? $getBancosCuentasResponsable['datos']['cuentasBancarias']: [];
@@ -136,6 +137,23 @@ Class Cita_deta_Controller Extends Cita_Model {
                     <hr style="color:#cecece;">
                 </div>',
                 'footer' => '<div></div>',
+                /*'footer'=>'<div class="pdf_cabecera" style="color:gray">
+                <div class="pdf_left">
+                    <div class="pdf_fontStyle">' . COMPANY . '</div>
+                        <div class="pdf_fontStyle">' . date_format(new DateTime(), 'd/m/Y H:i:s') . '</div>
+                    </div>
+                    <div class="pdf_centro pdf_fontStyle">
+                        <div class="col-md-12 pull-down">
+                            <div class="col-md-4 col-md-offset-2 border-top text-center">
+                                <span>CLIENTE</span>
+                            </div>
+                            <div class="col-md-4 col-md-offset-2 border-top text-center">
+                                <span>TÉCNICO</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="pdf_left fpag pdf_fontStyle">Página {PAGENO} de {nb} </div>
+                </div>',*/
                 'defaultFooter' => false,
                 'defaultHeader' => false,
                 'pdf' => [

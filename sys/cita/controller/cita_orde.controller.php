@@ -526,16 +526,7 @@ Class Cita_orde_Controller Extends Cita_Model {
             }
             $this->cita['skEmpresaTipo'] = $skEmpresaTipo;
         }
-        $get_empresas = parent::get_empresas();
-        $datos = [];
-        foreach($get_empresas AS $k=>$v){
-            array_push($datos,[
-                'id'=>$v['id'],
-                'nombre'=>$v['nombre'],
-                'data'=>$v
-            ]);
-        }
-        return $datos;
+        return parent::get_empresas();
     }
 
     public function get_medidas(){

@@ -10,7 +10,7 @@
             <i class="icon wb-more-horizontal" aria-hidden="true"></i>
         </button>
         <div class="navbar-brand navbar-brand-center site-gridmenu-toggle" data-toggle="gridmenu">
-            <img class="navbar-brand-logo img-rounded" src="<?php echo ASSETS_PATH ?>tpl/images/logoHeader.png"
+            <img class="navbar-brand-logo img-rounded" src="<?php echo ASSETS_PATH_CUSTOM ?>tpl/images/logoHeader.png"
                  title="<?php echo COMPANY;?>">
         </div>
         <button type="button" class="navbar-toggle collapsed" data-target="#site-navbar-search"

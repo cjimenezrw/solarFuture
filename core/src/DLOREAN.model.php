@@ -432,6 +432,7 @@ Class DLOREAN_Model extends Conn {
         if (!isset($_SESSION['usuario']) || !isset($_SESSION['usuario']['perfiles'])) {
             if ($this->is_ajax()) {
                 //echo '<script type="text/javascript">location.assign("' . SYS_URL . SYS_PROJECT . '/inic/inic-sesi/iniciar-session/' . '");</script>';
+                //echo '<script type="text/javascript">location.assign("' . SYS_URL . SYS_PROJECT . '/site/site-inic/inicio/' . '");</script>';
                 $this->data['response'] = FALSE;
                 $this->data['message'] = 'Su sesión ha caducado.';
                 $this->data['datos'] = FALSE;
@@ -449,7 +450,7 @@ Class DLOREAN_Model extends Conn {
                 exit(json_encode($this->data));
             }
             //header('Location: ' . SYS_URL . SYS_PROJECT . '/inic/inic-sesi/iniciar-session/');
-            header('Location: ' . SYS_URL . SYS_PROJECT . '/inic/inic-sesi/iniciar-session/');
+            header('Location: ' . SYS_URL . SYS_PROJECT . '/site/site-inic/inicio/');
             exit;
         }
         return TRUE;
@@ -729,7 +730,8 @@ Class DLOREAN_Model extends Conn {
             if ($session) {
                 header('Location: ' . SYS_URL . SYS_PROJECT . '/inic/inic-dash/inicio/');
             }else{
-                header('Location: ' . SYS_URL . SYS_PROJECT . '/inic/inic-sesi/iniciar-session/');
+                //header('Location: ' . SYS_URL . SYS_PROJECT . '/inic/inic-sesi/iniciar-session/');
+                header('Location: ' . SYS_URL . SYS_PROJECT . '/site/site-inic/inicio/');
             }
             exit;
         }
@@ -1284,10 +1286,10 @@ Class DLOREAN_Model extends Conn {
             $skModulo = str_replace('_', '-', $controller);
                 
             $ModuleInstance->sysProject = SYS_PROJECT;
-            $ModuleInstance->sysModule = $_SESSION['modulos'][$skModulo]['skModuloPrincipal'];
+            $ModuleInstance->sysModule = (!empty($_SESSION['modulos'][$skModulo]['skModuloPrincipal']) ? $_SESSION['modulos'][$skModulo]['skModuloPrincipal'] : NULL);
             $ModuleInstance->sysController = $skModulo;
             $ModuleInstance->sysFunction = $controller;
-            $ModuleInstance->sysName = $_SESSION['modulos'][$skModulo]['sNombre'];
+            $ModuleInstance->sysName = (!empty($_SESSION['modulos'][$skModulo]['sNombre']) ? $_SESSION['modulos'][$skModulo]['sNombre'] : NULL);
             $ModuleInstance->sysUrl = SERVER_PROTOCOL . SERVER_NAME . SERVER_PORT .'/'. DIR_PATH . $ModuleInstance->sysProject .'/'. $ModuleInstance->sysModule .'/'. $ModuleInstance->sysController .'/'. $ModuleInstance->sysName . '/';
 
         $response = call_user_func_array([$ModuleInstance, $callable], array_values($params));

@@ -13,8 +13,10 @@ $load = new AssetLoader();
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=0, minimal-ui">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="theme-color" media="(prefers-color-scheme: light)" content="#064480">
+    <meta name="theme-color" media="(prefers-color-scheme: dark)" content="#064480">
     <meta name="description" content="Solar Future">
-    <meta name="theme-color" content="#064480">
     <meta name="author" content="Solar Future">
     <meta name="keywords" content="Solar Future" />
     <title><?php echo COMPANY; ?></title>

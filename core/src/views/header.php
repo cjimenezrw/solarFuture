@@ -8,13 +8,15 @@ $load = new AssetLoader();
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=0, minimal-ui">
-    <meta name="description" content="softlab.">
-    <meta name="theme-color" content="#064480">
-    <meta name="author" content="Softlab">
-    <meta name="keywords" content="solar,paneles"/>
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="theme-color" media="(prefers-color-scheme: light)" content="#064480">
+    <meta name="theme-color" media="(prefers-color-scheme: dark)" content="#064480">
+    <meta name="description" content="Red Manzanillo">
+    <meta name="author" content="SoftLab">
+    <meta name="keywords" content="internet,red"/>
     <title><?php echo WEBTITLE; ?></title>
-    <link rel="apple-touch-icon" href="<?php echo ASSETS_PATH . 'tpl/'; ?>images/favicon.png">
-    <link rel="shortcut icon" href="<?php echo ASSETS_PATH . 'tpl/'; ?>images/favicon.png">
+    <link rel="apple-touch-icon" href="<?php echo ASSETS_PATH_CUSTOM . 'tpl/'; ?>images/favicon.png">
+    <link rel="shortcut icon" href="<?php echo ASSETS_PATH_CUSTOM . 'tpl/'; ?>images/favicon.png">
 
 
     <!-- Stylesheets -->

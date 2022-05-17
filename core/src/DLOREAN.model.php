@@ -449,8 +449,8 @@ Class DLOREAN_Model extends Conn {
                 $this->data['sesionOut'] = true;
                 exit(json_encode($this->data));
             }
-            //header('Location: ' . SYS_URL . SYS_PROJECT . '/inic/inic-sesi/iniciar-session/');
-            header('Location: ' . SYS_URL . SYS_PROJECT . '/site/site-inic/inicio/');
+            header('Location: ' . SYS_URL . SYS_PROJECT . '/inic/inic-sesi/iniciar-session/');
+            //header('Location: ' . SYS_URL . SYS_PROJECT . '/site/site-inic/inicio/');
             exit;
         }
         return TRUE;
@@ -730,8 +730,8 @@ Class DLOREAN_Model extends Conn {
             if ($session) {
                 header('Location: ' . SYS_URL . SYS_PROJECT . '/inic/inic-dash/inicio/');
             }else{
-                //header('Location: ' . SYS_URL . SYS_PROJECT . '/inic/inic-sesi/iniciar-session/');
-                header('Location: ' . SYS_URL . SYS_PROJECT . '/site/site-inic/inicio/');
+                header('Location: ' . SYS_URL . SYS_PROJECT . '/inic/inic-sesi/iniciar-session/');
+                //header('Location: ' . SYS_URL . SYS_PROJECT . '/site/site-inic/inicio/');
             }
             exit;
         }

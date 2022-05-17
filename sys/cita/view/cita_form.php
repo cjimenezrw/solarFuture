@@ -234,11 +234,22 @@
         $("#skMunicipioMX").select2({placeholder: "MUNICIPIO", allowClear: true });
 
         $("#skEmpresaSocioCliente").change(function(e){
-            var data_array = $("#skEmpresaSocioCliente").select2('data')[0];
-            $("#sNombreCliente").val(data_array.data.sNombreEmpresa);
-            $("#sDomicilio").val(data_array.data.sDomicilio);
-            $("#sTelefono").val(data_array.data.sTelefono);
-            $("#sCorreos").tagsinput("add", data_array.data.sCorreo);
+            if($("#skEmpresaSocioCliente").select2('data').length > 0){
+                var data_array = $("#skEmpresaSocioCliente").select2('data')[0];
+                $("#sNombreCliente").val(data_array.data.sNombreEmpresa);
+                $("#sDomicilio").val(data_array.data.sDomicilio);
+                $("#skEstadoMX").val(data_array.data.skEstadoMX).trigger('change');
+                $("#skMunicipioMX").val(data_array.data.skMunicipioMX).trigger('change');
+                $("#sTelefono").val(data_array.data.sTelefono);
+                $("#sCorreos").tagsinput("add", data_array.data.sCorreo);
+            }else{
+                $("#sNombreCliente").val("");
+                $("#skEstadoMX").val("").trigger('change');
+                $("#skMunicipioMX").val("").trigger('change');
+                $("#skMunicipioMX").val("");
+                $("#sTelefono").val("");
+                $("#sCorreos").tagsinput('removeAll');
+            }
         });
 
         $('.help-text').webuiPopover();

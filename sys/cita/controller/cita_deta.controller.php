@@ -92,7 +92,7 @@ Class Cita_deta_Controller Extends Cita_Model {
 
     public function getBancosCuentasResponsable(){
         $data = ['success'=>TRUE,'message'=>NULL,'datos'=>['bancos'=>[],'cuentasBancarias'=>[]]];
-        $this->vent['skEmpresaSocioResponsable'] = isset($_POST['skEmpresaSocioResponsable']) ? $_POST['skEmpresaSocioResponsable'] : $this->vent['skEmpresaSocioResponsable'];
+        $this->cita['skEmpresaSocioResponsable'] = isset($_POST['skEmpresaSocioResponsable']) ? $_POST['skEmpresaSocioResponsable'] : $this->cita['skEmpresaSocioResponsable'];
         
         $_getBancosCuentasResponsable = parent::_getBancosCuentasResponsable();
         if(!$_getBancosCuentasResponsable){
@@ -136,8 +136,8 @@ Class Cita_deta_Controller Extends Cita_Model {
                     </div>
                     <hr style="color:#cecece;">
                 </div>',
-                'footer' => '<div></div>',
-                /*'footer'=>'<div class="pdf_cabecera" style="color:gray">
+                //'footer' => '<div></div>',
+                'footer'=>'<div class="pdf_cabecera" style="color:gray">
                 <div class="pdf_left">
                     <div class="pdf_fontStyle">' . COMPANY . '</div>
                         <div class="pdf_fontStyle">' . date_format(new DateTime(), 'd/m/Y H:i:s') . '</div>
@@ -153,7 +153,7 @@ Class Cita_deta_Controller Extends Cita_Model {
                         </div>
                     </div>
                     <div class="pdf_left fpag pdf_fontStyle">Página {PAGENO} de {nb} </div>
-                </div>',*/
+                </div>',
                 'defaultFooter' => false,
                 'defaultHeader' => false,
                 'pdf' => [

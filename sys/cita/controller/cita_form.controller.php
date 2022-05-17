@@ -323,7 +323,6 @@ Class Cita_form_Controller Extends Cita_Model {
         }
         return $datos;
     }
-    
 
     public function getDatos() {
         $this->data = ['success' => TRUE, 'message' => NULL, 'datos' => NULL];

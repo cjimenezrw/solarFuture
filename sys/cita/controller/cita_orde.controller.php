@@ -168,6 +168,12 @@ Class Cita_orde_Controller Extends Cita_Model {
         $this->data['success'] = TRUE;
         $this->cita['axn'] = 'generar_orden';
 
+        if(parent::existeOrdenCobro()){
+            $this->data['success'] = FALSE;
+            $this->data['message'] = 'LA ORDEN DE COBRO YA EXISTE';
+            return $this->data;
+        }
+
         $generarOrden = $this->sysAPI('admi', 'orse_inde', 'generarOrden', [
             'POST'=>[
                 'axn'=>'GE',

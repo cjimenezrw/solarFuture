@@ -372,8 +372,24 @@ Class Cita_Model Extends DLOREAN_Model {
                 ) AS sDomicilio
                 FROM rel_empresasSocios_domicilios dom 
                 WHERE dom.skEmpresaSocio = es.skEmpresaSocio AND dom.skEstatus = 'AC' 
+                ORDER BY dom.dFechaCreacion DESC
                 LIMIT 1
             ) AS sDomicilio
+            ,(SELECT
+                IF(dom.skEstado IS NOT NULL,dom.skEstado,'') AS sDomicilio
+                FROM rel_empresasSocios_domicilios dom 
+                WHERE dom.skEmpresaSocio = es.skEmpresaSocio AND dom.skEstatus = 'AC' 
+                ORDER BY dom.dFechaCreacion DESC
+                LIMIT 1
+            ) AS skEstadoMX
+            ,(SELECT
+                IF(dom.skMunicipio IS NOT NULL,IF(muni.skMunicipioMX IS NOT NULL,muni.skMunicipioMX,dom.skMunicipio),'') AS skMunicipioMX
+                FROM rel_empresasSocios_domicilios dom 
+								LEFT JOIN cat_municipiosMX muni ON muni.sNombre = dom.skMunicipio
+                WHERE dom.skEmpresaSocio = es.skEmpresaSocio AND dom.skEstatus = 'AC' 
+                ORDER BY dom.dFechaCreacion DESC
+                LIMIT 1
+            ) AS skMunicipioMX
             FROM rel_empresasSocios es
             INNER JOIN cat_empresas e ON e.skEmpresa = es.skEmpresa
             INNER JOIN cat_empresasTipos et ON et.skEmpresaTipo = es.skEmpresaTipo
@@ -398,7 +414,6 @@ Class Cita_Model Extends DLOREAN_Model {
         }
 
         $sql .= " ORDER BY N1.nombre ASC ";
-       
         $result = Conn::query($sql);
         if (!$result) {
             return FALSE;
@@ -758,6 +773,25 @@ Class Cita_Model Extends DLOREAN_Model {
             return FALSE;
         }
         return Conn::fetch_assoc_all($result);
+    }
+
+    public function existeOrdenCobro(){
+        $sql = "SELECT CONCAT('ORD-', LPAD(os.iFolio, 5, 0))  AS iFolio,os.skEstatus
+            FROM rel_ordenesServicios_procesos osp
+            INNER JOIN ope_ordenesServicios os ON os.skOrdenServicio = osp.skOrdenServicio
+            WHERE os.skEstatus != 'CA' AND osp.skServicioProceso = 'CITA' AND osp.skCodigo = ".escape(isset($this->cita['skCita']) ? $this->cita['skCita'] : NULL)." LIMIT 1;";
+
+        $result = Conn::query($sql);
+        if (!$result) {
+            return FALSE;
+        }
+        $record = Conn::fetch_assoc_all($result);
+        utf8($record, FALSE);
+        if($record){
+            return TRUE;
+        }else{
+            return FALSE;    
+        }
     }
 
     public function stp_cita_agendar(){

@@ -21,10 +21,12 @@ cita.cita_inde.dataTableConf = {
         }
     },
     'axn': 'consultar',
-    'order': [[16, "desc"]],
+    'order': [[18, "desc"]],
     'columns': [
         {'title': 'E', 'data': 'estatus', 'dataType': 'string', 'tooltip': 'Estatus', 'filterT': 'Estatus'},
         {'title': 'Folio', 'data': 'iFolio', 'dataType': 'string','tooltip': 'Folio'},
+        {'title': 'Folio OC', 'data': 'iFolioOrdenCobro', 'dataType': 'string','tooltip': 'Folio Orden Cobro', 'filterT': 'Folio Orden Cobro'},
+        {'title': 'Folio FA', 'data': 'iFolioFactura', 'dataType': 'string','tooltip': 'Folio Factura', 'filterT': 'Folio Factura'},
         {'title': 'Categoría', 'data': 'sNombreCategoria', 'dataType': 'string','tooltip': 'Categoría'},
         {'title': 'F. Cita', 'data': 'dFechaCita', 'dataType': 'date','tooltip': 'Fecha Cita', 'filterT': 'Fecha Cita'},
         {'title': 'H. Cita', 'data': 'tHoraInicio', 'dataType': 'string','tooltip': 'Hora Cita', 'filterT': 'Hora Cita'},
@@ -34,8 +36,8 @@ cita.cita_inde.dataTableConf = {
         {'title': 'Estado', 'data': 'estado', 'dataType': 'string'},
         {'title': 'Municipio', 'data': 'municipio', 'dataType': 'string'},
         {'title': 'Dirección', 'data': 'sDomicilio', 'dataType': 'string'},
-        {'title': 'Observaciones', 'data': 'sObservaciones', 'dataType': 'string'},
-        {'title': 'Intrucción Servicio', 'data': 'sInstruccionesServicio', 'dataType': 'string'},
+        {'title': 'Observaciones', 'data': 'sObservaciones', 'dataType': 'string', 'hidden': true},
+        {'title': 'Intrucción Servicio', 'data': 'sInstruccionesServicio', 'dataType': 'string', 'hidden': true},
         {'title': 'U. Confirmación', 'data': 'usuarioConfirmacion', 'dataType': 'string', 'tooltip': 'Usuario Confirmación', 'filterT': 'Usuario Confirmación'},
         {'title': 'F. Confirmación', 'data': 'dFechaConfirmacion', 'dataType': 'date', 'tooltip': 'Fecha Confirmación', 'filterT': 'Fecha Confirmación'},
         {'title': 'U. Creación', 'data': 'usuarioCreacion', 'dataType': 'string', 'tooltip': 'Usuario Creación', 'filterT': 'Usuario Creación'},
@@ -45,7 +47,7 @@ cita.cita_inde.dataTableConf = {
     "drawCallback": function () {
         core.dataTable.contextMenuCore(true);
         core.dataTable.changeColumnColor(1, 'success');
-        core.dataTable.fastFilters(6, [], true);
+        core.dataTable.fastFilters(7, [], true);
         $('[data-toggle="tooltip"]').tooltip();
     },
     "columnDefs": [
@@ -59,10 +61,18 @@ cita.cita_inde.dataTableConf = {
             }
         },
         {
-            "targets": [1],
+            "targets": [1,2,3],
             "width": '10px'
+        },
+        {
+            "targets": [13,14],
+            "visible": false
         }
     ]
+};
+
+cita.cita_inde.descargarEstadoCuenta = function descargarEstadoCuenta(obj) {
+    core.excel(obj, 'descargarEstadoCuenta');
 };
 
 cita.cita_inde.finalizar = function finalizar(obj) {

@@ -31,6 +31,13 @@ Class Cita_Controller Extends Cita_Model {
             case 'pdf':
                 $cita_inde->generarPDF();
                 break;
+            case 'descargarEstadoCuenta':
+                $cita_inde->descargarEstadoCuenta();
+                break;
+            case 'recordatorio_tickets':
+                header('Content-Type: application/json');
+                echo json_encode($cita_inde->recordatorio_tickets(),true,512);
+                break;
             case 'formatoPDF':
                 $cita_inde->formatoPDF();
                 break;

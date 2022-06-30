@@ -214,11 +214,25 @@ td.text-right {
             <td colspan="4" style="text-align:right; font-size: 9px; text-transform: uppercase; font-weight:bold;" >TOTAL: </td>
             <td style="text-align:right; font-size: 9px; text-transform: uppercase;" ><?php echo " $" . number_format($data['datos']['fImporteTotal'], 2); ?></td>
 	    </tr>
-	</tbody>
+        <?php
+            if(isset($data['datos']['skCatalogoSistemaCOTMSI']) && !empty($data['datos']['skCatalogoSistemaCOTMSI'])){
+        ?>
+        <tr>
+            <td colspan="4" style="text-align:right; font-size: 9px; text-transform: uppercase; font-weight:bold;" >TOTAL (<?php echo $data['datos']['sMSI']; ?>): </td>
+            <td style="text-align:right; font-size: 9px; text-transform: uppercase;" ><?php echo " $" . number_format($data['datos']['fImporteTotalMSI'], 2); ?></td>
+	    </tr> 
+        <?php
+            }//ENDIF
+        ?>
+	</tbody> 
     </table>
+    <!--
     <div class="col-md-12" style="font-size:9px;text-align:right;">
-        <?php echo NumeroALetras::convertir($data['datos']['fImporteTotal'],'PESOS','CENTAVOS',true). ' '.$centavos.'/100M.N.'; ?>
+        <b>TOTAL:</b><br><?php echo NumeroALetras::convertir($data['datos']['fImporteTotal'],'PESOS','CENTAVOS',true). ' '.$centavos.'/100M.N.'; ?>
     </div>
+    <div class="col-md-12" style="font-size:9px;text-align:right;">
+        <b>TOTAL (<?php echo $data['datos']['sMSI']; ?>):</b><br><?php echo NumeroALetras::convertir($data['datos']['fImporteTotalMSI'],'PESOS','CENTAVOS',true). ' '.$centavos.'/100M.N.'; ?>
+    </div>!-->
 </div>
 
 <?php if(!empty($data['datos']['sCondicion'])){ ?>

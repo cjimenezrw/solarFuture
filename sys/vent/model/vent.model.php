@@ -57,12 +57,13 @@ Class Vent_Model Extends DLOREAN_Model {
             " .escape(isset($this->vent['sRPU']) ? $this->vent['sRPU'] : NULL) . ",
             " .escape(isset($this->vent['sTelefono']) ? $this->vent['sTelefono'] : NULL) . ",
             " .escape(isset($this->vent['TARIFA']) ? $this->vent['TARIFA'] : NULL) . ",
+            " .escape(isset($this->vent['skCatalogoSistemaCOTMSI']) ? $this->vent['skCatalogoSistemaCOTMSI'] : NULL) . ",
 
             " .escape(isset($this->vent['axn']) ? $this->vent['axn'] : NULL) . ",
             '" . $_SESSION['usuario']['skUsuario'] . "',
             '" . $this->sysController . "' )";
          
-        if($this->vent['axn'] == 'guardar_cotizacion_servicios'){
+        if($this->vent['axn'] == 'guardar_cotizacion'){
             //exit('<pre>'.print_r($sql,1).'</pre>');
         }
         $result = Conn::query($sql);
@@ -105,6 +106,7 @@ Class Vent_Model Extends DLOREAN_Model {
         oc.iInformacionPanel,
         oc.fKwGastados,
         oc.skCategoriaPrecio,
+        oc.skCatalogoSistemaCOTMSI,
         oc.sDireccion,
         oc.sRPU,
         oc.sTelefono,

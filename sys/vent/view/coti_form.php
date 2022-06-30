@@ -104,6 +104,7 @@ if (isset($data['cotizacionTerminosCondiciones'])) {
                              </select>
                          </div>
                      </div>
+
                      <div class="col-md-4 col-lg-4">
                      <div class="form-group">
                              <h4 class="example-title">CATEGORÍA <span class="required text-danger">*</span></h4>
@@ -123,6 +124,7 @@ if (isset($data['cotizacionTerminosCondiciones'])) {
                              </select>
                          </div>
                    </div>
+
                    <div class="col-md-4 col-lg-4">
                       <div class="form-group">
                           <h4 class="example-title">VIGENCIA </h4>
@@ -135,7 +137,25 @@ if (isset($data['cotizacionTerminosCondiciones'])) {
                       </div>
                    </div>
 
-                              
+                   <div class="col-md-4 col-lg-4">
+                     <div class="form-group">
+                             <h4 class="example-title">MESES SIN INTERESES (MSI)</h4>
+                             <select id="skCatalogoSistemaCOTMSI" name="skCatalogoSistemaCOTMSI" class="form-control" data-plugin="select2" select2Simple>
+                                 <option value="">- SELECCIONAR -</option>
+                                 <?php
+                                 if ($data['COTMSI']) {
+                                 foreach ($data['COTMSI'] AS $k=>$v) {
+                                     utf8($row);
+                                     ?>
+                                     <option <?php echo(isset($result['skCatalogoSistemaCOTMSI']) && $result['skCatalogoSistemaCOTMSI'] == $k ? 'selected="selected"' : '') ?>
+                                         value="<?php echo $k; ?>"> <?php echo $v; ?> </option>
+                                     <?php
+                                     }//ENDWHILE
+                                 }//ENDIF
+                                 ?>
+                             </select>
+                         </div>
+                   </div>
                                 
                   </div>
                   
@@ -649,6 +669,7 @@ function addCommas(amount) {
                         core.autocomplete2('#skProspecto', 'get_prospectos', window.location.href, 'Prospecto');
                         $("#skDivisa").select2({placeholder: "Moneda", allowClear: true });
                         $("#skCategoriaPrecio").select2({placeholder: "CATEGORIA", allowClear: true });
+                        $("#skCatalogoSistemaCOTMSI").select2({placeholder: "MESES SIN INTERESES (MSI)", allowClear: true });
                         $("#TARIFA").select2({placeholder: "TARIFA", allowClear: true });
                         
 

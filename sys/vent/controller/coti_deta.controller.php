@@ -46,6 +46,21 @@ Class Coti_deta_Controller Extends Vent_Model {
         
         $this->data = $this->consultar();
 
+        $this->data['datos']['fImporteTotalMSI'] = NULL;
+        $this->data['datos']['sMSI'] = NULL;
+        if(isset($this->data['datos']['skCatalogoSistemaCOTMSI']) && !empty($this->data['datos']['skCatalogoSistemaCOTMSI'])){
+            $comisionesMSI_array = [
+                '003MSI'=>[.035,.04,1.16,'3 MSI'],
+                '006MSI'=>[.035,.07,1.16,'6 MSI'],
+                '009MSI'=>[.035,.09,1.16,'9 MSI'],
+                '012MSI'=>[.035,.12,1.16,'12 MSI'],
+            ];
+            $this->data['datos']['fImporteTotalMSI'] = ((( ($this->data['datos']['fImporteTotal'] * $comisionesMSI_array[$this->data['datos']['skCatalogoSistemaCOTMSI']][0]) + ($this->data['datos']['fImporteTotal'] * $comisionesMSI_array[$this->data['datos']['skCatalogoSistemaCOTMSI']][1]) ) * $comisionesMSI_array[$this->data['datos']['skCatalogoSistemaCOTMSI']][2]) + $this->data['datos']['fImporteTotal']);
+            $this->data['datos']['sMSI'] = $comisionesMSI_array[$this->data['datos']['skCatalogoSistemaCOTMSI']][3];
+        }
+        
+        //exit('<pre>'.print_r($this->data,1).'</pre>'); 
+
         ob_start();
             $this->load_view('formato_cotizacion', $this->data, NULL, FALSE);
             $formato_cotizacion = ob_get_contents();

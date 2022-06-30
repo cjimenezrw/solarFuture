@@ -44,7 +44,7 @@ Class Coti_form_Controller Extends Vent_Model {
             
 
             $this->vent['skCotizacion'] = (isset($_POST['skCotizacion']) ? $_POST['skCotizacion'] : NULL);  
-
+            
         // REGISTRAR CLIENTE NUEVO
             /*$registrar_cliente = $this->registrar_cliente();
             if(!$registrar_cliente['success']){
@@ -440,6 +440,14 @@ Class Coti_form_Controller Extends Vent_Model {
         $this->data['divisas'] = parent::_getDivisas();
         $this->data['categoria'] = parent::_getCategorias();
         $this->data['TARIFA'] = json_decode(parent::getVariable('TARIFA'),true,512);
+        // ALTER TABLE `ope_cotizaciones` ADD `skCatalogoSistemaCOTMSI` CHAR(6) NULL AFTER `skUsoCFDI`;
+        $COTMSI = parent::getCatalogoSistema(['skCatalogoSistema'=>'COTMSI']);
+        $this->data['COTMSI'] = [];
+        if($COTMSI){
+            foreach($COTMSI AS $k=>$v){
+                $this->data['COTMSI'][$v["skClave"]] = $v["sNombre"];
+            }
+        }
 
         if (!empty($this->vent['skCotizacion'])) {
             
@@ -459,7 +467,7 @@ Class Coti_form_Controller Extends Vent_Model {
 
             
         }
- //exit('<pre>'.print_r($this->data,1).'</pre>');
+        //exit('<pre>'.print_r($this->data,1).'</pre>');
         return $this->data;
     }
 

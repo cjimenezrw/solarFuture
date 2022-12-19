@@ -5,6 +5,12 @@
     background-image-resize: 6;
 }*/
 
+html {
+    font-family: Times !important;
+    font-size: 11px;
+    line-height: 1.2;
+}
+
 table {
     background: white;
     border-radius:4em;
@@ -115,6 +121,22 @@ td.text-right {
 
 .input-group {
     display: none;
+}
+
+* {
+    font-family: Times !important;
+}
+
+.garantias *,
+.garantias p {
+    font-family: Times !important;
+    font-size: 11px !important;
+    text-align: justify !important;
+    line-height: 1.2;
+}
+
+p {
+    font-family: Times !important;
 }
 
 </style>
@@ -276,7 +298,7 @@ DICHO TRABAJO SE ENTREGA FUNCIONANDO Y A SATISFACCIÓN PLENA DEL CLIENTE, HABIÉ
                 $GENERACION_KW = (($infoProductos['fCantidad'] * $infoProductos['fKwh'] * 4.5 * 60) / 1000);
                 $infoProductos['sDescripcionGarantia'] = str_replace('[GENERACION_KW/H]',($GENERACION_KW),$infoProductos['sDescripcionGarantia']);
 ?>
-    <div class="col-md-12 clearfix" style="font-size:9px;">
+    <div class="col-md-12 clearfix garantias" style="font-family: Times;font-size:11px;">
         <?php echo (isset($infoProductos['sDescripcionGarantia'])) ? html_entity_decode($infoProductos['sDescripcionGarantia'],ENT_QUOTES) : ''; ?>
     </div> 
 <?php

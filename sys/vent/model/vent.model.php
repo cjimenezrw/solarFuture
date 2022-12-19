@@ -696,9 +696,19 @@ Class Vent_Model Extends DLOREAN_Model {
         if (!$result) {
             return FALSE;
         }
+        
         $records = Conn::fetch_assoc_all($result);
         utf8($records);
-        return $records;
+        
+        $data = [];
+        foreach($records AS $k => $v){
+            if(!isset($data[$v["skInformacionProductoServicio"]])){
+                $data[$v["skInformacionProductoServicio"]] = $v; 
+            }else{
+                $data[$v["skInformacionProductoServicio"]]["fCantidad"] += $v["fCantidad"]; 
+            }
+        }
+        return $data;
     }
     
 

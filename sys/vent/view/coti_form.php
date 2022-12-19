@@ -139,7 +139,7 @@ if (isset($data['cotizacionTerminosCondiciones'])) {
 
                    <div class="col-md-4 col-lg-4">
                      <div class="form-group">
-                             <h4 class="example-title">MESES SIN INTERESES (MSI)</h4>
+                             <h4 class="example-title">MESUALIDADES FIJAS CON TARJETA DE CRÉDITO (MFTC)</h4>
                              <select id="skCatalogoSistemaCOTMSI" name="skCatalogoSistemaCOTMSI" class="form-control" data-plugin="select2" select2Simple>
                                  <option value="">- SELECCIONAR -</option>
                                  <?php
@@ -669,7 +669,7 @@ function addCommas(amount) {
                         core.autocomplete2('#skProspecto', 'get_prospectos', window.location.href, 'Prospecto');
                         $("#skDivisa").select2({placeholder: "Moneda", allowClear: true });
                         $("#skCategoriaPrecio").select2({placeholder: "CATEGORIA", allowClear: true });
-                        $("#skCatalogoSistemaCOTMSI").select2({placeholder: "MESES SIN INTERESES (MSI)", allowClear: true });
+                        $("#skCatalogoSistemaCOTMSI").select2({placeholder: "MESUALIDADES FIJAS CON TARJETA DE CRÉDITO (MFTC)", allowClear: true });
                         $("#TARIFA").select2({placeholder: "TARIFA", allowClear: true });
                         
 

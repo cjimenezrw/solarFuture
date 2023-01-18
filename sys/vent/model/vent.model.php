@@ -58,6 +58,7 @@ Class Vent_Model Extends DLOREAN_Model {
             " .escape(isset($this->vent['sTelefono']) ? $this->vent['sTelefono'] : NULL) . ",
             " .escape(isset($this->vent['TARIFA']) ? $this->vent['TARIFA'] : NULL) . ",
             " .escape(isset($this->vent['skCatalogoSistemaCOTMSI']) ? $this->vent['skCatalogoSistemaCOTMSI'] : NULL) . ",
+            " .escape(isset($this->vent['iOcultarPrecios']) ? $this->vent['iOcultarPrecios'] : NULL) . ",
 
             " .escape(isset($this->vent['axn']) ? $this->vent['axn'] : NULL) . ",
             '" . $_SESSION['usuario']['skUsuario'] . "',
@@ -117,6 +118,7 @@ Class Vent_Model Extends DLOREAN_Model {
         oc.sTelefonoRecepcionEntrega,
         oc.dFechaEntregaInstalacion,
         oc.sObservacionesInstalacion,
+        oc.iOcultarPrecios,
         IF(oc.sNombreCliente IS NOT NULL, oc.sNombreCliente, IF(cep.sNombreCorto IS NOT NULL, cep.sNombreCorto, cep.sNombre)) AS sNombreCliente,
         IF(cep.sNombreCorto IS NOT NULL, cep.sNombreCorto, cep.sNombre) AS cliente,
         cep.sRFC AS clienteRFC,

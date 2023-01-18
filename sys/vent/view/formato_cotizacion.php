@@ -170,8 +170,10 @@ td.text-right {
 		<th class="text-center">CÓDIGO</th>
  		<th class="text-left">PRODUCTO / SERVICIO</th>
 		<th class="text-right">CANTIDAD</th>
-		<th class="text-right">P. UNITARIO</th>
-		<th class="text-right">IMPORTE </th>
+        <?php if($data['datos']['iOcultarPrecios'] != 1){ ?>
+		    <th class="text-right">P. UNITARIO</th>
+		    <th class="text-right">IMPORTE </th>
+        <?php }//ENDIF ?>
 	    </tr>
 	</thead>
 	<tbody>
@@ -183,9 +185,11 @@ td.text-right {
 		    <tr>
 			<td style="text-align:center; font-size: 10px; text-transform: uppercase; word-wrap: break-word;" ><?php echo $servicios['sCodigo']; ?></td>
  			<td style="text-align:left; font-size: 10px; text-transform: uppercase; word-wrap: break-word;" ><?php echo (!empty($servicios['sDescripcion']) ? $servicios['sDescripcion'] : $servicios['servicio']); ?></td>
-			<td style="text-align:right; font-size: 10px; text-transform: uppercase;" ><?php echo number_format($servicios['fCantidad'], 2); ?></td>
-            <td style="text-align:right; font-size: 10px; text-transform: uppercase;" ><?php echo "$" . number_format($servicios['fPrecioUnitario'], 2); ?></td>
-			<td style="text-align:right; font-size: 10px; text-transform: uppercase;" ><?php echo "$" . number_format($servicios['fImporte'], 2); ?></td>
+			<td style="text-align:right; font-size: 10px; text-transform: uppercase;"><?php echo number_format($servicios['fCantidad'], 2); ?></td>
+            <?php if($data['datos']['iOcultarPrecios'] != 1){ ?>
+                <td style="text-align:right; font-size: 10px; text-transform: uppercase;" ><?php echo "$" . number_format($servicios['fPrecioUnitario'], 2); ?></td>
+                <td style="text-align:right; font-size: 10px; text-transform: uppercase;" ><?php echo "$" . number_format($servicios['fImporte'], 2); ?></td>
+            <?php }//ENDIF ?>
 		    </tr>
 		    <?php
 		    $i++;
@@ -195,30 +199,30 @@ td.text-right {
             $centavos = ($centavos[1]);
 	    ?>
 	    <tr>
-            <td colspan="4" style="text-align:right; font-size: 9px; text-transform: uppercase; font-weight:bold;" >SUBTOTAL: </td>
+            <td <?php echo ($data['datos']['iOcultarPrecios'] != 1) ? 'colspan="4"' : 'colspan="2"'; ?> style="text-align:right; font-size: 9px; text-transform: uppercase; font-weight:bold;" >SUBTOTAL: </td>
             <td style="text-align:right; font-size: 9px; text-transform: uppercase;" ><?php echo " $" . number_format($data['datos']['fImporteSubtotal'], 2); ?></td>
 	    </tr>
         <?php
             if(!empty($data['datos']['fDescuento'])){
         ?>
             <tr>
-                <td colspan="4" style="text-align:right; font-size: 9px; text-transform: uppercase; font-weight:bold;" >DESCUENTO: </td>
+                <td <?php echo ($data['datos']['iOcultarPrecios'] != 1) ? 'colspan="4"' : 'colspan="2"'; ?> style="text-align:right; font-size: 9px; text-transform: uppercase; font-weight:bold;" >DESCUENTO: </td>
                 <td style="text-align:right; font-size: 9px; text-transform: uppercase;" ><?php echo " $" . number_format($data['datos']['fDescuento'], 2); ?></td>
             </tr>
         <?php }//ENDIF ?>
         <tr>
-		    <td colspan="4" style="text-align:right; font-size: 9px; text-transform: uppercase; font-weight:bold;" >IVA: </td>
+		    <td <?php echo ($data['datos']['iOcultarPrecios'] != 1) ? 'colspan="4"' : 'colspan="2"'; ?> style="text-align:right; font-size: 9px; text-transform: uppercase; font-weight:bold;" >IVA: </td>
 		    <td style="text-align:right; font-size: 9px; text-transform: uppercase;" ><?php echo " $" . number_format($data['datos']['fImpuestosTrasladados'], 2); ?></td>
 	    </tr>
 	    <tr>
-            <td colspan="4" style="text-align:right; font-size: 9px; text-transform: uppercase; font-weight:bold;" >TOTAL: </td>
+            <td <?php echo ($data['datos']['iOcultarPrecios'] != 1) ? 'colspan="4"' : 'colspan="2"'; ?> style="text-align:right; font-size: 9px; text-transform: uppercase; font-weight:bold;" >TOTAL: </td>
             <td style="text-align:right; font-size: 9px; text-transform: uppercase;" ><?php echo " $" . number_format($data['datos']['fImporteTotal'], 2); ?></td>
 	    </tr>
         <?php
             if(isset($data['datos']['skCatalogoSistemaCOTMSI']) && !empty($data['datos']['skCatalogoSistemaCOTMSI'])){
         ?>
         <tr>
-            <td colspan="4" style="text-align:right; font-size: 9px; text-transform: uppercase; font-weight:bold;" >TOTAL (<?php echo $data['datos']['sMSI']; ?>): </td>
+            <td <?php echo ($data['datos']['iOcultarPrecios'] != 1) ? 'colspan="4"' : 'colspan="2"'; ?> style="text-align:right; font-size: 9px; text-transform: uppercase; font-weight:bold;" >TOTAL (<?php echo $data['datos']['sMSI']; ?>): </td>
             <td style="text-align:right; font-size: 9px; text-transform: uppercase;" ><?php echo " $" . number_format($data['datos']['fImporteTotalMSI'], 2); ?></td>
 	    </tr> 
         <?php

@@ -156,6 +156,13 @@ if (isset($data['cotizacionTerminosCondiciones'])) {
                              </select>
                          </div>
                    </div>
+
+                   <div class="col-md-4 col-lg-4">
+                        <div class="checkbox-custom checkbox-primary">
+                            <input type="checkbox" name="iOcultarPrecios"  <?php echo (isset($result['iOcultarPrecios']) && !empty($result['iOcultarPrecios']) ) ? 'checked' : ''; ?> value="1" id="iOcultarPrecios"    />
+                            <label for="iOcultarPrecios"><h4>Ocultar Precios Unitarios e Importe</h4></label>
+                        </div>
+                    </div>
                                 
                   </div>
                   
@@ -188,16 +195,16 @@ if (isset($data['cotizacionTerminosCondiciones'])) {
                      <hr>
                  </div>
                  <div class="row row-lg col-lg-12">
-                    <h5 class="card-title margin-bottom-20">
+                    
                     
                     <div class="checkbox-custom checkbox-primary">
                                     <input type="checkbox" name="iInformacionPanel"  <?php echo (isset($result['iInformacionPanel']) && !empty($result['iInformacionPanel']) ) ? 'checked' : ''; ?> value="1" id="iInformacionPanel"    />
-                                    <label for="iInformacionPanel">Informacion adicional de Panel Solar</label>
+                                    <label for="iInformacionPanel"><h4>Mostrar Información adicional de Panel Solar</h4></label>
                     </div>
                         
                         
                         
-                    </h5>
+                    
                  </div>
                  <div class="row row-lg col-lg-12">
                  

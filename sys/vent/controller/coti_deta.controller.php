@@ -192,6 +192,16 @@ Class Coti_deta_Controller Extends Vent_Model {
             [
                 'content' => $formato_cotizacion,
                 'defaultWatermark' => false,
+                /*'waterMark' => [
+                    'imgsrc' => CORE_PATH.'assets/custom/img/engine_sfmzo_watermark.png',
+                    'opacity' => .07,
+                    'size' => [200, 60]
+                ],*/
+                /*'waterMark'     => [
+                    'imgsrc'    => CORE_PATH . 'assets/tpl/images/logoOriginal.png',
+                    'opacity'   => .14,
+                    'size'      => [100,90]
+                ],*/
                 'header' => '<div><img src="' . CORE_PATH . 'assets/custom/img/header_entrega.jpg" width="100%" height="140"></div>',
                 'footer' => '<div><img src="' . CORE_PATH . 'assets/custom/img/footer_entrega.jpg" width="100%" height="220"></div>',
                 'defaultFooter' => false,

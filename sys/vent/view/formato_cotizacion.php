@@ -135,6 +135,7 @@ td.text-right {
             <span  style="font-size: 10px;">AV. ELIAS ZAMORA VERDUZCO  #3220 "A"</span><br>
             <span  style="font-size: 10px;">COLONIA BARRIO NUEVO, MANZANILLO, COL.</span><br>
             <span style="font-size: 10px;">TEL (314) 137 8133 CEL. (314) 129 1339</span><br>
+            <span style="font-size: 10px;">ADMINISTRACION@SFMZO.COM</span><br>
         </div>
     </div>
 </div>
